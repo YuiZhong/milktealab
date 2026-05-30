@@ -432,6 +432,8 @@ v0.0.4.x 不做：
 
 【可删】v0.0.4.1 完成 UI 渲染与事件绑定低风险拆分，新增 `ui/render.js`、`ui/domEvents.js`，`game.js` 入口进一步收敛；未改味觉 / 评分 / 文案 / UI视觉 / 交互。
 
+【可删】v0.0.4.3 完成 scoreEngine / feedbackEngine 低风险拆分，新增或整理 `core/scoreEngine.js` 与 `core/feedbackEngine.js`。本轮仅移动评分与反馈选择职责，未改味觉结果、评分数值、反馈文案、UI 或交互。
+
 【可删】当前 GitHub remote 为：`https://github.com/YuiZhong/milktealab.git`
 
 【可删】v0.0.4.0 commit：`5db7d68 chore: freeze v0.0.4.0 modular foundation candidate`；tag：`v0.0.4.0-candidate`

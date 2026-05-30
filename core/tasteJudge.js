@@ -8,8 +8,9 @@ const {
   strawResistanceNames,
   clearLiquidNames
 } = window.MILK_TEA_LAB_SYNERGY_RULES;
-const { feedbackPools } = window.MILK_TEA_LAB_FEEDBACK_TEXTS;
 const { clamp, pick, displayName, has, hasAny } = window.MILK_TEA_LAB_HELPERS;
+const scoreEngine = window.MILK_TEA_LAB_SCORE_ENGINE;
+const feedbackEngine = window.MILK_TEA_LAB_FEEDBACK_ENGINE;
 const categoryByName = new Map(groups.flatMap(group => group.items.map(item => [item, group.name])));
 
 let activeCup = [];
@@ -450,14 +451,13 @@ function evaluateCup(cup) {
     difficulty: 0,
     photo: 8
   };
-  let score = 54;
+  const score = scoreEngine.createScoreState(54);
   const accidentNotes = [];
   const badNotes = [];
   const goodNotes = [];
   const segmentNotes = [];
   const generalNotes = [];
   let forcedType = null;
-  let scoreCap = 100;
 
   activeCup.forEach(item => {
     const profile = baseProfiles[item.name === "奶精" ? "植脂奶" : item.name] || {};
@@ -468,13 +468,13 @@ function evaluateCup(cup) {
   });
 
   const segmentResult = applyProportionSegments(attr);
-  score += segmentResult.scoreDelta;
+  scoreEngine.addScore(score, segmentResult.scoreDelta);
   segmentNotes.push(...segmentResult.notes);
 
   const accidents = detectAccidents().sort((left, right) => left.cap - right.cap);
   accidents.forEach(accident => {
-    score += accident.score;
-    scoreCap = Math.min(scoreCap, accident.cap);
+    scoreEngine.addScore(score, accident.score);
+    scoreEngine.applyScoreCap(score, accident.cap);
     forcedType = forcedType || accident.type;
     applyAttributeBoost(attr, accident.add);
     accidentNotes.push(accident.note);
@@ -482,7 +482,7 @@ function evaluateCup(cup) {
 
     comboRules.filter(rule => rule.kind === "bad").forEach(rule => {
     if (rule.names.every(name => has(name, names))) {
-      score += rule.score;
+      scoreEngine.addScore(score, rule.score);
       applyAttributeBoost(attr, rule.add);
       forcedType = forcedType || (rule.names.includes("柠檬") && rule.names.includes("牛奶") ? "口感事故" : "口感冲突");
       badNotes.push(rule.note);
@@ -492,8 +492,8 @@ function evaluateCup(cup) {
   if (!accidents.length && !badNotes.length) {
     const fruitTeaBlend = analyzeFruitTeaBlend();
     if (fruitTeaBlend) {
-      score += fruitTeaBlend.score;
-      scoreCap = Math.min(scoreCap, fruitTeaBlend.cap);
+      scoreEngine.addScore(score, fruitTeaBlend.score);
+      scoreEngine.applyScoreCap(score, fruitTeaBlend.cap);
       forcedType = forcedType || fruitTeaBlend.type;
       applyAttributeBoost(attr, fruitTeaBlend.add);
       goodNotes.push(fruitTeaBlend.note);
@@ -501,7 +501,7 @@ function evaluateCup(cup) {
 
     comboRules.filter(rule => rule.kind === "good").forEach(rule => {
       if (rule.names.every(name => has(name, names))) {
-        score += rule.score;
+        scoreEngine.addScore(score, rule.score);
         applyAttributeBoost(attr, rule.add);
         goodNotes.push(rule.note);
       }
@@ -517,25 +517,25 @@ function evaluateCup(cup) {
     attr.odd += 24 + (teaCount - 3) * 8;
     attr.tea += 10;
     attr.difficulty += 9;
-    score -= 16;
+    scoreEngine.addScore(score, -16);
     generalNotes.push("三种以上茶类同时开麦，茶味已经从合唱变成辩论赛。");
   }
   if (toppingCount >= 3) {
     attr.thick += 16;
     attr.difficulty += 8;
-    score -= 7;
+    scoreEngine.addScore(score, -7);
     generalNotes.push("小料很多，喝一口像在杯子里寻宝，也像在做咀嚼训练。");
   }
   if (dairyCount >= 3) {
     attr.thick += 14;
     attr.milk += 10;
     attr.odd += 8;
-    score -= 6;
+    scoreEngine.addScore(score, -6);
   }
   if (flavorCount >= 4) {
     attr.fruit += 14;
     attr.odd += 10;
-    score -= 7;
+    scoreEngine.addScore(score, -7);
   }
 
   const hasMilkFatAccident = accidents.some(accident => accident.type === "奶脂过载");
@@ -545,7 +545,7 @@ function evaluateCup(cup) {
     attr.cost += 8;
     attr.difficulty += 6;
     attr.greasy += 10;
-    score -= 10;
+    scoreEngine.addScore(score, -10);
     generalNotes.push(pick([
       "这杯奶感很足，足到像在喝一份会流动的下午茶。",
       "好喝是好喝，就是喝完胃可能想请半天假。",
@@ -555,19 +555,13 @@ function evaluateCup(cup) {
     ]));
   }
 
-  score += attr.fresh * 0.12 + attr.photo * 0.06 + Math.min(attr.tea, 60) * 0.06 + Math.min(attr.milk, 60) * 0.06;
-  score -= Math.max(0, attr.sweet - 68) * 0.22;
-  score -= Math.max(0, attr.thick - 76) * 0.2;
-  score -= Math.max(0, attr.straw - 62) * 0.34;
-  score -= Math.max(0, attr.greasy - 68) * 0.32;
-  score -= attr.odd * 0.45;
-  score -= Math.max(0, activeCup.length - 6) * 6;
+  scoreEngine.applyAttributeScore(score, attr, activeCup.length);
 
   Object.keys(attr).forEach(key => {
     attr[key] = Math.round(clamp(attr[key]));
   });
 
-  const finalScore = Math.round(clamp(Math.min(score, scoreCap)));
+  const finalScore = scoreEngine.finalizeScore(score);
   const type = forcedType || inferType(attr, normalizedNames, finalScore);
   const audience = inferAudience(attr, normalizedNames, finalScore);
   const priorityNotes = accidentNotes.length
@@ -579,7 +573,7 @@ function evaluateCup(cup) {
         : segmentNotes.length
           ? [segmentNotes[0]]
           : generalNotes;
-  const feedback = makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0);
+  const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0);
 
   return { attr, score: finalScore, type, audience, feedback };
 }
@@ -624,85 +618,6 @@ function inferAudience(attr, names, score) {
     }
   }
   return audience.slice(0, 4);
-}
-
-function makeFeedback(attr, score, notes, hasAccident = false) {
-  const parts = [];
-  if (notes.length) parts.push(hasAccident ? notes[0] : pick(notes));
-
-  if (hasAccident) {
-    if (attr.straw >= 65 || (attr.thick >= 78 && attr.straw >= 48)) {
-      parts.push(pick([
-        "吸管刚插进去就提交了辞职信。",
-        "试喝员努力吸了一口，结果只吸到了人生的阻力。",
-        "它不是难喝，它是物理意义上很难喝到。"
-      ]));
-    } else if (attr.greasy >= 68) {
-      parts.push(pick([
-        "试喝员喝完沉默了，不是难喝，是太沉重。",
-        "它不是吸不上来，是喝下去以后不太下得去。",
-        "奶脂感已经不是香，是压迫。"
-      ]));
-    } else if (attr.acid >= 70) {
-      parts.push(pick([
-        "试喝员喝完眨了三次眼，灵魂还停在上一口。",
-        "这杯不是提神，是给味蕾安排突击考试。",
-        "这不是试喝，是一次工伤。"
-      ]));
-    } else {
-      parts.push(pick([
-        "试喝员喝完没有说话，只是把工牌摘下来了。",
-        "它很有想法，问题是想法太多，已经开会吵起来了。",
-        "你想干啥？杯子刚才明显愣了一下。"
-      ]));
-    }
-  } else if (attr.thick >= 70 && attr.straw < 48) {
-    parts.push(pick([
-      "这杯奶感很足，足到像在喝一份会流动的下午茶。",
-      "好喝是好喝，就是喝完胃可能想请半天假。",
-      "奶油感很强，快乐是真的，负担也是真的。",
-      "它不像奶茶，更像一份假装成饮料的甜品。",
-      "第一口很幸福，第三口开始需要勇气。"
-    ]));
-  } else if (notes[0]?.includes("红茶和牛奶")) {
-    parts.push(pick(feedbackPools.classic));
-  } else if (notes[0]?.includes("乌龙")) {
-    parts.push(pick(feedbackPools.premium));
-  } else if (notes[0]?.includes("牛奶把榴莲")) {
-    parts.push(pick([
-      "榴莲牛乳路线是成立的，就是需要观众先确认自己站哪一边。",
-      "喜欢榴莲的人会觉得顺，路人可能会先保持礼貌距离。",
-      "它不算翻车，更像一杯明确知道自己会被争议的奶昔。"
-    ]));
-  } else if (score >= 72) {
-    parts.push(pick(attr.fresh >= 50 ? feedbackPools.fresh : feedbackPools.good));
-  } else if (score >= 56) {
-    parts.push(pick(attr.tea >= 28 && attr.milk >= 24 ? feedbackPools.classic : feedbackPools.good));
-  } else if (attr.sweet >= 72 && attr.odd < 48) {
-    parts.push(pick(feedbackPools.sweet));
-  } else {
-    parts.push(pick(feedbackPools.weird));
-  }
-
-  if (attr.straw >= 70) parts.push(pick([
-    "建议配勺子，不然吸管会开始怀疑人生。",
-    "它不是难喝，它是物理意义上很难喝到。",
-    "吸管刚插进去就提交了辞职信。"
-  ]));
-  if (attr.thick >= 78 && attr.straw < 70 && attr.greasy < 68) parts.push(pick([
-    "这杯奶感很足，足到像在喝一份会流动的下午茶。",
-    "奶油感很强，快乐是真的，负担也是真的。",
-    "第一口很幸福，第三口开始需要勇气。"
-  ]));
-  if (attr.thick >= 78 && attr.straw >= 70) parts.push(pick([
-    "稠度已经很有存在感，吸一口需要一点信念。",
-    "这杯已经很有存在感，问题是它不太愿意流动。",
-    "建议配勺子，不然吸管会怀疑自己的职业选择。"
-  ]));
-  if (attr.acid >= 62 && attr.milk >= 28) parts.push("酸和奶的关系比较紧张，建议让它们先冷静一下。");
-  if (attr.bubble >= 50 && attr.thick >= 58) parts.push("气泡想往上冲，厚重感想往下坐，场面很热闹。");
-
-  return [...new Set(parts)].slice(0, 3).join(" ");
 }
 
 window.MILK_TEA_LAB_TASTE_JUDGE = {
