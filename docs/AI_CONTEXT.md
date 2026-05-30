@@ -434,6 +434,8 @@ v0.0.4.x 不做：
 
 【可删】v0.0.4.3 完成 scoreEngine / feedbackEngine 低风险拆分，新增或整理 `core/scoreEngine.js` 与 `core/feedbackEngine.js`。本轮仅移动评分与反馈选择职责，未改味觉结果、评分数值、反馈文案、UI 或交互。
 
+【可删】v0.0.4.4 将“优先自动化验收”和“自动化失败后先低风险自救一次”写入项目 docs；该规则正本在 `docs/TEST_CASES.md` 与 `docs/PROJECT_RULES.md`。
+
 【可删】当前 GitHub remote 为：`https://github.com/YuiZhong/milktealab.git`
 
 【可删】v0.0.4.0 commit：`5db7d68 chore: freeze v0.0.4.0 modular foundation candidate`；tag：`v0.0.4.0-candidate`
