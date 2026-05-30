@@ -201,6 +201,7 @@ h1 {
 }
 
 .ingredient {
+  position: relative;
   min-height: 40px;
   padding: 8px 10px;
   border: 1px solid #eaded0;
@@ -216,12 +217,45 @@ h1 {
   box-shadow: 0 8px 18px rgba(92, 61, 42, 0.13);
 }
 
+.ingredient.is-selected {
+  border-color: #d66d47;
+  color: #2f211c;
+  background: #ffe0cd;
+  box-shadow: inset 0 0 0 1px rgba(214, 109, 71, 0.28), 0 6px 14px rgba(142, 76, 48, 0.13);
+  font-weight: 700;
+}
+
+.ingredient.is-selected::after {
+  content: "✓";
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #c95637;
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
 .ingredient.茶类 { background: #fff2df; }
 .ingredient.乳类 { background: #fff8f1; }
 .ingredient.液体 { background: #eef9ff; }
 .ingredient.水果风味 { background: #fff0f6; }
 .ingredient.调味 { background: #fff9d7; }
 .ingredient.小料 { background: #f2fff7; }
+
+.ingredient.茶类.is-selected,
+.ingredient.乳类.is-selected,
+.ingredient.液体.is-selected,
+.ingredient.水果风味.is-selected,
+.ingredient.调味.is-selected,
+.ingredient.小料.is-selected {
+  background: #ffe0cd;
+}
 
 .cup-panel {
   display: flex;
