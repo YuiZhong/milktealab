@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>奶茶实验室</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">奶茶实验室 v0.0.2.3｜配方实验室测试版</p>
+          <h1>奶茶实验室</h1>
+          <p class="subtitle">自由研发饮品配方，让试喝员先替未来顾客承受一下。</p>
+        </div>
+        <div class="hero-cup" aria-hidden="true">
+          <div class="cup-liquid"></div>
+          <div class="cup-bubbles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="straw"></div>
+        </div>
+      </section>
+
+      <section class="game-board">
+        <aside class="panel ingredients-panel">
+          <div class="panel-heading">
+            <h2>原料区</h2>
+            <span id="ingredient-count">0 种可用</span>
+          </div>
+          <div id="ingredient-groups" class="ingredient-groups"></div>
+        </aside>
+
+        <section class="panel cup-panel">
+          <div class="panel-heading">
+            <h2>当前杯子</h2>
+            <span id="total-ratio">当前总量：0%</span>
+          </div>
+
+          <div class="cup-stage">
+            <div class="lab-cup" id="visual-cup">
+              <div class="visual-fill"></div>
+              <div class="visual-toppings" id="visual-toppings"></div>
+            </div>
+            <div class="cup-summary">
+              <strong id="cup-title">还没开始研发</strong>
+              <p id="cup-note">点一些原料进杯子，比例会自动配平。</p>
+            </div>
+          </div>
+
+          <div id="cup-list" class="cup-list empty-state">杯子是空的。</div>
+
+          <div class="actions">
+            <div class="actions-core">
+              <button class="primary" id="taste-btn" type="button">试喝一下</button>
+              <button class="secondary" id="balance-btn" type="button">自动配平</button>
+              <button class="ghost" id="clear-btn" type="button">清空杯子</button>
+            </div>
+            <div class="actions-secondary">
+              <button id="random-btn" type="button">随机乱摇</button>
+              <button id="save-btn" type="button">保存配方</button>
+              <button id="saved-btn" type="button">查看已保存配方</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel result-panel">
+          <div class="panel-heading">
+            <h2>试喝报告</h2>
+            <span id="score-pill">等待试喝</span>
+          </div>
+
+          <div id="result-empty" class="result-empty">
+            <strong>试喝员正在旁边刷杯子。</strong>
+            <p>调好一杯后点击“试喝一下”。</p>
+          </div>
+
+          <div id="result" class="result hidden">
+            <div class="result-top">
+              <div>
+                <p class="label">饮品类型</p>
+                <h3 id="drink-type"></h3>
+              </div>
+              <div class="score-card">
+                <span id="score-value">0</span>
+                <small>综合评分</small>
+              </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="audience">
+              <p class="label">适合客群</p>
+              <div id="audience-tags" class="tags"></div>
+            </div>
+
+            <div id="attribute-bars" class="attribute-bars"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="saved-dialog" class="saved-dialog">
+      <div class="dialog-head">
+        <h2>已保存配方</h2>
+        <button id="close-saved" class="icon-btn" type="button" aria-label="关闭">×</button>
+      </div>
+      <div id="saved-list" class="saved-list"></div>
+    </dialog>
+
+    <script src="./data/ingredients.js"></script>
+    <script src="./data/synergyRules.js"></script>
+    <script src="./data/feedbackTexts.js"></script>
+    <script src="./game.js"></script>
+  </body>
+</html>
