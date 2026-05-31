@@ -106,6 +106,12 @@ v0.0.5.5 的目标是新增 `data/proportionSegmentRules.js` 和 `core/proportio
 
 后续新增比例规则应优先进入 `data/proportionSegmentRules.js` 或同类规则表，不要直接写进 `proportionAnalyzer.js`。本轮只迁移柠檬和榴莲两类强风味原料的比例段，不迁完整比例系统，不调味觉数值，不改变事故优先级。
 
+### v0.0.5.6 金标样本 / 回归样本地基
+
+v0.0.5.6 的目标是建立 `data/goldenSamples.js` 和 `scripts/runGoldenSamples.js`，把代表性配方固化为轻量回归安全网。金标样本用于确认规则迁移前后“正常不误伤、事故不洗白、强风味边界稳定”，不是隐藏配方识别，也不是固定款图鉴或玩家可见玩法。
+
+后续拆分 `accidentAnalyzer.js`、`feedbackEngine.js`、`drinkTypeAnalyzer.js` 或继续迁移比例 / 事故规则前，应先运行金标样本脚本，确认当前稳定判断没有被重构破坏。样本预期应优先使用类型关键词、禁用类型、分数区间和反馈关键词，不应硬匹配随机反馈全文。
+
 ## 4. if 治理原则
 
 核心原则：
