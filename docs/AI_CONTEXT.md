@@ -464,6 +464,8 @@ v0.0.4.x 不做：
 
 【可删】v0.0.5.7 已完成旧事故规则小范围表格化：新增 `data/accidentRules.js` 与 `core/accidentRuleEngine.js`，柠檬 / 榴莲极端事故已从 `core/accidentAnalyzer.js` 迁入规则表，golden samples 11/11 通过。后续可考虑奥利奥 / 强风味等单原料事故，但迁移前应补对应 golden samples。
 
+【可删】v0.0.5.8 新增事故迁移前置 golden samples，保护高柠檬酸度事故、高榴莲猎奇事故和奥利奥碎过量口感事故。暂不加入强风味过量样本，避免锁死未来浓郁饮品路线；当前 type 断言不代表最终玩家可见命名锁死，未来可拆分内部 tags 与前台文案。
+
 【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
 【可删】下一步建议：继续小步治理旧事故规则，不要一次性迁完整事故系统。若迁移奥利奥、强风味、芋泥或小料循环事故，先补对应 golden samples；奶脂过载、工业奶茶和综合吸管阻力因优先级耦合较高，应暂缓或单独评估。

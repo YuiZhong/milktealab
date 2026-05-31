@@ -1,5 +1,34 @@
 # 版本记录
 
+## v0.0.5.8
+
+事故迁移前置样本补强。
+
+### 阶段目标
+
+本版本只补充少量 golden samples，为后续继续迁移旧事故规则提供安全网。本轮不改味觉逻辑，不迁移任何事故规则，不调整评分、cap、文案或类型判断。
+
+### 本轮新增 / 更新
+
+- 更新 `data/goldenSamples.js`
+  - 新增 `high_lemon_acid_accident`，保护柠檬 60-80 高酸度事故档。
+  - 新增 `high_durian_oddity_accident`，保护榴莲 60-80 高争议猎奇事故档。
+  - 新增 `oreo_overload_texture_accident`，保护奥利奥碎 >40 的初始口感事故档。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.8。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，14/14 passed。
+
+### 本轮不做
+
+- 不加强风味过量样本，因为咖啡 / 抹茶 / 可可等强风味高比例可能是浓郁成立款，不应过早固化为事故基准。
+- 不改 `core/accidentAnalyzer.js`、`data/accidentRules.js`、`core/accidentRuleEngine.js` 或其他 core 逻辑。
+- 不迁移奥利奥、强风味、芋泥、奶脂过载、工业奶茶或综合吸管阻力规则。
+- 不改评分逻辑、事故优先级、反馈文案、UI 视觉或比例条交互。
+
 ## v0.0.5.7
 
 旧事故规则小范围表格化。

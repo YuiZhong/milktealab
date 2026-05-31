@@ -71,6 +71,23 @@
       notes: "极端酸度样本，不应被清爽组合洗白。"
     },
     {
+      id: "high_lemon_acid_accident",
+      name: "高柠檬酸度事故",
+      cup: [
+        { name: "柠檬", ratio: 65 },
+        { name: "绿茶", ratio: 20 },
+        { name: "气泡水", ratio: 10 },
+        { name: "蜂蜜", ratio: 5 }
+      ],
+      expectations: {
+        typeIncludes: ["口感事故"],
+        scoreMin: 0,
+        scoreMax: 40,
+        feedbackIncludesAny: ["柠檬", "酸", "味蕾", "打架", "事故"]
+      },
+      notes: "保护柠檬 60-80 高酸度事故档，避免后续规则迁移只保护 80+ 极端档；65% 柠檬不应被清爽水果茶方向洗白。"
+    },
+    {
       id: "extreme_durian_accident",
       name: "极端榴莲事故",
       cup: [
@@ -85,6 +102,22 @@
         feedbackIncludesAny: ["榴莲", "吸管", "物理", "食道", "开除"]
       },
       notes: "极端榴莲样本，应保持强香气和压迫方向。"
+    },
+    {
+      id: "high_durian_oddity_accident",
+      name: "高榴莲猎奇事故",
+      cup: [
+        { name: "榴莲", ratio: 65 },
+        { name: "牛奶", ratio: 20 },
+        { name: "红茶", ratio: 15 }
+      ],
+      expectations: {
+        typeIncludes: ["猎奇实验品"],
+        scoreMin: 0,
+        scoreMax: 50,
+        feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"]
+      },
+      notes: "保护榴莲 60-80 高争议猎奇事故档；当前 type 断言用于保护现阶段输出稳定，不代表“猎奇实验品”是最终正式版命名。"
     },
     {
       id: "greasy_overload",
@@ -118,6 +151,22 @@
         feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
       },
       notes: "高固体负载样本，应保持吸管阻力事故方向。"
+    },
+    {
+      id: "oreo_overload_texture_accident",
+      name: "奥利奥碎过量口感事故",
+      cup: [
+        { name: "奥利奥碎", ratio: 45 },
+        { name: "牛奶", ratio: 35 },
+        { name: "红茶", ratio: 20 }
+      ],
+      expectations: {
+        typeIncludes: ["口感事故"],
+        scoreMin: 0,
+        scoreMax: 55,
+        feedbackIncludesAny: ["奥利奥", "吸管", "矿层", "甜品", "开采"]
+      },
+      notes: "为后续迁移奥利奥碎过量事故提供回归保护，重点保护 >40 的初始事故档，而不是只保护 >60 的极端档。"
     },
     {
       id: "bubble_cream_conflict",
