@@ -1,0 +1,185 @@
+(function() {
+const {
+  heavyFlavorNames,
+  dairyNames,
+  highFatDairyNames,
+  strawResistanceNames,
+  clearLiquidNames
+} = window.MILK_TEA_LAB_SYNERGY_RULES;
+const { pick } = window.MILK_TEA_LAB_HELPERS;
+
+function detectAccidents(context) {
+  const accidents = [];
+  const lemon = context.ratioOf("柠檬");
+  const durian = context.ratioOf("榴莲");
+  const taro = context.ratioOf("芋泥");
+  const oreo = context.ratioOf("奥利奥碎");
+  const cream = context.ratioOf("淡奶油");
+  const thickMilk = context.ratioOf("厚乳");
+  const plantMilk = context.ratioOf("植脂奶");
+  const heavyTotal = context.sumRatios(heavyFlavorNames);
+  const dairyTotal = context.sumRatios(dairyNames);
+  const highFatDairyTotal = context.sumRatios(highFatDairyNames);
+  const strawTotal = context.sumRatios(strawResistanceNames);
+  const clearTotal = context.sumRatios(clearLiquidNames);
+
+  if (lemon > 80) {
+    accidents.push({
+      type: "口感事故",
+      cap: 18,
+      score: -82,
+      add: { acid: 70, odd: 42, fresh: -18, difficulty: 18 },
+      note: pick([
+        "柠檬比例已经不是清爽，是酸度爆炸。试喝员脸皱到不适合正常饮用。",
+        "这不是清爽，是柠檬在杯子里发动总攻。",
+        "酸度已经不是提神，是在和味蕾打架。"
+      ])
+    });
+  } else if (lemon > 60) {
+    accidents.push({
+      type: "口感事故",
+      cap: 34,
+      score: -54,
+      add: { acid: 52, odd: 28, fresh: -14, difficulty: 14 },
+      note: pick([
+        "柠檬已经不是风味，是酸度事故现场。",
+        "酸度已经不是提神，是在和味蕾打架。"
+      ])
+    });
+  }
+
+  if (durian >= 80) {
+    accidents.push({
+      type: "猎奇实验品",
+      cap: 22,
+      score: -70,
+      add: { odd: 75, thick: 32, greasy: 32, straw: 28, fruit: 12, difficulty: 22 },
+      note: pick([
+        "榴莲味很有主见，已经把其他材料全部开除了。",
+        "这杯不是喝进去的，是被榴莲缓慢推进食道的。",
+        "榴莲已经不是风味了，是杯子里的主要建筑材料。"
+      ])
+    });
+  } else if (durian > 60) {
+    accidents.push({
+      type: "猎奇实验品",
+      cap: 45,
+      score: -38,
+      add: { odd: 48, thick: 18, greasy: 18, straw: 16, fruit: 10, difficulty: 14 },
+      note: pick([
+        "榴莲香气冲击过强，普通客群建议先在门口做心理建设。",
+        "吸管吸到一半开始怀疑自己是不是在挖矿。"
+      ])
+    });
+  }
+
+  if ((dairyTotal > 80 && highFatDairyTotal > 50) || highFatDairyTotal > 65 || cream > 50 || thickMilk > 60) {
+    const severe = cream > 65 || thickMilk > 68 || highFatDairyTotal > 80 || dairyTotal > 92;
+    accidents.push({
+      type: "奶脂过载",
+      cap: severe ? 34 : 48,
+      score: severe ? -38 : -18,
+      add: { greasy: severe ? 72 : 50, thick: severe ? 38 : 24, milk: 20, fresh: -28, difficulty: 12, cost: 12 },
+      note: pick([
+        "第一口像奖励，第二口像惩罚，第三口开始怀疑人生。",
+        "奶味不是越多越好，这杯已经把幸福熬成了负担。",
+        "喝第一口很快乐，喝第二口开始想找热水。",
+        "这杯不像饮料，像把蛋糕上的奶油刮下来冲开了。",
+        "试喝员喝完沉默了，不是难喝，是太沉重。",
+        "它不是吸不上来，是喝下去以后不太下得去。",
+        "奶脂感已经不是香，是压迫。",
+        "喝完胃里像开了一场奶油年会。",
+        "快乐是真的，负担也是真的。"
+      ])
+    });
+  }
+
+  if (plantMilk > 45 || (plantMilk > 30 && dairyTotal > 0 && plantMilk / dairyTotal > 0.55)) {
+    accidents.push({
+      type: "工业奶茶",
+      cap: plantMilk > 65 ? 52 : 62,
+      score: plantMilk > 65 ? -22 : -12,
+      add: { milk: 12, greasy: 24, odd: 24, cost: -12, photo: -10, difficulty: -4 },
+      note: pick([
+        "一股子廉价味，像便利店第二排最便宜的饮料。",
+        "奶味是有了，但像是从配料表里硬挤出来的。",
+        "这杯喝起来很努力地想装成牛奶。",
+        "试喝员看了一眼配料，开始担心自己的体检报告。",
+        "这绝对对健康有害吧？",
+        "喝完感觉配料表在报警。",
+        "它不是不好喝，是有一种很熟悉的工业快乐。",
+        "奶感很努力，但努力得有点塑料。"
+      ])
+    });
+  }
+
+  if (taro > 50) {
+    accidents.push({
+      type: "实验特调",
+      cap: 52,
+      score: -24,
+      add: { thick: 28, straw: 34, odd: 12, difficulty: 14 },
+      note: pick([
+        "芋泥比例太高，稠度明显上升，这杯已经开始不太愿意流动。",
+        "这杯芋泥含量高到像在喝装修前的墙面。"
+      ])
+    });
+  }
+
+  if (oreo > 40) {
+    accidents.push({
+      type: "口感事故",
+      cap: oreo > 60 ? 32 : 48,
+      score: oreo > 60 ? -44 : -24,
+      add: { straw: 42, thick: 16, odd: 18, difficulty: 14 },
+      note: "奥利奥碎比例太高，喝起来像在用吸管开采甜品矿层。"
+    });
+  }
+
+  ["珍珠", "芋圆", "布丁", "仙草", "椰果"].forEach(name => {
+    const ratio = context.ratioOf(name);
+    if (ratio > 45) {
+      accidents.push({
+        type: "实验特调",
+        cap: ratio > 65 ? 38 : 55,
+        score: ratio > 65 ? -34 : -18,
+        add: { straw: 34, thick: 8, difficulty: 12 },
+        note: `${name}比例太高，已经不是加小料，是给吸管安排体能测试。`
+      });
+    }
+  });
+
+  const strongFlavor = ["抹茶", "可可", "咖啡"].find(name => context.ratioOf(name) > 60);
+  if (strongFlavor) {
+    accidents.push({
+      type: "实验特调",
+      cap: 55,
+      score: -24,
+      add: { odd: 20, thick: 12, difficulty: 10 },
+      note: `${strongFlavor}比例太猛，整杯饮料被它一个人拿着话筒开演唱会。`
+    });
+  }
+
+  if ((strawTotal >= 52 && clearTotal <= 25) || (strawTotal >= 68 && clearTotal <= 40) || (strawTotal >= 45 && heavyTotal >= 48 && clearTotal <= 35)) {
+    accidents.push({
+      type: "口感事故",
+      cap: strawTotal >= 68 || (strawTotal >= 45 && heavyTotal >= 48) ? 25 : 36,
+      score: strawTotal >= 68 || (strawTotal >= 45 && heavyTotal >= 48) ? -62 : -42,
+      add: { straw: 62, thick: heavyTotal >= 45 ? 34 : 16, odd: 34, difficulty: 25, fresh: -18 },
+      note: pick([
+        "这杯不是饮料，是需要装修队施工的半固体。",
+        "吸管刚插进去就提交了辞职信。",
+        "试喝员努力吸了一口，结果只吸到了人生的阻力。",
+        "建议改名叫可食用水泥，至少比较诚实。",
+        "它不是难喝，它是物理意义上很难喝到。"
+      ])
+    });
+  }
+
+  return accidents;
+}
+
+window.MILK_TEA_LAB_ACCIDENT_ANALYZER = {
+  detectAccidents
+};
+})();

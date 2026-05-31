@@ -432,6 +432,8 @@ v0.0.4.x 不做：
 
 【可删】v0.0.4.x 已完成工程地基阶段：模块化地基、UI 渲染/事件拆分、`docs/AI_CONTEXT.md` 本地记忆、scoreEngine/feedbackEngine 拆分、自动化验收规则收口。详细 commit、tag、版本流水账以 `docs/VERSION_LOG.md` 和 GitHub tag 为准。
 
+【可删】v0.0.5.0 已开始味觉系统数据化地基：新增原料味觉属性库、组合关系表和多个 analyzer，让 `tasteJudge.js` 更像总调度。本轮仍以保持现有输出稳定为优先，不做玩法扩张。
+
 ---
 
 ## 20. 长期内容 / 工程管理方向
