@@ -7,6 +7,14 @@ const {
   clearLiquidNames
 } = window.MILK_TEA_LAB_SYNERGY_RULES;
 const { pick } = window.MILK_TEA_LAB_HELPERS;
+const { evaluateStructureAccidentRules } = window.MILK_TEA_LAB_STRUCTURE_ACCIDENT_RULE_ENGINE;
+
+function isTextureAccident(accident) {
+  return accident.type === "口感事故" && (
+    (accident.add?.straw || 0) >= 40 ||
+    /吸管|半固体|水泥|物理|勺子/.test(accident.note)
+  );
+}
 
 function detectAccidents(context) {
   const accidents = [];
@@ -174,6 +182,11 @@ function detectAccidents(context) {
         "它不是难喝，它是物理意义上很难喝到。"
       ])
     });
+  }
+
+  const structureAccidents = evaluateStructureAccidentRules(context.structure);
+  if (structureAccidents.length && !accidents.some(isTextureAccident)) {
+    accidents.push(...structureAccidents);
   }
 
   return accidents;
