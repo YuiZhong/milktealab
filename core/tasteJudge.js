@@ -3,6 +3,7 @@ const { clamp, pick } = window.MILK_TEA_LAB_HELPERS;
 const scoreEngine = window.MILK_TEA_LAB_SCORE_ENGINE;
 const feedbackEngine = window.MILK_TEA_LAB_FEEDBACK_ENGINE;
 const { createTasteContext } = window.MILK_TEA_LAB_TASTE_CONTEXT;
+const { analyzeDrinkStructure } = window.MILK_TEA_LAB_DRINK_STRUCTURE_ANALYZER;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -12,6 +13,7 @@ const drinkTypeAnalyzer = window.MILK_TEA_LAB_DRINK_TYPE_ANALYZER;
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
+  context.structure = analyzeDrinkStructure(context);
 
   const attr = ingredientAnalyzer.analyzeBaseAttributes(context);
   const score = scoreEngine.createScoreState(54);

@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.5.3
+
+饮品结构分析地基版。
+
+### 阶段目标
+
+本版本只新增后台饮品结构分析层，为后续 `textureVector`、`solidLoad`、`drinkability`、`strawResistance` 和质地事故规则表化做准备。
+
+### 本轮新增 / 更新
+
+- 新增 `core/drinkStructureAnalyzer.js`
+  - 根据当前杯子和原料属性派生后台结构指标。
+  - 输出 `baseLiquidRatio`、`flavorRatio`、`textureRatio`、`sweetenerRatio`、`solidLoad`、`drinkability`、`strawResistance`、`textureBalance`、内部 `notes` 和内部 `tags`。
+  - 指标统一收口到 0-100，便于后续金标样本和表格化调参。
+- 更新 `core/tasteJudge.js`
+  - 在试喝流程中生成 `context.structure`。
+  - 本轮不把 structure 写入最终试喝结果，避免改变保存的 `result` 快照。
+- 更新 `index.html`
+  - 仅新增 `core/drinkStructureAnalyzer.js` 脚本引用。
+
+### 本轮不做
+
+- 不改 UI 内容或顶部版本显示。
+- 不改评分。
+- 不改反馈文案。
+- 不改现有事故触发。
+- 不改玩家保存结构。
+- 不新增原料。
+- 不做温度 / 冰量 / 糖度完整功能。
+- 不做经营、顾客、员工、报表或比赛系统。
+
+### 验证重点
+
+- 当前玩家可见试喝结果应保持稳定。
+- 后台结构指标只作为派生分析，不替代配方原始数据、玩家命名、饮品家族或版本标签。
+
 ## v0.0.5.2
 
 反馈系统标签化版。
