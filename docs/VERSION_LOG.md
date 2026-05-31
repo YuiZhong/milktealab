@@ -1,5 +1,45 @@
 # 版本记录
 
+## v0.0.5.7
+
+旧事故规则小范围表格化。
+
+### 阶段目标
+
+本版本只把 `core/accidentAnalyzer.js` 中柠檬 / 榴莲两类单原料极端事故迁移到规则表，继续降低事故系统进入巨大 if 树的风险。目标是结构治理，不是调整味觉表现。
+
+### 本轮新增 / 更新
+
+- 新增 `data/accidentRules.js`
+  - 存放旧事故规则表，本轮仅包含柠檬和榴莲两类单原料极端事故。
+  - 保持原有触发阈值、type、cap、score、add 属性加成和 notes 文案候选。
+- 新增 `core/accidentRuleEngine.js`
+  - 读取事故规则表，根据当前配方中对应原料比例返回事故对象。
+  - 保持执行器只做通用阈值匹配，不写具体柠檬 / 榴莲内容。
+- 更新 `core/accidentAnalyzer.js`
+  - 接入 `evaluateAccidentRules`。
+  - 移除柠檬 / 榴莲旧硬编码分支，避免重复叠加。
+  - 奶脂过载、工业奶茶、芋泥、奥利奥、小料循环、强风味、旧吸管阻力和结构事故调用保持不变。
+- 更新 `scripts/runGoldenSamples.js`
+  - 加入 `data/accidentRules.js` 与 `core/accidentRuleEngine.js` 的加载顺序。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.7。
+  - 加入事故规则表和执行器脚本引用。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，11/11 passed。
+
+### 本轮不做
+
+- 不一次性迁完整事故系统。
+- 不迁移奶脂过载、工业奶茶、综合吸管阻力、芋泥、奥利奥、小料循环或强风味泛化事故。
+- 不改事故优先级。
+- 不改评分数值、cap、add 属性加成或反馈文案内容。
+- 不改 `tasteJudge.js` 审判流程。
+- 不新增原料、隐藏配方、经营系统、顾客系统或温度 / 冰量 / 糖度完整功能。
+- 不改 UI 视觉或比例条交互。
+
 ## v0.0.5.6
 
 金标样本 / 回归样本地基版。

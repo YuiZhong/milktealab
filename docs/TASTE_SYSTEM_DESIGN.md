@@ -112,6 +112,12 @@ v0.0.5.6 的目标是建立 `data/goldenSamples.js` 和 `scripts/runGoldenSample
 
 后续拆分 `accidentAnalyzer.js`、`feedbackEngine.js`、`drinkTypeAnalyzer.js` 或继续迁移比例 / 事故规则前，应先运行金标样本脚本，确认当前稳定判断没有被重构破坏。样本预期应优先使用类型关键词、禁用类型、分数区间和反馈关键词，不应硬匹配随机反馈全文。
 
+### v0.0.5.7 旧事故规则小范围表格化
+
+v0.0.5.7 的目标是新增 `data/accidentRules.js` 和 `core/accidentRuleEngine.js`，让 `accidentAnalyzer.js` 开始从具体事故判断逐步转为事故调度器。本轮只迁移柠檬 / 榴莲两类单原料极端事故，保持原有阈值、评分、属性加成、事故类型和文案候选稳定。
+
+后续迁移事故规则应继续小步进行，优先选择有 golden samples 保护、条件清晰、和其他事故优先级耦合较低的规则。奶脂过载、工业奶茶、综合吸管阻力、芋泥、奥利奥、小料循环和强风味泛化事故不应一次性全拆；尤其是奶脂与吸管阻力分别代表“喝得动但负担重”和“物理意义上难喝到”，需要保持边界清楚。
+
 ## 4. if 治理原则
 
 核心原则：
