@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.5.9
+
+原料物理属性地基。
+
+### 阶段目标
+
+本版本在味觉属性 `tasteProfile` 之外，新增原料物理属性 `textureProfile` 地基，用于描述原料在杯子里的物理形态、固体负载、吸管阻力、糊化风险、液体支撑需求、奶脂负担等。目标是为后续质地事故、吸管阻力、沉积、糊化和奶脂负担规则表化做准备。
+
+### 本轮新增 / 更新
+
+- 新增 `data/ingredientTextureProfiles.js`
+  - 建立原料物理属性表，覆盖茶 / 清液基底、乳脂类、大颗粒糯弹类、果冻凝胶类、混凝土 / 泥糊类、顶层奶脂类、果肉 / 粉体 / 调味类等当前原料。
+  - 记录 `form`、`textureFamily`、`tags` 和 `effects`。
+- 新增 `core/textureProfileAnalyzer.js`
+  - 作为只读事实派生层，按当前杯子比例汇总 texture effects。
+  - 输出 `effects`、`tags`、`dominantFamilies` 和 `missingProfiles`。
+- 更新 `scripts/runGoldenSamples.js`
+  - 加载 textureProfile 数据表与只读分析器，确保 Node 回归环境可检查新增文件。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.9。
+  - 加载 textureProfile 数据表与只读分析器。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，14/14 passed。
+
+### 本轮不做
+
+- 不改事故触发、不改评分、不改反馈、不改饮品类型，不改变玩家可见结果。
+- 不迁移奥利奥、芋泥、小料循环、强风味、奶脂过载、工业奶茶或综合吸管阻力事故。
+- 不改 `core/accidentAnalyzer.js`、`data/accidentRules.js`、`core/accidentRuleEngine.js`、`feedbackEngine.js`、`drinkTypeAnalyzer.js` 或 `proportionAnalyzer.js`。
+
 ## v0.0.5.8
 
 事故迁移前置样本补强。
