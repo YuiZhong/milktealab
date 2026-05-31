@@ -4,7 +4,8 @@ const {
   highFatDairyNames,
   strawResistanceNames
 } = window.MILK_TEA_LAB_SYNERGY_RULES;
-const { has, hasAny } = window.MILK_TEA_LAB_HELPERS;
+const { has } = window.MILK_TEA_LAB_HELPERS;
+const { drinkTypeRules, defaultType } = window.MILK_TEA_LAB_DRINK_TYPE_RULES;
 
 function analyzeFruitTeaBlend(context) {
   const teaCandidates = ["茉莉茶", "绿茶", "乌龙茶", "红茶"];
@@ -84,24 +85,29 @@ function analyzeFruitTeaBlend(context) {
   return { type, score, add, cap, note };
 }
 
+function compare(left, op, right) {
+  if (op === ">=") return left >= right;
+  if (op === ">") return left > right;
+  if (op === "<=") return left <= right;
+  if (op === "<") return left < right;
+  if (op === "===") return left === right;
+  return false;
+}
+
+function matchesCondition(condition, attr, names, score) {
+  if (condition.all) return condition.all.every(item => matchesCondition(item, attr, names, score));
+  if (condition.any) return condition.any.some(item => matchesCondition(item, attr, names, score));
+  if (condition.ingredient) return has(condition.ingredient, names);
+  if (condition.allIngredients) return condition.allIngredients.every(name => has(name, names));
+  if (condition.anyIngredient) return condition.anyIngredient.some(name => has(name, names));
+  if (condition.attr) return compare(attr[condition.attr] || 0, condition.op, condition.value);
+  if (condition.score) return compare(score, condition.score, condition.value);
+  return false;
+}
+
 function inferType(attr, names, score) {
-  if (attr.straw >= 70 || (score < 38 && attr.straw >= 55)) return "口感事故";
-  if (attr.greasy >= 78 && attr.straw < 50) return "奶脂过载";
-  if (has("榴莲", names) && attr.milk >= 45 && attr.odd < 55) return attr.thick >= 58 ? "榴莲奶昔" : "榴莲牛乳";
-  if (has("草莓", names) && (has("牛奶", names) || has("淡奶油", names) || has("厚乳", names))) return "甜品奶昔";
-  if (attr.thick >= 68 && attr.straw < 50 && attr.odd < 58) return "甜品奶昔";
-  if (attr.odd >= 62 || score < 38) return "猎奇实验品";
-  if (has("气泡水", names) && has("柠檬", names)) return "清爽水果茶";
-  if (has("气泡水", names) && hasAny(names, ["西瓜", "葡萄", "桃子", "绿茶"]) && attr.odd < 45) return "气泡水果茶";
-  if (attr.bubble >= 36 && attr.fruit >= 26 && attr.fresh >= 42) return "清爽水果茶";
-  if (has("乌龙茶", names) && (has("厚乳", names) || has("奶盖", names)) && attr.odd < 45) return "高级厚乳款";
-  if (has("黑糖", names) && has("珍珠", names) && attr.tea >= 26 && attr.milk >= 24 && attr.odd < 45) return "黑糖珍珠奶茶";
-  if (attr.tea >= 30 && attr.milk >= 26 && attr.odd < 45) return "经典奶茶";
-  if (has("咖啡", names) && attr.milk >= 18) return "咖啡特调";
-  if (attr.thick >= 50 && (attr.fruit >= 25 || attr.sweet >= 45)) return "甜品奶昔";
-  if (attr.fruit >= 35 && attr.fresh >= 34) return "果味特调";
-  if (attr.tea >= 34 && attr.fresh >= 28) return "茶香轻饮";
-  return "实验特调";
+  const matchedRule = drinkTypeRules.find(rule => matchesCondition(rule.when, attr, names, score));
+  return matchedRule?.type || defaultType;
 }
 
 function inferAudience(attr, names, score) {
