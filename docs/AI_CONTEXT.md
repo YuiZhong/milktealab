@@ -472,9 +472,13 @@ v0.0.4.x 不做：
 
 【不要删】《奶茶实验室》原料数据模型后续应逐步引入稳定 ingredientId。系统规则、tasteProfile、textureProfile、flavorProfile、组合规则、事故规则、golden samples 和未来存档，应尽量引用 ingredientId，而不是玩家可见 name。name 负责显示，aliases 负责旧名 / 别名 / 搜索兼容。推荐使用可读字符串 ID，例如 fruit_lemon、topping_oreo_crumble，不建议长期依赖纯数字或中文显示名作为主键。正式迁移前应先做只读评估，避免一次性重写全项目。
 
-【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
+【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
-【可删】下一步建议：继续小步治理旧事故规则，不要一次性迁完整事故系统。若迁移奥利奥、强风味、芋泥或小料循环事故，先补对应 golden samples；奶脂过载、工业奶茶和综合吸管阻力因优先级耦合较高，应暂缓或单独评估。
+【可删】v0.0.5.9-candidate 已冻结；之后又补充并 push 了稳定 ingredientId 长期原则文档提交，未另打 tag。当前 main 已同步 GitHub，工作区应为干净状态，golden samples 应为 14/14 passed。
+
+【不要删】v0.0.5.10 前应先暂停继续机械迁移单个旧事故规则。今晚路线已升级：v0.0.5.x 后续目标不是继续“某个原料事故表格化”，而是先规划并逐步搭完三层 profile + stable ingredientId 的底层架构。下一步建议是只读评估：盘点中文 name 依赖点、ingredientId 迁移路径、textureProfile 如何接入 drinkStructureAnalyzer、flavorProfile 地基如何建立、tasteSummary / textureSummary / flavorSummary 如何统一输出，以及哪些 legacy 事故规则后续应迁到 taste / texture / flavor / identity 四类规则中。
+
+【不要删】v0.0.5.x 后续定位：继续做代码结构和数据模型地基，不急着调数值。v0.0.5.x 应尽量完成 ingredientId、tasteProfile、textureProfile、flavorProfile、三层 summary、规则分层入口等“房梁”；v0.0.6.x / v0.0.7.x 再进入系统性数值优化、样本扩展和调参。允许少量 legacy 逻辑暂存，但不能继续扩张，新增规则应优先进入三层 profile + summary + 规则表体系。
 
 ---
 
