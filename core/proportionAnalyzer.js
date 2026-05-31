@@ -3,75 +3,24 @@ const {
   dairyNames,
   highFatDairyNames
 } = window.MILK_TEA_LAB_SYNERGY_RULES;
+const proportionSegmentRuleEngine = window.MILK_TEA_LAB_PROPORTION_SEGMENT_RULE_ENGINE;
 
 function applyProportionSegments(context, attr) {
-  const notes = [];
-  let scoreDelta = 0;
-  const durian = context.ratioOf("榴莲");
-  const lemon = context.ratioOf("柠檬");
+  const ruleResult = proportionSegmentRuleEngine.applyProportionSegmentRules(context, attr);
+  const notes = [...ruleResult.notes];
+  const tags = [...ruleResult.tags];
+  const matchedRuleIds = [...ruleResult.matchedRuleIds];
+  let scoreDelta = ruleResult.scoreDelta;
   const taro = context.ratioOf("芋泥");
   const oreo = context.ratioOf("奥利奥碎");
   const bubble = context.ratioOf("气泡水");
   const cream = context.ratioOf("淡奶油");
-  const dairySupport = context.sumRatios(["牛奶", "厚乳", "椰奶", "燕麦奶"]);
   const dairyTotal = context.sumRatios(dairyNames);
   const highFatDairyTotal = context.sumRatios(highFatDairyNames);
   const toppingTotal = context.sumRatios(["珍珠", "芋圆", "布丁", "仙草", "椰果"]);
   const fruitSupport = context.sumRatios(["柠檬", "西瓜", "葡萄", "桃子", "草莓", "芒果", "荔枝"]);
   const teaSupport = context.sumRatios(["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶"]);
   const sweetSupport = context.sumRatios(["蜂蜜", "白糖", "黑糖", "焦糖"]);
-
-  if (durian > 0 && durian <= 15) {
-    attr.fruit += 5;
-    attr.sweet += 3;
-    attr.odd += 4;
-    scoreDelta += 4;
-    notes.push("榴莲只是点到为止，存在感有了，还没有把杯子占领。");
-  } else if (durian <= 35 && durian > 15) {
-    attr.fruit += 8;
-    attr.thick += 8;
-    attr.greasy += 6;
-    attr.odd += 6;
-    if (dairySupport >= 45) {
-      scoreDelta += 28;
-      attr.milk += 8;
-      notes.push("牛奶把榴莲压顺了一点，喜欢的人会很开心，不喜欢的人会退后半步。");
-    } else {
-      scoreDelta += 6;
-      notes.push("榴莲很有存在感，但还没有失控，这杯个性很强。");
-    }
-  } else if (durian <= 60 && durian > 35) {
-    attr.fruit += 8;
-    attr.thick += 18;
-    attr.greasy += 16;
-    attr.straw += 10;
-    attr.odd += 24;
-    scoreDelta -= 10;
-    notes.push("这杯榴莲已经成了主角，喜欢的人会点头，不喜欢的人已经后退半步。");
-  }
-
-  if (lemon > 0 && lemon <= 15) {
-    attr.fresh += 7;
-    attr.acid += 5;
-    scoreDelta += 3;
-    notes.push("柠檬把风味提亮了，没有酸到攻击味蕾。");
-  } else if (lemon <= 35 && lemon > 15) {
-    attr.fresh += 10;
-    attr.acid += 8;
-    if (sweetSupport >= 8 || teaSupport >= 25) {
-      scoreDelta += 6;
-      notes.push("柠檬把茶香提亮了，酸爽但还在可控范围里。");
-    } else {
-      scoreDelta -= 2;
-      notes.push("柠檬酸感很明显，最好有茶感或甜味接一下。");
-    }
-  } else if (lemon <= 60 && lemon > 35) {
-    attr.acid += 22;
-    attr.odd += 10;
-    attr.fresh -= 8;
-    scoreDelta -= 16;
-    notes.push("柠檬已经偏多，酸度开始从清爽变成压力。");
-  }
 
   if (dairyTotal >= 65 && dairyTotal <= 80) {
     attr.fresh -= 8;
@@ -145,7 +94,7 @@ function applyProportionSegments(context, attr) {
     notes.push("气泡水很多，但支撑风味太少，喝起来有点空。");
   }
 
-  return { scoreDelta, notes };
+  return { scoreDelta, notes, tags, matchedRuleIds };
 }
 
 window.MILK_TEA_LAB_PROPORTION_ANALYZER = {

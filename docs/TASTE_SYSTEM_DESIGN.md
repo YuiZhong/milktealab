@@ -100,6 +100,12 @@ v0.0.5.3 的目标是新增 `drinkStructureAnalyzer.js` 作为后台派生层，
 
 v0.0.5.4 的目标是让 `drinkStructureAnalyzer.js` 产出的结构事实，开始通过 `data/structureAccidentRules.js` 和 `core/structureAccidentRuleEngine.js` 参与口感事故判断。`structureAccidentRules` 只描述结构事故条件，`structureAccidentRuleEngine` 负责通用规则匹配，`accidentAnalyzer.js` 只调用和汇总结果，不继续堆具体结构事故 if。这是事故规则表化的第一刀，当前只处理质地、吸管阻力、半固体和可饮用性方向。
 
+### v0.0.5.5 比例段规则表地基
+
+v0.0.5.5 的目标是新增 `data/proportionSegmentRules.js` 和 `core/proportionSegmentRuleEngine.js`，让比例段逻辑开始进入规则表。比例段规则应描述原料、比例区间、分数变化、属性加成、说明文案和标签；`proportionSegmentRuleEngine` 负责通用区间匹配和少量通用上下文条件判断；`proportionAnalyzer.js` 只负责调度规则执行器，并保留尚未迁移的旧比例逻辑。
+
+后续新增比例规则应优先进入 `data/proportionSegmentRules.js` 或同类规则表，不要直接写进 `proportionAnalyzer.js`。本轮只迁移柠檬和榴莲两类强风味原料的比例段，不迁完整比例系统，不调味觉数值，不改变事故优先级。
+
 ## 4. if 治理原则
 
 核心原则：
