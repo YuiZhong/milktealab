@@ -140,6 +140,12 @@ v0.0.5.9 的目标是在 `tasteProfile` 之外新增 `textureProfile`。`tastePr
 
 后续事故和组合判断应尽量来自属性维度与规则表：基础味觉事故来自 taste summary，物理质地事故来自 texture summary，风味搭配与冲突来自 flavor summary。不要把大量具体原料判断写成单个原料 if，也不要只根据 UI 分类判断吸管阻力、奶脂过载或风味冲突。
 
+原料不能长期只依赖玩家可见中文名作为系统主键。后续应逐步引入稳定 `ingredientId`：系统规则、`tasteProfile`、`textureProfile`、`flavorProfile`、组合规则、事故规则、golden samples 和未来存档，应尽量引用 `ingredientId`，而不是玩家可见 `name`。`name` 负责显示，`aliases` 负责旧名、别名、搜索和文案兼容。改显示名不应导致规则、profile、存档或测试失效。
+
+未来原料基础数据可逐步采用类似结构：`{ id: "topping_oreo_crumble", name: "奥利奥碎", aliases: ["奥利奥", "可可饼干碎", "饼干碎"], category: "小料" }`。如果对外显示名以后改为“可可饼干碎”，系统内部仍应使用稳定的 `topping_oreo_crumble`。推荐使用可读字符串 ID，例如 `fruit_lemon`、`fruit_durian`、`topping_pearl`、`topping_oreo_crumble`、`dairy_milk`、`dairy_thick_milk`、`tea_black`、`tea_green`、`sweetener_honey`；不建议长期使用纯数字作为早期规则主键，因为规则表和测试样本需要可读性。
+
+长期应逐步从 `{ name: "柠檬", ratio: 20 }` 迁移为 `{ ingredientId: "fruit_lemon", ratio: 20 }`。过渡期可以同时保留 `{ ingredientId: "fruit_lemon", name: "柠檬", ratio: 20 }`：运行时判断优先使用 `ingredientId`，UI 显示使用 `name`，搜索和旧数据兼容使用 `aliases`，存档尽量保存 `ingredientId`。正式引入 `ingredientId` 前应先做只读评估，再小步迁移，避免一次性重写全项目。
+
 ## 4. if 治理原则
 
 核心原则：

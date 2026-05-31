@@ -25,6 +25,7 @@
 - 补充长期设计原则：原料数据化应逐步拆成 `tasteProfile` / `textureProfile` / `flavorProfile` 三层。
   - `flavorProfile` 用于描述风味身份、香气联想和饮品适配，解决酸甜度相近但风味身份不同的问题。
   - 这是长期设计原则，不改变当前运行逻辑。
+- 补充长期数据模型原则：后续应逐步引入稳定 `ingredientId`，系统内部判断使用 `ingredientId`，玩家显示使用 `name`，旧名 / 别名 / 搜索兼容使用 `aliases`。这是长期原则，不改变当前运行逻辑。
 
 ### 验证结果
 
