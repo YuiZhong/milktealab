@@ -450,6 +450,18 @@ v0.0.4.x 不做：
 
 【可删】v0.0.5.2 进入反馈系统标签化：`feedbackEngine.js` 开始按反馈标签从文案池选择试喝反馈，并补强味觉、反馈、顾客、经营、UI、存档等系统边界文档。
 
+【可删】v0.0.5.3 已完成饮品结构分析地基：新增 `drinkStructureAnalyzer`，生成 `context.structure`，为 `solidLoad`、`drinkability`、`strawResistance` 等结构指标打地基，但不进入最终 result，不改玩家可见输出。
+
+【可删】v0.0.5.4 已完成结构事故规则表地基：新增 `data/structureAccidentRules.js` 与 `core/structureAccidentRuleEngine.js`，让结构事故以规则表方式参与口感事故判断，并记录反巨大逻辑树警戒。
+
+【可删】v0.0.5.5 已完成比例段规则表地基：新增 `data/proportionSegmentRules.js` 与 `core/proportionSegmentRuleEngine.js`，先迁移柠檬 / 榴莲比例段，控制 `proportionAnalyzer.js` 的 if 膨胀风险。
+
+【可删】v0.0.5.6 已完成金标样本 / 回归样本地基：新增 `data/goldenSamples.js` 与 `scripts/runGoldenSamples.js`，当前 11 个样本通过。后续修改高风险味觉模块前，应先运行 `node scripts/runGoldenSamples.js`。
+
+【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
+
+【可删】下一步建议：v0.0.5.7 做旧事故规则小范围表格化。开始前必须先跑 `node scripts/runGoldenSamples.js`，并先只读评估 `core/accidentAnalyzer.js`、`data/goldenSamples.js`、`scripts/runGoldenSamples.js`、`data/structureAccidentRules.js`、`core/structureAccidentRuleEngine.js`。
+
 ---
 
 ## 20. 长期内容 / 工程管理方向
