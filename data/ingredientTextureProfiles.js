@@ -1,4 +1,7 @@
 (function() {
+const { displayName } = window.MILK_TEA_LAB_HELPERS;
+const ingredientRegistry = window.MILK_TEA_LAB_INGREDIENT_REGISTRY;
+
 const zeroEffects = {
   solidLoad: 0,
   strawResistance: 0,
@@ -67,8 +70,22 @@ const ingredientTextureProfiles = {
   海盐: profile("dissolved_seasoning", "dissolved_seasoning", ["dissolves"], {})
 };
 
+function resolveProfileName(ref) {
+  const meta = ingredientRegistry?.normalizeIngredientRef(ref);
+  if (meta?.name) return meta.name;
+  if (typeof ref === "object" && ref?.name) return displayName(ref.name);
+  if (typeof ref === "string") return displayName(ref);
+  return null;
+}
+
+function getTextureProfile(ref) {
+  const normalizedName = resolveProfileName(ref);
+  return ingredientTextureProfiles[normalizedName] || null;
+}
+
 window.MILK_TEA_LAB_INGREDIENT_TEXTURE_PROFILES = {
   ingredientTextureProfiles,
+  getTextureProfile,
   zeroEffects
 };
 })();

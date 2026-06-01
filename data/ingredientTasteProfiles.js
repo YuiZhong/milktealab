@@ -1,6 +1,7 @@
 (function() {
 const { baseProfiles } = window.MILK_TEA_LAB_INGREDIENTS;
 const { displayName } = window.MILK_TEA_LAB_HELPERS;
+const ingredientRegistry = window.MILK_TEA_LAB_INGREDIENT_REGISTRY;
 
 const futureRecipeOptions = {
   temperature: ["ice", "room", "warm", "hot"],
@@ -45,8 +46,16 @@ const tasteProfiles = {
   椰果: { sweetness: 4, acidity: 0, bitterness: 0, tea: 0, milkiness: 0, freshness: 8, heaviness: 2, viscosity: 2, aromaImpact: 5, weirdness: 0, strawResistance: 20, isHighFat: false, isStrongAroma: false, worksInFreshDrinks: true, textureRisk: true, tags: ["topping", "fruit"] }
 };
 
-function getTasteProfile(name) {
-  const normalizedName = displayName(name);
+function resolveProfileName(ref) {
+  const meta = ingredientRegistry?.normalizeIngredientRef(ref);
+  if (meta?.name) return meta.name;
+  if (typeof ref === "object" && ref?.name) return displayName(ref.name);
+  if (typeof ref === "string") return displayName(ref);
+  return null;
+}
+
+function getTasteProfile(ref) {
+  const normalizedName = resolveProfileName(ref);
   return {
     ...(tasteProfiles[normalizedName] || {}),
     calculationProfile: baseProfiles[normalizedName] || {}
@@ -57,8 +66,8 @@ window.MILK_TEA_LAB_INGREDIENT_TASTE_PROFILES = {
   futureRecipeOptions,
   tasteProfiles,
   getTasteProfile,
-  getCalculationProfile(name) {
-    return getTasteProfile(name).calculationProfile;
+  getCalculationProfile(ref) {
+    return getTasteProfile(ref).calculationProfile;
   }
 };
 })();

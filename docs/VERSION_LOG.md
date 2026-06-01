@@ -1,5 +1,45 @@
 # 版本记录
 
+## v0.0.5.13
+
+profile 查询入口支持 ingredientId / ref。
+
+### 阶段目标
+
+本版本保持 profile 数据表中文 key 不变，只增强 profile 查询入口，让 tasteProfile / textureProfile 可以通过 stable id、中文 name、alias 和对象 ref 查询，为后续 rules、golden samples 和存档继续小步迁移打地基。
+
+### 本轮新增 / 更新
+
+- 更新 `data/ingredientTasteProfiles.js`
+  - `getTasteProfile(ref)` 支持 stable id、中文 name、alias 和对象 ref。
+  - `getCalculationProfile(ref)` 基于同一查询入口，支持 stable id / ref 查询 calculation profile。
+- 更新 `data/ingredientTextureProfiles.js`
+  - 新增 `getTextureProfile(ref)`，支持 stable id、中文 name、alias 和对象 ref。
+  - `ingredientTextureProfiles` 继续保持中文 key。
+- 更新 `core/textureProfileAnalyzer.js`
+  - 改用统一 textureProfile 查询入口。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.13。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- `node --check data/ingredientTasteProfiles.js` 通过。
+- `node --check data/ingredientTextureProfiles.js` 通过。
+- `node --check core/textureProfileAnalyzer.js` 通过。
+- `node --check core/ingredientRegistry.js` 通过。
+- profile 查询自检通过：tasteProfile / calculationProfile / textureProfile 均支持 stable id、中文 name、alias 和对象 ref。
+- `validateIngredientRegistry()` 通过：37 个原料，37 个唯一 id，无 alias 冲突。
+- textureProfile 全原料查询无新增 missing profile。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，14/14 passed。
+
+### 本轮不做
+
+- 不改变评分、事故判断、反馈文案、饮品类型或玩家可见输出。
+- 不把 profile 数据表 key 改成 `ingredientId`。
+- 不让 rules、golden samples 或保存结构改用 `id`。
+- 不迁移任何旧事故规则。
+
 ## v0.0.5.12
 
 context 双轨 name/id 地基。

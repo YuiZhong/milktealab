@@ -1,6 +1,6 @@
 (function() {
 const { clamp, displayName } = window.MILK_TEA_LAB_HELPERS;
-const { ingredientTextureProfiles, zeroEffects } = window.MILK_TEA_LAB_INGREDIENT_TEXTURE_PROFILES;
+const { getTextureProfile, zeroEffects } = window.MILK_TEA_LAB_INGREDIENT_TEXTURE_PROFILES;
 
 function roundMetric(value) {
   return Math.round(clamp(value));
@@ -18,7 +18,7 @@ function analyzeTextureProfile(context) {
 
   context.activeCup.forEach(item => {
     const name = displayName(item.name);
-    const profile = ingredientTextureProfiles[name];
+    const profile = getTextureProfile(item);
     const ratioWeight = item.ratio / 100;
 
     if (!profile) {

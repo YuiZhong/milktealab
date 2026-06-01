@@ -152,6 +152,8 @@ v0.0.5.11 新增 ingredientRegistry 查询 helper，为后续 context / profile 
 
 v0.0.5.12 开始让 `tasteContext` 支持 `name` / `ingredientId` 双轨引用，但旧 `name` 逻辑仍保持兼容，后续再逐步迁移 profile、rules、golden samples 和存档。
 
+v0.0.5.13 开始让 `tasteProfile` / `textureProfile` 查询入口支持 `ingredientId` / alias / object ref，但 profile 数据表仍保持中文 key，后续再逐步迁移 rules、golden samples 和存档。
+
 ## 4. if 治理原则
 
 核心原则：

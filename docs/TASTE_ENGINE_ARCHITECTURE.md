@@ -46,6 +46,8 @@ v0.0.5.11 在 v0.0.5.10 的 `id` / `aliases` 数据地基上新增 ingredientReg
 
 v0.0.5.12 在 ingredientRegistry 基础上，让 context 层具备 `name` / `ingredientId` 双轨能力，但不让业务规则立刻切换到 `id`。
 
+v0.0.5.13 采用兼容层策略：先增强 profile 查询入口支持 stable id / name / alias / ref，不直接迁移 profile 数据 key。
+
 示意结构：
 
 ```js
