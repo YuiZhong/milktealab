@@ -27,6 +27,7 @@
   - 这是长期设计原则，不改变当前运行逻辑。
 - 补充长期数据模型原则：后续应逐步引入稳定 `ingredientId`，系统内部判断使用 `ingredientId`，玩家显示使用 `name`，旧名 / 别名 / 搜索兼容使用 `aliases`。这是长期原则，不改变当前运行逻辑。
 - 补充 AI 接续路线：v0.0.5.x 后续应先规划三层 profile + stable ingredientId 底层架构，暂停继续机械迁移单个旧事故规则。
+- 新增 `docs/TASTE_ENGINE_ARCHITECTURE.md`，记录三层 profile、stable ingredientId、三层 summary、事故优先级重排、质地事故细分、粗吸管需求和 v0.0.5.x 房梁阶段规划。本轮只改文档，不改运行逻辑。
 
 ### 验证结果
 
