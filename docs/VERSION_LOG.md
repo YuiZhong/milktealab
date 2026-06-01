@@ -18,6 +18,8 @@ context 双轨 name/id 地基。
 - 更新 `index.html`
   - 页面顶部版本号同步为 v0.0.5.12。
 - 更新味觉系统文档和 AI 接续上下文。
+- 补充测试分级规则：明确文件级 / Node runtime、无头 Chrome 页面加载、真实 UI smoke test 的适用场景。
+- 本轮 v0.0.5.12 candidate 前因修改 `tasteContext`，执行无头 Chrome 页面加载检查 + 轻量真实 UI smoke test。
 
 ### 验证结果
 
