@@ -7,6 +7,7 @@ const repoRoot = path.resolve(__dirname, "..");
 const scriptFiles = [
   "utils/helpers.js",
   "data/ingredients.js",
+  "core/ingredientRegistry.js",
   "data/ingredientTasteProfiles.js",
   "data/ingredientTextureProfiles.js",
   "data/combinationRules.js",

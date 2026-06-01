@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.5.11
+
+ingredient lookup helper。
+
+### 阶段目标
+
+本版本在 v0.0.5.10 的稳定 `id` / `aliases` 数据地基上，新增统一原料查询 helper，为后续 `context`、profile、rules、golden samples 和存档从中文 `name` 小步迁移到 stable `ingredientId` 提供基础设施。
+
+### 本轮新增 / 更新
+
+- 新增 `core/ingredientRegistry.js`
+  - 提供 `getIngredientById`、`getIngredientByName`、`getIngredientByAlias`。
+  - 提供 `getIngredientId`、`getIngredientName`、`getIngredientCategory`。
+  - 提供 `normalizeIngredientRef`、`listIngredients` 和 `validateIngredientRegistry`。
+  - 支持 stable id、中文 name、aliases 和 meta object 查询。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.11。
+  - 在 `data/ingredients.js` 后加载 `core/ingredientRegistry.js`。
+- 更新 `scripts/runGoldenSamples.js`
+  - 在 Node 回归环境中加载 `core/ingredientRegistry.js`。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- `node --check core/ingredientRegistry.js` 通过。
+- `validateIngredientRegistry()` 通过：37 个原料，37 个唯一 id，无 alias 冲突。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，14/14 passed。
+
+### 本轮不做
+
+- 不改变运行逻辑。
+- 不让 `tasteContext`、rules、profile、golden samples 或保存结构改用 `id`。
+- 不改评分、事故判断、反馈文案、饮品类型或玩家可见输出。
+- 不迁移任何旧事故规则。
+
 ## v0.0.5.10
 
 原料稳定 ID 字段地基。

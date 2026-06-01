@@ -42,6 +42,8 @@
 
 v0.0.5.10 第一刀只给原料基础数据添加 `id` / `aliases`，不让运行逻辑立刻改用 `id`。
 
+v0.0.5.11 在 v0.0.5.10 的 `id` / `aliases` 数据地基上新增 ingredientRegistry 查询 helper，但不让业务逻辑立刻改用 `id`。
+
 示意结构：
 
 ```js

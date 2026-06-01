@@ -148,6 +148,8 @@ v0.0.5.9 的目标是在 `tasteProfile` 之外新增 `textureProfile`。`tastePr
 
 v0.0.5.10 开始在原料基础数据上落地 stable ingredientId 字段，但运行逻辑仍保持 `name` 兼容，后续再逐步迁移 profile、rules、context、golden samples 和存档。
 
+v0.0.5.11 新增 ingredientRegistry 查询 helper，为后续 context / profile / rules / golden samples 从中文 `name` 迁移到 stable `ingredientId` 提供基础设施；本轮运行逻辑仍保持 `name` 兼容。
+
 ## 4. if 治理原则
 
 核心原则：
