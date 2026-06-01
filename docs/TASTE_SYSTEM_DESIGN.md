@@ -146,6 +146,8 @@ v0.0.5.9 的目标是在 `tasteProfile` 之外新增 `textureProfile`。`tastePr
 
 长期应逐步从 `{ name: "柠檬", ratio: 20 }` 迁移为 `{ ingredientId: "fruit_lemon", ratio: 20 }`。过渡期可以同时保留 `{ ingredientId: "fruit_lemon", name: "柠檬", ratio: 20 }`：运行时判断优先使用 `ingredientId`，UI 显示使用 `name`，搜索和旧数据兼容使用 `aliases`，存档尽量保存 `ingredientId`。正式引入 `ingredientId` 前应先做只读评估，再小步迁移，避免一次性重写全项目。
 
+v0.0.5.10 开始在原料基础数据上落地 stable ingredientId 字段，但运行逻辑仍保持 `name` 兼容，后续再逐步迁移 profile、rules、context、golden samples 和存档。
+
 ## 4. if 治理原则
 
 核心原则：

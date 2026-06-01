@@ -1,5 +1,36 @@
 # 版本记录
 
+## v0.0.5.10
+
+原料稳定 ID 字段地基。
+
+### 阶段目标
+
+本版本给当前所有原料补充稳定可读的 `id` 和 `aliases` 字段，为后续从中文显示名迁移到稳定 `ingredientId` 打地基。
+
+### 本轮新增 / 更新
+
+- 更新 `data/ingredients.js`
+  - 新增 `ingredientMeta`，为当前 37 个原料补齐 `id`、`name`、`aliases` 和 `category`。
+  - `id` 用于未来系统内部稳定引用。
+  - `name` 仍用于玩家可见显示。
+  - `aliases` 用于旧名、别名、搜索和后续兼容。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.10。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，14/14 passed。
+
+### 本轮不做
+
+- 不改变运行逻辑。
+- 不让规则、profile、context、golden samples 或保存结构改用 `id`。
+- 不改评分、事故判断、反馈文案、饮品类型或玩家可见输出。
+- 不迁移任何旧事故规则。
+- 不新增、删除或重分类原料。
+
 ## v0.0.5.9
 
 原料物理属性地基。
