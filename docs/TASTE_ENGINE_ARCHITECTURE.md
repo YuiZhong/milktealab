@@ -48,6 +48,8 @@ v0.0.5.12 在 ingredientRegistry 基础上，让 context 层具备 `name` / `ing
 
 v0.0.5.13 采用兼容层策略：先增强 profile 查询入口支持 stable id / name / alias / ref，不直接迁移 profile 数据 key。
 
+v0.0.5.14 将 ingredientId 兼容推进到规则执行层：`ruleRefHelper` 只负责 ref 解析和 context 查询，不承载味觉判断。
+
 示意结构：
 
 ```js

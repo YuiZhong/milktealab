@@ -1,5 +1,43 @@
 # 版本记录
 
+## v0.0.5.14
+
+rule ref helper 地基。
+
+### 阶段目标
+
+本版本新增很窄的规则引用 helper，让规则执行器可以通过 stable ingredientId、中文 name、alias 和 object ref 查询当前配方比例。本轮只接入 `accidentRuleEngine`，不批量迁移规则表，继续保持旧中文 `ingredient` 字段兼容。
+
+### 本轮新增 / 更新
+
+- 新增 `core/ruleRefHelper.js`
+  - 提供 `resolveRuleIngredientRef`、`ratioOfRuleRef`、`hasRuleRef`、`sumRuleRefs`。
+  - 只负责 ref 解析和 context 查询，不承载味觉判断、事故判断或文案判断。
+- 更新 `core/accidentRuleEngine.js`
+  - 改用 rule ref helper 查询规则原料比例。
+  - 旧 `{ ingredient: "柠檬" }` 写法继续可用。
+  - 新 `{ ingredientId: "fruit_lemon" }`、`{ ingredientRef: "fruit_lemon" }`、alias 和 object ref 查询能力已由 helper 支持。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.14。
+  - 加载 `core/ruleRefHelper.js`。
+- 更新 `scripts/runGoldenSamples.js`
+  - 在 Node 回归环境中加载 `core/ruleRefHelper.js`。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，14/14 passed。
+
+### 本轮不做
+
+- 不批量迁移 `data/accidentRules.js`。
+- 不改 `proportionSegmentRules`、`combinationRules`、`drinkTypeRules`、`synergyRules`。
+- 不改 golden samples。
+- 不改保存配方结构。
+- 不改评分、事故结果、反馈文案、饮品类型判断或 UI 交互。
+- 不做三层 summary 或 flavorProfile。
+- 不迁移任何旧事故规则。
+
 ## v0.0.5.13
 
 profile 查询入口支持 ingredientId / ref。

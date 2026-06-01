@@ -26,6 +26,7 @@ const scriptFiles = [
   "core/ingredientAnalyzer.js",
   "core/proportionSegmentRuleEngine.js",
   "core/proportionAnalyzer.js",
+  "core/ruleRefHelper.js",
   "core/accidentRuleEngine.js",
   "core/structureAccidentRuleEngine.js",
   "core/accidentAnalyzer.js",

@@ -1,6 +1,7 @@
 (function() {
 const { pick } = window.MILK_TEA_LAB_HELPERS;
 const { accidentRules } = window.MILK_TEA_LAB_ACCIDENT_RULES;
+const { resolveRuleIngredientRef, ratioOfRuleRef } = window.MILK_TEA_LAB_RULE_REF_HELPER;
 
 function matchesRatio(ratio, rule) {
   if (typeof rule.ratioMinExclusive === "number" && ratio <= rule.ratioMinExclusive) {
@@ -17,12 +18,14 @@ function evaluateAccidentRules(context) {
 
   return accidentRules
     .filter(rule => {
-      if (matchedIngredients.has(rule.ingredient)) {
+      const meta = resolveRuleIngredientRef(rule);
+      const ingredientKey = meta?.id || rule.ingredientId || rule.ingredientRef || rule.ingredient || rule.id;
+      if (matchedIngredients.has(ingredientKey)) {
         return false;
       }
-      const matched = matchesRatio(context.ratioOf(rule.ingredient), rule);
+      const matched = matchesRatio(ratioOfRuleRef(context, rule), rule);
       if (matched) {
-        matchedIngredients.add(rule.ingredient);
+        matchedIngredients.add(ingredientKey);
       }
       return matched;
     })
