@@ -22,6 +22,38 @@
 
 ---
 
+## 新对话启动提醒
+
+【不要删】如果用户在新 ChatGPT / Codex 对话中只提供了本文件，不要只依赖 `AI_CONTEXT.md` 继续开发。请主动提醒用户继续提供 / 让 Codex 读取以下关键文件：
+
+1. `docs/TASTE_ENGINE_ARCHITECTURE.md`
+   - 味觉引擎架构正本。
+   - 包含三层 profile 的设计由来、事故优先级、事故 severity 数值化原则、测试分级规则、v0.0.5.x 房梁阶段原则。
+   - 这是理解“为什么这么设计”的核心文件。
+2. `docs/TASTE_SYSTEM_DESIGN.md`
+   - 味觉系统设计文档。
+   - 包含 tasteProfile / textureProfile / flavorProfile、ingredientId、规则迁移方向等系统设计细节。
+3. `docs/VERSION_LOG.md`
+   - 版本记录。
+   - 用于确认最近完成了哪些 candidate、当前版本状态、哪些变化已经冻结。
+4. `data/goldenSamples.js`
+   - 当前 golden samples 安全网。
+   - 用于理解现有回归样本、ID 等价样本和关键味觉结果基线。
+5. 必要时再读取相关代码入口：
+   - `data/ingredients.js`
+   - `core/ingredientRegistry.js`
+   - `core/tasteContext.js`
+   - `core/ruleRefHelper.js`
+   - `core/tasteJudge.js`
+
+提醒原则：
+
+- `AI_CONTEXT.md` 只负责恢复方向和索引，不应该承载全部设计细节。
+- 新对话如果要继续架构设计或 Codex 开工，必须至少读取 `docs/TASTE_ENGINE_ARCHITECTURE.md`。
+- 如果用户只发了 AI_CONTEXT，助手应明确说：“请再把 `docs/TASTE_ENGINE_ARCHITECTURE.md` 发我，必要时再发 `TASTE_SYSTEM_DESIGN.md` 和 `VERSION_LOG.md`。”
+
+---
+
 ## 1. 项目定位
 
 【不要删】《奶茶实验室》是用户的长期原创游戏项目，暂定名已定。灵感来自老游戏《疯狂摇摇杯》，但必须做成原创作品，不能复刻原名、素材、UI、配方表或原文案。
@@ -483,6 +515,8 @@ v0.0.4.x 不做：
 【可删】v0.0.5.15 增强 golden samples 安全网：runner 支持 { ingredientId, ratio } 输入，并新增少量 ID 等价性样本；旧 name 样本保持兼容，不批量迁移，不改评分/事故/反馈/规则/保存结构。
 
 【可删】v0.0.5.16 让 proportionSegmentRuleEngine 接入 ruleRefHelper，兼容旧中文 ingredient/names 与新 ingredientId/ingredientRef/refs/ingredientIds；不批量迁移规则表，不改阈值、评分、反馈、golden samples 或保存结构。
+
+【不要删】三层 profile 的设计由来与事故 severity 数值化原则已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话 / Codex 继续 v0.0.5.x 时，必须理解三层架构来自奥利奥/小料 texture 问题、柠檬 acid overload 泛化、橙子 vs 西红柿 flavor identity 问题；事故优先级不等于严重度，严重度长期应数据化为可调 severityLevel / scoreMultiplier，不能把粗吸管需求等轻微服务冲突自动判成重事故。
 
 【不要删】《奶茶实验室》原料数据化长期应拆成三层 profile：tasteProfile（基础味觉）、textureProfile（物理质地）、flavorProfile（风味身份 / 香气身份）。tasteProfile 解决酸甜苦奶涩等基础味觉；textureProfile 解决吸管阻力、糊化、沉积、胶质、粉感、奶脂负担等物理结构；flavorProfile 解决橙子和西红柿这类酸甜度接近但风味身份完全不同的问题。后续事故、组合、客群和反馈判断应尽量来自 summary + 规则表，而不是 UI 分类或单个原料 if。
 

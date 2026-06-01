@@ -1,5 +1,36 @@
 # 版本记录
 
+## 文档补充：三层 profile 由来与事故 severity 原则
+
+本轮只补充设计文档，不提升页面版本号，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充三层 profile 的设计由来。
+  - 记录奥利奥 / 小料讨论如何引出 textureProfile。
+  - 记录柠檬 / acid overload 讨论如何引出 tasteProfile 事故泛化。
+  - 记录橙子 vs 西红柿例子如何引出 flavorProfile。
+  - 补充事故优先级与事故 severity 数值化原则。
+  - 明确粗吸管需求冲突不自动等于重事故。
+  - 补充 v0.0.5.x 房梁阶段边界。
+- 更新 `docs/AI_CONTEXT.md`
+  - 新增新对话启动提醒。
+  - 明确如果用户只提供 AI_CONTEXT，应提醒继续提供 / 读取 `docs/TASTE_ENGINE_ARCHITECTURE.md`，必要时再读 `docs/TASTE_SYSTEM_DESIGN.md` 和 `docs/VERSION_LOG.md`。
+  - 增加关键文件清单索引。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不改代码。
+- 不改 data / scripts / index.html。
+- 不改页面版本号。
+- 不新增功能。
+- 不 push，不 tag。
+
 ## v0.0.5.16
 
 proportion rules 支持 ingredientId。
