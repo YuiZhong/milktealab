@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.5.15
+
+golden samples 支持 ingredientId 输入。
+
+### 阶段目标
+
+本版本增强 golden samples 回归安全网，让测试 runner 可以把 `{ ingredientId, ratio }` 等 ID 输入标准化为现有味觉系统可读取的 cup item。旧 `{ name, ratio }` 样本保持兼容，现有 14 个样本不批量迁移。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 在 runner 内部标准化 sample cup item。
+  - 旧 `{ name, ratio }` 写法保持原路径。
+  - 新增支持 `{ ingredientId, ratio }`、`{ ingredientRef, ratio }` 和 `{ id, ratio }`。
+  - 无法解析的原料 ref 会让对应 golden sample 明确失败，不静默跳过。
+- 更新 `data/goldenSamples.js`
+  - 新增 `classic_milk_tea_id_equivalence`，用 `ingredientId` 覆盖经典奶茶等价输入路径。
+  - 不批量迁移原有 14 个 name 样本。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.15。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+- `validateIngredientRegistry()` 通过：37 个原料，37 个唯一 id，无 alias 冲突。
+
+### 本轮不做
+
+- 不改评分、事故结果、反馈文案、饮品类型判断或 UI 交互。
+- 不改 `tasteJudge`、`tasteContext`、profile、rules 或保存结构。
+- 不改 `proportionSegmentRuleEngine`。
+- 不批量迁移现有 golden samples。
+- 不做三层 summary 或 flavorProfile。
+
 ## v0.0.5.14
 
 rule ref helper 地基。

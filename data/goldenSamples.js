@@ -18,6 +18,23 @@
       notes: "经典稳定样本，不应被事故规则误伤。"
     },
     {
+      id: "classic_milk_tea_id_equivalence",
+      name: "经典奶茶 ID 等价样本",
+      cup: [
+        { ingredientId: "tea_black", ratio: 45 },
+        { ingredientId: "dairy_milk", ratio: 40 },
+        { ingredientId: "topping_pearl", ratio: 15 }
+      ],
+      expectations: {
+        typeIncludes: ["经典奶茶"],
+        forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
+        scoreMin: 74,
+        scoreMax: 74,
+        feedbackIncludesAny: ["红茶", "牛奶", "经典"]
+      },
+      notes: "与 classic_milk_tea 等价，用 ingredientId 覆盖 golden sample 的 ID 输入路径。"
+    },
+    {
       id: "fresh_bubble_fruit_tea",
       name: "清爽水果茶",
       cup: [

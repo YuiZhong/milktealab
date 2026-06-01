@@ -88,6 +88,31 @@ function checkForbidden(label, text, candidates, failures) {
   });
 }
 
+function normalizeSampleItem(item, ingredientRegistry, sampleId) {
+  if (item?.name) return { ...item };
+
+  const ref = item?.ingredientRef || item?.ingredientId || item?.id;
+  const meta = ingredientRegistry.normalizeIngredientRef(ref);
+
+  if (!meta) {
+    throw new Error(`sample ${sampleId} has unknown ingredient ref: ${JSON.stringify(item)}`);
+  }
+
+  return {
+    ...item,
+    name: meta.name,
+    ingredientId: meta.id
+  };
+}
+
+function normalizeSampleCup(sample, ingredientRegistry) {
+  if (!Array.isArray(sample.cup)) {
+    throw new Error(`sample ${sample.id} cup should be an array`);
+  }
+
+  return sample.cup.map(item => normalizeSampleItem(item, ingredientRegistry, sample.id));
+}
+
 function checkSample(sample, result) {
   const failures = [];
   const expectations = sample.expectations || {};
@@ -119,14 +144,24 @@ function checkSample(sample, result) {
 function main() {
   const runtime = createRuntime();
   const { evaluateCup } = runtime.MILK_TEA_LAB_TASTE_JUDGE;
+  const ingredientRegistry = runtime.MILK_TEA_LAB_INGREDIENT_REGISTRY;
   const { goldenSamples } = runtime.MILK_TEA_LAB_GOLDEN_SAMPLES;
 
   let passed = 0;
   const failed = [];
 
   goldenSamples.forEach(sample => {
-    const result = evaluateCup(sample.cup);
-    const failures = checkSample(sample, result);
+    let result = null;
+    let failures = [];
+
+    try {
+      const cup = normalizeSampleCup(sample, ingredientRegistry);
+      result = evaluateCup(cup);
+      failures = checkSample(sample, result);
+    } catch (error) {
+      failures = [error.message];
+    }
+
     const status = failures.length ? "FAIL" : "PASS";
     const summary = result ? `${result.type} / ${result.score}分` : "no result";
 
