@@ -482,6 +482,8 @@ v0.0.4.x 不做：
 
 【可删】v0.0.5.15 增强 golden samples 安全网：runner 支持 { ingredientId, ratio } 输入，并新增少量 ID 等价性样本；旧 name 样本保持兼容，不批量迁移，不改评分/事故/反馈/规则/保存结构。
 
+【可删】v0.0.5.16 让 proportionSegmentRuleEngine 接入 ruleRefHelper，兼容旧中文 ingredient/names 与新 ingredientId/ingredientRef/refs/ingredientIds；不批量迁移规则表，不改阈值、评分、反馈、golden samples 或保存结构。
+
 【不要删】《奶茶实验室》原料数据化长期应拆成三层 profile：tasteProfile（基础味觉）、textureProfile（物理质地）、flavorProfile（风味身份 / 香气身份）。tasteProfile 解决酸甜苦奶涩等基础味觉；textureProfile 解决吸管阻力、糊化、沉积、胶质、粉感、奶脂负担等物理结构；flavorProfile 解决橙子和西红柿这类酸甜度接近但风味身份完全不同的问题。后续事故、组合、客群和反馈判断应尽量来自 summary + 规则表，而不是 UI 分类或单个原料 if。
 
 【不要删】《奶茶实验室》原料数据模型后续应逐步引入稳定 ingredientId。系统规则、tasteProfile、textureProfile、flavorProfile、组合规则、事故规则、golden samples 和未来存档，应尽量引用 ingredientId，而不是玩家可见 name。name 负责显示，aliases 负责旧名 / 别名 / 搜索兼容。推荐使用可读字符串 ID，例如 fruit_lemon、topping_oreo_crumble，不建议长期依赖纯数字或中文显示名作为主键。正式迁移前应先做只读评估，避免一次性重写全项目。

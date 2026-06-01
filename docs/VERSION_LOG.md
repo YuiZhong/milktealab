@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.5.16
+
+proportion rules 支持 ingredientId。
+
+### 阶段目标
+
+本版本让 `proportionSegmentRuleEngine` 接入 `ruleRefHelper`，使比例段规则执行器可以通过 stable ingredientId、中文 name、alias 和 object ref 查询当前配方比例。本轮只增强执行层兼容能力，不批量迁移 `data/proportionSegmentRules.js`。
+
+### 本轮新增 / 更新
+
+- 更新 `core/proportionSegmentRuleEngine.js`
+  - 单原料比例查询改用 `ruleRefHelper`。
+  - 旧 `{ ingredient: "柠檬" }` 继续可用。
+  - 新 `{ ingredientId: "fruit_lemon" }`、`{ ingredientRef: "fruit_lemon" }`、alias 和 object ref 可由 helper 解析。
+  - 多原料合计兼容旧 `names` 与新 `refs`、`ingredientRefs`、`ingredientIds`。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.16。
+  - 将 `core/ruleRefHelper.js` 加载顺序前移到 `core/proportionSegmentRuleEngine.js` 之前。
+- 更新 `scripts/runGoldenSamples.js`
+  - 同步 Node 回归环境中的脚本加载顺序。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不批量迁移 `data/proportionSegmentRules.js`。
+- 不改比例段阈值、评分、事故结果、反馈文案、饮品类型判断或 UI 交互。
+- 不改 golden samples。
+- 不改保存配方结构。
+- 不改 `tasteJudge`、`tasteContext` 或 `accidentRuleEngine`。
+- 不做三层 summary 或 flavorProfile。
+
 ## v0.0.5.15
 
 golden samples 支持 ingredientId 输入。

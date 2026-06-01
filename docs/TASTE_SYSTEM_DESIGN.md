@@ -158,6 +158,8 @@ v0.0.5.14 新增 `ruleRefHelper`，并让 `accidentRuleEngine` 支持 ingredient
 
 v0.0.5.15 让 golden samples 安全网开始覆盖 ingredientId 输入路径；旧 name 样本仍保持兼容，现有样本不批量迁移。
 
+v0.0.5.16 让 proportionSegmentRuleEngine 支持 ingredientId / name / alias / object ref；比例段规则表仍保持旧 name 兼容，后续再逐步迁移规则数据。
+
 ## 4. if 治理原则
 
 核心原则：

@@ -1,6 +1,10 @@
 (function() {
 const { pick } = window.MILK_TEA_LAB_HELPERS;
 const { proportionSegmentRules } = window.MILK_TEA_LAB_PROPORTION_SEGMENT_RULES;
+const {
+  ratioOfRuleRef,
+  sumRuleRefs
+} = window.MILK_TEA_LAB_RULE_REF_HELPER;
 
 function matchesLowerBound(ratio, rule) {
   if (typeof rule.minRatioExclusive === "number" && ratio <= rule.minRatioExclusive) return false;
@@ -15,7 +19,8 @@ function matchesUpperBound(ratio, rule) {
 }
 
 function matchesRatioSum(context, condition) {
-  const ratio = context.sumRatios(condition.names);
+  const refs = condition.refs || condition.ingredientRefs || condition.ingredientIds || condition.names;
+  const ratio = sumRuleRefs(context, refs);
   if (typeof condition.minExclusive === "number" && ratio <= condition.minExclusive) return false;
   if (typeof condition.minInclusive === "number" && ratio < condition.minInclusive) return false;
   if (typeof condition.maxExclusive === "number" && ratio >= condition.maxExclusive) return false;
@@ -42,7 +47,7 @@ function applyProportionSegmentRules(context, attr) {
   let scoreDelta = 0;
 
   proportionSegmentRules.forEach(rule => {
-    const ratio = context.ratioOf(rule.ingredient);
+    const ratio = ratioOfRuleRef(context, rule);
     if (!matchesLowerBound(ratio, rule) || !matchesUpperBound(ratio, rule)) return;
     if (!matchesContext(context, rule)) return;
 
