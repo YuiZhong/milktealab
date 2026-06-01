@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.5.12
+
+context 双轨 name/id 地基。
+
+### 阶段目标
+
+本版本让 `tasteContext` 开始支持中文 `name` / stable `ingredientId` 双轨引用。旧 `name` 查询继续兼容，后续 profile、rules、golden samples 和存档可以在此基础上小步迁移到 stable `ingredientId`。
+
+### 本轮新增 / 更新
+
+- 更新 `core/tasteContext.js`
+  - `activeCup` 标准化时补充 `ingredientId` 和 `category`。
+  - 保留旧 `names`、`normalizedNames`、`ratioOf`、`sumRatios` 和 `countByCategory`。
+  - 新增 `ingredientIds`、`normalizedIngredientIds`。
+  - 新增 `ratioOfId`、`ratioOfRef`、`sumRatiosByIds`、`sumRatiosByRefs`、`hasIngredientRef`。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.12。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- `node --check core/tasteContext.js` 通过。
+- `node --check core/ingredientRegistry.js` 通过。
+- context 双轨自检通过。
+- `validateIngredientRegistry()` 通过：37 个原料，37 个唯一 id，无 alias 冲突。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，14/14 passed。
+
+### 本轮不做
+
+- 不改变评分、事故判断、反馈文案、饮品类型或玩家可见输出。
+- 不让 profile、rules、golden samples 或保存结构改用 `id`。
+- 不迁移任何旧事故规则。
+
 ## v0.0.5.11
 
 ingredient lookup helper。
