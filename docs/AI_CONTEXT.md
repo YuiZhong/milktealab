@@ -60,7 +60,7 @@
 
 - 最新 candidate：`v0.0.5.34-candidate`
 - 最新 candidate commit：`98bac8c3b22c2b54f5e66748b536de3e000a037f`
-- 最新 main：本轮 `v0.0.5.35` commit 完成后以 `git log -1` 为准；本轮不创建 tag，不创建 `v0.0.5.35-candidate`。
+- 最新 main：`v0.0.5.35` main 已追加 runtime script cache version bugfix commit，提交后以 `git log -1` 为准；本轮不创建 tag，不创建 `v0.0.5.35-candidate`。
 - `v0.0.5.34-candidate` 已冻结并推送，指向 `98bac8c3b22c2b54f5e66748b536de3e000a037f`；正式 tag `v0.0.5.34` 未创建。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -81,6 +81,7 @@
 - v0.0.5.33 修正 `core/accidentAnalyzer.js` 中 texture accident 去重 / 判断主路径，优先使用 `accidentTypeId` / `tags`；中文 `type` / `note` 仅保留 legacy fallback。本轮不改事故触发条件、评分、cap、add、note、type、accidentTypeId、tags、反馈文案或 golden expected。
 - v0.0.5.34 修正 `core/feedbackEngine.js` 中通过中文 note 片段选择反馈标签的主路径；反馈选择优先使用结构化 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback。`tasteJudge` 汇总并传递 `feedbackTags`，result 暴露 `feedbackTags`。本轮不改评分、事故、饮品类型、反馈文案风格或 golden expected。
 - v0.0.5.35 完成保存 result / 历史快照边界小修；旧保存 result / 损坏 result 缺 `feedback` / `audience` / `attr` 时渲染安全降级。明确保存的中文 `type` / `audience` / `feedback` 是历史展示快照，未来统计、图鉴、顾客偏好和经营报表应依赖 `accidentTypeId` / `drinkTypeId` / `audienceIds` / `feedbackTags` 等结构化 ID；玩家未来自定义饮品名 `customName` / `title` 只作为显示名，不作为 `recipeId` / `drinkTypeId` / `recipeFamilyId` / `recipeVersionId`。本轮不做正式存档系统、不改保存交互、不做 localStorage migration、不改 golden expected。
+- v0.0.5.35 main 追加 cache-busting bugfix：刷新 `index.html` 中 `data/feedbackTexts.js`、`core/feedbackEngine.js`、`core/tasteJudge.js`、`ui/render.js` 的 runtime script query string，修复旧缓存 `feedbackEngine` 缺少 `getFeedbackTags` 导致点击试喝时报错的问题。本轮不改业务逻辑、不改 core / data / scripts / ui / storage 文件、不改页面版本号。
 - docs 已补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
 - docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
 - docs 已补充经营层原则：自由实验室阶段不硬限制原料数量；未来经营阶段可通过出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险等软成本限制过度复杂配方。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚。
@@ -89,8 +90,9 @@
 - v0.0.5.33 已完成 texture accident 去中文判断小修，texture accident 判断主路径优先使用 `accidentTypeId` / `tags`，中文 `type` / `note` 仅保留 legacy fallback。
 - v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。
 - v0.0.5.35 已完成保存 result / 历史快照边界小修，旧 result 缺字段时渲染安全兜底，保存 result 中文字段明确为历史展示快照，未来机制依赖结构化 ID。
-- 当前未创建 `v0.0.5.35` tag。
-- 下一步可考虑 ID 化收口审计。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
+- 当前未创建 `v0.0.5.35` tag / `v0.0.5.35-candidate` tag。
+- 下一步仍是 `v0.0.5.35-candidate` 冻结前复查；之后可考虑 ID 化收口审计。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 

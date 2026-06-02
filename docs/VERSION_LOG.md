@@ -1,5 +1,33 @@
 # 版本记录
 
+## v0.0.5.35 bugfix: refresh runtime script cache version
+
+修复前端 runtime 脚本缓存串过旧导致浏览器加载旧 `feedbackEngine` 的问题。
+
+### 本轮新增 / 更新
+
+- 更新 `index.html`
+  - 将 `data/feedbackTexts.js` cache-busting query string 刷新为 `v=0055`。
+  - 将 `core/feedbackEngine.js` cache-busting query string 刷新为 `v=0055`。
+  - 为 `core/tasteJudge.js` 增加 `v=0055` query string。
+  - 为 `ui/render.js` 增加 `v=0055` query string。
+  - 保持脚本加载顺序不变。
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 `v0.0.5.35` main 已追加 runtime script cache version bugfix commit。
+  - 记录当前仍未创建 `v0.0.5.35-candidate`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- UI smoke：确认试喝、保存、载入恢复正常，console 无业务 JS error。
+
+### 本轮不做
+
+- 不改业务逻辑。
+- 不改 core / data / scripts / ui / storage 文件。
+- 不改评分、事故、饮品类型、反馈文案或 golden expected。
+- 不创建 tag。
+
 ## v0.0.5.35
 
 保存 result / 历史快照边界小修。
