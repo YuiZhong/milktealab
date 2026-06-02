@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.5.31 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.31-candidate`。
+  - 记录 candidate 指向 `349ba15a88506708ee40a4b652009fc67ff8201b`。
+  - 记录 `v0.0.5.31-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.31` 已完成 `combinationRules` refs 小批迁移。
+  - 记录 17 条 good / bad 具体组合已补 `ingredientIds`。
+  - 记录旧中文 `names` 仍保留。
+  - 记录 `multiIngredientRules.teaMix` 未迁移。
+  - 记录当前未推进 `v0.0.5.32`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.32。
+- 不创建 tag。
+
 ## v0.0.5.31
 
 combinationRules refs 小批迁移。
