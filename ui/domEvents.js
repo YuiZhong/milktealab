@@ -1,7 +1,8 @@
 (function() {
 function bindDomEvents(app) {
   const { el, state, recipeEngine, evaluateCup, saveStorage, groups, ui } = app;
-  const { clamp, displayName } = window.MILK_TEA_LAB_HELPERS;
+  const { clamp } = window.MILK_TEA_LAB_HELPERS;
+  const recipeNormalizer = window.MILK_TEA_LAB_RECIPE_NORMALIZER;
 
   function totalRatio() {
     return recipeEngine.totalRatio(state.cup);
@@ -85,7 +86,7 @@ function bindDomEvents(app) {
       id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
       title,
       createdAt: new Date().toLocaleString("zh-CN"),
-      cup: state.cup.map(item => ({ ...item })),
+      cup: recipeNormalizer.serializeCupForSave(state.cup),
       result
     });
     saveStorage.setRecipes(recipes.slice(0, 24));
@@ -95,7 +96,7 @@ function bindDomEvents(app) {
   }
 
   function loadRecipe(recipe) {
-    state.cup = recipe.cup.map(item => ({ ...item, name: displayName(item.name) }));
+    state.cup = recipeNormalizer.normalizeSavedRecipe(recipe).cup;
     state.lastResult = recipe.result;
     ui.render();
     ui.renderTasteReport(recipe.result);

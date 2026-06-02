@@ -58,14 +58,15 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.18-candidate`
-- 最新 candidate commit：`c25d7d0 feat: add ingredient group helper`
-- 最新 main：本轮 v0.0.5.19 提交 `feat: support ingredient refs in drink type rules`，提交后以 `git log -1` 为准。
-- `v0.0.5.18-candidate` 已冻结并推送；v0.0.5.19 让 drinkType rules 执行入口支持 ingredientId / ref，尚未冻结 candidate。
+- 最新 candidate：`v0.0.5.19-candidate`
+- 最新 candidate commit：`ebb37fe feat: support ingredient refs in drink type rules`
+- 最新 main：本轮 v0.0.5.20 提交 `feat: add ingredient ids to saved recipes`，提交后以 `git log -1` 为准。
+- `v0.0.5.19-candidate` 已冻结并推送；v0.0.5.20 让浏览器保存配方结构进入 name / ingredientId 双轨。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `15/15 passed`。
-- v0.0.5.10-v0.0.5.19 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口。
-- 后续不要拍死，可继续评估 `analyzeFruitTeaBlend` / audience 本地中文逻辑、保存结构或规则数据迁移策略。
+- v0.0.5.10-v0.0.5.20 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨。
+- v0.0.5.20 新增保存结构标准化入口；新保存配方写 ingredientId + name + ratio，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐。本轮不做复杂 localStorage migration，不批量改写旧数据，不等同于正式存档系统。
+- 后续不要拍死，可继续评估规则数据迁移策略、`analyzeFruitTeaBlend` / audience 本地中文逻辑或本地中文数组残留。
 
 ---
 

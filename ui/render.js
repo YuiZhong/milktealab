@@ -2,6 +2,8 @@
 function createRenderer(app) {
   const { groups, categoryByName, el, state, recipeEngine } = app;
   const { clamp, displayName } = window.MILK_TEA_LAB_HELPERS;
+  const ingredientRegistry = window.MILK_TEA_LAB_INGREDIENT_REGISTRY;
+  const recipeNormalizer = window.MILK_TEA_LAB_RECIPE_NORMALIZER;
 
   function totalRatio() {
     return recipeEngine.totalRatio(state.cup);
@@ -13,6 +15,21 @@ function createRenderer(app) {
 
   function maxRatioForIndex(index) {
     return recipeEngine.maxRatioForIndex(state.cup, index);
+  }
+
+  function normalizeCupItem(item) {
+    return recipeNormalizer.normalizeSavedCupItem(item);
+  }
+
+  function cupItemName(item) {
+    return normalizeCupItem(item).name || displayName(item.name) || "";
+  }
+
+  function cupItemCategory(item) {
+    const normalized = normalizeCupItem(item);
+    return ingredientRegistry?.getIngredientCategory({ ingredientId: normalized.ingredientId })
+      || categoryByName.get(normalized.name)
+      || categoryByName.get(item.name);
   }
 
   function renderIngredients() {
@@ -32,6 +49,7 @@ function createRenderer(app) {
         button.type = "button";
         button.className = `ingredient ${group.name.replace("/", "")}`;
         button.dataset.name = displayName(name);
+        button.dataset.ingredientId = ingredientRegistry?.getIngredientId({ name }) || "";
         button.setAttribute("aria-pressed", "false");
         button.textContent = name;
         grid.append(button);
@@ -63,7 +81,7 @@ function createRenderer(app) {
 
       const name = document.createElement("div");
       name.className = "cup-item-name";
-      name.textContent = displayName(item.name);
+      name.textContent = cupItemName(item);
 
       const range = document.createElement("input");
       range.className = "ratio-input";
@@ -84,7 +102,7 @@ function createRenderer(app) {
       remove.className = "remove-btn";
       remove.type = "button";
       remove.dataset.action = "remove-ingredient";
-      remove.setAttribute("aria-label", `删除${displayName(item.name)}`);
+      remove.setAttribute("aria-label", `删除${cupItemName(item)}`);
       remove.textContent = "×";
 
       row.append(name, range, number, remove);
@@ -119,7 +137,7 @@ function createRenderer(app) {
       el.cupNote.textContent = "杯子还没装满，可以继续加料或点击自动配平。";
       el.cupNote.className = "notice";
     } else {
-      el.cupNote.textContent = state.cup.map(item => `${displayName(item.name)} ${item.ratio}%`).join(" / ");
+      el.cupNote.textContent = state.cup.map(item => `${cupItemName(item)} ${item.ratio}%`).join(" / ");
       el.cupNote.className = "";
     }
     el.visualFill.style.height = `${clamp(total * 0.8, 18, 88)}%`;
@@ -140,7 +158,7 @@ function createRenderer(app) {
     };
     let cursor = 0;
     const stops = state.cup.map(item => {
-      const color = colorMap[categoryByName.get(item.name)] || "#ddd";
+      const color = colorMap[cupItemCategory(item)] || "#ddd";
       const start = cursor;
       cursor += (item.ratio / total) * 100;
       return `${color} ${start}% ${cursor}%`;
@@ -150,7 +168,7 @@ function createRenderer(app) {
 
   function renderToppings() {
     el.visualToppings.innerHTML = "";
-    const toppingCount = Math.min(10, state.cup.filter(item => categoryByName.get(item.name) === "小料").length * 3);
+    const toppingCount = Math.min(10, state.cup.filter(item => cupItemCategory(item) === "小料").length * 3);
     for (let index = 0; index < toppingCount; index += 1) {
       const dot = document.createElement("span");
       dot.style.left = `${18 + (index * 23) % 84}px`;
@@ -178,14 +196,22 @@ function createRenderer(app) {
     });
   }
 
-  function selectedIngredientNames() {
-    return new Set(state.cup.map(item => displayName(item.name)));
+  function selectedIngredients() {
+    const ids = new Set();
+    const names = new Set();
+    state.cup.forEach(item => {
+      const normalized = normalizeCupItem(item);
+      if (normalized.ingredientId) ids.add(normalized.ingredientId);
+      if (normalized.name) names.add(displayName(normalized.name));
+    });
+    return { ids, names };
   }
 
   function updateSelectedIngredientButtons() {
-    const selected = selectedIngredientNames();
+    const selected = selectedIngredients();
     el.groups.querySelectorAll(".ingredient").forEach(button => {
-      const isSelected = selected.has(button.dataset.name);
+      const isSelected = Boolean(button.dataset.ingredientId && selected.ids.has(button.dataset.ingredientId))
+        || selected.names.has(button.dataset.name);
       button.classList.toggle("is-selected", isSelected);
       button.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
@@ -257,7 +283,8 @@ function createRenderer(app) {
       const card = document.createElement("article");
       card.className = "saved-card";
       card.dataset.recipeId = recipe.id;
-      const ingredients = recipe.cup.map(item => `${displayName(item.name)} ${item.ratio}%`).join(" / ");
+      const normalizedRecipe = recipeNormalizer.normalizeSavedRecipe(recipe);
+      const ingredients = normalizedRecipe.cup.map(item => `${cupItemName(item)} ${item.ratio}%`).join(" / ");
       card.innerHTML = `
         <div class="saved-card-head">
           <strong>${recipe.title}</strong>

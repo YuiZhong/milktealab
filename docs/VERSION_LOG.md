@@ -1,5 +1,47 @@
 # 版本记录
 
+## v0.0.5.20
+
+保存结构 ingredientId 双轨地基。
+
+### 阶段目标
+
+本版本让浏览器保存配方结构进入 name / ingredientId 双轨。新保存配方写入 ingredientId + name + ratio，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐。本轮只做保存结构边界兼容，不做正式存档系统。
+
+### 本轮新增 / 更新
+
+- 新增 `storage/recipeNormalizer.js`
+  - 提供 `normalizeSavedCupItem`、`normalizeSavedCup`、`normalizeSavedRecipe`、`serializeCupForSave`。
+  - 只负责识别 name / ingredientId / id / ingredientRef，通过 ingredientRegistry 补 canonical name 和 ingredientId。
+  - 找不到原料时保留可用 name / ratio，不抛异常。
+  - 不计算评分，不判断事故、反馈或饮品类型。
+- 更新 `ui/domEvents.js`
+  - 保存配方时写入标准化 cup item。
+  - 载入旧保存配方时即时标准化 cup。
+- 更新 `ui/render.js`
+  - 保存列表显示 canonical name 或 fallback。
+  - 左侧按钮高亮兼容 ingredientId / name / alias。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.20。
+  - 加载 `storage/recipeNormalizer.js`。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+- 完成 recipe 标准化自检。
+- 完成无头 Chrome 页面加载检查和真实 UI smoke test。
+
+### 本轮不做
+
+- 不做复杂 localStorage migration。
+- 不批量改写旧 localStorage。
+- 不做正式存档系统、玩家进度存档、云存档、多存档槽或 schemaVersion。
+- 不改评分、事故判断、反馈文案、类型判断、rules 或 golden samples。
+- 不改 UI 视觉。
+- 不做三层 summary、flavorProfile 或 v0.0.5.21。
+- 不 tag。
+
 ## v0.0.5.19
 
 drinkType rules 支持 ingredientId。

@@ -166,6 +166,8 @@ v0.0.5.18 新增 ingredientGroupHelper，作为共享原料组的统一查询入
 
 v0.0.5.19 让 drinkType rules 执行入口支持 ingredientId / name / alias / object ref；drinkTypeRules 数据表仍保持旧中文字段兼容，analyzeFruitTeaBlend 与 audience 的本地中文逻辑留待后续小步治理。
 
+v0.0.5.20 让浏览器保存配方结构进入 name / ingredientId 双轨：新保存写入 ingredientId + name，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐；本轮不做复杂迁移或正式存档系统。
+
 ## 4. if 治理原则
 
 核心原则：

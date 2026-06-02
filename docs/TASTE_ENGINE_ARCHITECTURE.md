@@ -60,6 +60,8 @@ v0.0.5.18 将共享原料组查询从 analyzer 内部中文数组依赖中抽出
 
 v0.0.5.19 将 ingredientId 兼容推进到 drinkType 规则执行入口；本轮只做 ref 兼容，不改变玩家可见类型判断，不接三层 summary。
 
+v0.0.5.20 将 ingredientId 兼容推进到保存结构边界；保存结构 helper 只做 recipe/cup item 标准化，不承载味觉判断，也不等同于正式存档系统。
+
 示意结构：
 
 ```js
