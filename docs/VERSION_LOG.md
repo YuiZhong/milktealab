@@ -1,5 +1,31 @@
 # 版本记录
 
+## v0.0.5.31
+
+combinationRules refs 小批迁移。
+
+### 本轮新增 / 更新
+
+- 更新 `data/combinationRules.js`
+  - 给 `goodCombinations` / `conflictCombinations` 中现有具体原料组合规则新增 `ingredientIds`。
+  - 旧中文 `names` 字段保留兼容和可读性。
+  - `multiIngredientRules.teaMix` 基于 category，本轮不迁。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.31。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.31 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改 `core/combinationAnalyzer.js`。
+- 不改组合语义、score、add、note 或规则顺序。
+- 不改 golden expected。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.30 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
