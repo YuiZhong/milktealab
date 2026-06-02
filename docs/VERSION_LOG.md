@@ -1,5 +1,37 @@
 # 版本记录
 
+## 文档补充：三层判定数据化原则
+
+本轮只改设计文档，不提升页面版本号，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 新增“三层判定的数据化原则”。
+  - 明确三层判定不是三层 if。
+  - 明确代码负责“怎么判”，数据负责“判什么”，测试负责“别判歪”。
+  - 区分允许存在的引擎 if 与应避免长期堆叠的内容 if。
+  - 写入 taste / texture / flavor 三层各自的数据化方式。
+  - 明确 flavor 层尤其要避免标签组合 if 地狱。
+  - 明确 `ingredientGroupHelper` 与数据化原则的关系：只能做 group key -> refs -> context 查询，不承载味觉判断。
+  - 明确事故 severity 应数据化为 `severityLevel` / `scoreMultiplier` / `feedbackTags` 等结构。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步当前状态快照。
+  - 新增三层判定数据化原则的短索引。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不改代码。
+- 不改 data / scripts / index.html。
+- 不改 `AGENTS.md`。
+- 不改页面版本号。
+- 不推进 v0.0.5.18。
+- 不 push，不 tag。
+
 ## 文档补充：AGENTS.md Codex 工作守则
 
 本轮只改工作流文档，不提升页面版本号，不改运行逻辑。
