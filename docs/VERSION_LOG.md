@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.5.26
+
+普通饮品类型 drinkTypeId + type/displayName 双轨地基。
+
+### 本轮新增 / 更新
+
+- 更新 `data/drinkTypeRules.js`
+  - 普通饮品类型规则补充 stable `drinkTypeId`。
+  - 新增 `defaultTypeId: "experimental_special"`。
+  - 旧中文 `type` 保留，继续作为玩家可见显示名 / legacy 字段。
+- 更新 `core/drinkTypeAnalyzer.js`
+  - 保持 `inferType` 旧返回值兼容，仍返回中文 type 字符串。
+  - 新增 `inferTypeResult` 结构化返回能力，返回 `{ type, drinkTypeId }`。
+  - `analyzeFruitTeaBlend` 返回普通水果茶类型时补充 `drinkTypeId`。
+- 更新 `core/tasteJudge.js`
+  - 在不改变 `result.type` 的前提下，为普通饮品类型结果暴露 `result.drinkTypeId`。
+  - 事故类型继续由 `accidentTypeId` 处理，本轮不把事故类型塞进 `drinkTypeId`。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.26。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.26 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改评分、事故触发、反馈文案、type 中文或 golden expected。
+- 不改 golden samples。
+- 不做 golden runner `drinkTypeId` 断言。
+- 不做 audienceId。
+- 不做三层 summary。
+- 不做 severity 系统。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.25 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

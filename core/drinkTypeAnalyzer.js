@@ -2,7 +2,7 @@
 const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
 const { hasRuleRef } = window.MILK_TEA_LAB_RULE_REF_HELPER;
 const { has } = window.MILK_TEA_LAB_HELPERS;
-const { drinkTypeRules, defaultType } = window.MILK_TEA_LAB_DRINK_TYPE_RULES;
+const { drinkTypeRules, defaultType, defaultTypeId } = window.MILK_TEA_LAB_DRINK_TYPE_RULES;
 
 function analyzeFruitTeaBlend(context) {
   const teaCandidates = ["茉莉茶", "绿茶", "乌龙茶", "红茶"];
@@ -69,17 +69,19 @@ function analyzeFruitTeaBlend(context) {
   }
 
   const typeMap = {
-    茉莉茶: "水果茉莉茶",
-    绿茶: "水果绿茶",
-    乌龙茶: "水果乌龙茶",
-    红茶: "水果红茶"
+    茉莉茶: { type: "水果茉莉茶", drinkTypeId: "fruit_jasmine_tea" },
+    绿茶: { type: "水果绿茶", drinkTypeId: "fruit_green_tea" },
+    乌龙茶: { type: "水果乌龙茶", drinkTypeId: "fruit_oolong_tea" },
+    红茶: { type: "水果红茶", drinkTypeId: "fruit_black_tea" }
   };
-  const type = bubble >= 10 ? "气泡水果茶" : typeMap[primaryTea.name] || "花果茶";
+  const typeResult = bubble >= 10
+    ? { type: "气泡水果茶", drinkTypeId: "sparkling_fruit_tea" }
+    : typeMap[primaryTea.name] || { type: "花果茶", drinkTypeId: "flower_fruit_tea" };
   const note = bubble >= 10
     ? "茶、水果和气泡的结构成立，清爽感很足，但气泡不是万能满分按钮。"
     : `${primaryTea.name}和水果搭得自然，像一杯认真做过功课的花果茶。`;
 
-  return { type, score, add, cap, note };
+  return { ...typeResult, score, add, cap, note };
 }
 
 function compare(left, op, right) {
@@ -140,9 +142,22 @@ function matchesCondition(condition, attr, names, score, context) {
   return false;
 }
 
-function inferType(attr, names, score, context = null) {
+function inferTypeResult(attr, names, score, context = null) {
   const matchedRule = drinkTypeRules.find(rule => matchesCondition(rule.when, attr, names, score, context));
-  return matchedRule?.type || defaultType;
+  if (matchedRule) {
+    return {
+      type: matchedRule.type,
+      drinkTypeId: matchedRule.drinkTypeId
+    };
+  }
+  return {
+    type: defaultType,
+    drinkTypeId: defaultTypeId
+  };
+}
+
+function inferType(attr, names, score, context = null) {
+  return inferTypeResult(attr, names, score, context).type;
 }
 
 function inferAudience(attr, names, score) {
@@ -169,6 +184,7 @@ function inferAudience(attr, names, score) {
 
 window.MILK_TEA_LAB_DRINK_TYPE_ANALYZER = {
   analyzeFruitTeaBlend,
+  inferTypeResult,
   inferType,
   inferAudience
 };

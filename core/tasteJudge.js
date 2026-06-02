@@ -31,6 +31,7 @@ function evaluateCup(cup) {
   const segmentNotes = [];
   const generalNotes = [];
   let forcedType = null;
+  let forcedDrinkTypeId = null;
 
   const segmentResult = proportionAnalyzer.applyProportionSegments(context, attr);
   scoreEngine.addScore(score, segmentResult.scoreDelta);
@@ -59,6 +60,7 @@ function evaluateCup(cup) {
       scoreEngine.addScore(score, fruitTeaBlend.score);
       scoreEngine.applyScoreCap(score, fruitTeaBlend.cap);
       forcedType = forcedType || fruitTeaBlend.type;
+      forcedDrinkTypeId = forcedDrinkTypeId || fruitTeaBlend.drinkTypeId;
       ingredientAnalyzer.applyAttributeBoost(attr, fruitTeaBlend.add);
       goodNotes.push(fruitTeaBlend.note);
     }
@@ -125,7 +127,11 @@ function evaluateCup(cup) {
   });
 
   const finalScore = scoreEngine.finalizeScore(score);
-  const type = forcedType || drinkTypeAnalyzer.inferType(attr, context.normalizedNames, finalScore, context);
+  const inferredTypeResult = forcedType
+    ? null
+    : drinkTypeAnalyzer.inferTypeResult(attr, context.normalizedNames, finalScore, context);
+  const type = forcedType || inferredTypeResult.type;
+  const drinkTypeId = forcedDrinkTypeId || inferredTypeResult?.drinkTypeId;
   const audience = drinkTypeAnalyzer.inferAudience(attr, context.normalizedNames, finalScore);
   const priorityNotes = accidentNotes.length
     ? accidentNotes
@@ -141,6 +147,9 @@ function evaluateCup(cup) {
   const result = { attr, score: finalScore, type, audience, feedback };
   if (primaryAccident?.accidentTypeId) {
     result.accidentTypeId = primaryAccident.accidentTypeId;
+  }
+  if (drinkTypeId && !primaryAccident?.accidentTypeId && !badNotes.length) {
+    result.drinkTypeId = drinkTypeId;
   }
   return result;
 }
