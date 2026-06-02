@@ -207,6 +207,23 @@ function createRenderer(app) {
     return { ids, names };
   }
 
+  function resultText(value, fallback) {
+    return typeof value === "string" && value.trim() ? value : fallback;
+  }
+
+  function resultScore(result) {
+    return Number.isFinite(result?.score) ? result.score : "待评估";
+  }
+
+  function resultAudience(result) {
+    return Array.isArray(result?.audience) ? result.audience.filter(name => typeof name === "string" && name) : [];
+  }
+
+  function resultAttrValue(result, key) {
+    const value = result?.attr?.[key];
+    return Number.isFinite(value) ? clamp(value, 0, 100) : 0;
+  }
+
   function updateSelectedIngredientButtons() {
     const selected = selectedIngredients();
     el.groups.querySelectorAll(".ingredient").forEach(button => {
@@ -244,12 +261,12 @@ function createRenderer(app) {
 
     el.result.classList.remove("hidden");
     el.resultEmpty.classList.add("hidden");
-    el.scorePill.textContent = `${result.score} 分`;
-    el.drinkType.textContent = result.type;
-    el.scoreValue.textContent = result.score;
-    el.feedback.textContent = result.feedback;
+    el.scorePill.textContent = `${resultScore(result)} 分`;
+    el.drinkType.textContent = resultText(result.type, "历史配方");
+    el.scoreValue.textContent = resultScore(result);
+    el.feedback.textContent = resultText(result.feedback, "暂无反馈");
     el.audienceTags.innerHTML = "";
-    result.audience.forEach(name => {
+    resultAudience(result).forEach(name => {
       const tag = document.createElement("span");
       tag.className = "tag";
       tag.textContent = name;
@@ -258,12 +275,13 @@ function createRenderer(app) {
 
     el.attributeBars.innerHTML = "";
     labels.forEach(([key, label]) => {
+      const value = resultAttrValue(result, key);
       const row = document.createElement("div");
       row.className = "bar-row";
       row.innerHTML = `
         <span>${label}</span>
-        <div class="bar-track"><div class="bar-fill" style="width: ${result.attr[key]}%"></div></div>
-        <strong>${result.attr[key]}</strong>
+        <div class="bar-track"><div class="bar-fill" style="width: ${value}%"></div></div>
+        <strong>${value}</strong>
       `;
       el.attributeBars.append(row);
     });
@@ -285,13 +303,14 @@ function createRenderer(app) {
       card.dataset.recipeId = recipe.id;
       const normalizedRecipe = recipeNormalizer.normalizeSavedRecipe(recipe);
       const ingredients = normalizedRecipe.cup.map(item => `${cupItemName(item)} ${item.ratio}%`).join(" / ");
+      const feedback = resultText(recipe.result?.feedback, "暂无反馈").replaceAll("奶精", "植脂奶");
       card.innerHTML = `
         <div class="saved-card-head">
           <strong>${recipe.title}</strong>
           <span class="tag">${recipe.createdAt}</span>
         </div>
         <p>${ingredients}</p>
-        <p>${recipe.result.feedback.replaceAll("奶精", "植脂奶")}</p>
+        <p>${feedback}</p>
         <div class="saved-card-actions">
           <button type="button" data-action="load">载入杯子</button>
           <button type="button" data-action="delete">删除</button>

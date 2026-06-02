@@ -172,6 +172,14 @@ v0.0.5.19 让 drinkType rules 执行入口支持 ingredientId / name / alias / o
 
 v0.0.5.20 让浏览器保存配方结构进入 name / ingredientId 双轨：新保存写入 ingredientId + name，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐；本轮不做复杂迁移或正式存档系统。
 
+### 保存 result / 历史快照边界
+
+保存配方里的 `result` 是当次试喝报告的历史展示快照。中文 `type`、`audience`、`feedback` 可以作为当时玩家看到的展示内容保存，用来复原历史报告和保存列表，但不应作为未来统计、图鉴、顾客偏好或经营报表的系统判断依据。
+
+未来机制层读取保存结果时，应优先依赖结构化 ID 字段，例如 `accidentTypeId`、`drinkTypeId`、`audienceIds`、`feedbackTags`。如果某些未来机制需要更细的组合、图鉴或配方家族身份，应新增稳定 ID，而不是反推中文展示文案。
+
+玩家未来自定义饮品名应作为 `customName` / `title` 等显示名进入正式存档，但不应替代 `recipeId`、`drinkTypeId`、`recipeFamilyId` 或 `recipeVersionId`。当前阶段不实现正式存档系统，不批量迁移旧 localStorage，只保持读取和渲染兼容。
+
 v0.0.5.21 补强 golden samples 的 ingredientId 路径覆盖：新增若干 ID 等价样本，但旧 name 样本保留，不批量迁移，继续作为规则数据迁移前的安全网。
 
 v0.0.5.21 后明确 golden samples 的定位：它们是重构期回归安全网，不是永久数值圣经；后续数值调优、三层 summary 和 severity 接入时可以有意识更新 expected，但 ID 等价样本应始终保持 name 与 ingredientId 路径输出一致。

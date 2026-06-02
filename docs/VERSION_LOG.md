@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.5.35
+
+保存 result / 历史快照边界小修。
+
+### 本轮新增 / 更新
+
+- 更新 `ui/render.js`
+  - 为旧保存 result / 损坏 result 增加轻量渲染兜底。
+  - `feedback` 缺失时安全显示“暂无反馈”。
+  - `audience` 缺失时跳过受众标签渲染。
+  - `attr` 缺失时属性条安全降级为 0。
+  - 正常 result 展示效果保持不变。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 明确保存的 `result` 是历史展示快照。
+  - 明确中文 `type` / `audience` / `feedback` 可作为当时展示内容保存。
+  - 明确未来统计、图鉴、顾客偏好和经营报表应依赖 `accidentTypeId` / `drinkTypeId` / `audienceIds` / `feedbackTags` 等结构化 ID。
+  - 明确玩家未来自定义饮品名 `customName` / `title` 只作为显示名，不作为 `recipeId` / `drinkTypeId` / `recipeFamilyId` / `recipeVersionId`。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.35。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.35 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不做正式存档系统。
+- 不改保存交互。
+- 不做 localStorage migration。
+- 不改评分、事故、饮品类型、反馈文案或 golden expected。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.34 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
