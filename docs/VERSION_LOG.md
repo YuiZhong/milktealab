@@ -1,5 +1,37 @@
 # 版本记录
 
+## docs: sync v0.0.5.27 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.27-candidate`。
+  - 记录 candidate 指向 `d1fd84af0c21ee2dc6ff37a0e5bcc3a3b08a2cbd`。
+  - 记录 `v0.0.5.27-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.27` 已完成 golden runner 支持 `drinkTypeId` 断言。
+  - 记录 runner 支持 `drinkTypeIdIncludes` / `drinkTypeIdIncludesAny` / `forbiddenDrinkTypeIdIncludes`。
+  - 记录关键普通饮品 golden samples 已补 `drinkTypeId` expected。
+  - 记录旧中文 type 断言和 `accidentTypeId` 断言仍保留。
+  - 记录正式 tag `v0.0.5.27` 未创建。
+  - 记录当前未推进 `v0.0.5.28`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不改页面版本号。
+- 不推进 v0.0.5.28。
+- 不创建 tag。
+- 不做 `audienceId` / `customerTypeId`。
+- 不做三层 summary。
+- 不做 severity 系统。
+
 ## v0.0.5.27
 
 golden runner 支持普通饮品类型 `drinkTypeId` 断言。
