@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.5.35 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.35-candidate`。
+  - 记录 candidate 指向 `d9d77c270a81e77fe6d9d6b428ac093c68f740db`。
+  - 记录 `v0.0.5.35-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.35` 已完成保存 result / 历史快照边界小修。
+  - 记录旧 result 的 `feedback` / `audience` / `attr` 渲染兜底已完成。
+  - 记录已修复 runtime script cache-busting query 过旧导致旧 `feedbackEngine` 被加载的问题。
+  - 记录 UI smoke 已确认普通试喝、保存、载入、事故路径正常。
+  - 记录当前未推进 `v0.0.5.36`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.36。
+- 不创建 tag。
+
 ## v0.0.5.35 bugfix: refresh runtime script cache version
 
 修复前端 runtime 脚本缓存串过旧导致浏览器加载旧 `feedbackEngine` 的问题。
