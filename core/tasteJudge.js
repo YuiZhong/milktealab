@@ -120,7 +120,7 @@ function evaluateCup(cup) {
   });
 
   const finalScore = scoreEngine.finalizeScore(score);
-  const type = forcedType || drinkTypeAnalyzer.inferType(attr, context.normalizedNames, finalScore);
+  const type = forcedType || drinkTypeAnalyzer.inferType(attr, context.normalizedNames, finalScore, context);
   const audience = drinkTypeAnalyzer.inferAudience(attr, context.normalizedNames, finalScore);
   const priorityNotes = accidentNotes.length
     ? accidentNotes

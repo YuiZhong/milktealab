@@ -164,6 +164,8 @@ v0.0.5.17 让 combinationAnalyzer 支持 ingredientId / name / alias / object re
 
 v0.0.5.18 新增 ingredientGroupHelper，作为共享原料组的统一查询入口；analyzer 不再直接关心 dairy / highFatDairy / strawResistance / clearLiquid / heavyFlavor 的底层数组形态，后续可逐步从中文 name 迁移到 ingredientId / refs / profile tag。
 
+v0.0.5.19 让 drinkType rules 执行入口支持 ingredientId / name / alias / object ref；drinkTypeRules 数据表仍保持旧中文字段兼容，analyzeFruitTeaBlend 与 audience 的本地中文逻辑留待后续小步治理。
+
 ## 4. if 治理原则
 
 核心原则：

@@ -1,5 +1,43 @@
 # 版本记录
 
+## v0.0.5.19
+
+drinkType rules 支持 ingredientId。
+
+### 阶段目标
+
+本版本让 `drinkTypeRules` 执行入口支持 ingredientId / ingredientRef / refs / anyRefs / allRefs 等 ref 字段。本轮只增强规则匹配入口，不批量迁移 `data/drinkTypeRules.js`，不改变玩家可见类型输出。
+
+### 本轮新增 / 更新
+
+- 更新 `core/drinkTypeAnalyzer.js`
+  - 旧 `ingredient` / `anyIngredient` / `allIngredients` 继续兼容。
+  - 新增支持单个 ref：`ingredientId` / `ingredientRef` / `ref`。
+  - 新增支持任一 ref：`anyRefs` / `anyIngredientRefs` / `anyIngredientIds`。
+  - 新增支持全部 ref：`allRefs` / `allIngredientRefs` / `allIngredientIds` / `refs` / `ingredientIds`。
+  - 规则匹配入口可接收完整 `context`，并通过现有 ref 查询能力判断当前杯子是否含有目标原料。
+- 更新 `core/tasteJudge.js`
+  - 调用 `inferType` 时传入完整 `context`。
+  - 不改变 `forcedType` / fallback 顺序。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.19。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不批量迁移 `data/drinkTypeRules.js` 为 ingredientId。
+- 不删除旧中文 name 兼容。
+- 不改 `analyzeFruitTeaBlend` 内部中文数组。
+- 不改 audience 逻辑。
+- 不改保存结构、golden samples、评分、cap、阈值、反馈文案或类型命名。
+- 不做三层 summary、flavorProfile 或 severity 系统。
+- 不改 `ruleRefHelper` 或 `ingredientGroupHelper` 的职责。
+- 不 tag。
+
 ## v0.0.5.18
 
 ingredient group helper 地基。

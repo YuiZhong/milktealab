@@ -1,5 +1,6 @@
 (function() {
 const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
+const { hasRuleRef } = window.MILK_TEA_LAB_RULE_REF_HELPER;
 const { has } = window.MILK_TEA_LAB_HELPERS;
 const { drinkTypeRules, defaultType } = window.MILK_TEA_LAB_DRINK_TYPE_RULES;
 
@@ -90,19 +91,57 @@ function compare(left, op, right) {
   return false;
 }
 
-function matchesCondition(condition, attr, names, score) {
-  if (condition.all) return condition.all.every(item => matchesCondition(item, attr, names, score));
-  if (condition.any) return condition.any.some(item => matchesCondition(item, attr, names, score));
-  if (condition.ingredient) return has(condition.ingredient, names);
-  if (condition.allIngredients) return condition.allIngredients.every(name => has(name, names));
-  if (condition.anyIngredient) return condition.anyIngredient.some(name => has(name, names));
+function getSingleDrinkTypeRef(condition) {
+  if (condition.ingredientId) return { ingredientId: condition.ingredientId };
+  if (condition.ingredientRef) return condition.ingredientRef;
+  if (condition.ref) return condition.ref;
+  return null;
+}
+
+function getAnyDrinkTypeRefs(condition) {
+  return condition.anyRefs || condition.anyIngredientRefs || condition.anyIngredientIds || null;
+}
+
+function getAllDrinkTypeRefs(condition) {
+  return condition.allRefs || condition.allIngredientRefs || condition.allIngredientIds || condition.refs || condition.ingredientIds || null;
+}
+
+function hasDrinkTypeRef(context, ref) {
+  if (!context || !ref) return false;
+  return hasRuleRef(context, ref);
+}
+
+function hasAnyDrinkTypeRefs(context, refs = []) {
+  return Array.isArray(refs) && refs.some(ref => hasDrinkTypeRef(context, ref));
+}
+
+function hasAllDrinkTypeRefs(context, refs = []) {
+  return Array.isArray(refs) && refs.length > 0 && refs.every(ref => hasDrinkTypeRef(context, ref));
+}
+
+function hasLegacyIngredient(context, names, name) {
+  return has(name, names) || hasDrinkTypeRef(context, name);
+}
+
+function matchesCondition(condition, attr, names, score, context) {
+  if (condition.all) return condition.all.every(item => matchesCondition(item, attr, names, score, context));
+  if (condition.any) return condition.any.some(item => matchesCondition(item, attr, names, score, context));
+  const singleRef = getSingleDrinkTypeRef(condition);
+  if (singleRef) return hasDrinkTypeRef(context, singleRef);
+  const allRefs = getAllDrinkTypeRefs(condition);
+  if (allRefs) return hasAllDrinkTypeRefs(context, allRefs);
+  const anyRefs = getAnyDrinkTypeRefs(condition);
+  if (anyRefs) return hasAnyDrinkTypeRefs(context, anyRefs);
+  if (condition.ingredient) return hasLegacyIngredient(context, names, condition.ingredient);
+  if (condition.allIngredients) return condition.allIngredients.every(name => hasLegacyIngredient(context, names, name));
+  if (condition.anyIngredient) return condition.anyIngredient.some(name => hasLegacyIngredient(context, names, name));
   if (condition.attr) return compare(attr[condition.attr] || 0, condition.op, condition.value);
   if (condition.score) return compare(score, condition.score, condition.value);
   return false;
 }
 
-function inferType(attr, names, score) {
-  const matchedRule = drinkTypeRules.find(rule => matchesCondition(rule.when, attr, names, score));
+function inferType(attr, names, score, context = null) {
+  const matchedRule = drinkTypeRules.find(rule => matchesCondition(rule.when, attr, names, score, context));
   return matchedRule?.type || defaultType;
 }
 
