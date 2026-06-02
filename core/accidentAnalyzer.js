@@ -4,11 +4,39 @@ const { pick } = window.MILK_TEA_LAB_HELPERS;
 const { evaluateAccidentRules } = window.MILK_TEA_LAB_ACCIDENT_RULE_ENGINE;
 const { evaluateStructureAccidentRules } = window.MILK_TEA_LAB_STRUCTURE_ACCIDENT_RULE_ENGINE;
 
-function isTextureAccident(accident) {
+const textureAccidentTypeIds = new Set([
+  "texture_taro_overload",
+  "texture_oreo_overload",
+  "texture_topping_overload",
+  "texture_straw_resistance",
+  "texture_low_drinkability",
+  "texture_solid_overload"
+]);
+
+const textureAccidentTags = new Set([
+  "semi_solid",
+  "low_drinkability",
+  "high_straw_resistance",
+  "texture_heavy",
+  "low_liquid_support"
+]);
+
+function hasTextureAccidentTag(accident) {
+  return Array.isArray(accident.tags) && accident.tags.some(tag => textureAccidentTags.has(tag));
+}
+
+function isLegacyTextureAccident(accident) {
   return accident.type === "口感事故" && (
     (accident.add?.straw || 0) >= 40 ||
     /吸管|半固体|水泥|物理|勺子/.test(accident.note)
   );
+}
+
+function isTextureAccident(accident) {
+  if (!accident) return false;
+  if (textureAccidentTypeIds.has(accident.accidentTypeId)) return true;
+  if (hasTextureAccidentTag(accident)) return true;
+  return isLegacyTextureAccident(accident);
 }
 
 function detectAccidents(context) {

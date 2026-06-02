@@ -1,5 +1,31 @@
 # 版本记录
 
+## v0.0.5.33
+
+texture accident 去中文判断小修。
+
+### 本轮新增 / 更新
+
+- 更新 `core/accidentAnalyzer.js`
+  - texture accident 去重 / 判断主路径优先使用 `accidentTypeId` / `tags`。
+  - 中文 `type` / `note` 仅保留 legacy fallback。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.33。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.33 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改事故触发条件、评分、cap、add、note、type、accidentTypeId 或 tags。
+- 不改反馈文案。
+- 不改 `core/feedbackEngine.js`。
+- 不改 golden expected。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.32 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
