@@ -61,10 +61,10 @@
 - 最新 candidate：`v0.0.5.38-candidate`
 - 最新 candidate commit：`aa8dcfdbc3a162a5bc2c58c5a1ba646ed5d003b0`
 - `v0.0.5.38-candidate` 已冻结并推送，指向 `aa8dcfdbc3a162a5bc2c58c5a1ba646ed5d003b0`；正式 tag `v0.0.5.38` 未创建。
-- 最新 main：本轮 docs commit 是 `v0.0.5.38-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 main：本轮 v0.0.5.39 小修 commit 是 `v0.0.5.38-candidate` 之后的 main 实现 commit，提交后以 `git log -1` 为准。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
-- v0.0.5.10-v0.0.5.38 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言。
+- v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.20 新增保存结构标准化入口；新保存配方写 ingredientId + name + ratio，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐。本轮不做复杂 localStorage migration，不批量改写旧数据，不等同于正式存档系统。
 - v0.0.5.21 新增 5 个 ID 等价 golden samples：清爽水果茶、气泡奶油冲突、奶脂过载、吸管阻力和高榴莲猎奇事故。旧 name samples 保持不变，不批量迁移，不改评分、事故、反馈、类型判断、rules 或保存结构。
 - v0.0.5.22 将 `data/synergyRules.js` 的 `ingredientGroups` 主定义从旧中文 name arrays 迁移为 stable ingredientId / refs；旧中文 name arrays 保留兼容导出，不改 analyzer 调用方式、评分、事故、反馈、类型判断、保存结构或 golden samples expected。
@@ -87,7 +87,8 @@
 - v0.0.5.36 让 golden runner 支持 `outcomeTypeIdIncludes` / `outcomeTypeIdIncludesAny` / `forbiddenOutcomeTypeIdIncludes`，并给 `bubble_cream_conflict` / `bubble_cream_conflict_id_equivalence` 补充 `outcomeTypeIdIncludes: ["taste_conflict"]`；旧中文 `typeIncludesAny` 保留为显示回归保护。
 - v0.0.5.37 已完成 analyzer 本地显示名比例查询改为 ID/ref 主路径，且 `v0.0.5.37-candidate` 已冻结并推送；`core/accidentAnalyzer.js` / `core/proportionAnalyzer.js` / `core/drinkTypeAnalyzer.js` 中的低风险本地比例查询优先使用 ingredientId / ref / group helper，中文 name 仍保留展示或 legacy fallback。本轮不改评分、阈值、事故触发、饮品类型、反馈文案或 golden expected，不做三层 summary。
 - v0.0.5.38 已完成 golden runner 支持 feedbackTag 断言；`scripts/runGoldenSamples.js` 支持 `feedbackTagIncludes` / `feedbackTagIncludesAny` / `forbiddenFeedbackTagIncludes`，少量稳定 golden samples 已补 feedbackTag expected，旧 `feedbackIncludesAny` 文案回归断言保留。本轮不改 core、feedback 文案、评分、事故、饮品类型或 golden score expected。
-- `inferAudience` 中仍有少量 `has(name, names)` 遗留 P1，已记录且不阻塞当前阶段；如继续收尾，可在后续小版本让 audience 推断接收 context 或由 v0.0.6.x summary 接管。
+- v0.0.5.39 已完成柠檬牛奶冲突 special case ID/ref 主路径小修；`core/tasteJudge.js` 优先使用 `ingredientIds` / refs 判断 `fruit_lemon` + `dairy_milk`，中文 `rule.names` 仅保留 legacy fallback。
+- v0.0.5.39 同步完成 `inferAudience` 中植脂奶 / 榴莲判断的 ID/ref 主路径小修；`inferAudience` / `inferAudienceResult` 保持旧返回值兼容，可选接收 context，优先通过 `dairy_non_dairy_creamer` / `fruit_durian` 判断，中文 names 仅保留 legacy fallback。本轮不做 `customerTypeIds`、正式顾客系统或经营系统，不改 audience / audienceIds 输出。
 - docs 已补充长期原则：玩家可见显示文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。中文只是当前最常见的显示文案例子，不是唯一风险来源。
 - docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
 - docs 已补充经营层原则：自由实验室阶段不硬限制原料数量；未来经营阶段可通过出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险等软成本限制过度复杂配方。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚。
@@ -97,8 +98,8 @@
 - v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。
 - v0.0.5.35 已完成保存 result / 历史快照边界小修，旧 result 缺字段时渲染安全兜底，保存 result 中文字段明确为历史展示快照，未来机制依赖结构化 ID。
 - v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
-- 当前未创建正式 tag `v0.0.5.38`，未推进 `v0.0.5.39`。
-- 下一步可考虑 v0.0.5.x 最终收口判断 / 阶段收尾。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 当前未创建正式 tag `v0.0.5.38`，未创建 `v0.0.5.39` / `v0.0.5.39-candidate` tag。
+- 下一步可考虑最终收口复查 / v0.0.5.x 阶段收尾。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
@@ -597,7 +598,7 @@ v0.0.4.x 不做：
 
 【不要删】v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界已重新定义：v0.0.5.x 解决“系统里的东西是谁”，即现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基；v0.0.6.x 解决“这些东西如何被三层系统判断”，即三层 profile / summary / 判定地基；v0.0.7.x 解决“判断得好不好、数值顺不顺”，即 severity / 数值调优 / golden samples 扩容。
 
-【不要删】v0.0.5.x 后续不默认推进完整三层 summary。v0.0.5.30 已完成 `proportionSegmentRules` refs 小批迁移，`v0.0.5.30-candidate` 已冻结并推送；v0.0.5.31 已完成 `combinationRules` refs 小批迁移，`v0.0.5.31-candidate` 已冻结并推送；v0.0.5.32 已完成 `drinkTypeRules` refs 小批迁移，`v0.0.5.32-candidate` 已冻结并推送；v0.0.5.33 已完成 texture accident 去显示文案判断小修，`v0.0.5.33-candidate` 已冻结并推送；v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，`v0.0.5.34-candidate` 已冻结并推送；v0.0.5.35 已完成保存 result / 历史快照边界小修，`v0.0.5.35-candidate` 已冻结并推送；v0.0.5.36 已完成 `outcomeTypeId` 兜底地基，`v0.0.5.36-candidate` 已冻结并推送；v0.0.5.37 已完成 analyzer 本地显示名查询小修，`v0.0.5.37-candidate` 已冻结并推送；v0.0.5.38 已完成 golden runner feedbackTag 断言，`v0.0.5.38-candidate` 已冻结并推送。本轮仍不默认推进完整三层 summary，下一步可考虑 v0.0.5.x 最终收口判断 / 阶段收尾。允许少量 legacy 逻辑暂存，但不能继续扩张；新增结构应优先 stable ID + displayName / text，但不要为未来尚不存在的系统提前造空架子。
+【不要删】v0.0.5.x 后续不默认推进完整三层 summary。v0.0.5.30 已完成 `proportionSegmentRules` refs 小批迁移，`v0.0.5.30-candidate` 已冻结并推送；v0.0.5.31 已完成 `combinationRules` refs 小批迁移，`v0.0.5.31-candidate` 已冻结并推送；v0.0.5.32 已完成 `drinkTypeRules` refs 小批迁移，`v0.0.5.32-candidate` 已冻结并推送；v0.0.5.33 已完成 texture accident 去显示文案判断小修，`v0.0.5.33-candidate` 已冻结并推送；v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，`v0.0.5.34-candidate` 已冻结并推送；v0.0.5.35 已完成保存 result / 历史快照边界小修，`v0.0.5.35-candidate` 已冻结并推送；v0.0.5.36 已完成 `outcomeTypeId` 兜底地基，`v0.0.5.36-candidate` 已冻结并推送；v0.0.5.37 已完成 analyzer 本地显示名查询小修，`v0.0.5.37-candidate` 已冻结并推送；v0.0.5.38 已完成 golden runner feedbackTag 断言，`v0.0.5.38-candidate` 已冻结并推送；v0.0.5.39 已完成柠檬牛奶冲突 special case 和 `inferAudience` 植脂奶 / 榴莲判断的 ID/ref 主路径小修。本轮仍不默认推进完整三层 summary，下一步可考虑最终收口复查 / v0.0.5.x 阶段收尾。允许少量 legacy 逻辑暂存，但不能继续扩张；新增结构应优先 stable ID + displayName / text，但不要为未来尚不存在的系统提前造空架子。
 
 【不要删】详细的三层 profile、stable ingredientId、三层 summary、事故优先级重排、质地事故细分、粗吸管需求、legacy 迁移原则和 v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界，已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话或 Codex 继续 v0.0.5.x 前，应先读取该文档；不要继续机械迁移单个旧事故规则。
 

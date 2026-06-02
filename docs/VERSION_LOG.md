@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.5.39
+
+柠檬牛奶冲突 special case 与 audience 局部判断改为 ID/ref 主路径。
+
+### 本轮新增 / 更新
+
+- 更新 `core/tasteJudge.js`
+  - 柠檬牛奶冲突 special case 优先使用 `ingredientIds` / refs 判断 `fruit_lemon` + `dairy_milk`。
+  - 中文 `rule.names` 仅保留 legacy fallback。
+- 更新 `core/drinkTypeAnalyzer.js`
+  - `inferAudience` / `inferAudienceResult` 保持旧返回值兼容，并新增可选 context 参数。
+  - 植脂奶 / 榴莲判断优先通过 `dairy_non_dairy_creamer` / `fruit_durian` ID/ref。
+  - 中文 names 判断仅保留 legacy fallback。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.39。
+  - `core/tasteJudge.js` / `core/drinkTypeAnalyzer.js` script cache query 同步刷新为 `v=0059`。
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 v0.0.5.39 已完成两个 P1 小修。
+  - 记录当前仍未创建 `v0.0.5.39` tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改评分。
+- 不改事故结果。
+- 不改 type。
+- 不改 feedback。
+- 不改 audience / audienceIds 输出。
+- 不改 golden expected。
+- 不做 `customerTypeIds`。
+- 不做正式顾客系统。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.38 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

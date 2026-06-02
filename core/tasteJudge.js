@@ -10,8 +10,26 @@ const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
 const combinationAnalyzer = window.MILK_TEA_LAB_COMBINATION_ANALYZER;
 const drinkTypeAnalyzer = window.MILK_TEA_LAB_DRINK_TYPE_ANALYZER;
 
-function isLegacyLemonMilkConflict(rule) {
-  return Array.isArray(rule.names) && rule.names.includes("柠檬") && rule.names.includes("牛奶");
+function getRuleIngredientIds(rule) {
+  const refs = [
+    ...(Array.isArray(rule?.ingredientIds) ? rule.ingredientIds : []),
+    ...(Array.isArray(rule?.refs) ? rule.refs : []),
+    ...(Array.isArray(rule?.ingredientRefs) ? rule.ingredientRefs : [])
+  ];
+
+  return refs
+    .map(ref => {
+      if (typeof ref === "string") return ref;
+      if (ref && typeof ref === "object") return ref.ingredientId || ref.id || null;
+      return null;
+    })
+    .filter(Boolean);
+}
+
+function isLemonMilkConflict(rule) {
+  const ingredientIds = getRuleIngredientIds(rule);
+  if (ingredientIds.includes("fruit_lemon") && ingredientIds.includes("dairy_milk")) return true;
+  return Array.isArray(rule?.names) && rule.names.includes("柠檬") && rule.names.includes("牛奶");
 }
 
 function isDairyFatOverloadAccident(accident) {
@@ -97,7 +115,7 @@ function evaluateCup(cup) {
   combinationAnalyzer.findComboMatches("bad", context).forEach(rule => {
     scoreEngine.addScore(score, rule.score);
     ingredientAnalyzer.applyAttributeBoost(attr, rule.add);
-    forcedType = forcedType || (isLegacyLemonMilkConflict(rule) ? "口感事故" : "口感冲突");
+    forcedType = forcedType || (isLemonMilkConflict(rule) ? "口感事故" : "口感冲突");
     badNotes.push(rule.note);
     addUniqueTags(sourceFeedbackTags, rule.feedbackTags);
   });
@@ -182,7 +200,7 @@ function evaluateCup(cup) {
     : drinkTypeAnalyzer.inferTypeResult(attr, context.normalizedNames, finalScore, context);
   const type = forcedType || inferredTypeResult.type;
   const drinkTypeId = forcedDrinkTypeId || inferredTypeResult?.drinkTypeId;
-  const audienceResult = drinkTypeAnalyzer.inferAudienceResult(attr, context.normalizedNames, finalScore);
+  const audienceResult = drinkTypeAnalyzer.inferAudienceResult(attr, context.normalizedNames, finalScore, context);
   const { audience, audienceIds } = audienceResult;
   const priorityNotes = accidentNotes.length
     ? accidentNotes

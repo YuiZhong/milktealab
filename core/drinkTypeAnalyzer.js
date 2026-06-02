@@ -200,15 +200,20 @@ function inferType(attr, names, score, context = null) {
   return inferTypeResult(attr, names, score, context).type;
 }
 
-function inferAudience(attr, names, score) {
+function hasAudienceIngredient(context, names, name, ref) {
+  return hasDrinkTypeRef(context, ref) || has(name, names);
+}
+
+function inferAudience(attr, names, score, context = null) {
   const audience = [];
-  const plantMilk = has("植脂奶", names);
+  const plantMilk = hasAudienceIngredient(context, names, "植脂奶", { ingredientId: "dairy_non_dairy_creamer" });
+  const durian = hasAudienceIngredient(context, names, "榴莲", { ingredientId: "fruit_durian" });
   if (score >= 58 && attr.cost <= 55) audience.push("学生");
   if (score >= 60 && attr.sweet <= 58 && !plantMilk) audience.push("白领");
   if (attr.sweet <= 35 && attr.bubble <= 25 && attr.odd <= 25 && attr.greasy < 55 && !plantMilk) audience.push("老人");
   if (attr.photo >= 48 || (attr.fruit >= 35 && attr.milk >= 24)) audience.push("情侣");
   if (attr.sweet <= 30 && attr.thick <= 38 && !plantMilk) audience.push("健身党");
-  if (attr.odd >= 48 || has("榴莲", names)) audience.push("猎奇党");
+  if (attr.odd >= 48 || durian) audience.push("猎奇党");
   if (attr.photo >= 52 || attr.odd >= 55) audience.push("网红打卡党");
   if (!audience.length) {
     if (plantMilk) {
@@ -222,8 +227,8 @@ function inferAudience(attr, names, score) {
   return audience.slice(0, 4);
 }
 
-function inferAudienceResult(attr, names, score) {
-  const audience = inferAudience(attr, names, score);
+function inferAudienceResult(attr, names, score, context = null) {
+  const audience = inferAudience(attr, names, score, context);
   const audienceIds = audience
     .map(name => audienceIdByName[name])
     .filter(Boolean);
