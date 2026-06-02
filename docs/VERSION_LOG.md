@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.5.28
+
+audienceIds + audience/displayName 双轨地基。
+
+### 本轮新增 / 更新
+
+- 更新 `core/drinkTypeAnalyzer.js`
+  - 新增 stable audience ID 映射。
+  - 新增 `inferAudienceResult` 结构化返回能力，返回 `{ audience, audienceIds }`。
+  - `inferAudience` 保持旧返回值兼容，仍返回中文 audience 数组。
+  - 不改变现有受众判断逻辑、顺序或数量。
+- 更新 `core/tasteJudge.js`
+  - 在保留旧中文 `result.audience` 的前提下，新增 `result.audienceIds`。
+  - 中文 audience 继续作为 UI 展示 / legacy 字段。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.28。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.28 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不做 `customerTypeIds`。
+- 不做正式顾客系统。
+- 不做经营系统。
+- 不改 UI 展示逻辑。
+- 不改评分、反馈文案、饮品类型、事故判断或 golden expected。
+- 不改 data / scripts / storage。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.27 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

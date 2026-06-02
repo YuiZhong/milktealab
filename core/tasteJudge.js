@@ -132,7 +132,8 @@ function evaluateCup(cup) {
     : drinkTypeAnalyzer.inferTypeResult(attr, context.normalizedNames, finalScore, context);
   const type = forcedType || inferredTypeResult.type;
   const drinkTypeId = forcedDrinkTypeId || inferredTypeResult?.drinkTypeId;
-  const audience = drinkTypeAnalyzer.inferAudience(attr, context.normalizedNames, finalScore);
+  const audienceResult = drinkTypeAnalyzer.inferAudienceResult(attr, context.normalizedNames, finalScore);
+  const { audience, audienceIds } = audienceResult;
   const priorityNotes = accidentNotes.length
     ? accidentNotes
     : badNotes.length
@@ -144,7 +145,7 @@ function evaluateCup(cup) {
           : generalNotes;
   const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0);
 
-  const result = { attr, score: finalScore, type, audience, feedback };
+  const result = { attr, score: finalScore, type, audience, audienceIds, feedback };
   if (primaryAccident?.accidentTypeId) {
     result.accidentTypeId = primaryAccident.accidentTypeId;
   }

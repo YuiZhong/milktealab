@@ -3,6 +3,15 @@ const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
 const { hasRuleRef } = window.MILK_TEA_LAB_RULE_REF_HELPER;
 const { has } = window.MILK_TEA_LAB_HELPERS;
 const { drinkTypeRules, defaultType, defaultTypeId } = window.MILK_TEA_LAB_DRINK_TYPE_RULES;
+const audienceIdByName = {
+  "学生": "student",
+  "白领": "office_worker",
+  "老人": "elderly",
+  "情侣": "couple",
+  "健身党": "fitness",
+  "猎奇党": "novelty_seeker",
+  "网红打卡党": "influencer"
+};
 
 function analyzeFruitTeaBlend(context) {
   const teaCandidates = ["茉莉茶", "绿茶", "乌龙茶", "红茶"];
@@ -182,10 +191,20 @@ function inferAudience(attr, names, score) {
   return audience.slice(0, 4);
 }
 
+function inferAudienceResult(attr, names, score) {
+  const audience = inferAudience(attr, names, score);
+  const audienceIds = audience
+    .map(name => audienceIdByName[name])
+    .filter(Boolean);
+
+  return { audience, audienceIds };
+}
+
 window.MILK_TEA_LAB_DRINK_TYPE_ANALYZER = {
   analyzeFruitTeaBlend,
   inferTypeResult,
   inferType,
-  inferAudience
+  inferAudience,
+  inferAudienceResult
 };
 })();
