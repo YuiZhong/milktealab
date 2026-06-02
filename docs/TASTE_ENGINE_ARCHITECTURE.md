@@ -779,6 +779,25 @@ v0.0.5.x 先搭房梁，不急着调味；
 v0.0.6.x / v0.0.7.x 再慢慢调口味。
 ```
 
+## Golden samples 的定位与可调整原则
+
+golden samples 不是最终味觉真理；golden samples 是当前阶段的安全网。安全网可以换，但不能施工时突然剪断。
+
+在 v0.0.5.x 重构期，golden samples 的主要职责是防止已有行为无意识漂移：改 ingredientId、profile、rule engine、summary 或保存结构时，必须能看见是否把既有结果撞歪了。
+
+进入数值调优阶段后，golden samples 的 `expected` 可以有意识地更新，包括 `score`、`type`、`feedback`、`audience`、`attr` 等字段。更新 expected 必须有明确版本目的，例如数值调优、三层 summary 接入、severity 系统调整或反馈文案重构。
+
+不能为了让测试通过而随手放宽断言，也不能在没有说明版本目的的情况下偷改 expected。测试样本可以迭代，但每次迭代都要说明是在“调安全网”，不是在掩盖回归。
+
+ID 等价样本的核心不是永久锁死某个分数，而是锁死“name 输入和 ingredientId 输入结果一致”。如果对应 name 样本未来从 74 调成 80，则 ID 等价样本也应同步调成 80。
+
+当前 samples 可以理解为几类：
+
+- `structural`：结构保护，例如系统不应崩、事故不应被洗白。
+- `id_equivalence`：name / ingredientId 输入路径等价。
+- `behavior_boundary`：极端边界行为保护，例如高酸、吸不上来、奶脂过载。
+- `tuning`：未来数值调参样本，可在调参版本中有意识更新。
+
 ## 9. 测试分级规则
 
 测试强度应和改动风险匹配。不是每次 candidate 前都必须做真实 UI smoke test；但如果修改了核心试喝链路、浏览器运行时脚本加载、UI 事件或保存结构，就必须提高验证等级。

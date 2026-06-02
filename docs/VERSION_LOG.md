@@ -1,5 +1,34 @@
 # 版本记录
 
+## docs: v0.0.5.21-candidate 后文档补充
+
+本轮只更新文档，不提升页面版本号，不创建 tag。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步到 `v0.0.5.21-candidate`。
+  - 记录最新 candidate commit 为 `47e57a9 test: add ingredient id golden equivalents`。
+  - 说明本轮 docs commit 是 `v0.0.5.21-candidate` 之后的文档补充 commit，未单独 tag。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 golden samples 的定位与可调整原则。
+  - 明确 golden samples 是当前阶段的回归安全网，不是永久数值圣经。
+  - 明确 ID 等价样本用于保证 name 与 ingredientId 输入路径输出一致。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 同步 golden samples 在重构期、调参期、三层 summary 和 severity 接入阶段的定位。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 core / data / scripts / index.html / ui / storage。
+- 不改评分、事故判断、反馈文案、类型判断或保存结构。
+- 不推进 v0.0.5.22。
+- 不 tag。
+
 ## v0.0.5.21
 
 ID golden samples 补强。
