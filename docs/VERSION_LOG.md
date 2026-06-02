@@ -1,5 +1,32 @@
 # 版本记录
 
+## v0.0.5.30
+
+proportionSegmentRules refs 小批迁移。
+
+### 本轮新增 / 更新
+
+- 更新 `data/proportionSegmentRules.js`
+  - 给现有柠檬 / 榴莲单原料比例段规则新增 `ingredientId`。
+  - 给 `requiredRatioSums` / `anyRatioSums` 中的多原料求和条件新增 `ingredientIds`。
+  - 旧中文 `ingredient` / `names` 字段保留兼容和可读性。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.30。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.30 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改 core。
+- 不改阈值、score、add、notes、tags。
+- 不改反馈文案。
+- 不改 golden expected。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.29 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

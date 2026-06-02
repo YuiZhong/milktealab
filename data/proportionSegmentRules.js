@@ -2,6 +2,7 @@ const proportionSegmentRules = [
   {
     id: "durian_low_presence",
     ingredient: "榴莲",
+    ingredientId: "fruit_durian",
     minRatioExclusive: 0,
     maxRatioInclusive: 15,
     score: 4,
@@ -12,12 +13,13 @@ const proportionSegmentRules = [
   {
     id: "durian_milk_supported",
     ingredient: "榴莲",
+    ingredientId: "fruit_durian",
     minRatioExclusive: 15,
     maxRatioInclusive: 35,
     score: 28,
     add: { fruit: 8, thick: 8, greasy: 6, odd: 6, milk: 8 },
     requiredRatioSums: [
-      { names: ["牛奶", "厚乳", "椰奶", "燕麦奶"], minInclusive: 45 }
+      { names: ["牛奶", "厚乳", "椰奶", "燕麦奶"], ingredientIds: ["dairy_milk", "dairy_thick_milk", "dairy_coconut_milk", "dairy_oat_milk"], minInclusive: 45 }
     ],
     notes: ["牛奶把榴莲压顺了一点，喜欢的人会很开心，不喜欢的人会退后半步。"],
     tags: ["durian_medium", "dairy_supported"]
@@ -25,12 +27,13 @@ const proportionSegmentRules = [
   {
     id: "durian_medium_presence",
     ingredient: "榴莲",
+    ingredientId: "fruit_durian",
     minRatioExclusive: 15,
     maxRatioInclusive: 35,
     score: 6,
     add: { fruit: 8, thick: 8, greasy: 6, odd: 6 },
     requiredRatioSums: [
-      { names: ["牛奶", "厚乳", "椰奶", "燕麦奶"], maxExclusive: 45 }
+      { names: ["牛奶", "厚乳", "椰奶", "燕麦奶"], ingredientIds: ["dairy_milk", "dairy_thick_milk", "dairy_coconut_milk", "dairy_oat_milk"], maxExclusive: 45 }
     ],
     notes: ["榴莲很有存在感，但还没有失控，这杯个性很强。"],
     tags: ["durian_medium", "strong_flavor"]
@@ -38,6 +41,7 @@ const proportionSegmentRules = [
   {
     id: "durian_high_pressure",
     ingredient: "榴莲",
+    ingredientId: "fruit_durian",
     minRatioExclusive: 35,
     maxRatioInclusive: 60,
     score: -10,
@@ -48,6 +52,7 @@ const proportionSegmentRules = [
   {
     id: "lemon_low_bright",
     ingredient: "柠檬",
+    ingredientId: "fruit_lemon",
     minRatioExclusive: 0,
     maxRatioInclusive: 15,
     score: 3,
@@ -58,13 +63,14 @@ const proportionSegmentRules = [
   {
     id: "lemon_supported_bright",
     ingredient: "柠檬",
+    ingredientId: "fruit_lemon",
     minRatioExclusive: 15,
     maxRatioInclusive: 35,
     score: 6,
     add: { fresh: 10, acid: 8 },
     anyRatioSums: [
-      { names: ["蜂蜜", "白糖", "黑糖", "焦糖"], minInclusive: 8 },
-      { names: ["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶"], minInclusive: 25 }
+      { names: ["蜂蜜", "白糖", "黑糖", "焦糖"], ingredientIds: ["sweetener_honey", "sweetener_white_sugar", "sweetener_brown_sugar", "sweetener_caramel"], minInclusive: 8 },
+      { names: ["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶"], ingredientIds: ["tea_black", "tea_green", "tea_oolong", "tea_jasmine", "tea_puer"], minInclusive: 25 }
     ],
     notes: ["柠檬把茶香提亮了，酸爽但还在可控范围里。"],
     tags: ["lemon_medium", "supported_acid"]
@@ -72,13 +78,14 @@ const proportionSegmentRules = [
   {
     id: "lemon_unsupported_acid",
     ingredient: "柠檬",
+    ingredientId: "fruit_lemon",
     minRatioExclusive: 15,
     maxRatioInclusive: 35,
     score: -2,
     add: { fresh: 10, acid: 8 },
     requiredRatioSums: [
-      { names: ["蜂蜜", "白糖", "黑糖", "焦糖"], maxExclusive: 8 },
-      { names: ["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶"], maxExclusive: 25 }
+      { names: ["蜂蜜", "白糖", "黑糖", "焦糖"], ingredientIds: ["sweetener_honey", "sweetener_white_sugar", "sweetener_brown_sugar", "sweetener_caramel"], maxExclusive: 8 },
+      { names: ["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶"], ingredientIds: ["tea_black", "tea_green", "tea_oolong", "tea_jasmine", "tea_puer"], maxExclusive: 25 }
     ],
     notes: ["柠檬酸感很明显，最好有茶感或甜味接一下。"],
     tags: ["lemon_medium", "unsupported_acid"]
@@ -86,6 +93,7 @@ const proportionSegmentRules = [
   {
     id: "lemon_high_pressure",
     ingredient: "柠檬",
+    ingredientId: "fruit_lemon",
     minRatioExclusive: 35,
     maxRatioInclusive: 60,
     score: -16,
