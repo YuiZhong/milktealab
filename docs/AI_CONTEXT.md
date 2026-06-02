@@ -28,7 +28,7 @@
 
 1. `docs/TASTE_ENGINE_ARCHITECTURE.md`
    - 味觉引擎架构正本。
-   - 包含三层 profile 的设计由来、事故优先级、事故 severity 数值化原则、测试分级规则、v0.0.5.x 房梁阶段原则。
+   - 包含三层 profile 的设计由来、事故优先级、事故 severity 数值化原则、测试分级规则、v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界。
    - 这是理解“为什么这么设计”的核心文件。
 2. `docs/TASTE_SYSTEM_DESIGN.md`
    - 味觉系统设计文档。
@@ -60,7 +60,7 @@
 
 - 最新 candidate：`v0.0.5.23-candidate`
 - 最新 candidate commit：`047739a refactor: add ingredient ids to accident rules`
-- 最新 main：本轮是 `v0.0.5.23-candidate` 后的 docs 补充 commit，提交后以 `git log -1` 为准；本轮不推进 v0.0.5.24，不单独 tag。
+- 最新 main：本轮是 `v0.0.5.23-candidate` 后的路线文档补充 commit，提交后以 `git log -1` 为准；本轮不推进 v0.0.5.24，不单独 tag。
 - `v0.0.5.23-candidate` 已冻结并推送；v0.0.5.23 完成 accidentRules 小批 refs 迁移。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -70,7 +70,8 @@
 - v0.0.5.22 将 `data/synergyRules.js` 的 `ingredientGroups` 主定义从旧中文 name arrays 迁移为 stable ingredientId / refs；旧中文 name arrays 保留兼容导出，不改 analyzer 调用方式、评分、事故、反馈、类型判断、保存结构或 golden samples expected。
 - v0.0.5.23 将 `data/accidentRules.js` 中柠檬 / 榴莲事故规则新增 `ingredientId` 字段，保留旧中文 `ingredient` 字段兼容；不改阈值、score、cap、tags、notes、type 或 golden samples expected。
 - 本轮 docs 补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
-- 下一步可继续“小批规则表 refs 迁移策略 / accidentTypeId / drinkTypeId / golden samples ID 断言 / 三层 summary 只读挂载”路线判断；不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 本轮 docs 补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
+- 后续 v0.0.5.x 可优先做中文主键残留盘点、`accidentTypeId`、`drinkTypeId`、`audienceId`、规则表 refs、golden ID 断言、反馈 tag 边界和 ID 化收口审计；不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
@@ -483,8 +484,9 @@ v0.0.4.x 不做：
 【不要删】当前长期开发节奏：
 
 - v0.0.4.x：工程地基、模块化、文档、回滚、规则
-- v0.0.5.x：味觉系统底层重构，纳入温度 / 冰量 / 糖度 / 甜味来源、原料属性等
-- v0.0.6.x：建立金标测试、自动测试、组合矩阵
+- v0.0.5.x：现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基，解决“系统里的东西是谁”
+- v0.0.6.x：三层 profile / summary / 判定地基，解决“这些东西如何被三层系统判断”
+- v0.0.7.x：severity / 数值调优 / golden samples 扩容，解决“判断得好不好、数值顺不顺”
 - v0.1.x：让配方实验室真正好玩，能让玩家持续玩约 10 分钟
 - v0.2.x：隐藏配方 / 图鉴
 - v0.3.x：试喝员 / 客群差异反馈
@@ -562,13 +564,13 @@ v0.0.4.x 不做：
 
 【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
-【可删】v0.0.5.23-candidate 已冻结并推送，指向 `047739a refactor: add ingredient ids to accident rules`。当前 main 本轮仅补充 docs / AGENTS 中“玩家可见文案不作为系统主键”的长期原则，不推进 v0.0.5.24，不单独 tag；工作区应为干净状态，golden samples 应为 20/20 passed。
+【可删】v0.0.5.23-candidate 已冻结并推送，指向 `047739a refactor: add ingredient ids to accident rules`。当前 main 本轮仅补充 docs / AGENTS 中 v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界重定义，不推进 v0.0.5.24，不单独 tag；工作区应为干净状态，golden samples 应为 20/20 passed。
 
-【不要删】v0.0.5.x 路线已升级：后续目标不是继续“某个原料事故表格化”，而是继续小步搭完三层 profile + stable ingredientId 的底层架构。v0.0.5.10-v0.0.5.23 已完成 ingredientId 主线的多段兼容地基。后续可继续评估小批规则表 refs 迁移和三层 summary 只读挂载路线，继续避免一次性批量迁移规则表。
+【不要删】v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界已重新定义：v0.0.5.x 解决“系统里的东西是谁”，即现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基；v0.0.6.x 解决“这些东西如何被三层系统判断”，即三层 profile / summary / 判定地基；v0.0.7.x 解决“判断得好不好、数值顺不顺”，即 severity / 数值调优 / golden samples 扩容。
 
-【不要删】v0.0.5.x 后续定位：继续做代码结构和数据模型地基，不急着调数值。v0.0.5.x 应尽量完成 ingredientId、tasteProfile、textureProfile、flavorProfile、三层 summary、规则分层入口等“房梁”；v0.0.6.x / v0.0.7.x 再进入系统性数值优化、样本扩展和调参。允许少量 legacy 逻辑暂存，但不能继续扩张，新增规则应优先进入三层 profile + summary + 规则表体系。
+【不要删】v0.0.5.x 后续不默认推进完整三层 summary。优先事项是中文主键残留盘点、accidentTypeId / drinkTypeId / audienceId 双轨、规则表 refs 小批迁移、golden ID 断言、feedbackTag / 文案池边界复查、保存结果 / 历史 result 快照边界复查和 ID 化收口审计。允许少量 legacy 逻辑暂存，但不能继续扩张；新增结构应优先 stable ID + displayName / text，但不要为未来尚不存在的系统提前造空架子。
 
-【不要删】详细的三层 profile、stable ingredientId、三层 summary、事故优先级重排、质地事故细分、粗吸管需求、legacy 迁移原则和 v0.0.5.x 房梁阶段规划，已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话或 Codex 继续 v0.0.5.x 前，应先读取该文档；不要继续机械迁移单个旧事故规则。
+【不要删】详细的三层 profile、stable ingredientId、三层 summary、事故优先级重排、质地事故细分、粗吸管需求、legacy 迁移原则和 v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界，已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话或 Codex 继续 v0.0.5.x 前，应先读取该文档；不要继续机械迁移单个旧事故规则。
 
 【不要删】三层 profile 确立后，长期事故优先级应逐步升级为：硬性物理 / 服务参数事故 > 质地与可饮用性事故 > 基础味觉过载事故 > 风味身份冲突 > 普通冲突组合 > 好组合 / 协同 > 普通类型识别。质地事故下可继续细分吸管阻力、粗吸管需求冲突、糊化、沉积、胶质、太硬、太粘、奶脂负担等小类。大类决定优先级，小类决定具体反馈和规则。
 

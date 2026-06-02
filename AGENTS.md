@@ -34,19 +34,20 @@
 当前阶段是：
 
 ```text
-v0.0.5.x｜味觉引擎底层架构重构 / 房梁阶段
+v0.0.5.x｜现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段
 ```
 
-本阶段优先清除结构性隐患，不急着做动画、经营、顾客、隐藏配方、UI 大改或数值精调。
+本阶段优先解决“系统里的东西是谁”：现有味觉实验室核心链路中，已经参与判断 / 测试 / 保存 / 展示的对象，应逐步进入 stable ID + displayName / text 双轨。玩家可见中文文案不再长期承担系统主键职责。
 
-后续应继续小步推进：
+v0.0.5.x 不默认推进完整三层 summary，也不为未来还不存在的顾客、家具、事件、成就、本地化等系统提前造空架子。后续新增系统 / 新数据结构应从第一天使用 stable ID，但只有进入真实实现范围时才建立对应数据结构。
 
-- `ingredientId`
-- 三层 profile：`tasteProfile` / `textureProfile` / `flavorProfile`
-- 三层 summary
-- 规则入口兼容
-- golden samples
-- 保存结构兼容
+阶段边界：
+
+- v0.0.5.x：解决“系统里的东西是谁”。
+- v0.0.6.x：解决“这些东西如何被三层系统判断”，正式推进 `tasteProfile` / `textureProfile` / `flavorProfile` 与三层 summary。
+- v0.0.7.x：解决“判断得好不好、数值顺不顺”，推进 severity、数值调优和 golden samples 扩容。
+
+v0.0.5.x 后续候选事项应保持小步、可回归、可冻结，例如中文主键残留盘点、`accidentTypeId` / `drinkTypeId` / `audienceId` 双轨、规则表 refs 小批迁移、golden samples ID 断言、feedbackTag 边界复查和 ID 化收口审计。不要把这些候选写成已经完成，也不要机械扩成固定版本清单。
 
 每一刀都应小、可回归、可冻结。
 
@@ -109,6 +110,8 @@ node scripts/runGoldenSamples.js
 - `tasteProfile`：基础味觉。
 - `textureProfile`：物理质地。
 - `flavorProfile`：风味身份 / 香气身份。
+
+三层 profile / summary 仍是长期重要方向，但正式开工应放在 v0.0.6.x 阶段，除非用户明确重新调整路线。v0.0.5.x 当前优先级是现有系统 ID 化和去中文主键。
 
 事故优先级不等于事故严重度。severity 长期应数据化为 `severityLevel` / `scoreMultiplier` 等可调结构。
 

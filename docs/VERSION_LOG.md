@@ -1,5 +1,42 @@
 # 版本记录
 
+## docs: redefine v0.0.5.x as stable identity foundation
+
+本轮只更新 docs / AGENTS，不提升页面版本号，不创建 tag。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 重定义 v0.0.5.x 为现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段。
+  - 定义 v0.0.6.x 为三层 profile / summary / 判定地基阶段。
+  - 定义 v0.0.7.x 为 severity / 数值调优 / golden samples 扩容阶段。
+  - 明确 v0.0.5.x 负责“系统里的东西是谁”，v0.0.6.x 负责“这些东西如何被三层系统判断”，v0.0.7.x 负责“判断得好不好、数值顺不顺”。
+  - 明确不要把 v0.0.5.x 误解为给所有未来系统提前造 ID 空表。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 同步短版阶段边界：ID 化完成前不急着启动完整三层 summary，三层判定放到 v0.0.6.x，severity 和数值调优放到 v0.0.7.x。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步到 `v0.0.5.23-candidate` 后路线文档补充状态。
+  - 补充后续 v0.0.5.x 候选方向：中文主键残留盘点、accidentTypeId、drinkTypeId、audienceId、规则表 refs、golden ID 断言、反馈 tag 边界和 ID 化收口审计。
+- 更新 `AGENTS.md`
+  - 补充 Codex / AI agent 长期工作守则：后续 v0.0.5.x 不默认推进三层 summary；当前优先级是现有系统 ID 化和去中文主键。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html / ui / storage。
+- 不改页面版本号。
+- 不推进 v0.0.5.24。
+- 不创建未来不存在系统的数据结构。
+- 不做 accidentTypeId / drinkTypeId 代码实现。
+- 不做三层 summary。
+- 不做 severity 系统。
+- 不改评分、事故判断、反馈文案、类型判断、保存结构或 golden samples expected。
+- 不 tag。
+
 ## docs: record stable ids for player-visible labels
 
 本轮只更新 docs / 工作守则，不提升页面版本号，不创建 tag。
