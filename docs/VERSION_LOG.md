@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.5.39 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.39-candidate`。
+  - 记录 candidate 指向 `d2f359ab54f8eafd4b3cb0b5d399d9941b428dc3`。
+  - 记录 `v0.0.5.39-candidate` 已冻结并推送。
+  - 记录 v0.0.5.39 已完成柠檬牛奶冲突 special case 与 `inferAudience` 显示名判断尾巴小修。
+  - 记录柠檬牛奶冲突已优先使用 `ingredientIds` / refs。
+  - 记录 `inferAudience` 植脂奶 / 榴莲判断已优先走 ID/ref。
+  - 记录中文 fallback 仍保留。
+  - 记录当前未推进 `v0.0.5.40`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.40。
+- 不创建 tag。
+
 ## v0.0.5.39
 
 柠檬牛奶冲突 special case 与 audience 局部判断改为 ID/ref 主路径。
