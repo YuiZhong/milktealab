@@ -1,5 +1,31 @@
 # 版本记录
 
+## docs: sync v0.0.5.32 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.32-candidate`。
+  - 记录 candidate 指向 `2f3fadedeb29333237dac9e55ebf8c7407c28188`。
+  - 记录 `v0.0.5.32-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.32` 已完成 `drinkTypeRules` refs 小批迁移。
+  - 记录 `drinkTypeRules` 已补 `ingredientId` / `anyIngredientIds` / `allIngredientIds`。
+  - 记录旧中文 `ingredient` / `anyIngredient` / `allIngredients` 仍保留。
+  - 记录当前未推进 `v0.0.5.33`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.33。
+- 不创建 tag。
+
 ## v0.0.5.32
 
 drinkTypeRules refs 小批迁移。
