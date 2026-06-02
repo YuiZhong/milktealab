@@ -1,5 +1,33 @@
 # 版本记录
 
+## 文档补充：AI_CONTEXT 当前状态快照
+
+本轮只修正文档索引，不提升页面版本号，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 新增“当前状态快照”。
+  - 明确最新 candidate 为 `v0.0.5.16-candidate`。
+  - 明确最新 candidate commit 为 `7584d5e feat: support ingredient refs in proportion rules`。
+  - 明确最新 main docs commit 为 `2291191 docs: record profile rationale and accident severity principles`。
+  - 明确 `2291191` 是 `v0.0.5.16-candidate` 之后的 docs 补充 commit，未单独创建 candidate tag。
+  - 明确 golden samples 当前为 15/15 passed。
+  - 清理旧的 v0.0.5.9 candidate / 14/14 当前状态误导。
+  - 新增“当前状态快照”维护规则，避免新对话读到旧 candidate 或旧 golden 数量。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不改代码。
+- 不改 data / scripts / index.html。
+- 不改页面版本号。
+- 不新增功能。
+- 不 push，不 tag。
+
 ## 文档补充：三层 profile 由来与事故 severity 原则
 
 本轮只补充设计文档，不提升页面版本号，不改运行逻辑。
