@@ -1,5 +1,30 @@
 # 版本记录
 
+## docs: sync v0.0.5.40 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.40-candidate`。
+  - 记录 candidate 指向 `0c2a3c6f50ae598129276cc1223ef2536444d78d`。
+  - 记录 `v0.0.5.40-candidate` 已冻结并推送。
+  - 记录 v0.0.5.x 的现有核心系统 ID 化 / 去显示文案主键阶段已基本收口。
+  - 记录未发现进入 v0.0.6.x 前必须处理的 P0。
+  - 记录当前未推进 v0.0.6.0。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.6.0。
+- 不创建 tag。
+
 ## v0.0.5.40
 
 v0.0.5.x final docs 收口。本轮只更新文档，不改运行逻辑。

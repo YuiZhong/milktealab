@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.39-candidate`
-- 最新 candidate commit：`d2f359ab54f8eafd4b3cb0b5d399d9941b428dc3`
-- `v0.0.5.39-candidate` 已冻结并推送，指向 `d2f359ab54f8eafd4b3cb0b5d399d9941b428dc3`；正式 tag `v0.0.5.39` 未创建。
-- 最新 main：本轮 docs commit 是 v0.0.5.x final docs 收口 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.5.40-candidate`
+- 最新 candidate commit：`0c2a3c6f50ae598129276cc1223ef2536444d78d`
+- `v0.0.5.40-candidate` 已冻结并推送，指向 `0c2a3c6f50ae598129276cc1223ef2536444d78d`；正式 tag `v0.0.5.40` 未创建。
+- 最新 main：本轮 docs commit 是 `v0.0.5.40-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
@@ -102,8 +102,8 @@
 - v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。
 - v0.0.5.35 已完成保存 result / 历史快照边界小修，旧 result 缺字段时渲染安全兜底，保存 result 中文字段明确为历史展示快照，未来机制依赖结构化 ID。
 - v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
-- 当前未创建正式 tag `v0.0.5.39`，未创建 `v0.0.5.40` / `v0.0.5.40-candidate` tag，未推进 v0.0.6.0。
-- 下一阶段可准备 v0.0.6.x 三层 profile / summary / 判定地基。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 当前未创建正式 tag `v0.0.5.40`，未推进 v0.0.6.0。
+- 下一步：准备 v0.0.6.0 三层 profile / summary / 判定地基设计会议。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
@@ -596,7 +596,7 @@ v0.0.4.x 不做：
 
 【不要删】golden samples 是当前阶段的回归安全网，不是最终味觉真理。重构期尽量保持 expected 稳定以防无意识漂移；调参期、三层 summary 接入或 severity 系统调整时，可以有意识更新 expected。ID 等价样本的重点是保证 name 输入与 ingredientId 输入结果一致，而不是永久锁死某个分数。
 
-【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`、`v0.0.5.24-candidate`、`v0.0.5.25-candidate`、`v0.0.5.26-candidate`、`v0.0.5.27-candidate`、`v0.0.5.28-candidate`、`v0.0.5.29-candidate`、`v0.0.5.30-candidate`、`v0.0.5.31-candidate`、`v0.0.5.32-candidate`、`v0.0.5.33-candidate`、`v0.0.5.34-candidate`、`v0.0.5.35-candidate`、`v0.0.5.36-candidate`、`v0.0.5.37-candidate`、`v0.0.5.38-candidate`、`v0.0.5.39-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
+【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`、`v0.0.5.24-candidate`、`v0.0.5.25-candidate`、`v0.0.5.26-candidate`、`v0.0.5.27-candidate`、`v0.0.5.28-candidate`、`v0.0.5.29-candidate`、`v0.0.5.30-candidate`、`v0.0.5.31-candidate`、`v0.0.5.32-candidate`、`v0.0.5.33-candidate`、`v0.0.5.34-candidate`、`v0.0.5.35-candidate`、`v0.0.5.36-candidate`、`v0.0.5.37-candidate`、`v0.0.5.38-candidate`、`v0.0.5.39-candidate`、`v0.0.5.40-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
 【可删】v0.0.5.34-candidate 已冻结并推送，指向 `98bac8c3b22c2b54f5e66748b536de3e000a037f`。v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修；feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。正式 tag `v0.0.5.34` 未创建，当前未推进 `v0.0.5.35`；工作区应为干净状态，golden samples 应为 20/20 passed。
 
