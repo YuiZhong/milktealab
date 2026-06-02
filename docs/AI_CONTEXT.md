@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.28-candidate`
-- 最新 candidate commit：`bc63f91c0fc8e1453773c1a5e9a526e07e615676`
-- 最新 main：本轮 `v0.0.5.29` commit 提交后以 `git log -1` 为准；本轮不创建 tag，不创建 `v0.0.5.29-candidate`。
-- `v0.0.5.28-candidate` 已冻结并推送，指向 `bc63f91c0fc8e1453773c1a5e9a526e07e615676`；正式 tag `v0.0.5.28` 未创建。
+- 最新 candidate：`v0.0.5.29-candidate`
+- 最新 candidate commit：`67115d5847317a124f415a96ea59bbb0ecab86e4`
+- 最新 main：本轮 docs commit 是 `v0.0.5.29-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准；本轮不创建 tag，不推进 `v0.0.5.30`。
+- `v0.0.5.29-candidate` 已冻结并推送，指向 `67115d5847317a124f415a96ea59bbb0ecab86e4`；正式 tag `v0.0.5.29` 未创建。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.29 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言。
@@ -78,7 +78,7 @@
 - docs 已补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
 - docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
 - docs 已补充经营层原则：自由实验室阶段不硬限制原料数量；未来经营阶段可通过出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险等软成本限制过度复杂配方。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚。
-- 下一步可考虑冻结 `v0.0.5.29-candidate`，或继续规则表 refs 小批迁移；后续还可评估反馈 tag 边界和 ID 化收口审计。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 当前未推进 v0.0.5.30。下一步可考虑规则表 refs 小批迁移，优先 `proportionSegmentRules` refs；后续还可评估反馈 tag 边界和 ID 化收口审计。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
@@ -571,13 +571,13 @@ v0.0.4.x 不做：
 
 【不要删】golden samples 是当前阶段的回归安全网，不是最终味觉真理。重构期尽量保持 expected 稳定以防无意识漂移；调参期、三层 summary 接入或 severity 系统调整时，可以有意识更新 expected。ID 等价样本的重点是保证 name 输入与 ingredientId 输入结果一致，而不是永久锁死某个分数。
 
-【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`、`v0.0.5.24-candidate`、`v0.0.5.25-candidate`、`v0.0.5.26-candidate`、`v0.0.5.27-candidate`、`v0.0.5.28-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
+【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`、`v0.0.5.24-candidate`、`v0.0.5.25-candidate`、`v0.0.5.26-candidate`、`v0.0.5.27-candidate`、`v0.0.5.28-candidate`、`v0.0.5.29-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
-【可删】v0.0.5.28-candidate 已冻结并推送，指向 `bc63f91c0fc8e1453773c1a5e9a526e07e615676`。v0.0.5.29 已完成 golden runner 支持 audience ID 断言；`scripts/runGoldenSamples.js` 支持 `audienceIdIncludes` / `audienceIdIncludesAny` / `forbiddenAudienceIdIncludes`，少量稳定 golden samples 已补 `audienceIds` expected，旧中文 type 断言、既有 `accidentTypeId` 断言、既有 `drinkTypeId` 断言和反馈文案断言保留。正式 tag `v0.0.5.29` 未创建，`v0.0.5.29-candidate` 未创建；工作区应为干净状态，golden samples 应为 20/20 passed。
+【可删】v0.0.5.29-candidate 已冻结并推送，指向 `67115d5847317a124f415a96ea59bbb0ecab86e4`。v0.0.5.29 已完成 golden runner 支持 audience ID 断言；`scripts/runGoldenSamples.js` 支持 `audienceIdIncludes` / `audienceIdIncludesAny` / `forbiddenAudienceIdIncludes`，少量稳定 golden samples 已补 `audienceIds` expected，中文 type 断言、`accidentTypeId` 断言、`drinkTypeId` 断言和反馈文案断言保留。正式 tag `v0.0.5.29` 未创建；当前未推进 v0.0.5.30；工作区应为干净状态，golden samples 应为 20/20 passed。
 
 【不要删】v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界已重新定义：v0.0.5.x 解决“系统里的东西是谁”，即现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基；v0.0.6.x 解决“这些东西如何被三层系统判断”，即三层 profile / summary / 判定地基；v0.0.7.x 解决“判断得好不好、数值顺不顺”，即 severity / 数值调优 / golden samples 扩容。
 
-【不要删】v0.0.5.x 后续不默认推进完整三层 summary。v0.0.5.29 已完成 golden runner 支持 audience ID 断言，当前未创建 `v0.0.5.29-candidate`。下一步可考虑冻结 `v0.0.5.29-candidate`，或继续规则表 refs 小批迁移；后续还可考虑 feedbackTag / 文案池边界复查、保存结果 / 历史 result 快照边界复查和 ID 化收口审计。允许少量 legacy 逻辑暂存，但不能继续扩张；新增结构应优先 stable ID + displayName / text，但不要为未来尚不存在的系统提前造空架子。
+【不要删】v0.0.5.x 后续不默认推进完整三层 summary。v0.0.5.29 已完成 golden runner 支持 audience ID 断言，且 `v0.0.5.29-candidate` 已冻结并推送。当前未推进 v0.0.5.30；下一步可考虑规则表 refs 小批迁移，优先 `proportionSegmentRules` refs；后续还可考虑 feedbackTag / 文案池边界复查、保存结果 / 历史 result 快照边界复查和 ID 化收口审计。允许少量 legacy 逻辑暂存，但不能继续扩张；新增结构应优先 stable ID + displayName / text，但不要为未来尚不存在的系统提前造空架子。
 
 【不要删】详细的三层 profile、stable ingredientId、三层 summary、事故优先级重排、质地事故细分、粗吸管需求、legacy 迁移原则和 v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界，已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话或 Codex 继续 v0.0.5.x 前，应先读取该文档；不要继续机械迁移单个旧事故规则。
 

@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.5.29 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.29-candidate`。
+  - 记录 candidate 指向 `67115d5847317a124f415a96ea59bbb0ecab86e4`。
+  - 记录 `v0.0.5.29-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.29` 已完成 golden runner 支持 audience ID 断言。
+  - 记录 runner 支持 `audienceIdIncludes` / `audienceIdIncludesAny` / `forbiddenAudienceIdIncludes`。
+  - 记录关键样本已补 `audienceIds` expected。
+  - 记录中文 type 断言、`accidentTypeId` 断言和 `drinkTypeId` 断言仍保留。
+  - 记录当前未推进 `v0.0.5.30`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.30。
+- 不创建 tag。
+
 ## v0.0.5.29
 
 golden runner 支持 audience ID 断言。
