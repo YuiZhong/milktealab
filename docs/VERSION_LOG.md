@@ -1,5 +1,31 @@
 # 版本记录
 
+## docs: sync v0.0.5.38 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.38-candidate`。
+  - 记录 candidate 指向 `aa8dcfdbc3a162a5bc2c58c5a1ba646ed5d003b0`。
+  - 记录 `v0.0.5.38-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.38` 已完成 golden runner 支持 feedbackTag 断言。
+  - 记录关键样本已补 feedbackTag expected。
+  - 记录 `feedbackIncludesAny` 文案断言仍保留。
+  - 记录当前未推进 `v0.0.5.39`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.39。
+- 不创建 tag。
+
 ## v0.0.5.38
 
 golden runner 支持 feedbackTag 断言。
