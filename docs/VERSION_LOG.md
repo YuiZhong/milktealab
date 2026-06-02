@@ -1,5 +1,37 @@
 # 版本记录
 
+## docs: record recipe complexity as operation cost
+
+本轮只更新设计文档，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 新增原则：自由实验室阶段不硬限制原料数量。
+  - 说明玩家可以把很多原料加入同一杯，以保留自由研发和整活空间。
+  - 说明未来经营阶段可将配方复杂度转化为出杯时间、制作难度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险。
+  - 明确这属于 operation / production / economy 层，不属于味觉层硬惩罚。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步为本轮 docs 补充 commit。
+  - 增加配方复杂度经营软成本原则的短索引。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不改页面版本号。
+- 不推进 v0.0.5.25。
+- 不创建 tag。
+- 不新增经营系统。
+- 不新增 operationProfile / economyProfile 代码。
+- 不新增成本字段、出杯时间或原料数量惩罚。
+- 不限制自由实验室原料数量。
+- 不做 UI 改动。
+
 ## docs: sync v0.0.5.24 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

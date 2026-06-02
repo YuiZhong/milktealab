@@ -60,7 +60,7 @@
 
 - 最新 candidate：`v0.0.5.24-candidate`
 - 最新 candidate commit：`5fbcdb039d41c8a9e27d7cd1ba383d19a5fad54e`
-- 最新 main：本轮 docs commit 是 `v0.0.5.24-candidate` 之后的文档同步 commit，提交后以 `git log -1` 为准；本轮不创建 tag，不推进 v0.0.5.25。
+- 最新 main：本轮 docs commit 是 `v0.0.5.24-candidate` 之后的设计文档补充 commit，提交后以 `git log -1` 为准；本轮不创建 tag，不推进 v0.0.5.25。
 - `v0.0.5.24-candidate` 已冻结并推送，指向 `5fbcdb039d41c8a9e27d7cd1ba383d19a5fad54e`；正式 tag `v0.0.5.24` 未创建。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -72,6 +72,7 @@
 - v0.0.5.24 为事故结果新增 `accidentTypeId` + `type` / displayName 双轨地基；旧中文 `type` 保留为 displayName / legacy 字段，`tasteJudge` 在主事故路径暴露 `result.accidentTypeId`，`accidentRuleEngine` / `structureAccidentRuleEngine` 只透传 `accidentTypeId`，不承载业务判断。本轮不做 drinkTypeId，不改 golden expected，不做 golden runner accidentTypeId 断言。
 - docs 已补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
 - docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
+- docs 已补充经营层原则：自由实验室阶段不硬限制原料数量；未来经营阶段可通过出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险等软成本限制过度复杂配方。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚。
 - 当前未推进 v0.0.5.25。后续 v0.0.5.x 可优先考虑 golden runner 支持 `accidentTypeId` 断言，然后再评估 `drinkTypeId`、`audienceId`、规则表 refs、反馈 tag 边界和 ID 化收口审计；不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
@@ -148,6 +149,8 @@
 - 再点已加入原料 = 移除
 - 不采用每点一次 +10% 的累加逻辑
 - 已加入原料应明显高亮或显示 ✓
+
+【不要删】自由实验室阶段不应硬限制原料数量。允许玩家把很多原料放进同一杯，这是自由研发和整活的乐趣；未来经营阶段可以把过度复杂配方转化为出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和吞吐风险等软成本。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚，也不进入当前 v0.0.5.x ID 化实现范围。
 
 ---
 
