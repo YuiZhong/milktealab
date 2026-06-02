@@ -281,6 +281,7 @@
       ],
       expectations: {
         typeIncludesAny: ["口感冲突", "实验特调"],
+        outcomeTypeIdIncludes: ["taste_conflict"],
         forbiddenTypeIncludes: ["经典奶茶", "清爽水果茶"],
         scoreMin: 15,
         scoreMax: 45,
@@ -298,6 +299,7 @@
       ],
       expectations: {
         typeIncludesAny: ["口感冲突", "实验特调"],
+        outcomeTypeIdIncludes: ["taste_conflict"],
         forbiddenTypeIncludes: ["经典奶茶", "清爽水果茶"],
         scoreMin: 15,
         scoreMax: 45,

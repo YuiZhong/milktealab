@@ -47,6 +47,20 @@ function getAccidentFeedbackTags(accident) {
   return tags;
 }
 
+const outcomeTypeIdByDisplayType = {
+  "口感冲突": "taste_conflict",
+  "口感事故": "texture_accident_outcome",
+  "奶脂过载": "dairy_fat_overload",
+  "猎奇实验品": "novelty_experiment",
+  "工业奶茶": "industrial_creamer_overload",
+  "实验特调": "experimental_special"
+};
+
+function inferOutcomeTypeId(type, accidentTypeId, drinkTypeId) {
+  if (accidentTypeId || drinkTypeId) return null;
+  return outcomeTypeIdByDisplayType[type] || null;
+}
+
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
@@ -189,6 +203,10 @@ function evaluateCup(cup) {
   }
   if (drinkTypeId && !primaryAccident?.accidentTypeId && !badNotes.length) {
     result.drinkTypeId = drinkTypeId;
+  }
+  const outcomeTypeId = inferOutcomeTypeId(result.type, result.accidentTypeId, result.drinkTypeId);
+  if (outcomeTypeId) {
+    result.outcomeTypeId = outcomeTypeId;
   }
   return result;
 }

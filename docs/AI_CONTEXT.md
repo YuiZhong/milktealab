@@ -64,7 +64,7 @@
 - 最新 main：本轮 docs commit 是 `v0.0.5.35-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
-- v0.0.5.10-v0.0.5.35 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去中文判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修。
+- v0.0.5.10-v0.0.5.36 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基。
 - v0.0.5.20 新增保存结构标准化入口；新保存配方写 ingredientId + name + ratio，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐。本轮不做复杂 localStorage migration，不批量改写旧数据，不等同于正式存档系统。
 - v0.0.5.21 新增 5 个 ID 等价 golden samples：清爽水果茶、气泡奶油冲突、奶脂过载、吸管阻力和高榴莲猎奇事故。旧 name samples 保持不变，不批量迁移，不改评分、事故、反馈、类型判断、rules 或保存结构。
 - v0.0.5.22 将 `data/synergyRules.js` 的 `ingredientGroups` 主定义从旧中文 name arrays 迁移为 stable ingredientId / refs；旧中文 name arrays 保留兼容导出，不改 analyzer 调用方式、评分、事故、反馈、类型判断、保存结构或 golden samples expected。
@@ -83,8 +83,10 @@
 - v0.0.5.35 完成保存 result / 历史快照边界小修；旧保存 result / 损坏 result 缺 `feedback` / `audience` / `attr` 时渲染安全降级。明确保存的中文 `type` / `audience` / `feedback` 是历史展示快照，未来统计、图鉴、顾客偏好和经营报表应依赖 `accidentTypeId` / `drinkTypeId` / `audienceIds` / `feedbackTags` 等结构化 ID；玩家未来自定义饮品名 `customName` / `title` 只作为显示名，不作为 `recipeId` / `drinkTypeId` / `recipeFamilyId` / `recipeVersionId`。本轮不做正式存档系统、不改保存交互、不做 localStorage migration、不改 golden expected。
 - v0.0.5.35 main 追加 cache-busting bugfix：刷新 `index.html` 中 `data/feedbackTexts.js`、`core/feedbackEngine.js`、`core/tasteJudge.js`、`ui/render.js` 的 runtime script query string，修复旧缓存 `feedbackEngine` 缺少 `getFeedbackTags` 导致点击试喝时报错的问题。本轮不改业务逻辑、不改 core / data / scripts / ui / storage 文件、不改页面版本号。
 - v0.0.5.35-candidate UI smoke 已确认普通试喝、保存、载入、事故路径正常，console 无业务 JS error。
-- docs 已补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
-- docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
+- v0.0.5.36 已完成 `outcomeTypeId` 兜底地基：当最终 `result.type` 既没有 `accidentTypeId`、也没有 `drinkTypeId` 时，补充稳定 `outcomeTypeId`；当前覆盖 `口感冲突` / `口感事故` / `奶脂过载` / `猎奇实验品` / `工业奶茶` / `实验特调` 等显示文案兜底结果。本轮不改事故触发、饮品类型判断、评分、反馈文案或 golden score expected。
+- v0.0.5.36 让 golden runner 支持 `outcomeTypeIdIncludes` / `outcomeTypeIdIncludesAny` / `forbiddenOutcomeTypeIdIncludes`，并给 `bubble_cream_conflict` / `bubble_cream_conflict_id_equivalence` 补充 `outcomeTypeIdIncludes: ["taste_conflict"]`；旧中文 `typeIncludesAny` 保留为显示回归保护。
+- docs 已补充长期原则：玩家可见显示文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。中文只是当前最常见的显示文案例子，不是唯一风险来源。
+- docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
 - docs 已补充经营层原则：自由实验室阶段不硬限制原料数量；未来经营阶段可通过出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险等软成本限制过度复杂配方。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚。
 - v0.0.5.31 已完成 `combinationRules` refs 小批迁移，17 条 good / bad 具体组合已补 `ingredientIds`，旧中文 `names` 仍保留，`multiIngredientRules.teaMix` 未迁移。
 - v0.0.5.32 已完成 `drinkTypeRules` refs 小批迁移，`drinkTypeRules` 已补 `ingredientId` / `anyIngredientIds` / `allIngredientIds`，旧中文 `ingredient` / `anyIngredient` / `allIngredients` 仍保留。
@@ -92,8 +94,8 @@
 - v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。
 - v0.0.5.35 已完成保存 result / 历史快照边界小修，旧 result 缺字段时渲染安全兜底，保存 result 中文字段明确为历史展示快照，未来机制依赖结构化 ID。
 - v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
-- 当前未创建正式 tag `v0.0.5.35`，未推进 `v0.0.5.36`。
-- 下一步可考虑 ID 化最终收口审计。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 当前未创建正式 tag `v0.0.5.35`，未创建 `v0.0.5.36` / `v0.0.5.36-candidate` tag。
+- 下一步可考虑 v0.0.5.x 最终收口审计 / candidate 冻结。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
@@ -508,7 +510,7 @@ v0.0.4.x 不做：
 【不要删】当前长期开发节奏：
 
 - v0.0.4.x：工程地基、模块化、文档、回滚、规则
-- v0.0.5.x：现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基，解决“系统里的东西是谁”
+- v0.0.5.x：现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基，解决“系统里的东西是谁”
 - v0.0.6.x：三层 profile / summary / 判定地基，解决“这些东西如何被三层系统判断”
 - v0.0.7.x：severity / 数值调优 / golden samples 扩容，解决“判断得好不好、数值顺不顺”
 - v0.1.x：让配方实验室真正好玩，能让玩家持续玩约 10 分钟
@@ -582,7 +584,7 @@ v0.0.4.x 不做：
 
 【不要删】《奶茶实验室》原料数据模型后续应逐步引入稳定 ingredientId。系统规则、tasteProfile、textureProfile、flavorProfile、组合规则、事故规则、golden samples 和未来存档，应尽量引用 ingredientId，而不是玩家可见 name。name 负责显示，aliases 负责旧名 / 别名 / 搜索兼容。推荐使用可读字符串 ID，例如 fruit_lemon、topping_oreo_crumble，不建议长期依赖纯数字或中文显示名作为主键。正式迁移前应先做只读评估，避免一次性重写全项目。
 
-【不要删】玩家可见中文 / 文案不应长期作为系统主键。现有系统中已参与判断、测试、保存或展示的显示文本，应逐步补 stable ID；未来新增系统应从第一天使用 stable ID + displayName / text。中文 / 文案负责显示、反馈、UI 和本地化，不负责长期规则身份。不要把这条原则扩张成“现在立刻为未来不存在系统造空架子”。
+【不要删】玩家可见显示文案不应长期作为系统主键。现有系统中已参与判断、测试、保存或展示的显示文本，应逐步补 stable ID；未来新增系统应从第一天使用 stable ID + displayName / text。中文只是当前最常见的显示文案例子，英文、日文或任何未来可能改名 / 本地化的 label 也一样不应当主键；文案负责显示、反馈、UI 和本地化，不负责长期规则身份。不要把这条原则扩张成“现在立刻为未来不存在系统造空架子”。
 
 【不要删】golden samples 是当前阶段的回归安全网，不是最终味觉真理。重构期尽量保持 expected 稳定以防无意识漂移；调参期、三层 summary 接入或 severity 系统调整时，可以有意识更新 expected。ID 等价样本的重点是保证 name 输入与 ingredientId 输入结果一致，而不是永久锁死某个分数。
 
@@ -590,9 +592,9 @@ v0.0.4.x 不做：
 
 【可删】v0.0.5.34-candidate 已冻结并推送，指向 `98bac8c3b22c2b54f5e66748b536de3e000a037f`。v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修；feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。正式 tag `v0.0.5.34` 未创建，当前未推进 `v0.0.5.35`；工作区应为干净状态，golden samples 应为 20/20 passed。
 
-【不要删】v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界已重新定义：v0.0.5.x 解决“系统里的东西是谁”，即现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基；v0.0.6.x 解决“这些东西如何被三层系统判断”，即三层 profile / summary / 判定地基；v0.0.7.x 解决“判断得好不好、数值顺不顺”，即 severity / 数值调优 / golden samples 扩容。
+【不要删】v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界已重新定义：v0.0.5.x 解决“系统里的东西是谁”，即现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基；v0.0.6.x 解决“这些东西如何被三层系统判断”，即三层 profile / summary / 判定地基；v0.0.7.x 解决“判断得好不好、数值顺不顺”，即 severity / 数值调优 / golden samples 扩容。
 
-【不要删】v0.0.5.x 后续不默认推进完整三层 summary。v0.0.5.30 已完成 `proportionSegmentRules` refs 小批迁移，`v0.0.5.30-candidate` 已冻结并推送；v0.0.5.31 已完成 `combinationRules` refs 小批迁移，`v0.0.5.31-candidate` 已冻结并推送；v0.0.5.32 已完成 `drinkTypeRules` refs 小批迁移，`v0.0.5.32-candidate` 已冻结并推送；v0.0.5.33 已完成 texture accident 去中文判断小修，`v0.0.5.33-candidate` 已冻结并推送；v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，`v0.0.5.34-candidate` 已冻结并推送。下一步可考虑保存 result / 历史快照边界复查，或 ID 化收口审计。允许少量 legacy 逻辑暂存，但不能继续扩张；新增结构应优先 stable ID + displayName / text，但不要为未来尚不存在的系统提前造空架子。
+【不要删】v0.0.5.x 后续不默认推进完整三层 summary。v0.0.5.30 已完成 `proportionSegmentRules` refs 小批迁移，`v0.0.5.30-candidate` 已冻结并推送；v0.0.5.31 已完成 `combinationRules` refs 小批迁移，`v0.0.5.31-candidate` 已冻结并推送；v0.0.5.32 已完成 `drinkTypeRules` refs 小批迁移，`v0.0.5.32-candidate` 已冻结并推送；v0.0.5.33 已完成 texture accident 去显示文案判断小修，`v0.0.5.33-candidate` 已冻结并推送；v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，`v0.0.5.34-candidate` 已冻结并推送；v0.0.5.35 已完成保存 result / 历史快照边界小修，`v0.0.5.35-candidate` 已冻结并推送；v0.0.5.36 已完成 `outcomeTypeId` 兜底地基。下一步可考虑 v0.0.5.x 最终收口审计 / candidate 冻结。允许少量 legacy 逻辑暂存，但不能继续扩张；新增结构应优先 stable ID + displayName / text，但不要为未来尚不存在的系统提前造空架子。
 
 【不要删】详细的三层 profile、stable ingredientId、三层 summary、事故优先级重排、质地事故细分、粗吸管需求、legacy 迁移原则和 v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界，已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话或 Codex 继续 v0.0.5.x 前，应先读取该文档；不要继续机械迁移单个旧事故规则。
 

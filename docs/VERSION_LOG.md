@@ -1,5 +1,42 @@
 # 版本记录
 
+## v0.0.5.36
+
+outcomeTypeId 兜底地基 + “显示文案主键”术语同步。
+
+### 本轮新增 / 更新
+
+- 更新 `core/tasteJudge.js`
+  - 为最终 `result.type` 没有 `accidentTypeId`、也没有 `drinkTypeId` 的兜底结果补充 `outcomeTypeId`。
+  - 当前覆盖 `口感冲突` / `口感事故` / `奶脂过载` / `猎奇实验品` / `工业奶茶` / `实验特调` 等显示文案兜底结果。
+  - `result.type` 继续保留为玩家可见显示文案。
+- 更新 `scripts/runGoldenSamples.js`
+  - 新增 `outcomeTypeIdIncludes` / `outcomeTypeIdIncludesAny` / `forbiddenOutcomeTypeIdIncludes` 断言支持。
+  - runner 只读取 `result.outcomeTypeId` / `result.outcomeTypeIds`，不从中文 `type` 反推 ID。
+- 更新 `data/goldenSamples.js`
+  - 为 `bubble_cream_conflict` 和 `bubble_cream_conflict_id_equivalence` 补充 `outcomeTypeIdIncludes: ["taste_conflict"]`。
+  - 保留旧中文 `typeIncludesAny` 作为显示回归保护。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.36。
+  - 将 `core/tasteJudge.js` runtime cache-busting query string 刷新为 `v=0056`。
+  - 保持脚本加载顺序不变。
+- 更新 `AGENTS.md` / `docs/TASTE_ENGINE_ARCHITECTURE.md` / `docs/TASTE_SYSTEM_DESIGN.md` / `docs/AI_CONTEXT.md`
+  - 将长期术语从“去中文主键”同步为“去显示文案主键”。
+  - 明确中文只是当前最常见的显示文案例子，英文、日文或任何未来可能改名 / 本地化的 label 也不应承担系统主键职责。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- UI smoke：页面版本号、普通试喝、事故试喝、保存、载入路径通过，页面未出现 `undefined` / `[object Object]` 或可见业务错误。
+
+### 本轮不做
+
+- 不改事故触发条件。
+- 不改饮品类型判断。
+- 不改评分、反馈文案或 golden score expected。
+- 不改正式存档系统、localStorage migration 或保存交互。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.35 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
@@ -766,7 +803,7 @@ accidentTypeId + type/displayName 双轨地基。
 ### 本轮新增 / 更新
 
 - 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
-  - 重定义 v0.0.5.x 为现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段。
+  - 重定义 v0.0.5.x 为现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基阶段。
   - 定义 v0.0.6.x 为三层 profile / summary / 判定地基阶段。
   - 定义 v0.0.7.x 为 severity / 数值调优 / golden samples 扩容阶段。
   - 明确 v0.0.5.x 负责“系统里的东西是谁”，v0.0.6.x 负责“这些东西如何被三层系统判断”，v0.0.7.x 负责“判断得好不好、数值顺不顺”。
@@ -775,9 +812,9 @@ accidentTypeId + type/displayName 双轨地基。
   - 同步短版阶段边界：ID 化完成前不急着启动完整三层 summary，三层判定放到 v0.0.6.x，severity 和数值调优放到 v0.0.7.x。
 - 更新 `docs/AI_CONTEXT.md`
   - 当前状态快照同步到 `v0.0.5.23-candidate` 后路线文档补充状态。
-  - 补充后续 v0.0.5.x 候选方向：中文主键残留盘点、accidentTypeId、drinkTypeId、audienceId、规则表 refs、golden ID 断言、反馈 tag 边界和 ID 化收口审计。
+  - 补充后续 v0.0.5.x 候选方向：显示文案主键残留盘点、accidentTypeId、drinkTypeId、audienceId、规则表 refs、golden ID 断言、反馈 tag 边界和 ID 化收口审计。
 - 更新 `AGENTS.md`
-  - 补充 Codex / AI agent 长期工作守则：后续 v0.0.5.x 不默认推进三层 summary；当前优先级是现有系统 ID 化和去中文主键。
+  - 补充 Codex / AI agent 长期工作守则：后续 v0.0.5.x 不默认推进三层 summary；当前优先级是现有系统 ID 化和去显示文案主键。
 
 ### 验证结果
 
