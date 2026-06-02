@@ -1,5 +1,44 @@
 # 版本记录
 
+## v0.0.5.21
+
+ID golden samples 补强。
+
+### 阶段目标
+
+本版本在规则表数据迁移前补强 golden samples 的 ingredientId 输入路径。新增 5 个 ID 等价样本，复制现有 name 样本的配方比例和 expected，用于保护清爽水果茶、冲突组合、奶脂过载、吸管阻力和榴莲强身份路径。
+
+### 本轮新增 / 更新
+
+- 更新 `data/goldenSamples.js`
+  - 新增 `fresh_bubble_fruit_tea_id_equivalence`。
+  - 新增 `bubble_cream_conflict_id_equivalence`。
+  - 新增 `greasy_overload_id_equivalence`。
+  - 新增 `straw_resistance_accident_id_equivalence`。
+  - 新增 `high_durian_oddity_accident_id_equivalence`。
+  - 旧 name samples 保持不变。
+  - 不批量迁移 golden samples。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.21。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `node --check data/goldenSamples.js` 通过。
+- 完成 ingredient registry 校验：37 个原料，37 个唯一 ID，无 alias 冲突。
+- 完成 ID 等价样本自检。
+
+### 本轮不做
+
+- 不改 taste engine。
+- 不改 core / rules / storage / ui / scripts。
+- 不改评分、事故判断、反馈文案、类型判断或保存结构。
+- 不删除旧 name samples。
+- 不批量迁移 golden samples。
+- 不推进 v0.0.5.22。
+- 不 tag。
+
 ## v0.0.5.20
 
 保存结构 ingredientId 双轨地基。

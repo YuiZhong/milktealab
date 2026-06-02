@@ -58,15 +58,16 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.19-candidate`
-- 最新 candidate commit：`ebb37fe feat: support ingredient refs in drink type rules`
-- 最新 main：本轮 v0.0.5.20 提交 `feat: add ingredient ids to saved recipes`，提交后以 `git log -1` 为准。
-- `v0.0.5.19-candidate` 已冻结并推送；v0.0.5.20 让浏览器保存配方结构进入 name / ingredientId 双轨。
+- 最新 candidate：`v0.0.5.20-candidate`
+- 最新 candidate commit：`da76b96 feat: add ingredient ids to saved recipes`
+- 最新 main：本轮 v0.0.5.21 提交 `test: add ingredient id golden equivalents`，提交后以 `git log -1` 为准。
+- `v0.0.5.20-candidate` 已冻结并推送；v0.0.5.21 补强 ID golden samples 覆盖。
 - main 与 origin/main 应同步，工作区应干净。
-- golden samples 当前应为 `15/15 passed`。
-- v0.0.5.10-v0.0.5.20 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨。
+- golden samples 当前应为 `20/20 passed`。
+- v0.0.5.10-v0.0.5.21 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强。
 - v0.0.5.20 新增保存结构标准化入口；新保存配方写 ingredientId + name + ratio，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐。本轮不做复杂 localStorage migration，不批量改写旧数据，不等同于正式存档系统。
-- 后续不要拍死，可继续评估规则数据迁移策略、`analyzeFruitTeaBlend` / audience 本地中文逻辑或本地中文数组残留。
+- v0.0.5.21 新增 5 个 ID 等价 golden samples：清爽水果茶、气泡奶油冲突、奶脂过载、吸管阻力和高榴莲猎奇事故。旧 name samples 保持不变，不批量迁移，不改评分、事故、反馈、类型判断、rules 或保存结构。
+- 下一步可继续小批规则表 refs 迁移或 ingredientGroups refs 迁移策略；不要为了“干净”批量迁移全部规则表。
 
 ---
 

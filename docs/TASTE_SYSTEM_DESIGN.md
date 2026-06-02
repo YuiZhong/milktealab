@@ -168,6 +168,8 @@ v0.0.5.19 让 drinkType rules 执行入口支持 ingredientId / name / alias / o
 
 v0.0.5.20 让浏览器保存配方结构进入 name / ingredientId 双轨：新保存写入 ingredientId + name，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐；本轮不做复杂迁移或正式存档系统。
 
+v0.0.5.21 补强 golden samples 的 ingredientId 路径覆盖：新增若干 ID 等价样本，但旧 name 样本保留，不批量迁移，继续作为规则数据迁移前的安全网。
+
 ## 4. if 治理原则
 
 核心原则：

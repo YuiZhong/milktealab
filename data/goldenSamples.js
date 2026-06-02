@@ -53,6 +53,24 @@
       notes: "清爽茶饮样本，应保持高分和清爽方向。"
     },
     {
+      id: "fresh_bubble_fruit_tea_id_equivalence",
+      name: "清爽水果茶 ID 等价样本",
+      cup: [
+        { ingredientId: "tea_green", ratio: 40 },
+        { ingredientId: "liquid_sparkling_water", ratio: 30 },
+        { ingredientId: "fruit_lemon", ratio: 20 },
+        { ingredientId: "sweetener_honey", ratio: 10 }
+      ],
+      expectations: {
+        typeIncludesAny: ["清爽水果茶", "气泡水果茶", "水果绿茶"],
+        forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
+        scoreMin: 65,
+        scoreMax: 100,
+        feedbackIncludesAny: ["柠檬", "清爽", "酸爽", "茶香", "合理"]
+      },
+      notes: "与 fresh_bubble_fruit_tea 等价，用 ingredientId 覆盖清爽水果茶和 fruit tea ID 输入路径。"
+    },
+    {
       id: "premium_oolong_milk",
       name: "高级厚乳款",
       cup: [
@@ -137,6 +155,22 @@
       notes: "保护榴莲 60-80 高争议猎奇事故档；当前 type 断言用于保护现阶段输出稳定，不代表“猎奇实验品”是最终正式版命名。"
     },
     {
+      id: "high_durian_oddity_accident_id_equivalence",
+      name: "高榴莲猎奇事故 ID 等价样本",
+      cup: [
+        { ingredientId: "fruit_durian", ratio: 65 },
+        { ingredientId: "dairy_milk", ratio: 20 },
+        { ingredientId: "tea_black", ratio: 15 }
+      ],
+      expectations: {
+        typeIncludes: ["猎奇实验品"],
+        scoreMin: 0,
+        scoreMax: 50,
+        feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"]
+      },
+      notes: "与 high_durian_oddity_accident 等价，用 ingredientId 覆盖强身份和榴莲事故 ID 输入路径。"
+    },
+    {
       id: "greasy_overload",
       name: "奶脂过载",
       cup: [
@@ -151,6 +185,22 @@
         feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"]
       },
       notes: "奶脂事故样本，不应被甜品饮方向洗白。"
+    },
+    {
+      id: "greasy_overload_id_equivalence",
+      name: "奶脂过载 ID 等价样本",
+      cup: [
+        { ingredientId: "dairy_thick_milk", ratio: 70 },
+        { ingredientId: "dairy_cream", ratio: 20 },
+        { ingredientId: "dairy_non_dairy_creamer", ratio: 10 }
+      ],
+      expectations: {
+        typeIncludes: ["奶脂过载"],
+        scoreMin: 0,
+        scoreMax: 35,
+        feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"]
+      },
+      notes: "与 greasy_overload 等价，用 ingredientId 覆盖 dairy / highFatDairy ID 输入路径。"
     },
     {
       id: "straw_resistance_accident",
@@ -168,6 +218,23 @@
         feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
       },
       notes: "高固体负载样本，应保持吸管阻力事故方向。"
+    },
+    {
+      id: "straw_resistance_accident_id_equivalence",
+      name: "吸管阻力事故 ID 等价样本",
+      cup: [
+        { ingredientId: "topping_taro_paste", ratio: 45 },
+        { ingredientId: "topping_oreo_crumble", ratio: 32 },
+        { ingredientId: "topping_pearl", ratio: 16 },
+        { ingredientId: "sweetener_honey", ratio: 7 }
+      ],
+      expectations: {
+        typeIncludes: ["口感事故"],
+        scoreMin: 0,
+        scoreMax: 25,
+        feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
+      },
+      notes: "与 straw_resistance_accident 等价，用 ingredientId 覆盖 strawResistance / texture ID 输入路径。"
     },
     {
       id: "oreo_overload_texture_accident",
@@ -201,6 +268,23 @@
         feedbackIncludesAny: ["气泡", "奶油", "打架", "思考人生", "奇怪"]
       },
       notes: "气泡和奶油冲突样本，不应被判成经典稳定款。"
+    },
+    {
+      id: "bubble_cream_conflict_id_equivalence",
+      name: "气泡奶油冲突 ID 等价样本",
+      cup: [
+        { ingredientId: "liquid_sparkling_water", ratio: 50 },
+        { ingredientId: "dairy_cream", ratio: 40 },
+        { ingredientId: "sweetener_honey", ratio: 10 }
+      ],
+      expectations: {
+        typeIncludesAny: ["口感冲突", "实验特调"],
+        forbiddenTypeIncludes: ["经典奶茶", "清爽水果茶"],
+        scoreMin: 15,
+        scoreMax: 45,
+        feedbackIncludesAny: ["气泡", "奶油", "打架", "思考人生", "奇怪"]
+      },
+      notes: "与 bubble_cream_conflict 等价，用 ingredientId 覆盖 bad combination ID 输入路径。"
     },
     {
       id: "industrial_milk_tea",

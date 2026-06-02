@@ -62,6 +62,8 @@ v0.0.5.19 将 ingredientId 兼容推进到 drinkType 规则执行入口；本轮
 
 v0.0.5.20 将 ingredientId 兼容推进到保存结构边界；保存结构 helper 只做 recipe/cup item 标准化，不承载味觉判断，也不等同于正式存档系统。
 
+v0.0.5.21 在规则表数据迁移前先补强 ID golden 覆盖，确保更多关键路径可同时通过 name 与 ingredientId 输入回归。
+
 示意结构：
 
 ```js
