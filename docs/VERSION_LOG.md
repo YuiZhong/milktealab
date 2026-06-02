@@ -1,5 +1,27 @@
 # 版本记录
 
+## docs: AGENTS golden samples 数量规则修正
+
+本轮只更新工作流文档，不提升页面版本号，不创建 tag。
+
+### 本轮新增 / 更新
+
+- 更新 `AGENTS.md`
+  - 移除过期的 `15/15 passed` 当前数量表述。
+  - 明确 `AGENTS.md` 不承担具体 golden samples 数量记录职责。
+  - 具体 expected 数量以 `docs/AI_CONTEXT.md` 当前状态快照、`docs/VERSION_LOG.md`、实际 `data/goldenSamples.js` 和 `node scripts/runGoldenSamples.js` 运行结果为准。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 core / data / scripts / index.html / ui / storage。
+- 不推进 v0.0.5.22。
+- 不 tag。
+
 ## docs: v0.0.5.21-candidate 后文档补充
 
 本轮只更新文档，不提升页面版本号，不创建 tag。

@@ -77,17 +77,13 @@ v0.0.5.x｜味觉引擎底层架构重构 / 房梁阶段
 
 ## 6. 测试与验收规则
 
-修改味觉 / 规则 / core 相关文件后，通常必须执行：
+修改味觉 / 规则 / core / data / golden samples 相关文件后，或用户明确要求回归检查时，通常必须执行：
 
 ```bash
 node scripts/runGoldenSamples.js
 ```
 
-当前 golden samples 应为：
-
-```text
-15/15 passed
-```
+`AGENTS.md` 不承担具体 golden samples 数量记录职责，不应硬编码当前样本总数。具体 expected 数量以 `docs/AI_CONTEXT.md` 当前状态快照、`docs/VERSION_LOG.md`、实际 `data/goldenSamples.js` 和 `node scripts/runGoldenSamples.js` 的运行结果为准。报告中必须如实写明本轮实际结果。
 
 测试分级规则以 `docs/TASTE_ENGINE_ARCHITECTURE.md` 为准。
 
