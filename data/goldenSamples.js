@@ -10,6 +10,7 @@
       ],
       expectations: {
         typeIncludes: ["经典奶茶"],
+        drinkTypeIdIncludes: ["classic_milk_tea"],
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 65,
         scoreMax: 85,
@@ -27,6 +28,7 @@
       ],
       expectations: {
         typeIncludes: ["经典奶茶"],
+        drinkTypeIdIncludes: ["classic_milk_tea"],
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 74,
         scoreMax: 74,
@@ -45,6 +47,7 @@
       ],
       expectations: {
         typeIncludesAny: ["清爽水果茶", "气泡水果茶", "水果绿茶"],
+        drinkTypeIdIncludes: ["fresh_fruit_tea"],
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 65,
         scoreMax: 100,
@@ -63,6 +66,7 @@
       ],
       expectations: {
         typeIncludesAny: ["清爽水果茶", "气泡水果茶", "水果绿茶"],
+        drinkTypeIdIncludes: ["fresh_fruit_tea"],
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 65,
         scoreMax: 100,
@@ -81,6 +85,7 @@
       ],
       expectations: {
         typeIncludesAny: ["高级厚乳款", "高级奶茶", "经典奶茶", "甜品奶昔"],
+        drinkTypeIdIncludes: ["premium_thick_milk_tea"],
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 60,
         scoreMax: 90,

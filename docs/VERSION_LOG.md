@@ -1,5 +1,43 @@
 # 版本记录
 
+## v0.0.5.27
+
+golden runner 支持普通饮品类型 `drinkTypeId` 断言。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 新增 `drinkTypeIdIncludes` 断言。
+  - 新增 `drinkTypeIdIncludesAny` 断言。
+  - 新增 `forbiddenDrinkTypeIdIncludes` 断言。
+  - 检查时读取 `result.drinkTypeId`，并兼容未来可能出现的 `result.drinkTypeIds` 数组。
+  - runner 只检查 result，不推导、不映射中文 type 到 drinkTypeId。
+- 更新 `data/goldenSamples.js`
+  - 给少量已有普通饮品样本补充 `drinkTypeId` expected。
+  - 覆盖经典奶茶、清爽水果茶和高级厚乳款。
+  - 保留旧中文 `typeIncludes` / `typeIncludesAny` / `forbiddenTypeIncludes` 断言。
+  - 保留既有 `accidentTypeId` 断言。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.27。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.27 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改 core。
+- 不改评分、事故触发、反馈文案、`result.type`、`drinkTypeId` 生成逻辑或 golden score expected。
+- 不给事故样本添加 `drinkTypeId` expected。
+- 不新增 golden samples。
+- 不改比例。
+- 不做 `audienceId`。
+- 不做三层 summary。
+- 不做 severity 系统。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.26 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
