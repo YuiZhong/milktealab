@@ -1,5 +1,30 @@
 # 版本记录
 
+## docs: sync v0.0.5.30 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.30-candidate`。
+  - 记录 candidate 指向 `7e75f426f392a7da0d60bbceb8afece6e3d29c51`。
+  - 记录 `v0.0.5.30-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.30` 已完成 `proportionSegmentRules` refs 小批迁移。
+  - 记录旧中文 `ingredient` / `names` 仍保留。
+  - 记录当前未推进 `v0.0.5.31`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.31。
+- 不创建 tag。
+
 ## v0.0.5.30
 
 proportionSegmentRules refs 小批迁移。
