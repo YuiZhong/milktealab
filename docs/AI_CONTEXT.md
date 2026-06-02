@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.36-candidate`
-- 最新 candidate commit：`f833349f6f0459b1e538cc65dfa01b80c412972b`
-- `v0.0.5.36-candidate` 已冻结并推送，指向 `f833349f6f0459b1e538cc65dfa01b80c412972b`；正式 tag `v0.0.5.36` 未创建。
-- 最新 main：本轮 docs commit 是 `v0.0.5.36-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.5.37-candidate`
+- 最新 candidate commit：`65f6a32c33d81f5652ed3f527294ef2826b71e61`
+- `v0.0.5.37-candidate` 已冻结并推送，指向 `65f6a32c33d81f5652ed3f527294ef2826b71e61`；正式 tag `v0.0.5.37` 未创建。
+- 最新 main：本轮 docs commit 是 `v0.0.5.37-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.37 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修。
@@ -85,7 +85,8 @@
 - v0.0.5.35-candidate UI smoke 已确认普通试喝、保存、载入、事故路径正常，console 无业务 JS error。
 - v0.0.5.36 已完成 `outcomeTypeId` 兜底地基，且 `v0.0.5.36-candidate` 已冻结并推送；当最终 `result.type` 既没有 `accidentTypeId`、也没有 `drinkTypeId` 时，补充稳定 `outcomeTypeId`；当前覆盖 `口感冲突` / `口感事故` / `奶脂过载` / `猎奇实验品` / `工业奶茶` / `实验特调` 等显示文案兜底结果。本轮不改事故触发、饮品类型判断、评分、反馈文案或 golden score expected。
 - v0.0.5.36 让 golden runner 支持 `outcomeTypeIdIncludes` / `outcomeTypeIdIncludesAny` / `forbiddenOutcomeTypeIdIncludes`，并给 `bubble_cream_conflict` / `bubble_cream_conflict_id_equivalence` 补充 `outcomeTypeIdIncludes: ["taste_conflict"]`；旧中文 `typeIncludesAny` 保留为显示回归保护。
-- v0.0.5.37 已完成 analyzer 本地显示名查询小修：`core/accidentAnalyzer.js` / `core/proportionAnalyzer.js` / `core/drinkTypeAnalyzer.js` 中的低风险本地比例查询优先使用 ingredientId / ref / group helper，中文 name 仅保留展示或 legacy fallback。本轮不改评分、阈值、事故触发、饮品类型、反馈文案或 golden expected，不做三层 summary。
+- v0.0.5.37 已完成 analyzer 本地显示名比例查询改为 ID/ref 主路径，且 `v0.0.5.37-candidate` 已冻结并推送；`core/accidentAnalyzer.js` / `core/proportionAnalyzer.js` / `core/drinkTypeAnalyzer.js` 中的低风险本地比例查询优先使用 ingredientId / ref / group helper，中文 name 仍保留展示或 legacy fallback。本轮不改评分、阈值、事故触发、饮品类型、反馈文案或 golden expected，不做三层 summary。
+- `inferAudience` 中仍有少量 `has(name, names)` 遗留 P1，已记录且不阻塞当前阶段；如继续收尾，可在后续小版本让 audience 推断接收 context 或由 v0.0.6.x summary 接管。
 - docs 已补充长期原则：玩家可见显示文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。中文只是当前最常见的显示文案例子，不是唯一风险来源。
 - docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
 - docs 已补充经营层原则：自由实验室阶段不硬限制原料数量；未来经营阶段可通过出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险等软成本限制过度复杂配方。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚。
@@ -95,8 +96,8 @@
 - v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。
 - v0.0.5.35 已完成保存 result / 历史快照边界小修，旧 result 缺字段时渲染安全兜底，保存 result 中文字段明确为历史展示快照，未来机制依赖结构化 ID。
 - v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
-- 当前未创建正式 tag `v0.0.5.36`，未创建 `v0.0.5.37` / `v0.0.5.37-candidate` tag。
-- 下一步可考虑 feedbackTag golden 断言，或 v0.0.5.x 最终收口复查 / 阶段收尾。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 当前未创建正式 tag `v0.0.5.37`，未推进 `v0.0.5.38`。
+- 下一步可考虑 feedbackTag golden 断言，或最终收口审计。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
