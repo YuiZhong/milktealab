@@ -27,6 +27,7 @@ function evaluateStructureAccidentRules(structure) {
     .filter(rule => matchesConditions(structure, rule.conditions))
     .map(rule => ({
       id: rule.id,
+      accidentTypeId: rule.accidentTypeId,
       type: rule.type,
       cap: rule.cap,
       score: rule.score,

@@ -14,6 +14,10 @@ function isLegacyLemonMilkConflict(rule) {
   return Array.isArray(rule.names) && rule.names.includes("柠檬") && rule.names.includes("牛奶");
 }
 
+function isDairyFatOverloadAccident(accident) {
+  return accident.accidentTypeId === "dairy_fat_overload" || accident.type === "奶脂过载";
+}
+
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
@@ -33,6 +37,7 @@ function evaluateCup(cup) {
   segmentNotes.push(...segmentResult.notes);
 
   const accidents = accidentAnalyzer.detectAccidents(context).sort((left, right) => left.cap - right.cap);
+  const primaryAccident = accidents[0] || null;
   accidents.forEach(accident => {
     scoreEngine.addScore(score, accident.score);
     scoreEngine.applyScoreCap(score, accident.cap);
@@ -96,7 +101,7 @@ function evaluateCup(cup) {
     scoreEngine.addScore(score, -7);
   }
 
-  const hasMilkFatAccident = accidents.some(accident => accident.type === "奶脂过载");
+  const hasMilkFatAccident = accidents.some(isDairyFatOverloadAccident);
 
   if (attr.thick >= 70 && attr.straw < 48 && !hasMilkFatAccident) {
     attr.fresh -= 18;
@@ -133,7 +138,11 @@ function evaluateCup(cup) {
           : generalNotes;
   const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0);
 
-  return { attr, score: finalScore, type, audience, feedback };
+  const result = { attr, score: finalScore, type, audience, feedback };
+  if (primaryAccident?.accidentTypeId) {
+    result.accidentTypeId = primaryAccident.accidentTypeId;
+  }
+  return result;
 }
 
 window.MILK_TEA_LAB_TASTE_JUDGE = {

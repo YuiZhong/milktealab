@@ -1,5 +1,53 @@
 # 版本记录
 
+## v0.0.5.24
+
+accidentTypeId + type/displayName 双轨地基。
+
+### 阶段目标
+
+本版本为事故结果新增稳定 `accidentTypeId`，让事故的内部系统身份不再只依赖中文 `type`。旧中文 `type` 继续保留，作为现有玩家可见显示名 / legacy 字段。
+
+### 本轮新增 / 更新
+
+- 更新 `data/accidentRules.js`
+  - 柠檬酸度事故新增 `accidentTypeId: "taste_acid_overload"`。
+  - 榴莲强身份事故新增 `accidentTypeId: "flavor_durian_overload"`。
+  - 保留旧 `type: "口感事故"` / `type: "猎奇实验品"`。
+- 更新 `data/structureAccidentRules.js`
+  - 结构事故规则新增 stable `accidentTypeId`。
+- 更新 `core/accidentRuleEngine.js`
+  - 只透传 `rule.accidentTypeId`，不承载业务判断。
+- 更新 `core/structureAccidentRuleEngine.js`
+  - 只透传 `rule.accidentTypeId`，不承载业务判断。
+- 更新 `core/accidentAnalyzer.js`
+  - 手写事故对象补充 `accidentTypeId`。
+  - 不改触发条件、评分、cap、文案或类型中文名。
+- 更新 `core/tasteJudge.js`
+  - 在不改变 `result.type` 的前提下，为主事故结果暴露 `accidentTypeId`。
+  - 奶脂过载判断优先检查 `accidentTypeId`，保留旧中文 `type` fallback。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.24。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.24 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不做 drinkTypeId。
+- 不做 golden runner accidentTypeId 断言。
+- 不改 golden samples expected。
+- 不改评分、阈值、cap、notes、tags、反馈文案或类型中文名。
+- 不做 severity 系统。
+- 不做三层 summary。
+- 不做 flavorProfile。
+- 不改 UI 结构或交互。
+- 不创建未来不存在系统的数据结构。
+- 不 tag。
+
 ## docs: redefine v0.0.5.x as stable identity foundation
 
 本轮只更新 docs / AGENTS，不提升页面版本号，不创建 tag。

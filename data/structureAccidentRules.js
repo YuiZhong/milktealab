@@ -2,6 +2,7 @@
 const structureAccidentRules = [
   {
     id: "semiSolidLowDrinkability",
+    accidentTypeId: "texture_low_drinkability",
     type: "口感事故",
     cap: 28,
     score: -50,
@@ -22,6 +23,7 @@ const structureAccidentRules = [
   },
   {
     id: "highTextureLowLiquidSupport",
+    accidentTypeId: "texture_solid_overload",
     type: "口感事故",
     cap: 36,
     score: -36,

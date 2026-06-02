@@ -29,6 +29,7 @@ function detectAccidents(context) {
   if ((dairyTotal > 80 && highFatDairyTotal > 50) || highFatDairyTotal > 65 || cream > 50 || thickMilk > 60) {
     const severe = cream > 65 || thickMilk > 68 || highFatDairyTotal > 80 || dairyTotal > 92;
     accidents.push({
+      accidentTypeId: "dairy_fat_overload",
       type: "奶脂过载",
       cap: severe ? 34 : 48,
       score: severe ? -38 : -18,
@@ -49,6 +50,7 @@ function detectAccidents(context) {
 
   if (plantMilk > 45 || (plantMilk > 30 && dairyTotal > 0 && plantMilk / dairyTotal > 0.55)) {
     accidents.push({
+      accidentTypeId: "industrial_creamer_overload",
       type: "工业奶茶",
       cap: plantMilk > 65 ? 52 : 62,
       score: plantMilk > 65 ? -22 : -12,
@@ -68,6 +70,7 @@ function detectAccidents(context) {
 
   if (taro > 50) {
     accidents.push({
+      accidentTypeId: "texture_taro_overload",
       type: "实验特调",
       cap: 52,
       score: -24,
@@ -81,6 +84,7 @@ function detectAccidents(context) {
 
   if (oreo > 40) {
     accidents.push({
+      accidentTypeId: "texture_oreo_overload",
       type: "口感事故",
       cap: oreo > 60 ? 32 : 48,
       score: oreo > 60 ? -44 : -24,
@@ -93,6 +97,7 @@ function detectAccidents(context) {
     const ratio = context.ratioOf(name);
     if (ratio > 45) {
       accidents.push({
+        accidentTypeId: "texture_topping_overload",
         type: "实验特调",
         cap: ratio > 65 ? 38 : 55,
         score: ratio > 65 ? -34 : -18,
@@ -105,6 +110,7 @@ function detectAccidents(context) {
   const strongFlavor = ["抹茶", "可可", "咖啡"].find(name => context.ratioOf(name) > 60);
   if (strongFlavor) {
     accidents.push({
+      accidentTypeId: "taste_strong_flavor_overload",
       type: "实验特调",
       cap: 55,
       score: -24,
@@ -115,6 +121,7 @@ function detectAccidents(context) {
 
   if ((strawTotal >= 52 && clearTotal <= 25) || (strawTotal >= 68 && clearTotal <= 40) || (strawTotal >= 45 && heavyTotal >= 48 && clearTotal <= 35)) {
     accidents.push({
+      accidentTypeId: "texture_straw_resistance",
       type: "口感事故",
       cap: strawTotal >= 68 || (strawTotal >= 45 && heavyTotal >= 48) ? 25 : 36,
       score: strawTotal >= 68 || (strawTotal >= 45 && heavyTotal >= 48) ? -62 : -42,
