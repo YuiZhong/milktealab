@@ -1,5 +1,32 @@
 # 版本记录
 
+## 文档补充：AGENTS.md Codex 工作守则
+
+本轮只改工作流文档，不提升页面版本号，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新根目录 `AGENTS.md`
+  - 明确其作为 Codex / AI agent 进入本仓库时的长期工作守则。
+  - 明确 `AGENTS.md` 不是单次任务单。
+  - 明确用户粘贴的单次任务提示词只约束本轮任务，不应被长期化，除非任务明确要求更新守则。
+  - 写入开工前必读文件、修改范围、push / tag、测试分级、诚实报告和味觉引擎架构边界。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步当前状态快照到 `v0.0.5.17-candidate`。
+  - 补充根目录 `AGENTS.md` 已作为 Codex / AI agent 长期工作守则。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不改游戏代码。
+- 不改 data / scripts / index.html。
+- 不改页面版本号。
+- 不推进 v0.0.5.18。
+- 不 push，不 tag。
+
 ## v0.0.5.17
 
 combination rules 支持 ingredientId。
