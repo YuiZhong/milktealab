@@ -1,5 +1,45 @@
 # 版本记录
 
+## v0.0.5.23
+
+accidentRules 小批 refs 迁移。
+
+### 阶段目标
+
+本版本将 `data/accidentRules.js` 中现有柠檬 / 榴莲事故规则新增 `ingredientId` 字段，让这些事故规则进入 stable ingredientId / 中文 name 双轨结构。旧 `ingredient` 中文字段继续保留，用于 legacy 兼容和规则可读性。
+
+### 本轮新增 / 更新
+
+- 更新 `data/accidentRules.js`
+  - 柠檬事故规则新增 `ingredientId: "fruit_lemon"`。
+  - 榴莲事故规则新增 `ingredientId: "fruit_durian"`。
+  - 保留旧 `ingredient: "柠檬"` / `ingredient: "榴莲"`。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.23。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.23 完成点。
+
+### 架构边界
+
+- `accidentRuleEngine` / `ruleRefHelper` 职责不扩张。
+- `ruleRefHelper` 仍只负责 ref 解析和 context 查询，不承载事故判断、味觉判断、评分判断或文案判断。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `node --check data/accidentRules.js` 通过。
+- `node --check core/accidentRuleEngine.js` 通过。
+- `node --check core/ruleRefHelper.js` 通过。
+- 完成 accidentRules ref 解析自检：柠檬规则解析为 `fruit_lemon`，榴莲规则解析为 `fruit_durian`。
+
+### 本轮不做
+
+- 不改阈值、评分、cap、tags、notes、事故类型或 golden samples expected。
+- 不迁移 `data/proportionSegmentRules.js`、`data/combinationRules.js` 或 `data/drinkTypeRules.js`。
+- 不改 `accidentRuleEngine`、`ruleRefHelper`、analyzer、保存结构或 UI 交互。
+- 不做三层 summary、flavorProfile 或 severity 系统。
+- 不 tag。
+
 ## v0.0.5.22
 
 ingredientGroups refs 迁移。

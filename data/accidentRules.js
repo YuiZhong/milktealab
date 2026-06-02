@@ -2,6 +2,7 @@
 const accidentRules = [
   {
     id: "extremeLemonOver80",
+    ingredientId: "fruit_lemon",
     ingredient: "柠檬",
     ratioMinExclusive: 80,
     type: "口感事故",
@@ -17,6 +18,7 @@ const accidentRules = [
   },
   {
     id: "extremeLemonOver60",
+    ingredientId: "fruit_lemon",
     ingredient: "柠檬",
     ratioMinExclusive: 60,
     type: "口感事故",
@@ -31,6 +33,7 @@ const accidentRules = [
   },
   {
     id: "extremeDurianAtLeast80",
+    ingredientId: "fruit_durian",
     ingredient: "榴莲",
     ratioMinInclusive: 80,
     type: "猎奇实验品",
@@ -46,6 +49,7 @@ const accidentRules = [
   },
   {
     id: "extremeDurianOver60",
+    ingredientId: "fruit_durian",
     ingredient: "榴莲",
     ratioMinExclusive: 60,
     type: "猎奇实验品",
