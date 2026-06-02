@@ -60,12 +60,12 @@
 
 - 最新 candidate：`v0.0.5.17-candidate`
 - 最新 candidate commit：`74aaca7 feat: support ingredient refs in combination rules`
-- 最新 main：本轮 docs 提交 `docs: define data-driven three-layer judgment principle`，提交后以 `git log -1` 为准。
-- `v0.0.5.17-candidate` 已冻结并推送；本轮仅补充三层判定数据化原则，未推进 v0.0.5.18。
+- 最新 main：本轮 v0.0.5.18 提交 `feat: add ingredient group helper`，提交后以 `git log -1` 为准。
+- `v0.0.5.17-candidate` 已冻结并推送；v0.0.5.18 新增 ingredientGroupHelper，尚未冻结 candidate。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `15/15 passed`。
-- v0.0.5.10-v0.0.5.17 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer。
-- 后续可继续 v0.0.5.18 `ingredientGroupHelper` 地基评估 / 实现，但不要直接拍死实现方式；也可继续评估 `drinkType` / 保存结构的 ingredientId 兼容路线。
+- v0.0.5.10-v0.0.5.18 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper。
+- 后续不要拍死，可继续评估 `drinkType` / 保存结构 / 三层 summary 的 ingredientId 兼容路线。
 
 ---
 
@@ -538,6 +538,8 @@ v0.0.4.x 不做：
 【可删】v0.0.5.16 让 proportionSegmentRuleEngine 接入 ruleRefHelper，兼容旧中文 ingredient/names 与新 ingredientId/ingredientRef/refs/ingredientIds；不批量迁移规则表，不改阈值、评分、反馈、golden samples 或保存结构。
 
 【可删】v0.0.5.17 让 combinationAnalyzer 支持旧 names 与新 refs / ingredientRefs / ingredientIds，通过 ruleRefHelper 查询 ingredientId / name / alias / object ref；不迁移 data/combinationRules.js，不处理 synergyRules，不改评分、反馈文案、类型判断、golden samples 或保存结构。
+
+【可删】v0.0.5.18 新增 ingredientGroupHelper，作为共享原料组的统一查询入口；synergyRules 旧中文 group 数组保留，accidentAnalyzer / proportionAnalyzer / drinkTypeAnalyzer 的共享 group totals 改走 helper。本轮不改阈值、评分、事故结果、反馈文案、类型判断、golden samples 或保存结构。
 
 【不要删】三层 profile 的设计由来与事故 severity 数值化原则已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话 / Codex 继续 v0.0.5.x 时，必须理解三层架构来自奥利奥/小料 texture 问题、柠檬 acid overload 泛化、橙子 vs 西红柿 flavor identity 问题；事故优先级不等于严重度，严重度长期应数据化为可调 severityLevel / scoreMultiplier，不能把粗吸管需求等轻微服务冲突自动判成重事故。
 

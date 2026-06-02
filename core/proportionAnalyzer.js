@@ -1,8 +1,5 @@
 (function() {
-const {
-  dairyNames,
-  highFatDairyNames
-} = window.MILK_TEA_LAB_SYNERGY_RULES;
+const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
 const proportionSegmentRuleEngine = window.MILK_TEA_LAB_PROPORTION_SEGMENT_RULE_ENGINE;
 
 function applyProportionSegments(context, attr) {
@@ -15,8 +12,8 @@ function applyProportionSegments(context, attr) {
   const oreo = context.ratioOf("奥利奥碎");
   const bubble = context.ratioOf("气泡水");
   const cream = context.ratioOf("淡奶油");
-  const dairyTotal = context.sumRatios(dairyNames);
-  const highFatDairyTotal = context.sumRatios(highFatDairyNames);
+  const dairyTotal = sumIngredientGroup(context, "dairy");
+  const highFatDairyTotal = sumIngredientGroup(context, "highFatDairy");
   const toppingTotal = context.sumRatios(["珍珠", "芋圆", "布丁", "仙草", "椰果"]);
   const fruitSupport = context.sumRatios(["柠檬", "西瓜", "葡萄", "桃子", "草莓", "芒果", "荔枝"]);
   const teaSupport = context.sumRatios(["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶"]);

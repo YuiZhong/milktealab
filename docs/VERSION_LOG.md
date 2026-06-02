@@ -1,5 +1,48 @@
 # 版本记录
 
+## v0.0.5.18
+
+ingredient group helper 地基。
+
+### 阶段目标
+
+本版本新增 `ingredientGroupHelper`，让共享原料组通过统一入口支持 name / ingredientId / alias / object ref。本轮只切换现有 synergy group totals 的查询入口，不迁移本地硬编码数组，不改变玩家可见输出。
+
+### 本轮新增 / 更新
+
+- 新增 `core/ingredientGroupHelper.js`
+  - 提供 `getIngredientGroupRefs`、`sumIngredientGroup`、`hasAnyIngredientGroup`、`validateIngredientGroups`。
+  - 只负责 group key -> refs -> context 查询。
+  - 不承载事故、比例、类型、风味、评分或文案判断。
+- 更新 `data/synergyRules.js`
+  - 新增统一 `ingredientGroups` group key 入口。
+  - 保留旧中文 group 数组：`heavyFlavorNames`、`dairyNames`、`highFatDairyNames`、`strawResistanceNames`、`clearLiquidNames`。
+  - 不改变 `comboRules` 转出口语义。
+- 更新 `core/accidentAnalyzer.js`
+  - `heavyFlavor`、`dairy`、`highFatDairy`、`strawResistance`、`clearLiquid` totals 改走 helper。
+- 更新 `core/proportionAnalyzer.js`
+  - `dairy`、`highFatDairy` totals 改走 helper。
+- 更新 `core/drinkTypeAnalyzer.js`
+  - `dairy`、`highFatDairy`、`strawResistance` totals 改走 helper。
+- 更新 `index.html` 和 `scripts/runGoldenSamples.js`
+  - 加载 `core/ingredientGroupHelper.js`，顺序在 `ruleRefHelper` 之后、使用 group helper 的 analyzer 之前。
+  - 页面顶部版本号同步为 v0.0.5.18。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不删除旧中文 group 数组。
+- 不批量迁移 `data/synergyRules.js` 为 ingredientId。
+- 不迁移 analyzer 内部本地硬编码中文数组。
+- 不改 `data/combinationRules.js` 或 `data/goldenSamples.js`。
+- 不改阈值、评分、事故结果、反馈文案、类型判断、golden samples 或保存结构。
+- 不做 drinkType 全量迁移、三层 summary、flavorProfile 或 severity 系统。
+- 不 push，不 tag。
+
 ## 文档补充：三层判定数据化原则
 
 本轮只改设计文档，不提升页面版本号，不改运行逻辑。

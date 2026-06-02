@@ -162,6 +162,8 @@ v0.0.5.16 让 proportionSegmentRuleEngine 支持 ingredientId / name / alias / o
 
 v0.0.5.17 让 combinationAnalyzer 支持 ingredientId / name / alias / object ref；组合规则表仍保持旧 names 兼容，后续再逐步迁移规则数据。
 
+v0.0.5.18 新增 ingredientGroupHelper，作为共享原料组的统一查询入口；analyzer 不再直接关心 dairy / highFatDairy / strawResistance / clearLiquid / heavyFlavor 的底层数组形态，后续可逐步从中文 name 迁移到 ingredientId / refs / profile tag。
+
 ## 4. if 治理原则
 
 核心原则：

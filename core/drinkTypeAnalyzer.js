@@ -1,9 +1,5 @@
 (function() {
-const {
-  dairyNames,
-  highFatDairyNames,
-  strawResistanceNames
-} = window.MILK_TEA_LAB_SYNERGY_RULES;
+const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
 const { has } = window.MILK_TEA_LAB_HELPERS;
 const { drinkTypeRules, defaultType } = window.MILK_TEA_LAB_DRINK_TYPE_RULES;
 
@@ -17,9 +13,9 @@ function analyzeFruitTeaBlend(context) {
   const lemon = context.ratioOf("柠檬");
   const fruitCount = fruits.length + (lemon > 0 && lemon <= 15 ? 1 : 0);
   const fruitTotal = fruits.reduce((sum, item) => sum + item.ratio, 0) + Math.min(lemon, 15);
-  const dairyTotal = context.sumRatios(dairyNames);
-  const highFatDairyTotal = context.sumRatios(highFatDairyNames);
-  const strawTotal = context.sumRatios(strawResistanceNames);
+  const dairyTotal = sumIngredientGroup(context, "dairy");
+  const highFatDairyTotal = sumIngredientGroup(context, "highFatDairy");
+  const strawTotal = sumIngredientGroup(context, "strawResistance");
   const disruptiveTotal = dairyTotal + highFatDairyTotal + context.ratioOf("咖啡") + context.ratioOf("榴莲") + context.ratioOf("奥利奥碎") + context.ratioOf("芋泥") + Math.max(0, strawTotal - 12);
 
   if (teaTotal < 25 || fruitCount < 2 || fruitTotal < 32 || disruptiveTotal > 18) return null;

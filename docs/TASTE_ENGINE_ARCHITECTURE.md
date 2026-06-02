@@ -56,6 +56,8 @@ v0.0.5.16 将 ruleRefHelper 继续接入比例段规则执行层；helper 仍只
 
 v0.0.5.17 将 ingredientId 兼容推进到组合规则执行层；本轮只改匹配入口，不迁移组合规则表，不处理 synergyRules。
 
+v0.0.5.18 将共享原料组查询从 analyzer 内部中文数组依赖中抽出，新增 ingredientGroupHelper；该 helper 只做 group key -> refs -> context 查询，不承载事故、比例、类型或风味判断。
+
 示意结构：
 
 ```js

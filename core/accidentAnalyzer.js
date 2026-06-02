@@ -1,11 +1,5 @@
 (function() {
-const {
-  heavyFlavorNames,
-  dairyNames,
-  highFatDairyNames,
-  strawResistanceNames,
-  clearLiquidNames
-} = window.MILK_TEA_LAB_SYNERGY_RULES;
+const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
 const { pick } = window.MILK_TEA_LAB_HELPERS;
 const { evaluateAccidentRules } = window.MILK_TEA_LAB_ACCIDENT_RULE_ENGINE;
 const { evaluateStructureAccidentRules } = window.MILK_TEA_LAB_STRUCTURE_ACCIDENT_RULE_ENGINE;
@@ -24,11 +18,11 @@ function detectAccidents(context) {
   const cream = context.ratioOf("淡奶油");
   const thickMilk = context.ratioOf("厚乳");
   const plantMilk = context.ratioOf("植脂奶");
-  const heavyTotal = context.sumRatios(heavyFlavorNames);
-  const dairyTotal = context.sumRatios(dairyNames);
-  const highFatDairyTotal = context.sumRatios(highFatDairyNames);
-  const strawTotal = context.sumRatios(strawResistanceNames);
-  const clearTotal = context.sumRatios(clearLiquidNames);
+  const heavyTotal = sumIngredientGroup(context, "heavyFlavor");
+  const dairyTotal = sumIngredientGroup(context, "dairy");
+  const highFatDairyTotal = sumIngredientGroup(context, "highFatDairy");
+  const strawTotal = sumIngredientGroup(context, "strawResistance");
+  const clearTotal = sumIngredientGroup(context, "clearLiquid");
 
   accidents.push(...evaluateAccidentRules(context));
 

@@ -25,6 +25,7 @@ const scriptFiles = [
   "core/textureProfileAnalyzer.js",
   "core/ingredientAnalyzer.js",
   "core/ruleRefHelper.js",
+  "core/ingredientGroupHelper.js",
   "core/proportionSegmentRuleEngine.js",
   "core/proportionAnalyzer.js",
   "core/accidentRuleEngine.js",
