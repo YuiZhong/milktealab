@@ -104,6 +104,10 @@
 - v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
 - 当前未创建正式 tag `v0.0.5.40`，未推进 v0.0.6.0。
 - 下一步：准备 v0.0.6.0 三层 profile / summary / 判定地基设计会议。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
+- v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
+- v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
+- 不只原料有属性：组合规则、事故规则、反馈规则、结果候选也应逐步拥有结构化 metadata，例如 `sourceLayer`、`triggerMetric`、`threshold`、`feedbackTags`、`outcomeTypeId`、`priorityBand`、`severityHint`。数据负责“判什么”，代码负责“怎么汇总 / 调度”。
 
 ---
 

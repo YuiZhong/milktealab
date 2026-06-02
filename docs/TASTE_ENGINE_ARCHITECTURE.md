@@ -42,6 +42,18 @@ v0.0.7.x：再调 severity 和数值
 
 允许 legacy `displayName` / `name` / `names` / `note` / feedback 文案继续存在；它们负责展示、历史快照、文案回归和旧数据兼容。只要机制判断、测试身份、保存机制身份和未来统计聚合优先依赖 stable ID，就不需要在 v0.0.5.x 末尾为了“看起来干净”强行拆掉所有显示文案字段。
 
+### v0.0.6.x 三层属性 / profile / summary 边界
+
+后续文档和任务应优先使用“三层属性 / 三层 profile / 三层 summary”这组术语，不要简单写“三层判定”。三层属性负责描述饮品的中间理解层：`tasteSummary` 描述基础味觉结构，`textureSummary` 描述物理质地和饮用性，`flavorSummary` 描述风味身份、香气联想和搭配语义。profile / summary 不是最终判定本身，事故优先级、severity、score、反馈、经营成本、顾客偏好和报表聚合，是基于 summary 的后续判定层。
+
+三层细分项必须可扩展。`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重后续都可能大量增删；v0.0.6.x 初期应优先定义 schema 和 summary 产物，不急着完整调参，也不要把字段和阈值写死在 analyzer if 中。
+
+v0.0.6.x 不需要立刻实现完整权重系统，但 schema 不能堵死未来权重、阈值、severity 和 priority 接入。profile / summary / rule / candidate 应预留或允许扩展 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等字段；默认权重可以先不启用或使用默认值。完整 `severity` / `scoreMultiplier` / 大规模数值调优和 golden 扩容，留到 v0.0.7.x 更合适。
+
+不只原料有属性。原料有 profile，组合规则、事故规则、反馈规则、结果候选也应逐步拥有结构化 metadata，例如 `sourceLayer`、`triggerMetric`、`threshold`、`feedbackTags`、`outcomeTypeId`、`priorityBand`、`severityHint`。不要把具体组合判断长期写成 if 某原料 + 某原料；数据负责“判什么”，代码负责“怎么汇总 / 调度”。
+
+v0.0.6.x 可以设计 accident candidate / priority schema，但不要在 v0.0.6.0 就完整实现 severity / scoreMultiplier 调参。事故优先级 schema 可以先表达来源层、触发指标、候选结果和优先级区间；真正的严重度数值、乘数和平衡校准留到 v0.0.7.x。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

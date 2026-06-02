@@ -190,6 +190,16 @@ v0.0.5.21 后明确 golden samples 的定位：它们是重构期回归安全网
 
 v0.0.6.x 可以开始设计 `tasteSummary` / `textureSummary` / `flavorSummary`，把现有 ID 地基转化为三层判定输入。profile 表仍以 canonical name 作为 key、部分 category label 仍承担分类语义、少量 feedback / outcome fallback 仍保留 legacy 显示文案路径，这些遗留项不建议在 v0.0.5.x 末尾硬拆；更适合在 v0.0.6.x profile / summary 阶段自然收口。
 
+### v0.0.6.x summary schema 预留
+
+v0.0.6.x 的重点应是“三层属性 / 三层 profile / 三层 summary”，而不是把 taste / texture / flavor 误写成三个最终判定优先级。三层属性用于形成饮品的中间理解层；事故优先级、severity、score、反馈、经营成本等后续系统再基于 summary 做判定。
+
+`tasteSummary` / `textureSummary` / `flavorSummary` 的细分项应允许增删。字段、类别、阈值、说明和权重不应写死在 analyzer if 中；初期可以先定义 schema、默认值和 evidence 结构，等 golden 与实际手感稳定后再调参。
+
+profile / summary / rule / candidate 后续应允许携带 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等字段。默认权重可以先不启用；完整 `severity`、`scoreMultiplier`、大规模数值调优和 golden 扩容应放到 v0.0.7.x。
+
+不只原料需要 profile。组合规则、事故规则、反馈规则、结果候选也应逐步有结构化 metadata，用来表达触发来源、触发指标、阈值、反馈标签、结果 ID、优先级区间和严重度提示。数据负责描述“判什么”，代码负责“怎么汇总 / 调度”。
+
 ## 4. if 治理原则
 
 核心原则：

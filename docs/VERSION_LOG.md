@@ -1,5 +1,34 @@
 # 版本记录
 
+## docs: record v0.0.6.x three-layer summary boundaries
+
+本轮只更新 docs，记录 v0.0.6.x 开工前的三层属性 / profile / summary 边界。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 v0.0.6.x 优先使用“三层属性 / 三层 profile / 三层 summary”术语。
+  - 记录 profile / summary 不是最终判定，事故优先级、severity、score、反馈和经营成本属于后续判定层。
+  - 记录权重、阈值、metadata、evidence、sourceLayer 等扩展预留原则。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 v0.0.6.x 三层属性 / profile / summary 的边界。
+  - 记录 summary 字段、类别、阈值、说明和权重应允许后续增删。
+  - 记录组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 summary schema 预留说明。
+  - 记录完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.6.0。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.40 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
