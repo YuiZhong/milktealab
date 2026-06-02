@@ -1,5 +1,38 @@
 # 版本记录
 
+## docs: sync v0.0.5.26 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.26-candidate`。
+  - 记录 candidate 指向 `eba057291777dbb2d415ff6a511b60209a2065cb`。
+  - 记录 `v0.0.5.26` 已完成 `drinkTypeId` + `type` / displayName 双轨地基。
+  - 记录普通饮品类型 result 暴露 `drinkTypeId`。
+  - 记录 `inferType` 保持旧返回值兼容，`inferTypeResult` 提供结构化返回能力。
+  - 记录事故路径继续使用 `accidentTypeId`，没有被 `drinkTypeId` 洗白。
+  - 记录正式 tag `v0.0.5.26` 未创建。
+  - 记录当前未推进 `v0.0.5.27`。
+  - 记录下一刀候选为 golden runner 支持 `drinkTypeId` 断言。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不改页面版本号。
+- 不推进 v0.0.5.27。
+- 不创建 tag。
+- 不做 `drinkTypeId` golden 断言。
+- 不做 audienceId。
+- 不做三层 summary。
+- 不做 severity 系统。
+
 ## v0.0.5.26
 
 普通饮品类型 drinkTypeId + type/displayName 双轨地基。
