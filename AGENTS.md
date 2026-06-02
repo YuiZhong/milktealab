@@ -100,6 +100,10 @@ node scripts/runGoldenSamples.js
 
 `ruleRefHelper` 只做 ref 解析和 context 查询，不承载味觉判断、事故判断、组合语义或文案判断。
 
+玩家可见中文文本不应长期作为系统主键。Codex 后续看到原料名、事故类型、饮品类型、反馈文案、客群名、图鉴条件、成就条件等玩家可见文本被当作内部主键时，应提醒并优先考虑 stable ID + displayName / text 双轨。
+
+允许 legacy 中文字段在过渡期继续存在，但新增规则、新数据和新系统应优先使用稳定 ID。不要在新结构里继续把中文显示文案当内部主键，也不要为了 ID 化把本轮任务扩大到未来尚不存在的系统；应遵守用户单次任务范围，小步迁移。
+
 长期三层 profile：
 
 - `tasteProfile`：基础味觉。

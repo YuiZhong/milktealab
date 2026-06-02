@@ -1,5 +1,41 @@
 # 版本记录
 
+## docs: record stable ids for player-visible labels
+
+本轮只更新 docs / 工作守则，不提升页面版本号，不创建 tag。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 新增长期原则：玩家可见文案不应长期作为系统主键。
+  - 明确 stable ID + `displayName` / `text` 双轨原则。
+  - 说明现有系统中已参与判断 / 测试 / 保存 / 展示的中文显示文本，应后续逐步 ID 化。
+  - 说明未来新增系统应从第一天使用 stable ID + `displayName` / `text`。
+  - 明确不要为未来尚不存在的系统提前造空架子。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 同步味觉系统输出的事故类型、饮品类型、反馈标签、客群标签等长期不应只依赖中文显示名。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步到 `v0.0.5.23-candidate` 后 docs 补充状态。
+  - 补充后续可评估 accidentTypeId、drinkTypeId、golden samples ID 断言等小步迁移方向。
+- 更新 `AGENTS.md`
+  - 补充 Codex / AI agent 长期工作守则：新增规则、新数据和新系统优先使用 stable ID，legacy 中文字段可过渡保留，但不得扩大单次任务范围。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html / ui / storage。
+- 不改页面版本号。
+- 不推进 v0.0.5.24。
+- 不创建未来不存在系统的空表或数据结构。
+- 不做 accidentTypeId / drinkTypeId 代码实现。
+- 不做完整本地化系统。
+- 不改评分、事故判断、反馈文案、类型判断、保存结构或 golden samples expected。
+- 不 tag。
+
 ## v0.0.5.23
 
 accidentRules 小批 refs 迁移。

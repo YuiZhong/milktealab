@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.22-candidate`
-- 最新 candidate commit：`78c7f1a refactor: migrate ingredient groups to ingredient refs`
-- 最新 main：本轮 v0.0.5.23 提交 `refactor: add ingredient ids to accident rules`，提交后以 `git log -1` 为准；本轮未单独 tag。
-- `v0.0.5.22-candidate` 已冻结并推送；v0.0.5.22 完成 ingredientGroups refs 主定义迁移。
+- 最新 candidate：`v0.0.5.23-candidate`
+- 最新 candidate commit：`047739a refactor: add ingredient ids to accident rules`
+- 最新 main：本轮是 `v0.0.5.23-candidate` 后的 docs 补充 commit，提交后以 `git log -1` 为准；本轮不推进 v0.0.5.24，不单独 tag。
+- `v0.0.5.23-candidate` 已冻结并推送；v0.0.5.23 完成 accidentRules 小批 refs 迁移。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.23 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移。
@@ -69,7 +69,8 @@
 - v0.0.5.21 新增 5 个 ID 等价 golden samples：清爽水果茶、气泡奶油冲突、奶脂过载、吸管阻力和高榴莲猎奇事故。旧 name samples 保持不变，不批量迁移，不改评分、事故、反馈、类型判断、rules 或保存结构。
 - v0.0.5.22 将 `data/synergyRules.js` 的 `ingredientGroups` 主定义从旧中文 name arrays 迁移为 stable ingredientId / refs；旧中文 name arrays 保留兼容导出，不改 analyzer 调用方式、评分、事故、反馈、类型判断、保存结构或 golden samples expected。
 - v0.0.5.23 将 `data/accidentRules.js` 中柠檬 / 榴莲事故规则新增 `ingredientId` 字段，保留旧中文 `ingredient` 字段兼容；不改阈值、score、cap、tags、notes、type 或 golden samples expected。
-- 下一步可继续“小批规则表 refs 迁移策略 / 三层 summary 只读挂载”路线判断；不要为了“干净”批量迁移全部规则表。
+- 本轮 docs 补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
+- 下一步可继续“小批规则表 refs 迁移策略 / accidentTypeId / drinkTypeId / golden samples ID 断言 / 三层 summary 只读挂载”路线判断；不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
@@ -555,11 +556,13 @@ v0.0.4.x 不做：
 
 【不要删】《奶茶实验室》原料数据模型后续应逐步引入稳定 ingredientId。系统规则、tasteProfile、textureProfile、flavorProfile、组合规则、事故规则、golden samples 和未来存档，应尽量引用 ingredientId，而不是玩家可见 name。name 负责显示，aliases 负责旧名 / 别名 / 搜索兼容。推荐使用可读字符串 ID，例如 fruit_lemon、topping_oreo_crumble，不建议长期依赖纯数字或中文显示名作为主键。正式迁移前应先做只读评估，避免一次性重写全项目。
 
+【不要删】玩家可见中文 / 文案不应长期作为系统主键。现有系统中已参与判断、测试、保存或展示的显示文本，应逐步补 stable ID；未来新增系统应从第一天使用 stable ID + displayName / text。中文 / 文案负责显示、反馈、UI 和本地化，不负责长期规则身份。不要把这条原则扩张成“现在立刻为未来不存在系统造空架子”。
+
 【不要删】golden samples 是当前阶段的回归安全网，不是最终味觉真理。重构期尽量保持 expected 稳定以防无意识漂移；调参期、三层 summary 接入或 severity 系统调整时，可以有意识更新 expected。ID 等价样本的重点是保证 name 输入与 ingredientId 输入结果一致，而不是永久锁死某个分数。
 
-【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
+【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
-【可删】v0.0.5.22-candidate 已冻结并推送，指向 `78c7f1a refactor: migrate ingredient groups to ingredient refs`。当前 main 已继续推进 v0.0.5.23 accidentRules 小批 refs 迁移，本轮不单独 tag；工作区应为干净状态，golden samples 应为 20/20 passed。
+【可删】v0.0.5.23-candidate 已冻结并推送，指向 `047739a refactor: add ingredient ids to accident rules`。当前 main 本轮仅补充 docs / AGENTS 中“玩家可见文案不作为系统主键”的长期原则，不推进 v0.0.5.24，不单独 tag；工作区应为干净状态，golden samples 应为 20/20 passed。
 
 【不要删】v0.0.5.x 路线已升级：后续目标不是继续“某个原料事故表格化”，而是继续小步搭完三层 profile + stable ingredientId 的底层架构。v0.0.5.10-v0.0.5.23 已完成 ingredientId 主线的多段兼容地基。后续可继续评估小批规则表 refs 迁移和三层 summary 只读挂载路线，继续避免一次性批量迁移规则表。
 
