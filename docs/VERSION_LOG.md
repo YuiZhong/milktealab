@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.5.29
+
+golden runner 支持 audience ID 断言。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 新增 `audienceIdIncludes` 断言。
+  - 新增 `audienceIdIncludesAny` 断言。
+  - 新增 `forbiddenAudienceIdIncludes` 断言。
+  - 检查时读取 `result.audienceIds`，并兼容未来可能出现的 `result.audienceId`。
+  - runner 只检查 result，不从中文 `audience` 推导 ID。
+- 更新 `data/goldenSamples.js`
+  - 给少量已有稳定样本补充 `audienceIds` expected。
+  - 覆盖经典奶茶、清爽水果茶和高级厚乳款。
+  - 保留旧中文 type 断言、既有 `accidentTypeId` 断言、既有 `drinkTypeId` 断言和反馈文案断言。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.29。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.29 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改 core。
+- 不改 UI 逻辑。
+- 不改保存结构。
+- 不改评分、反馈文案、饮品类型、事故判断或 golden score expected。
+- 不新增 golden samples。
+- 不创建 tag。
+
 ## v0.0.5.28
 
 audienceIds + audience/displayName 双轨地基。
