@@ -184,6 +184,12 @@ v0.0.5.21 补强 golden samples 的 ingredientId 路径覆盖：新增若干 ID 
 
 v0.0.5.21 后明确 golden samples 的定位：它们是重构期回归安全网，不是永久数值圣经；后续数值调优、三层 summary 和 severity 接入时可以有意识更新 expected，但 ID 等价样本应始终保持 name 与 ingredientId 路径输出一致。
 
+### v0.0.5.x final 收口
+
+截至 v0.0.5.40 docs 收口，v0.0.5.x 已基本把现有结果身份、规则引用和保存边界推进到 stable ID / display text 双轨：原料有 `ingredientId`，规则表具备 refs / `ingredientIds` 主路径，结果暴露 `accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`，golden runner 支持对应 ID 断言，保存的 `result` 也已定义为历史展示快照。
+
+v0.0.6.x 可以开始设计 `tasteSummary` / `textureSummary` / `flavorSummary`，把现有 ID 地基转化为三层判定输入。profile 表仍以 canonical name 作为 key、部分 category label 仍承担分类语义、少量 feedback / outcome fallback 仍保留 legacy 显示文案路径，这些遗留项不建议在 v0.0.5.x 末尾硬拆；更适合在 v0.0.6.x profile / summary 阶段自然收口。
+
 ## 4. if 治理原则
 
 核心原则：

@@ -1,5 +1,37 @@
 # 版本记录
 
+## v0.0.5.40
+
+v0.0.5.x final docs 收口。本轮只更新文档，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 仍为 `v0.0.5.39-candidate`。
+  - 记录 candidate 指向 `d2f359ab54f8eafd4b3cb0b5d399d9941b428dc3`。
+  - 记录 v0.0.5.x 的现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基阶段已基本收口。
+  - 记录未发现进入 v0.0.6.x 前必须处理的 P0。
+  - 记录剩余 P1 将交给 v0.0.6.x profile / summary 阶段处理。
+  - 修正过期 candidate 列表，补上 `v0.0.5.39-candidate`。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 v0.0.5.x final 收口结论。
+  - 明确“中文主键”只是历史简称，更准确是“显示文案主键”。
+  - 明确 v0.0.6.x 不再主要做 ID 化补洞，而是基于 stable ID 地基建立三层 summary。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 v0.0.5.x 已基本完成结果身份、规则引用和保存边界 ID 化。
+  - 记录 profile 表中文 key、category label 等遗留项应在 v0.0.6.x profile / summary 阶段自然处理。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.6.0。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.39 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

@@ -34,6 +34,14 @@ v0.0.7.x：再调 severity 和数值
 
 也就是：v0.0.5.x 解决“系统里的东西是谁”；v0.0.6.x 解决“这些东西如何被三层系统判断”；v0.0.7.x 解决“判断得好不好、数值顺不顺”。三层判定依然重要，但应建立在 stable ID 地基之上。
 
+### v0.0.5.x final 收口结论
+
+截至 v0.0.5.40 docs 收口，v0.0.5.x 可基本认为已经完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。这里的“中文主键”只是历史简称，更准确的风险是“显示文案主键”：任何玩家可见、未来可能改名、本地化或换文案风格的 label，都不应承担系统身份。
+
+进入 v0.0.6.x 前，现有核心链路已经具备 stable ID 主路径：原料有 `ingredientId`，规则表有 refs / `ingredientIds` 双轨，结果链路有 `accidentTypeId` / `drinkTypeId` / `audienceIds` / `outcomeTypeId` / `feedbackTags`，golden runner 也已支持对应 ID 断言。v0.0.6.x 不应再主要做 ID 化补洞，而应基于这些 ID 建立 `tasteSummary` / `textureSummary` / `flavorSummary` 等三层判定地基。
+
+允许 legacy `displayName` / `name` / `names` / `note` / feedback 文案继续存在；它们负责展示、历史快照、文案回归和旧数据兼容。只要机制判断、测试身份、保存机制身份和未来统计聚合优先依赖 stable ID，就不需要在 v0.0.5.x 末尾为了“看起来干净”强行拆掉所有显示文案字段。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。
