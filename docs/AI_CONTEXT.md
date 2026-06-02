@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.23-candidate`
-- 最新 candidate commit：`047739a refactor: add ingredient ids to accident rules`
-- 最新 main：本轮是 `v0.0.5.24` main 实现 commit，提交后以 `git log -1` 为准；本轮不创建 v0.0.5.24 tag，不创建 v0.0.5.24-candidate。
-- `v0.0.5.23-candidate` 已冻结并推送；v0.0.5.23 完成 accidentRules 小批 refs 迁移。
+- 最新 candidate：`v0.0.5.24-candidate`
+- 最新 candidate commit：`5fbcdb039d41c8a9e27d7cd1ba383d19a5fad54e`
+- 最新 main：本轮 docs commit 是 `v0.0.5.24-candidate` 之后的文档同步 commit，提交后以 `git log -1` 为准；本轮不创建 tag，不推进 v0.0.5.25。
+- `v0.0.5.24-candidate` 已冻结并推送，指向 `5fbcdb039d41c8a9e27d7cd1ba383d19a5fad54e`；正式 tag `v0.0.5.24` 未创建。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.24 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基。
@@ -69,10 +69,10 @@
 - v0.0.5.21 新增 5 个 ID 等价 golden samples：清爽水果茶、气泡奶油冲突、奶脂过载、吸管阻力和高榴莲猎奇事故。旧 name samples 保持不变，不批量迁移，不改评分、事故、反馈、类型判断、rules 或保存结构。
 - v0.0.5.22 将 `data/synergyRules.js` 的 `ingredientGroups` 主定义从旧中文 name arrays 迁移为 stable ingredientId / refs；旧中文 name arrays 保留兼容导出，不改 analyzer 调用方式、评分、事故、反馈、类型判断、保存结构或 golden samples expected。
 - v0.0.5.23 将 `data/accidentRules.js` 中柠檬 / 榴莲事故规则新增 `ingredientId` 字段，保留旧中文 `ingredient` 字段兼容；不改阈值、score、cap、tags、notes、type 或 golden samples expected。
-- v0.0.5.24 为事故结果新增 `accidentTypeId` 双轨地基；旧中文 `type` 保留为 displayName / legacy 字段，`tasteJudge` 在主事故路径暴露 `result.accidentTypeId`。本轮不做 drinkTypeId，不改 golden expected，不做 golden runner accidentTypeId 断言。
-- 本轮 docs 补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
-- 本轮 docs 补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
-- 后续 v0.0.5.x 可优先考虑 golden runner 支持 `accidentTypeId` 断言，然后再评估 `drinkTypeId`、`audienceId`、规则表 refs、反馈 tag 边界和 ID 化收口审计；不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.5.24 为事故结果新增 `accidentTypeId` + `type` / displayName 双轨地基；旧中文 `type` 保留为 displayName / legacy 字段，`tasteJudge` 在主事故路径暴露 `result.accidentTypeId`，`accidentRuleEngine` / `structureAccidentRuleEngine` 只透传 `accidentTypeId`，不承载业务判断。本轮不做 drinkTypeId，不改 golden expected，不做 golden runner accidentTypeId 断言。
+- docs 已补充长期原则：玩家可见中文 / 文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。
+- docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基阶段；v0.0.6.x 是三层 profile / summary / 判定地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
+- 当前未推进 v0.0.5.25。后续 v0.0.5.x 可优先考虑 golden runner 支持 `accidentTypeId` 断言，然后再评估 `drinkTypeId`、`audienceId`、规则表 refs、反馈 tag 边界和 ID 化收口审计；不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 
 ---
 
@@ -563,9 +563,9 @@ v0.0.4.x 不做：
 
 【不要删】golden samples 是当前阶段的回归安全网，不是最终味觉真理。重构期尽量保持 expected 稳定以防无意识漂移；调参期、三层 summary 接入或 severity 系统调整时，可以有意识更新 expected。ID 等价样本的重点是保证 name 输入与 ingredientId 输入结果一致，而不是永久锁死某个分数。
 
-【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
+【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`、`v0.0.5.17-candidate`、`v0.0.5.18-candidate`、`v0.0.5.19-candidate`、`v0.0.5.20-candidate`、`v0.0.5.21-candidate`、`v0.0.5.22-candidate`、`v0.0.5.23-candidate`、`v0.0.5.24-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
-【可删】v0.0.5.23-candidate 已冻结并推送，指向 `047739a refactor: add ingredient ids to accident rules`。当前 main 已完成 v0.0.5.24 accidentTypeId + type/displayName 双轨地基；本轮不创建 v0.0.5.24 tag，不创建 v0.0.5.24-candidate；工作区应为干净状态，golden samples 应为 20/20 passed。
+【可删】v0.0.5.24-candidate 已冻结并推送，指向 `5fbcdb039d41c8a9e27d7cd1ba383d19a5fad54e`。v0.0.5.24 已完成 accidentTypeId + type/displayName 双轨地基；正式 tag `v0.0.5.24` 未创建，当前未推进 v0.0.5.25；工作区应为干净状态，golden samples 应为 20/20 passed。
 
 【不要删】v0.0.5.x / v0.0.6.x / v0.0.7.x 阶段边界已重新定义：v0.0.5.x 解决“系统里的东西是谁”，即现有核心系统 ID 化 / 去中文主键 / 平台无关数据地基；v0.0.6.x 解决“这些东西如何被三层系统判断”，即三层 profile / summary / 判定地基；v0.0.7.x 解决“判断得好不好、数值顺不顺”，即 severity / 数值调优 / golden samples 扩容。
 

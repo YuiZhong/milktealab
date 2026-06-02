@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.5.24 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.24-candidate`。
+  - 记录 candidate 指向 `5fbcdb039d41c8a9e27d7cd1ba383d19a5fad54e`。
+  - 记录 `v0.0.5.24` 已完成 accidentTypeId + type/displayName 双轨地基。
+  - 记录正式 tag `v0.0.5.24` 未创建。
+  - 记录当前未推进 v0.0.5.25。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不改页面版本号。
+- 不推进 v0.0.5.25。
+- 不创建 tag。
+- 不做 accidentTypeId 后续 runner 断言。
+- 不做 drinkTypeId、三层 summary 或 severity 系统。
+
 ## v0.0.5.24
 
 accidentTypeId + type/displayName 双轨地基。
