@@ -1,5 +1,44 @@
 # 版本记录
 
+## v0.0.5.37
+
+analyzer 本地显示名比例查询改为 ID/ref 主路径小修。
+
+### 本轮新增 / 更新
+
+- 更新 `core/accidentAnalyzer.js`
+  - 芋泥、奥利奥碎、淡奶油、厚乳、植脂奶等本地比例查询改为优先使用 `ingredientId` ref。
+  - 小料过载和强风味过载检测改为优先通过 ref 查询比例。
+  - 中文 name 仅保留为反馈 note 的展示内容 / legacy fallback。
+- 更新 `core/proportionAnalyzer.js`
+  - 芋泥、奥利奥碎、气泡水、淡奶油等比例查询改为优先使用 ref。
+  - 小料、果味支撑、茶底支撑和甜味支撑求和改为使用 refs。
+- 更新 `core/drinkTypeAnalyzer.js`
+  - 水果茶 blend 的茶底、水果、干扰项、气泡水、甜味支撑和水感支撑查询改为优先使用 refs。
+  - `typeMap` 和反馈 note 中的中文继续作为玩家可见显示文案。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.37。
+  - 将本轮修改的 analyzer runtime script cache-busting query string 刷新为 `v=0057`。
+  - 保持脚本加载顺序不变。
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 `v0.0.5.37` 已完成 analyzer 本地显示名查询小修。
+  - 记录当前仍未创建 `v0.0.5.37` tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改评分。
+- 不改阈值。
+- 不改事故触发。
+- 不改饮品类型结果。
+- 不改反馈文案。
+- 不改 golden expected。
+- 不做三层 summary。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.36 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

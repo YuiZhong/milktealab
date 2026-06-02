@@ -1,6 +1,47 @@
 (function() {
 const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
+const { ratioOfRuleRef, sumRuleRefs } = window.MILK_TEA_LAB_RULE_REF_HELPER;
 const proportionSegmentRuleEngine = window.MILK_TEA_LAB_PROPORTION_SEGMENT_RULE_ENGINE;
+
+const refs = {
+  taroPaste: { ingredientId: "topping_taro_paste" },
+  oreoCrumble: { ingredientId: "topping_oreo_crumble" },
+  sparklingWater: { ingredientId: "liquid_sparkling_water" },
+  cream: { ingredientId: "dairy_cream" }
+};
+
+const toppingRefs = [
+  { ingredientId: "topping_pearl" },
+  { ingredientId: "topping_taro_ball" },
+  { ingredientId: "topping_pudding" },
+  { ingredientId: "topping_grass_jelly" },
+  { ingredientId: "topping_coconut_jelly" }
+];
+
+const fruitSupportRefs = [
+  { ingredientId: "fruit_lemon" },
+  { ingredientId: "fruit_watermelon" },
+  { ingredientId: "fruit_grape" },
+  { ingredientId: "fruit_peach" },
+  { ingredientId: "fruit_strawberry" },
+  { ingredientId: "fruit_mango" },
+  { ingredientId: "fruit_lychee" }
+];
+
+const teaSupportRefs = [
+  { ingredientId: "tea_black" },
+  { ingredientId: "tea_green" },
+  { ingredientId: "tea_oolong" },
+  { ingredientId: "tea_jasmine" },
+  { ingredientId: "tea_puer" }
+];
+
+const sweetSupportRefs = [
+  { ingredientId: "sweetener_honey" },
+  { ingredientId: "sweetener_white_sugar" },
+  { ingredientId: "sweetener_brown_sugar" },
+  { ingredientId: "sweetener_caramel" }
+];
 
 function applyProportionSegments(context, attr) {
   const ruleResult = proportionSegmentRuleEngine.applyProportionSegmentRules(context, attr);
@@ -8,16 +49,16 @@ function applyProportionSegments(context, attr) {
   const tags = [...ruleResult.tags];
   const matchedRuleIds = [...ruleResult.matchedRuleIds];
   let scoreDelta = ruleResult.scoreDelta;
-  const taro = context.ratioOf("芋泥");
-  const oreo = context.ratioOf("奥利奥碎");
-  const bubble = context.ratioOf("气泡水");
-  const cream = context.ratioOf("淡奶油");
+  const taro = ratioOfRuleRef(context, refs.taroPaste);
+  const oreo = ratioOfRuleRef(context, refs.oreoCrumble);
+  const bubble = ratioOfRuleRef(context, refs.sparklingWater);
+  const cream = ratioOfRuleRef(context, refs.cream);
   const dairyTotal = sumIngredientGroup(context, "dairy");
   const highFatDairyTotal = sumIngredientGroup(context, "highFatDairy");
-  const toppingTotal = context.sumRatios(["珍珠", "芋圆", "布丁", "仙草", "椰果"]);
-  const fruitSupport = context.sumRatios(["柠檬", "西瓜", "葡萄", "桃子", "草莓", "芒果", "荔枝"]);
-  const teaSupport = context.sumRatios(["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶"]);
-  const sweetSupport = context.sumRatios(["蜂蜜", "白糖", "黑糖", "焦糖"]);
+  const toppingTotal = sumRuleRefs(context, toppingRefs);
+  const fruitSupport = sumRuleRefs(context, fruitSupportRefs);
+  const teaSupport = sumRuleRefs(context, teaSupportRefs);
+  const sweetSupport = sumRuleRefs(context, sweetSupportRefs);
 
   if (dairyTotal >= 65 && dairyTotal <= 80) {
     attr.fresh -= 8;

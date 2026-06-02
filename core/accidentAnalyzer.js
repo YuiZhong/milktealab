@@ -1,5 +1,6 @@
 (function() {
 const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
+const { ratioOfRuleRef } = window.MILK_TEA_LAB_RULE_REF_HELPER;
 const { pick } = window.MILK_TEA_LAB_HELPERS;
 const { evaluateAccidentRules } = window.MILK_TEA_LAB_ACCIDENT_RULE_ENGINE;
 const { evaluateStructureAccidentRules } = window.MILK_TEA_LAB_STRUCTURE_ACCIDENT_RULE_ENGINE;
@@ -21,6 +22,28 @@ const textureAccidentTags = new Set([
   "low_liquid_support"
 ]);
 
+const refs = {
+  taroPaste: { ingredientId: "topping_taro_paste" },
+  oreoCrumble: { ingredientId: "topping_oreo_crumble" },
+  cream: { ingredientId: "dairy_cream" },
+  thickMilk: { ingredientId: "dairy_thick_milk" },
+  plantMilk: { ingredientId: "dairy_non_dairy_creamer" }
+};
+
+const toppingOverloadRefs = [
+  { name: "珍珠", ref: { ingredientId: "topping_pearl" } },
+  { name: "芋圆", ref: { ingredientId: "topping_taro_ball" } },
+  { name: "布丁", ref: { ingredientId: "topping_pudding" } },
+  { name: "仙草", ref: { ingredientId: "topping_grass_jelly" } },
+  { name: "椰果", ref: { ingredientId: "topping_coconut_jelly" } }
+];
+
+const strongFlavorRefs = [
+  { name: "抹茶", ref: { ingredientId: "flavor_matcha" } },
+  { name: "可可", ref: { ingredientId: "flavor_cocoa" } },
+  { name: "咖啡", ref: { ingredientId: "liquid_coffee" } }
+];
+
 function hasTextureAccidentTag(accident) {
   return Array.isArray(accident.tags) && accident.tags.some(tag => textureAccidentTags.has(tag));
 }
@@ -41,11 +64,11 @@ function isTextureAccident(accident) {
 
 function detectAccidents(context) {
   const accidents = [];
-  const taro = context.ratioOf("芋泥");
-  const oreo = context.ratioOf("奥利奥碎");
-  const cream = context.ratioOf("淡奶油");
-  const thickMilk = context.ratioOf("厚乳");
-  const plantMilk = context.ratioOf("植脂奶");
+  const taro = ratioOfRuleRef(context, refs.taroPaste);
+  const oreo = ratioOfRuleRef(context, refs.oreoCrumble);
+  const cream = ratioOfRuleRef(context, refs.cream);
+  const thickMilk = ratioOfRuleRef(context, refs.thickMilk);
+  const plantMilk = ratioOfRuleRef(context, refs.plantMilk);
   const heavyTotal = sumIngredientGroup(context, "heavyFlavor");
   const dairyTotal = sumIngredientGroup(context, "dairy");
   const highFatDairyTotal = sumIngredientGroup(context, "highFatDairy");
@@ -121,8 +144,8 @@ function detectAccidents(context) {
     });
   }
 
-  ["珍珠", "芋圆", "布丁", "仙草", "椰果"].forEach(name => {
-    const ratio = context.ratioOf(name);
+  toppingOverloadRefs.forEach(({ name, ref }) => {
+    const ratio = ratioOfRuleRef(context, ref);
     if (ratio > 45) {
       accidents.push({
         accidentTypeId: "texture_topping_overload",
@@ -135,7 +158,7 @@ function detectAccidents(context) {
     }
   });
 
-  const strongFlavor = ["抹茶", "可可", "咖啡"].find(name => context.ratioOf(name) > 60);
+  const strongFlavor = strongFlavorRefs.find(item => ratioOfRuleRef(context, item.ref) > 60)?.name;
   if (strongFlavor) {
     accidents.push({
       accidentTypeId: "taste_strong_flavor_overload",

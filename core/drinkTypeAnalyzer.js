@@ -1,6 +1,6 @@
 (function() {
 const { sumIngredientGroup } = window.MILK_TEA_LAB_INGREDIENT_GROUP_HELPER;
-const { hasRuleRef } = window.MILK_TEA_LAB_RULE_REF_HELPER;
+const { hasRuleRef, ratioOfRuleRef, sumRuleRefs } = window.MILK_TEA_LAB_RULE_REF_HELPER;
 const { has } = window.MILK_TEA_LAB_HELPERS;
 const { drinkTypeRules, defaultType, defaultTypeId } = window.MILK_TEA_LAB_DRINK_TYPE_RULES;
 const audienceIdByName = {
@@ -13,31 +13,62 @@ const audienceIdByName = {
   "网红打卡党": "influencer"
 };
 
+const fruitTeaTeaRefs = [
+  { name: "茉莉茶", ref: { ingredientId: "tea_jasmine" } },
+  { name: "绿茶", ref: { ingredientId: "tea_green" } },
+  { name: "乌龙茶", ref: { ingredientId: "tea_oolong" } },
+  { name: "红茶", ref: { ingredientId: "tea_black" } }
+];
+
+const fruitTeaFruitRefs = [
+  { name: "桃子", ref: { ingredientId: "fruit_peach" } },
+  { name: "葡萄", ref: { ingredientId: "fruit_grape" } },
+  { name: "荔枝", ref: { ingredientId: "fruit_lychee" } },
+  { name: "草莓", ref: { ingredientId: "fruit_strawberry" } },
+  { name: "西瓜", ref: { ingredientId: "fruit_watermelon" } },
+  { name: "芒果", ref: { ingredientId: "fruit_mango" } }
+];
+
+const fruitTeaDisruptiveRefs = [
+  { ingredientId: "liquid_coffee" },
+  { ingredientId: "fruit_durian" },
+  { ingredientId: "topping_oreo_crumble" },
+  { ingredientId: "topping_taro_paste" }
+];
+
+const fruitTeaSweetSupportRefs = [
+  { ingredientId: "sweetener_honey" },
+  { ingredientId: "sweetener_white_sugar" }
+];
+
+const fruitTeaWaterSupportRefs = [
+  { ingredientId: "liquid_water" },
+  { ingredientId: "liquid_sparkling_water" }
+];
+
 function analyzeFruitTeaBlend(context) {
-  const teaCandidates = ["茉莉茶", "绿茶", "乌龙茶", "红茶"];
-  const fruitCandidates = ["桃子", "葡萄", "荔枝", "草莓", "西瓜", "芒果"];
-  const teaTotal = context.sumRatios(teaCandidates);
-  const fruits = fruitCandidates
-    .map(name => ({ name, ratio: context.ratioOf(name) }))
+  const teaTotal = sumRuleRefs(context, fruitTeaTeaRefs.map(item => item.ref));
+  const fruits = fruitTeaFruitRefs
+    .map(item => ({ name: item.name, ratio: ratioOfRuleRef(context, item.ref) }))
     .filter(item => item.ratio > 0);
-  const lemon = context.ratioOf("柠檬");
+  const lemon = ratioOfRuleRef(context, { ingredientId: "fruit_lemon" });
   const fruitCount = fruits.length + (lemon > 0 && lemon <= 15 ? 1 : 0);
   const fruitTotal = fruits.reduce((sum, item) => sum + item.ratio, 0) + Math.min(lemon, 15);
   const dairyTotal = sumIngredientGroup(context, "dairy");
   const highFatDairyTotal = sumIngredientGroup(context, "highFatDairy");
   const strawTotal = sumIngredientGroup(context, "strawResistance");
-  const disruptiveTotal = dairyTotal + highFatDairyTotal + context.ratioOf("咖啡") + context.ratioOf("榴莲") + context.ratioOf("奥利奥碎") + context.ratioOf("芋泥") + Math.max(0, strawTotal - 12);
+  const disruptiveTotal = dairyTotal + highFatDairyTotal + sumRuleRefs(context, fruitTeaDisruptiveRefs) + Math.max(0, strawTotal - 12);
 
   if (teaTotal < 25 || fruitCount < 2 || fruitTotal < 32 || disruptiveTotal > 18) return null;
 
-  const primaryTea = teaCandidates
-    .map(name => ({ name, ratio: context.ratioOf(name) }))
+  const primaryTea = fruitTeaTeaRefs
+    .map(item => ({ name: item.name, ratio: ratioOfRuleRef(context, item.ref) }))
     .sort((left, right) => right.ratio - left.ratio)[0];
   if (!primaryTea || primaryTea.ratio <= 0) return null;
 
-  const bubble = context.ratioOf("气泡水");
-  const sweetSupport = context.sumRatios(["蜂蜜", "白糖"]);
-  const waterSupport = context.sumRatios(["纯水", "气泡水"]);
+  const bubble = ratioOfRuleRef(context, { ingredientId: "liquid_sparkling_water" });
+  const sweetSupport = sumRuleRefs(context, fruitTeaSweetSupportRefs);
+  const waterSupport = sumRuleRefs(context, fruitTeaWaterSupportRefs);
   let score = 16;
   let cap = 88;
   const add = { fresh: 18, fruit: 18, tea: 8, photo: 8, odd: -8 };
