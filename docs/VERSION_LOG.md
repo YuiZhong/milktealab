@@ -1,5 +1,35 @@
 # 版本记录
 
+## docs: sync v0.0.5.25 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.25-candidate`。
+  - 记录 candidate 指向 `0ffd989ca226fe1e2a0ff24425d62308a3aa41a2`。
+  - 记录 `v0.0.5.25` 已完成 golden runner 支持 `accidentTypeId` 断言。
+  - 记录 runner 支持 `accidentTypeIdIncludes` / `accidentTypeIdIncludesAny` / `forbiddenAccidentTypeIdIncludes`。
+  - 记录关键事故 golden samples 已补 `accidentTypeId` expected。
+  - 记录旧中文 `typeIncludes` / `forbiddenTypeIncludes` 断言仍保留。
+  - 记录正式 tag `v0.0.5.25` 未创建。
+  - 记录当前未推进 `v0.0.5.26`。
+  - 记录下一刀候选为 `drinkTypeId` + `type` / `displayName` 双轨地基。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不改页面版本号。
+- 不推进 v0.0.5.26。
+- 不创建 tag。
+- 不做 `drinkTypeId`。
+
 ## v0.0.5.25
 
 golden runner 支持 accidentTypeId 断言。
