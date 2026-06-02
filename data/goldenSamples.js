@@ -99,6 +99,7 @@
       ],
       expectations: {
         typeIncludes: ["口感事故"],
+        accidentTypeIdIncludes: ["taste_acid_overload"],
         scoreMin: 0,
         scoreMax: 20,
         feedbackIncludesAny: ["柠檬", "酸", "味蕾", "清爽"]
@@ -116,6 +117,7 @@
       ],
       expectations: {
         typeIncludes: ["口感事故"],
+        accidentTypeIdIncludes: ["taste_acid_overload"],
         scoreMin: 0,
         scoreMax: 40,
         feedbackIncludesAny: ["柠檬", "酸", "味蕾", "打架", "事故"]
@@ -132,6 +134,7 @@
       ],
       expectations: {
         typeIncludes: ["猎奇实验品"],
+        accidentTypeIdIncludes: ["flavor_durian_overload"],
         scoreMin: 0,
         scoreMax: 25,
         feedbackIncludesAny: ["榴莲", "吸管", "物理", "食道", "开除"]
@@ -148,6 +151,7 @@
       ],
       expectations: {
         typeIncludes: ["猎奇实验品"],
+        accidentTypeIdIncludes: ["flavor_durian_overload"],
         scoreMin: 0,
         scoreMax: 50,
         feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"]
@@ -164,6 +168,7 @@
       ],
       expectations: {
         typeIncludes: ["猎奇实验品"],
+        accidentTypeIdIncludes: ["flavor_durian_overload"],
         scoreMin: 0,
         scoreMax: 50,
         feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"]
@@ -180,6 +185,7 @@
       ],
       expectations: {
         typeIncludes: ["奶脂过载"],
+        accidentTypeIdIncludes: ["dairy_fat_overload"],
         scoreMin: 0,
         scoreMax: 35,
         feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"]
@@ -196,6 +202,7 @@
       ],
       expectations: {
         typeIncludes: ["奶脂过载"],
+        accidentTypeIdIncludes: ["dairy_fat_overload"],
         scoreMin: 0,
         scoreMax: 35,
         feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"]
@@ -213,6 +220,7 @@
       ],
       expectations: {
         typeIncludes: ["口感事故"],
+        accidentTypeIdIncludes: ["texture_straw_resistance"],
         scoreMin: 0,
         scoreMax: 25,
         feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
@@ -230,6 +238,7 @@
       ],
       expectations: {
         typeIncludes: ["口感事故"],
+        accidentTypeIdIncludes: ["texture_straw_resistance"],
         scoreMin: 0,
         scoreMax: 25,
         feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]

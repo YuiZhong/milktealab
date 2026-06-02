@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.5.25
+
+golden runner 支持 accidentTypeId 断言。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 新增 `accidentTypeIdIncludes` 断言。
+  - 新增 `accidentTypeIdIncludesAny` 断言。
+  - 新增 `forbiddenAccidentTypeIdIncludes` 断言。
+  - 检查时读取 `result.accidentTypeId`，并兼容未来可能出现的 `result.accidentTypeIds` 数组。
+  - runner 只检查 result，不推导、不映射事故 ID。
+- 更新 `data/goldenSamples.js`
+  - 给少量已有事故样本补充 `accidentTypeId` expected。
+  - 覆盖柠檬酸度事故、榴莲强身份事故、奶脂过载和吸管阻力事故。
+  - 保留旧中文 `typeIncludes` / `forbiddenTypeIncludes` 断言。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.25。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.25 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改 core 逻辑。
+- 不改评分、事故触发、反馈文案、`result.type` 或 golden expected 分数区间。
+- 不做 `drinkTypeId`。
+- 不做 `audienceId`。
+- 不做三层 summary。
+- 不做 severity 系统。
+- 不创建 tag。
+
 ## docs: record recipe complexity as operation cost
 
 本轮只更新设计文档，不改运行逻辑。

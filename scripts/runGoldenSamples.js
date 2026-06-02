@@ -89,6 +89,41 @@ function checkForbidden(label, text, candidates, failures) {
   });
 }
 
+function getAccidentTypeIds(result) {
+  const accidentTypeIds = [
+    ...(Array.isArray(result?.accidentTypeIds) ? result.accidentTypeIds : []),
+    ...(result?.accidentTypeId ? [result.accidentTypeId] : [])
+  ];
+  return [...new Set(accidentTypeIds.filter(Boolean))];
+}
+
+function formatIds(ids) {
+  return `[${ids.join(", ")}]`;
+}
+
+function checkIdIncludes(label, actualIds, expectedIds, failures) {
+  if (!expectedIds?.length) return;
+  const missingIds = expectedIds.filter(id => !actualIds.includes(id));
+  if (missingIds.length) {
+    failures.push(`expected ${label} ${formatIds(expectedIds)} but got ${formatIds(actualIds)}`);
+  }
+}
+
+function checkIdIncludesAny(label, actualIds, expectedIds, failures) {
+  if (!expectedIds?.length) return;
+  if (!expectedIds.some(id => actualIds.includes(id))) {
+    failures.push(`expected ${label} to include one of ${formatIds(expectedIds)} but got ${formatIds(actualIds)}`);
+  }
+}
+
+function checkForbiddenIds(label, actualIds, forbiddenIds, failures) {
+  if (!forbiddenIds?.length) return;
+  const matchedIds = forbiddenIds.filter(id => actualIds.includes(id));
+  if (matchedIds.length) {
+    failures.push(`expected ${label} not to include ${formatIds(forbiddenIds)} but got ${formatIds(actualIds)}`);
+  }
+}
+
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
   if (item?.name) return { ...item };
 
@@ -120,6 +155,7 @@ function checkSample(sample, result) {
   const feedback = result?.feedback || "";
   const type = result?.type || "";
   const score = result?.score;
+  const accidentTypeIds = getAccidentTypeIds(result);
 
   if (!result) {
     failures.push("evaluateCup returned null");
@@ -129,6 +165,9 @@ function checkSample(sample, result) {
   checkIncludes("type", type, expectations.typeIncludes, failures);
   checkIncludesAny("type", type, expectations.typeIncludesAny, failures);
   checkForbidden("type", type, expectations.forbiddenTypeIncludes, failures);
+  checkIdIncludes("accidentTypeIdIncludes", accidentTypeIds, expectations.accidentTypeIdIncludes, failures);
+  checkIdIncludesAny("accidentTypeIdIncludesAny", accidentTypeIds, expectations.accidentTypeIdIncludesAny, failures);
+  checkForbiddenIds("forbiddenAccidentTypeIdIncludes", accidentTypeIds, expectations.forbiddenAccidentTypeIdIncludes, failures);
   checkIncludesAny("feedback", feedback, expectations.feedbackIncludesAny, failures);
   checkForbidden("feedback", feedback, expectations.feedbackForbiddenAny, failures);
 
