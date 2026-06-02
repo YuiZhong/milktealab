@@ -1,5 +1,44 @@
 # 版本记录
 
+## v0.0.5.22
+
+ingredientGroups refs 迁移。
+
+### 阶段目标
+
+本版本将 `data/synergyRules.js` 的 `ingredientGroups` 主定义从旧中文 name arrays 迁移为 stable ingredientId / refs。目标是继续收口系统主键依赖，让 analyzer 继续通过 `ingredientGroupHelper` 查询共享原料组，而不关心底层 group 定义是中文 name 还是 stable ref。
+
+### 本轮新增 / 更新
+
+- 更新 `data/synergyRules.js`
+  - 新增 `heavyFlavorRefs`、`dairyRefs`、`highFatDairyRefs`、`strawResistanceRefs`、`clearLiquidRefs`。
+  - `ingredientGroups` 主定义改为引用 refs 数组。
+  - 保留旧中文 `heavyFlavorNames`、`dairyNames`、`highFatDairyNames`、`strawResistanceNames`、`clearLiquidNames` 作为兼容导出。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.22。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.22 完成点。
+
+### 架构边界
+
+- `ingredientGroupHelper` 仍只负责 group key -> refs -> context 查询，不承载味觉判断、事故判断、评分判断、类型判断或文案判断。
+- analyzer 调用方式保持稳定，仍通过 `sumIngredientGroup(context, "...")` 查询 group total。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `node --check data/synergyRules.js` 通过。
+- `node --check core/ingredientGroupHelper.js` 通过。
+- `validateIngredientGroups()` 通过。
+
+### 本轮不做
+
+- 不改评分、事故判断、反馈文案、类型判断、保存结构或 golden samples expected。
+- 不新增 golden samples。
+- 不迁移 `data/combinationRules.js`、`data/drinkTypeRules.js`、`data/accidentRules.js` 或 `data/proportionSegmentRules.js`。
+- 不做三层 summary、flavorProfile 或 severity 系统。
+- 不 tag。
+
 ## docs: AGENTS golden samples 数量规则修正
 
 本轮只更新工作流文档，不提升页面版本号，不创建 tag。
