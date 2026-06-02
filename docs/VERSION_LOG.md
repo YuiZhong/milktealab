@@ -1,5 +1,31 @@
 # 版本记录
 
+## docs: sync v0.0.5.33 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.33-candidate`。
+  - 记录 candidate 指向 `af4507cd18e138b1221d758f0aa3043a7f988d49`。
+  - 记录 `v0.0.5.33-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.33` 已完成 texture accident 去中文判断小修。
+  - 记录 texture accident 判断主路径优先使用 `accidentTypeId` / `tags`。
+  - 记录中文 `type` / `note` 仅保留 legacy fallback。
+  - 记录当前未推进 `v0.0.5.34`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.34。
+- 不创建 tag。
+
 ## v0.0.5.33
 
 texture accident 去中文判断小修。
