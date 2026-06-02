@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.5.34 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.34-candidate`。
+  - 记录 candidate 指向 `98bac8c3b22c2b54f5e66748b536de3e000a037f`。
+  - 记录 `v0.0.5.34-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.34` 已完成 feedbackEngine 去 notes.includes 小修。
+  - 记录 feedbackEngine 主路径优先使用 `tags` / `feedbackTags`。
+  - 记录中文 `notes.includes` 仅保留 legacy fallback。
+  - 记录 result 已暴露 `feedbackTags`。
+  - 记录当前未推进 `v0.0.5.35`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.35。
+- 不创建 tag。
+
 ## v0.0.5.34
 
 feedbackEngine 去 notes.includes 小修。
