@@ -15,6 +15,7 @@
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 65,
         scoreMax: 85,
+        feedbackTagIncludes: ["classic"],
         feedbackIncludesAny: ["红茶", "牛奶", "经典"]
       },
       notes: "经典稳定样本，不应被事故规则误伤。"
@@ -34,6 +35,7 @@
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 74,
         scoreMax: 74,
+        feedbackTagIncludes: ["classic"],
         feedbackIncludesAny: ["红茶", "牛奶", "经典"]
       },
       notes: "与 classic_milk_tea 等价，用 ingredientId 覆盖 golden sample 的 ID 输入路径。"
@@ -94,6 +96,7 @@
         forbiddenTypeIncludes: ["口感事故", "奶脂过载", "猎奇实验品"],
         scoreMin: 60,
         scoreMax: 90,
+        feedbackTagIncludes: ["premium"],
         feedbackIncludesAny: ["乌龙", "高级", "顺", "合理", "厚"]
       },
       notes: "高级厚乳样本，不应被奶脂过载误伤。"
@@ -198,6 +201,7 @@
         accidentTypeIdIncludes: ["dairy_fat_overload"],
         scoreMin: 0,
         scoreMax: 35,
+        feedbackTagIncludes: ["greasy_overload"],
         feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"]
       },
       notes: "奶脂事故样本，不应被甜品饮方向洗白。"
@@ -215,6 +219,7 @@
         accidentTypeIdIncludes: ["dairy_fat_overload"],
         scoreMin: 0,
         scoreMax: 35,
+        feedbackTagIncludes: ["greasy_overload"],
         feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"]
       },
       notes: "与 greasy_overload 等价，用 ingredientId 覆盖 dairy / highFatDairy ID 输入路径。"
@@ -233,6 +238,8 @@
         accidentTypeIdIncludes: ["texture_straw_resistance"],
         scoreMin: 0,
         scoreMax: 25,
+        feedbackTagIncludes: ["straw_disaster"],
+        feedbackTagIncludesAny: ["straw_followup", "thick_straw_followup"],
         feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
       },
       notes: "高固体负载样本，应保持吸管阻力事故方向。"
@@ -251,6 +258,8 @@
         accidentTypeIdIncludes: ["texture_straw_resistance"],
         scoreMin: 0,
         scoreMax: 25,
+        feedbackTagIncludes: ["straw_disaster"],
+        feedbackTagIncludesAny: ["straw_followup", "thick_straw_followup"],
         feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
       },
       notes: "与 straw_resistance_accident 等价，用 ingredientId 覆盖 strawResistance / texture ID 输入路径。"

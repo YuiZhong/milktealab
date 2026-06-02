@@ -121,6 +121,14 @@ function getOutcomeTypeIds(result) {
   return [...new Set(outcomeTypeIds.filter(Boolean))];
 }
 
+function getFeedbackTags(result) {
+  const feedbackTags = [
+    ...(Array.isArray(result?.feedbackTags) ? result.feedbackTags : []),
+    ...(result?.feedbackTag ? [result.feedbackTag] : [])
+  ];
+  return [...new Set(feedbackTags.filter(Boolean))];
+}
+
 function formatIds(ids) {
   return `[${ids.join(", ")}]`;
 }
@@ -183,6 +191,7 @@ function checkSample(sample, result) {
   const drinkTypeIds = getDrinkTypeIds(result);
   const audienceIds = getAudienceIds(result);
   const outcomeTypeIds = getOutcomeTypeIds(result);
+  const feedbackTags = getFeedbackTags(result);
 
   if (!result) {
     failures.push("evaluateCup returned null");
@@ -204,6 +213,9 @@ function checkSample(sample, result) {
   checkIdIncludes("outcomeTypeIdIncludes", outcomeTypeIds, expectations.outcomeTypeIdIncludes, failures);
   checkIdIncludesAny("outcomeTypeIdIncludesAny", outcomeTypeIds, expectations.outcomeTypeIdIncludesAny, failures);
   checkForbiddenIds("forbiddenOutcomeTypeIdIncludes", outcomeTypeIds, expectations.forbiddenOutcomeTypeIdIncludes, failures);
+  checkIdIncludes("feedbackTagIncludes", feedbackTags, expectations.feedbackTagIncludes, failures);
+  checkIdIncludesAny("feedbackTagIncludesAny", feedbackTags, expectations.feedbackTagIncludesAny, failures);
+  checkForbiddenIds("forbiddenFeedbackTagIncludes", feedbackTags, expectations.forbiddenFeedbackTagIncludes, failures);
   checkIncludesAny("feedback", feedback, expectations.feedbackIncludesAny, failures);
   checkForbidden("feedback", feedback, expectations.feedbackForbiddenAny, failures);
 

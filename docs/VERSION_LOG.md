@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.5.38
+
+golden runner 支持 feedbackTag 断言。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 新增 `feedbackTagIncludes` / `feedbackTagIncludesAny` / `forbiddenFeedbackTagIncludes` 断言支持。
+  - runner 只读取 `result.feedbackTags` / `result.feedbackTag`，不从中文 feedback 文案反推 tag。
+- 更新 `data/goldenSamples.js`
+  - 为少量稳定样本补充 feedbackTag expected。
+  - 覆盖经典奶茶、高级厚乳、奶脂过载和吸管阻力事故路径。
+  - 保留既有 `feedbackIncludesAny` 文案回归断言。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.38。
+  - 本轮不改 runtime core / UI 脚本，不更新 core script query。
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 `v0.0.5.38` 已完成 golden runner 支持 feedbackTag 断言。
+  - 记录当前仍未创建 `v0.0.5.38` tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改 core。
+- 不改 feedback 文案。
+- 不改 data 规则。
+- 不改评分。
+- 不改事故或饮品类型判断。
+- 不改 golden score expected。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.37 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
