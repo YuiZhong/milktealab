@@ -1,5 +1,32 @@
 # 版本记录
 
+## v0.0.5.32
+
+drinkTypeRules refs 小批迁移。
+
+### 本轮新增 / 更新
+
+- 更新 `data/drinkTypeRules.js`
+  - 给现有单原料中文条件新增 `ingredientId`。
+  - 给现有 `anyIngredient` 条件新增 `anyIngredientIds`。
+  - 给现有 `allIngredients` 条件新增 `allIngredientIds`。
+  - 旧中文 `ingredient` / `anyIngredient` / `allIngredients` 字段保留兼容和可读性。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.32。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.32 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改 core。
+- 不改规则顺序、type、drinkTypeId 或判断条件。
+- 不改 golden expected。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.31 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

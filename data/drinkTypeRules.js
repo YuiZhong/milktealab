@@ -16,17 +16,17 @@ const drinkTypeRules = [
   {
     type: "榴莲奶昔",
     drinkTypeId: "durian_milkshake",
-    when: { all: [{ ingredient: "榴莲" }, { attr: "milk", op: ">=", value: 45 }, { attr: "odd", op: "<", value: 55 }, { attr: "thick", op: ">=", value: 58 }] }
+    when: { all: [{ ingredient: "榴莲", ingredientId: "fruit_durian" }, { attr: "milk", op: ">=", value: 45 }, { attr: "odd", op: "<", value: 55 }, { attr: "thick", op: ">=", value: 58 }] }
   },
   {
     type: "榴莲牛乳",
     drinkTypeId: "durian_milk",
-    when: { all: [{ ingredient: "榴莲" }, { attr: "milk", op: ">=", value: 45 }, { attr: "odd", op: "<", value: 55 }] }
+    when: { all: [{ ingredient: "榴莲", ingredientId: "fruit_durian" }, { attr: "milk", op: ">=", value: 45 }, { attr: "odd", op: "<", value: 55 }] }
   },
   {
     type: "甜品奶昔",
     drinkTypeId: "dessert_milkshake",
-    when: { all: [{ ingredient: "草莓" }, { anyIngredient: ["牛奶", "淡奶油", "厚乳"] }] }
+    when: { all: [{ ingredient: "草莓", ingredientId: "fruit_strawberry" }, { anyIngredient: ["牛奶", "淡奶油", "厚乳"], anyIngredientIds: ["dairy_milk", "dairy_cream", "dairy_thick_milk"] }] }
   },
   {
     type: "甜品奶昔",
@@ -40,12 +40,12 @@ const drinkTypeRules = [
   {
     type: "清爽水果茶",
     drinkTypeId: "fresh_fruit_tea",
-    when: { allIngredients: ["气泡水", "柠檬"] }
+    when: { allIngredients: ["气泡水", "柠檬"], allIngredientIds: ["liquid_sparkling_water", "fruit_lemon"] }
   },
   {
     type: "气泡水果茶",
     drinkTypeId: "sparkling_fruit_tea",
-    when: { all: [{ ingredient: "气泡水" }, { anyIngredient: ["西瓜", "葡萄", "桃子", "绿茶"] }, { attr: "odd", op: "<", value: 45 }] }
+    when: { all: [{ ingredient: "气泡水", ingredientId: "liquid_sparkling_water" }, { anyIngredient: ["西瓜", "葡萄", "桃子", "绿茶"], anyIngredientIds: ["fruit_watermelon", "fruit_grape", "fruit_peach", "tea_green"] }, { attr: "odd", op: "<", value: 45 }] }
   },
   {
     type: "清爽水果茶",
@@ -55,12 +55,12 @@ const drinkTypeRules = [
   {
     type: "高级厚乳款",
     drinkTypeId: "premium_thick_milk_tea",
-    when: { all: [{ ingredient: "乌龙茶" }, { anyIngredient: ["厚乳", "奶盖"] }, { attr: "odd", op: "<", value: 45 }] }
+    when: { all: [{ ingredient: "乌龙茶", ingredientId: "tea_oolong" }, { anyIngredient: ["厚乳", "奶盖"], anyIngredientIds: ["dairy_thick_milk", "topping_cheese_foam"] }, { attr: "odd", op: "<", value: 45 }] }
   },
   {
     type: "黑糖珍珠奶茶",
     drinkTypeId: "brown_sugar_pearl_milk_tea",
-    when: { all: [{ ingredient: "黑糖" }, { ingredient: "珍珠" }, { attr: "tea", op: ">=", value: 26 }, { attr: "milk", op: ">=", value: 24 }, { attr: "odd", op: "<", value: 45 }] }
+    when: { all: [{ ingredient: "黑糖", ingredientId: "sweetener_brown_sugar" }, { ingredient: "珍珠", ingredientId: "topping_pearl" }, { attr: "tea", op: ">=", value: 26 }, { attr: "milk", op: ">=", value: 24 }, { attr: "odd", op: "<", value: 45 }] }
   },
   {
     type: "经典奶茶",
@@ -70,7 +70,7 @@ const drinkTypeRules = [
   {
     type: "咖啡特调",
     drinkTypeId: "coffee_special",
-    when: { all: [{ ingredient: "咖啡" }, { attr: "milk", op: ">=", value: 18 }] }
+    when: { all: [{ ingredient: "咖啡", ingredientId: "liquid_coffee" }, { attr: "milk", op: ">=", value: 18 }] }
   },
   {
     type: "甜品奶昔",
