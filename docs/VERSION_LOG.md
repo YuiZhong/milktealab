@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.5.36 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.5.36-candidate`。
+  - 记录 candidate 指向 `f833349f6f0459b1e538cc65dfa01b80c412972b`。
+  - 记录 `v0.0.5.36-candidate` 已冻结并推送。
+  - 记录 `v0.0.5.36` 已完成 `outcomeTypeId` 兜底地基。
+  - 记录 runner 已支持 `outcomeTypeId` 断言。
+  - 记录关键冲突样本已补 `outcomeTypeId` expected。
+  - 记录“中文主键”术语已升级为“显示文案主键 / 玩家可见文案当系统主键”。
+  - 记录当前未推进 `v0.0.5.37`。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.5.37。
+- 不创建 tag。
+
 ## v0.0.5.36
 
 outcomeTypeId 兜底地基 + “显示文案主键”术语同步。
