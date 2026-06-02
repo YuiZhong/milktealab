@@ -10,6 +10,10 @@ const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
 const combinationAnalyzer = window.MILK_TEA_LAB_COMBINATION_ANALYZER;
 const drinkTypeAnalyzer = window.MILK_TEA_LAB_DRINK_TYPE_ANALYZER;
 
+function isLegacyLemonMilkConflict(rule) {
+  return Array.isArray(rule.names) && rule.names.includes("柠檬") && rule.names.includes("牛奶");
+}
+
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
@@ -37,10 +41,10 @@ function evaluateCup(cup) {
     accidentNotes.push(accident.note);
   });
 
-  combinationAnalyzer.findComboMatches("bad", context.names).forEach(rule => {
+  combinationAnalyzer.findComboMatches("bad", context).forEach(rule => {
     scoreEngine.addScore(score, rule.score);
     ingredientAnalyzer.applyAttributeBoost(attr, rule.add);
-    forcedType = forcedType || (rule.names.includes("柠檬") && rule.names.includes("牛奶") ? "口感事故" : "口感冲突");
+    forcedType = forcedType || (isLegacyLemonMilkConflict(rule) ? "口感事故" : "口感冲突");
     badNotes.push(rule.note);
   });
 
@@ -54,7 +58,7 @@ function evaluateCup(cup) {
       goodNotes.push(fruitTeaBlend.note);
     }
 
-    combinationAnalyzer.findComboMatches("good", context.names).forEach(rule => {
+    combinationAnalyzer.findComboMatches("good", context).forEach(rule => {
       scoreEngine.addScore(score, rule.score);
       ingredientAnalyzer.applyAttributeBoost(attr, rule.add);
       goodNotes.push(rule.note);

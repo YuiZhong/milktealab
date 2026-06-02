@@ -60,12 +60,12 @@
 
 - 最新 candidate：`v0.0.5.16-candidate`
 - 最新 candidate commit：`7584d5e feat: support ingredient refs in proportion rules`
-- 最新 main：`2291191 docs: record profile rationale and accident severity principles`
-- `2291191` 是 `v0.0.5.16-candidate` 之后的 docs 补充 commit，未单独创建 candidate tag。
+- 最新 main：本轮 v0.0.5.17 提交 `feat: support ingredient refs in combination rules`。
+- `v0.0.5.16-candidate` 之后曾追加 docs 补充提交 `2291191` 和 AI context 快照修正提交 `9d42187`，均未单独创建 candidate tag。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `15/15 passed`。
-- v0.0.5.10-v0.0.5.16 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine。
-- 下一步不要直接开工，应先继续 ID 收口路线判断；候选方向是 `combination / synergy ingredientId 兼容只读评估`。
+- v0.0.5.10-v0.0.5.17 已完成 ingredientId 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer。
+- 后续可继续评估 `synergyRules` / `drinkType` / 保存结构的 ingredientId 兼容路线；不要一次性批量迁移规则表。
 
 ---
 
@@ -533,6 +533,8 @@ v0.0.4.x 不做：
 
 【可删】v0.0.5.16 让 proportionSegmentRuleEngine 接入 ruleRefHelper，兼容旧中文 ingredient/names 与新 ingredientId/ingredientRef/refs/ingredientIds；不批量迁移规则表，不改阈值、评分、反馈、golden samples 或保存结构。
 
+【可删】v0.0.5.17 让 combinationAnalyzer 支持旧 names 与新 refs / ingredientRefs / ingredientIds，通过 ruleRefHelper 查询 ingredientId / name / alias / object ref；不迁移 data/combinationRules.js，不处理 synergyRules，不改评分、反馈文案、类型判断、golden samples 或保存结构。
+
 【不要删】三层 profile 的设计由来与事故 severity 数值化原则已写入 `docs/TASTE_ENGINE_ARCHITECTURE.md`。新对话 / Codex 继续 v0.0.5.x 时，必须理解三层架构来自奥利奥/小料 texture 问题、柠檬 acid overload 泛化、橙子 vs 西红柿 flavor identity 问题；事故优先级不等于严重度，严重度长期应数据化为可调 severityLevel / scoreMultiplier，不能把粗吸管需求等轻微服务冲突自动判成重事故。
 
 【不要删】《奶茶实验室》原料数据化长期应拆成三层 profile：tasteProfile（基础味觉）、textureProfile（物理质地）、flavorProfile（风味身份 / 香气身份）。tasteProfile 解决酸甜苦奶涩等基础味觉；textureProfile 解决吸管阻力、糊化、沉积、胶质、粉感、奶脂负担等物理结构；flavorProfile 解决橙子和西红柿这类酸甜度接近但风味身份完全不同的问题。后续事故、组合、客群和反馈判断应尽量来自 summary + 规则表，而不是 UI 分类或单个原料 if。
@@ -541,9 +543,9 @@ v0.0.4.x 不做：
 
 【可删】当前已冻结 candidate：`v0.0.5.3-candidate`、`v0.0.5.4-candidate`、`v0.0.5.5-candidate`、`v0.0.5.6-candidate`、`v0.0.5.7-candidate`、`v0.0.5.8-candidate`、`v0.0.5.9-candidate`、`v0.0.5.10-candidate`、`v0.0.5.11-candidate`、`v0.0.5.12-candidate`、`v0.0.5.13-candidate`、`v0.0.5.14-candidate`、`v0.0.5.15-candidate`、`v0.0.5.16-candidate`。`v0.0.5.6-candidate` 页面显示仍为 v0.0.5.5，是已记录小瑕疵，不重打 tag；从 v0.0.5.7 起，candidate 前必须先同步页面版本号。
 
-【可删】v0.0.5.16-candidate 已冻结；之后又补充并 push 了三层 profile 由来与事故 severity 原则文档提交 `2291191`，未另打 tag。当前 main 已同步 GitHub，工作区应为干净状态，golden samples 应为 15/15 passed。
+【可删】v0.0.5.16-candidate 已冻结；之后又补充并 push 了三层 profile 由来与事故 severity 原则文档提交 `2291191`，以及 AI_CONTEXT 当前状态快照修正提交 `9d42187`，均未另打 tag。当前 main 完成 v0.0.5.17 combinationAnalyzer ingredientId/ref 兼容，工作区应为干净状态，golden samples 应为 15/15 passed。
 
-【不要删】v0.0.5.x 路线已升级：后续目标不是继续“某个原料事故表格化”，而是继续小步搭完三层 profile + stable ingredientId 的底层架构。v0.0.5.10-v0.0.5.16 已完成 ingredientId 主线的多段兼容地基。下一步不要直接开工，应先做 ID 收口路线判断；候选方向是 `combination / synergy ingredientId 兼容只读评估`，继续避免一次性批量迁移规则表。
+【不要删】v0.0.5.x 路线已升级：后续目标不是继续“某个原料事故表格化”，而是继续小步搭完三层 profile + stable ingredientId 的底层架构。v0.0.5.10-v0.0.5.17 已完成 ingredientId 主线的多段兼容地基。后续可继续评估 `synergyRules` / `drinkType` / 保存结构的 ingredientId 兼容路线，继续避免一次性批量迁移规则表。
 
 【不要删】v0.0.5.x 后续定位：继续做代码结构和数据模型地基，不急着调数值。v0.0.5.x 应尽量完成 ingredientId、tasteProfile、textureProfile、flavorProfile、三层 summary、规则分层入口等“房梁”；v0.0.6.x / v0.0.7.x 再进入系统性数值优化、样本扩展和调参。允许少量 legacy 逻辑暂存，但不能继续扩张，新增规则应优先进入三层 profile + summary + 规则表体系。
 

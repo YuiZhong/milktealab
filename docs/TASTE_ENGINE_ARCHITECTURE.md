@@ -54,6 +54,8 @@ v0.0.5.15 将 ingredientId 兼容推进到回归测试层：golden samples runne
 
 v0.0.5.16 将 ruleRefHelper 继续接入比例段规则执行层；helper 仍只负责 ref 解析和 context 查询，不承载比例规则内容。
 
+v0.0.5.17 将 ingredientId 兼容推进到组合规则执行层；本轮只改匹配入口，不迁移组合规则表，不处理 synergyRules。
+
 示意结构：
 
 ```js

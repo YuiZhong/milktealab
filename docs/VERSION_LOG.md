@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.5.17
+
+combination rules 支持 ingredientId。
+
+### 阶段目标
+
+本版本让 `combinationAnalyzer` 支持组合规则通过旧 `names` 与新 `refs` / `ingredientRefs` / `ingredientIds` 匹配当前配方。本轮只增强组合规则执行入口，不批量迁移 `data/combinationRules.js`。
+
+### 本轮新增 / 更新
+
+- 更新 `core/combinationAnalyzer.js`
+  - 旧 `{ names: ["红茶", "牛奶"] }` 继续可用。
+  - 新 `{ refs: ["tea_black", "dairy_milk"] }`、`ingredientRefs`、`ingredientIds` 可通过 `ruleRefHelper` 查询。
+  - 支持 ingredientId / name / alias / object ref。
+- 更新 `core/tasteJudge.js`
+  - 组合匹配调用改为传入完整 context，让组合规则执行层可以使用 ingredientId/ref 查询。
+  - 柠檬 + 牛奶旧 `names` 特殊判断保持旧输出，不扩展新业务语义。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.17。
+- 更新味觉系统文档和 AI 接续上下文。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，15/15 passed。
+
+### 本轮不做
+
+- 不迁移 `data/combinationRules.js`。
+- 不处理 `data/synergyRules.js`。
+- 不改 golden samples。
+- 不改保存配方结构。
+- 不改评分、事故优先级、反馈文案、饮品类型判断或 UI 交互。
+- 不做三层 summary、flavorProfile 或 severity 系统。
+- 不 push，不 tag。
+
 ## 文档补充：AI_CONTEXT 当前状态快照
 
 本轮只修正文档索引，不提升页面版本号，不改运行逻辑。
