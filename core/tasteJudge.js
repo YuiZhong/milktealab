@@ -18,6 +18,35 @@ function isDairyFatOverloadAccident(accident) {
   return accident.accidentTypeId === "dairy_fat_overload" || accident.type === "奶脂过载";
 }
 
+function addUniqueTags(target, tags) {
+  if (!Array.isArray(tags)) return;
+  tags.forEach(tag => {
+    if (tag && !target.includes(tag)) target.push(tag);
+  });
+}
+
+function getCombinationFeedbackTags(rule) {
+  if (Array.isArray(rule.feedbackTags)) return rule.feedbackTags;
+  const ids = Array.isArray(rule.ingredientIds) ? rule.ingredientIds : [];
+  if (ids.includes("tea_black") && ids.includes("dairy_milk")) return ["classic"];
+  if (ids.includes("tea_oolong") && ids.includes("dairy_thick_milk")) return ["premium"];
+  return [];
+}
+
+function getSegmentFeedbackTags(tags) {
+  if (!Array.isArray(tags)) return [];
+  if (tags.includes("durian_medium") && tags.includes("dairy_supported")) return ["durian"];
+  return [];
+}
+
+function getAccidentFeedbackTags(accident) {
+  const tags = [...(accident.tags || [])];
+  if (accident.accidentTypeId === "dairy_fat_overload") tags.push("greasy_overload");
+  if (accident.accidentTypeId === "texture_straw_resistance") tags.push("straw_disaster");
+  if (tags.includes("acid_accident")) tags.push("acid_accident");
+  return tags;
+}
+
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
@@ -30,12 +59,15 @@ function evaluateCup(cup) {
   const goodNotes = [];
   const segmentNotes = [];
   const generalNotes = [];
+  const sourceFeedbackTags = [];
   let forcedType = null;
   let forcedDrinkTypeId = null;
 
   const segmentResult = proportionAnalyzer.applyProportionSegments(context, attr);
   scoreEngine.addScore(score, segmentResult.scoreDelta);
   segmentNotes.push(...segmentResult.notes);
+  addUniqueTags(sourceFeedbackTags, segmentResult.tags);
+  addUniqueTags(sourceFeedbackTags, getSegmentFeedbackTags(segmentResult.tags));
 
   const accidents = accidentAnalyzer.detectAccidents(context).sort((left, right) => left.cap - right.cap);
   const primaryAccident = accidents[0] || null;
@@ -45,6 +77,7 @@ function evaluateCup(cup) {
     forcedType = forcedType || accident.type;
     ingredientAnalyzer.applyAttributeBoost(attr, accident.add);
     accidentNotes.push(accident.note);
+    addUniqueTags(sourceFeedbackTags, getAccidentFeedbackTags(accident));
   });
 
   combinationAnalyzer.findComboMatches("bad", context).forEach(rule => {
@@ -52,6 +85,7 @@ function evaluateCup(cup) {
     ingredientAnalyzer.applyAttributeBoost(attr, rule.add);
     forcedType = forcedType || (isLegacyLemonMilkConflict(rule) ? "口感事故" : "口感冲突");
     badNotes.push(rule.note);
+    addUniqueTags(sourceFeedbackTags, rule.feedbackTags);
   });
 
   if (!accidents.length && !badNotes.length) {
@@ -63,12 +97,14 @@ function evaluateCup(cup) {
       forcedDrinkTypeId = forcedDrinkTypeId || fruitTeaBlend.drinkTypeId;
       ingredientAnalyzer.applyAttributeBoost(attr, fruitTeaBlend.add);
       goodNotes.push(fruitTeaBlend.note);
+      addUniqueTags(sourceFeedbackTags, fruitTeaBlend.feedbackTags);
     }
 
     combinationAnalyzer.findComboMatches("good", context).forEach(rule => {
       scoreEngine.addScore(score, rule.score);
       ingredientAnalyzer.applyAttributeBoost(attr, rule.add);
       goodNotes.push(rule.note);
+      addUniqueTags(sourceFeedbackTags, getCombinationFeedbackTags(rule));
     });
   }
 
@@ -143,9 +179,11 @@ function evaluateCup(cup) {
         : segmentNotes.length
           ? [segmentNotes[0]]
           : generalNotes;
-  const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0);
+  const feedbackOptions = { feedbackTags: sourceFeedbackTags };
+  const feedbackTags = feedbackEngine.getFeedbackTags(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
+  const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
 
-  const result = { attr, score: finalScore, type, audience, audienceIds, feedback };
+  const result = { attr, score: finalScore, type, audience, audienceIds, feedback, feedbackTags };
   if (primaryAccident?.accidentTypeId) {
     result.accidentTypeId = primaryAccident.accidentTypeId;
   }

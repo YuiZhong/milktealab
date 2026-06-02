@@ -1,5 +1,33 @@
 # 版本记录
 
+## v0.0.5.34
+
+feedbackEngine 去 notes.includes 小修。
+
+### 本轮新增 / 更新
+
+- 更新 `core/feedbackEngine.js`
+  - 反馈标签选择主路径优先使用结构化 `tags` / `feedbackTags`。
+  - 中文 `notes.includes` 仅保留为 legacy fallback。
+  - 保持 `makeFeedback(...)` 旧调用兼容，不重写反馈引擎。
+- 更新 `core/tasteJudge.js`
+  - 汇总并传递 `feedbackTags`。
+  - 最终 result 暴露 `feedbackTags`。
+- 更新 `index.html`
+  - 页面顶部版本号同步为 v0.0.5.34。
+- 更新 `docs/AI_CONTEXT.md`
+  - 当前状态快照同步 v0.0.5.34 完成点。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改评分、事故、饮品类型、`result.type` 或反馈文案风格。
+- 不改 golden expected。
+- 不创建 tag。
+
 ## docs: sync v0.0.5.33 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
