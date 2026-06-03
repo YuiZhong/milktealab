@@ -1,7 +1,11 @@
 ﻿textId,feedbackTag,scene,zhCN,tone,minScore,maxScore,accidentTypeId,drinkTypeId,outcomeTypeId,audienceId,enabled,notes
 feedback_classic_001,classic,normal,经典的珍珠奶茶。肯定不能算难喝啦但也算不上惊艳，还行吧,classic,60,90,,classic_milk_tea,,,TRUE,经典奶茶稳定反馈样例
+feedback_classic_002,classic,normal,这杯就是很标准的奶茶，稳稳当当，不惊喜也不翻车,classic,60,90,,classic_milk_tea,,,TRUE,多候选评审包压力测试：经典奶茶稳定候选
+feedback_classic_003,classic,normal,像店里不会出错的常规款，喝完会点头，但不会拍桌子夸,teasing,60,90,,classic_milk_tea,,,TRUE,多候选评审包压力测试：经典奶茶轻吐槽候选
 feedback_premium_001,premium,normal,喝起来有种“高档”味，用料应该不错？,premium,65,95,,premium_thick_milk_tea,,,TRUE,高级厚乳路线样例
 feedback_acid_accident_001,acid_accident,accident,我牙被酸掉了，你要不赔我点钱吧,warning,0,35,taste_acid_overload,,,,TRUE,酸度事故代表样例
+feedback_acid_accident_002,acid_accident,accident,这酸度已经不是提神，是直接把脸拧成柠檬了,warning,0,35,taste_acid_overload,,,,TRUE,多候选评审包压力测试：酸度事故口语候选
+feedback_acid_accident_003,acid_accident,accident,喝一口，牙齿先开会讨论要不要辞职,teasing,0,35,taste_acid_overload,,,,TRUE,多候选评审包压力测试：酸度事故轻吐槽候选
 feedback_greasy_overload_001,greasy_overload,accident,有点像和牛，第一口感觉好香啊，第二口就想吐了,warning,0,35,dairy_fat_overload,,,,TRUE,奶脂过载代表样例
 feedback_greasy_overload_002,greasy_overload,accident,你这给我灌奶油呢这是？,warning,0,35,dairy_fat_overload,,,,TRUE,奶脂过载事故样例，直白吐槽版
 feedback_straw_disaster_001,straw_disaster,accident,吸管刚插进去就提交了辞职信,teasing,0,35,texture_straw_resistance,,,,TRUE,吸管阻力事故样例

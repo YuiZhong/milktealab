@@ -32,6 +32,36 @@
       "enabled": true,
       "notes": "经典奶茶稳定反馈样例"
     },
+    "feedback_classic_002": {
+      "textId": "feedback_classic_002",
+      "feedbackTag": "classic",
+      "scene": "normal",
+      "zhCN": "这杯就是很标准的奶茶，稳稳当当，不惊喜也不翻车",
+      "tone": "classic",
+      "minScore": 60,
+      "maxScore": 90,
+      "accidentTypeId": null,
+      "drinkTypeId": "classic_milk_tea",
+      "outcomeTypeId": null,
+      "audienceId": null,
+      "enabled": true,
+      "notes": "多候选评审包压力测试：经典奶茶稳定候选"
+    },
+    "feedback_classic_003": {
+      "textId": "feedback_classic_003",
+      "feedbackTag": "classic",
+      "scene": "normal",
+      "zhCN": "像店里不会出错的常规款，喝完会点头，但不会拍桌子夸",
+      "tone": "teasing",
+      "minScore": 60,
+      "maxScore": 90,
+      "accidentTypeId": null,
+      "drinkTypeId": "classic_milk_tea",
+      "outcomeTypeId": null,
+      "audienceId": null,
+      "enabled": true,
+      "notes": "多候选评审包压力测试：经典奶茶轻吐槽候选"
+    },
     "feedback_premium_001": {
       "textId": "feedback_premium_001",
       "feedbackTag": "premium",
@@ -61,6 +91,36 @@
       "audienceId": null,
       "enabled": true,
       "notes": "酸度事故代表样例"
+    },
+    "feedback_acid_accident_002": {
+      "textId": "feedback_acid_accident_002",
+      "feedbackTag": "acid_accident",
+      "scene": "accident",
+      "zhCN": "这酸度已经不是提神，是直接把脸拧成柠檬了",
+      "tone": "warning",
+      "minScore": 0,
+      "maxScore": 35,
+      "accidentTypeId": "taste_acid_overload",
+      "drinkTypeId": null,
+      "outcomeTypeId": null,
+      "audienceId": null,
+      "enabled": true,
+      "notes": "多候选评审包压力测试：酸度事故口语候选"
+    },
+    "feedback_acid_accident_003": {
+      "textId": "feedback_acid_accident_003",
+      "feedbackTag": "acid_accident",
+      "scene": "accident",
+      "zhCN": "喝一口，牙齿先开会讨论要不要辞职",
+      "tone": "teasing",
+      "minScore": 0,
+      "maxScore": 35,
+      "accidentTypeId": "taste_acid_overload",
+      "drinkTypeId": null,
+      "outcomeTypeId": null,
+      "audienceId": null,
+      "enabled": true,
+      "notes": "多候选评审包压力测试：酸度事故轻吐槽候选"
     },
     "feedback_greasy_overload_001": {
       "textId": "feedback_greasy_overload_001",
@@ -200,13 +260,17 @@
   },
   "textsByTag": {
     "classic": [
-      "feedback_classic_001"
+      "feedback_classic_001",
+      "feedback_classic_002",
+      "feedback_classic_003"
     ],
     "premium": [
       "feedback_premium_001"
     ],
     "acid_accident": [
-      "feedback_acid_accident_001"
+      "feedback_acid_accident_001",
+      "feedback_acid_accident_002",
+      "feedback_acid_accident_003"
     ],
     "greasy_overload": [
       "feedback_greasy_overload_001",
@@ -235,12 +299,16 @@
   "textsByScene": {
     "normal": [
       "feedback_classic_001",
+      "feedback_classic_002",
+      "feedback_classic_003",
       "feedback_premium_001",
       "feedback_durian_001",
       "feedback_disabled_idea_001"
     ],
     "accident": [
       "feedback_acid_accident_001",
+      "feedback_acid_accident_002",
+      "feedback_acid_accident_003",
       "feedback_greasy_overload_001",
       "feedback_greasy_overload_002",
       "feedback_straw_disaster_001",
@@ -256,13 +324,17 @@
   },
   "enabledTextIdsByTag": {
     "classic": [
-      "feedback_classic_001"
+      "feedback_classic_001",
+      "feedback_classic_002",
+      "feedback_classic_003"
     ],
     "premium": [
       "feedback_premium_001"
     ],
     "acid_accident": [
-      "feedback_acid_accident_001"
+      "feedback_acid_accident_001",
+      "feedback_acid_accident_002",
+      "feedback_acid_accident_003"
     ],
     "greasy_overload": [
       "feedback_greasy_overload_001",
@@ -288,11 +360,15 @@
   "enabledTextIdsByScene": {
     "normal": [
       "feedback_classic_001",
+      "feedback_classic_002",
+      "feedback_classic_003",
       "feedback_premium_001",
       "feedback_durian_001"
     ],
     "accident": [
       "feedback_acid_accident_001",
+      "feedback_acid_accident_002",
+      "feedback_acid_accident_003",
       "feedback_greasy_overload_001",
       "feedback_greasy_overload_002",
       "feedback_straw_disaster_001",
@@ -314,7 +390,7 @@
     "generatedBy": "scripts/content/buildFeedbackData.js",
     "validation": {
       "errors": 0,
-      "warnings": 12
+      "warnings": 11
     },
     "valueEncoding": {
       "enabled": "boolean",
@@ -322,8 +398,8 @@
       "optionalIdEmpty": null
     },
     "counts": {
-      "total": 12,
-      "enabled": 11,
+      "total": 16,
+      "enabled": 15,
       "disabled": 1
     }
   }

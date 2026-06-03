@@ -1,5 +1,54 @@
 # 版本记录
 
+## v0.0.7.23
+
+本轮为 feedback 多候选评审包压力测试。
+
+### 本轮新增 / 更新
+
+- 更新 `content_sheets/examples/feedback_texts.sample.csv`
+  - 少量扩充 sample feedback candidates。
+  - 保持 UTF-8 with BOM，供 Excel / Google Sheets / Numbers 直接打开时中文可读。
+  - 新增 classic / acid_accident 代表候选，并保留既有 straw_disaster 多候选，用于测试一个 sample 对应多条 generated shadow candidates 的评审体验。
+- 更新 `content_sheets/examples/feedback_texts.sample.json`
+  - 与 CSV 样例内容同步，保持中文可读。
+- 更新 `data/generated/feedbackTexts.generated.json`
+  - 由 `scripts/content/buildFeedbackData.js` 从 sample CSV 重新生成。
+- 更新 `data/generated/feedbackTexts.generated.js`
+  - 由 `scripts/content/buildFeedbackData.js` 从 sample CSV 重新生成。
+- 更新 `reports/feedbackShadowReview.sample.md`
+  - 重新生成多候选 review pack。
+  - 覆盖 `classic_milk_tea`、`extreme_lemon_accident`、`straw_resistance_accident` 的多候选展示。
+  - 将 report 调整为“制作人审核区集中在前，机器详情集中放附录”的两段式结构。
+  - 将制作人审核字段移到每条候选文案下方，便于逐条填写 `reviewStatus`、`issueTags`、`suggestedRewrite`、`producerComment`。
+  - 将 `reviewStatus` 提示调整为选项在前、数字在后，例如 keep 保留=1。
+  - 增加“整组备注”，用于填写 `needsNewText`、`preferredTextId` 和整体 `producerComment`。
+- 更新 `scripts/content/checkFeedbackRuntimeAdapter.js`
+  - 泛化候选数量断言，避免内容扩充时因“固定数量”误判失败。
+  - check 仍保护 stable ID、enabled / includeDisabled、返回对象只读、不按 zhCN 查询、invalid data unavailable 等边界。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.23 已完成 feedback 多候选评审包压力测试。
+  - 记录当前仍未改变玩家最终 feedback，仍未做 partial / active 接管。
+
+### 阶段边界
+
+- 本轮是评审包可用性测试，不是正式文案库扩充。
+- 不改 runtime、不改 `feedbackEngine`、不改 `data/feedbackTexts.js`。
+- 不改 `core/feedbackRuntimeAdapter.js`，只调整 adapter check 的结构断言方式。
+- 不改玩家最终 feedback、score、type、accident 或 feedbackTags。
+- 不改 golden samples / runner / golden expected。
+- 不接 runtime，不做 partial / active 接管。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Validator：Errors 0；Warnings 为人工审核提醒。
+- Generated JSON / JS build 通过。
+- Generated data validators / browser loading / adapter / shadow checks 通过。
+- Review pack 生成通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.22 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

@@ -100,9 +100,17 @@
 - review pack 只是制作人评审材料，不是 runtime data，不自动接管 generated feedback，不自动改文案，不自动改 golden expected。
 - 当前未改变玩家最终 feedback。
 - 当前仍未做 partial / active 接管。
-- 当前未推进 v0.0.7.23。
-- 当前未推进 v0.0.7.23。
-- 下一步可考虑：让用户查看 `reports/feedbackShadowReview.sample.md`，或继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.23｜severity / threshold 表格化路线设计`。
+- v0.0.7.23 已完成 feedback 多候选评审包压力测试，本地 commit 后以 `git log -1` 为准。
+- 少量扩充 `content_sheets/examples/feedback_texts.sample.csv` / `.json` 的 sample feedback candidates，并重新生成 `data/generated/feedbackTexts.generated.json` / `.js` 与 `reports/feedbackShadowReview.sample.md`。
+- `scripts/content/checkFeedbackRuntimeAdapter.js` 已从固定数量断言调整为结构 / 至少覆盖 / stable ID 断言，避免后续内容扩充时因候选数量变化误判失败。
+- review pack 当前采用“制作人审核区集中在前，机器详情集中放附录”的两段式结构，避免制作人反复跳过机器字段。
+- review pack 当前将制作人审核字段放在每条候选文案下方；整组层面单独提供 `needsNewText`、`preferredTextId` 和整体 `producerComment`。
+- `reviewStatus` 填写提示当前使用选项在前、数字在后的格式，例如 keep 保留=1、revise 修改=2、reject 不要=3、pending 待定=4。
+- 当前 report 需要用户查看多候选情况下是否好用，重点确认多条候选显示是否清楚、制作人审核区是否好填、状态码 + 中文问题标签是否够用、机器详情是否不碍眼。
+- 当前未改变玩家最终 feedback。
+- 当前仍未做 partial / active 接管。
+- 当前未创建 `v0.0.7.23-candidate`。
+- 下一步可考虑：`v0.0.7.23-candidate` 冻结，或继续根据用户反馈调整 review pack，或 `v0.0.7.24｜severity / threshold 表格化路线设计`。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。

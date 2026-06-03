@@ -226,8 +226,13 @@ function renderProducerCandidates(candidates) {
 
   return candidates.map((candidate, index) => [
     `${index + 1}. ${markdownValue(candidate.textId)} / ${markdownValue(candidate.feedbackTag)} / ${markdownValue(candidate.scene)} / ${markdownValue(candidate.tone)}`,
-    `   文案：${markdownValue(candidate.zhCN)}`
-  ].join("\n")).join("\n");
+    `   文案：${markdownValue(candidate.zhCN)}`,
+    "   候选审核：",
+    "   - reviewStatus（审核状态）:",
+    "   - issueTags（问题标签）:",
+    "   - suggestedRewrite（建议改写）:",
+    "   - producerComment（制作人备注）:"
+  ].join("\n")).join("\n\n");
 }
 
 function renderMachineCandidates(candidates) {
@@ -244,56 +249,41 @@ function renderMachineCandidates(candidates) {
   ].join("\n")).join("\n");
 }
 
-function renderReviewItem(item) {
+function renderProducerReviewItem(item) {
   return [
     `## ${item.source.goldenSampleId}｜${item.source.recipeName}`,
-    "",
-    "### 你需要审什么",
-    "- 新候选文案是否适合这杯饮品？",
-    "- 是否 AI 味太重？",
-    "- 是否触发条件正确？",
-    "- 是否可以未来替代旧反馈？",
-    "",
-    "### 这杯饮品",
-    item.source.recipe.map(ingredient =>
-      `- ${markdownValue(ingredient.name)} (${markdownValue(ingredient.ingredientId)}): ${ingredient.ratio}%`
-    ).join("\n"),
     "",
     "### 旧反馈（当前玩家看到）",
     markdownValue(item.legacy.feedback),
     "",
     "### 新候选文案（后台 shadow，不会影响玩家）",
+    "",
+    "填写提示：",
+    "- reviewStatus 可填：keep 保留=1；revise 修改=2；reject 不要=3；pending 待定=4",
+    "- issueTags 可直接写中文，例如：AI味浓、太狠、不好笑、触发不对、太平、太长、太抽象、想留但要改",
+    "",
     renderProducerCandidates(item.shadow.candidates),
     "",
-    "### 制作人审核",
+    "### 整组备注",
     "",
-    "状态码：",
+    "- needsNewText（是否还需要新增文案）:",
+    "- preferredTextId（最喜欢哪条，可选）:",
+    "- producerComment（整体备注）:",
+    ""
+  ].join("\n");
+}
+
+function renderMachineAppendixItem(item) {
+  return [
+    `## ${item.source.goldenSampleId}｜${item.source.recipeName}`,
     "",
-    "1 = keep 保留",
-    "2 = revise 修改",
-    "3 = reject 不要",
-    "4 = pending 待定",
+    "### Recipe",
+    item.source.recipe.map(ingredient =>
+      `- ${markdownValue(ingredient.name)} (${markdownValue(ingredient.ingredientId)}): ${ingredient.ratio}%`
+    ).join("\n"),
     "",
-    "常见问题标签，可直接写中文：",
-    "",
-    "- AI味浓",
-    "- 太狠",
-    "- 不好笑",
-    "- 触发不对",
-    "- 太平",
-    "- 太长",
-    "- 太抽象",
-    "- 想留但要改",
-    "",
-    "- reviewStatus（审核状态）:",
-    "- preferredTextId（偏好文案ID）:",
-    "- issueTags（问题标签）:",
-    "- suggestedRewrite（建议改写）:",
-    "- producerComment（制作人备注）:",
-    "",
-    "### 机器详情（一般不用制作人细看）",
-    "",
-    "#### Legacy Final Output",
+    "### Legacy Final Output",
+    `- feedback: ${markdownValue(item.legacy.feedback)}`,
     `- score: ${markdownValue(item.legacy.score)}`,
     `- result.type: ${markdownValue(item.legacy.type)}`,
     `- feedbackTags: ${markdownValue(item.legacy.feedbackTags)}`,
@@ -301,7 +291,7 @@ function renderReviewItem(item) {
     `- drinkTypeId: ${markdownValue(item.legacy.drinkTypeId)}`,
     `- outcomeTypeId: ${markdownValue(item.legacy.outcomeTypeId)}`,
     "",
-    "#### Generated Shadow",
+    "### Generated Shadow",
     `- enabled: ${markdownValue(item.shadow.enabled)}`,
     `- mode: ${markdownValue(item.shadow.mode)}`,
     `- source: ${markdownValue(item.shadow.source)}`,
@@ -310,10 +300,10 @@ function renderReviewItem(item) {
     `- fallbackReason: ${markdownValue(item.shadow.fallbackReason)}`,
     `- checkedFeedbackTags: ${markdownValue(item.shadow.metadata.checkedFeedbackTags || [])}`,
     "",
-    "#### Candidate Details",
+    "### Candidate Details",
     renderMachineCandidates(item.shadow.candidates),
     "",
-    "#### Machine Checks",
+    "### Machine Checks",
     `- needsHumanReview: ${markdownValue(item.checks.needsHumanReview)}`,
     `- shadowAffectsFinalFeedback: ${markdownValue(item.checks.shadowAffectsFinalFeedback)}`,
     `- finalFeedbackChanged: ${markdownValue(item.checks.finalFeedbackChanged)}`,
@@ -328,27 +318,27 @@ function renderReviewItem(item) {
 
 function renderMarkdown(items) {
   return [
-    "# Feedback Shadow Review Pack Sample",
+    "# 制作人审核区",
     "",
-    "这份报告主要给制作人审“新文案候选是否适合”。",
+    "这份报告主要给制作人审“新文案候选是否适合”。只需要看本区即可完成文案初审。",
     "",
-    "你只需要重点看：",
+    "机器详情集中放在后文附录，一般不用看。",
     "",
-    "1. 旧反馈",
-    "2. 新候选文案",
-    "3. 新文案是否匹配场景",
-    "4. 制作人审核区",
-    "",
-    "机器详情主要给 ChatGPT / Codex 检查，不需要逐项理解。",
-    "",
-    "本报告用于制作人评审 legacy final feedback 与 generated shadow candidates。",
+    "- 每条候选都可以单独 keep / revise / reject / pending。",
+    "- 多条候选可以同时 keep，未来可随机或按权重使用。",
+    "- preferredTextId 只是最喜欢哪条，不代表只能保留一条。",
     "",
     "- report 类型：制作人评审材料，不是 runtime data。",
     "- generated shadow 不接管最终反馈。",
     "- 本报告不会自动判断文案好坏，不会自动改文案，不会自动修改 golden expected。",
     "- generatedAt：not recorded for deterministic sample output。",
     "",
-    ...items.map(renderReviewItem)
+    ...items.map(renderProducerReviewItem),
+    "# 机器详情附录",
+    "",
+    "本附录主要给 ChatGPT / Codex 检查数据结构和 shadow 输出，一般不用制作人逐项理解。",
+    "",
+    ...items.map(renderMachineAppendixItem)
   ].join("\n");
 }
 
