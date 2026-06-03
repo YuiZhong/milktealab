@@ -1,5 +1,49 @@
 # 版本记录
 
+## docs: sync v0.0.7.19 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.19-candidate`。
+  - 记录 candidate 指向 `0bca500949d645af146194576227757cad4c5eff`。
+  - 记录 `v0.0.7.19-candidate` 已冻结并推送。
+  - 记录 v0.0.7.19 已实现 `feedbackEngine` shadow mode 只读旁路。
+  - 记录当前未推进 v0.0.7.20。
+
+### 阶段边界
+
+- `v0.0.7.19-candidate` 已冻结并推送。
+- candidate 指向 `0bca500949d645af146194576227757cad4c5eff`。
+- v0.0.7.19 已实现 `feedbackEngine` shadow mode 只读旁路。
+- 新增 `result.generatedFeedbackShadow`，用于调试 / 对比 generated feedback 候选。
+- shadow mode 不接管最终 feedback，`result.feedback` 仍由 legacy 输出。
+- generated 文案不显示到 UI。
+- final feedback / score / type / stable IDs / feedbackTags 不变。
+- validate / build / generated validator / adapter check / shadow check / golden 均通过。
+- UI smoke 通过：页面、普通试喝、事故路径正常，无 pageerror / 无业务 JS error。
+- 工具与 smoke 细节：使用系统 Chrome；Playwright 自带浏览器缺失；Chrome 捕获到一条泛化 `Failed to load resource` 404，但未对应业务脚本错误，未影响 smoke。
+- 未改 `data/feedbackTexts.js` / generated data / `content_sheets`。
+- 未改评分、事故、饮品类型、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.19`。
+- 当前未推进 v0.0.7.20。
+
+### 验证结果
+
+- Shadow check 通过，final feedback 保持 legacy，shadow 不影响最终反馈。
+- Generated browser load check 通过。
+- Adapter check 通过。
+- Feedback sheet validator：Errors 0，Warnings 12；warnings 为人工审核提醒。
+- JSON build 通过。
+- JS module build 通过。
+- Generated JSON validator：Errors 0，Warnings 0。
+- Generated JS module check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.19
 
 本轮实现 `feedbackEngine` shadow mode 只读旁路。
