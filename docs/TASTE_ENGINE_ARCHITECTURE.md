@@ -210,6 +210,48 @@ v0.0.6.x 可以准备 priority shell 的 schema、只读输出和结构断言。
 
 v0.0.7.x 不应再一边补 v0.0.6.x 地基一边调参。它的重点应转为参数增删、标签增删、阈值调优、`severityLevel`、`scoreMultiplier`、golden expected 有意识调整，以及让 summary / candidate / priority shell 在明确任务中逐步接管旧判定。
 
+### v0.0.6.18 v0.0.6.x final 收口审计
+
+v0.0.6.18 完成 v0.0.6.x final 收口审计。审计目标不是调参，也不是让新结构接管旧判定，而是确认三层属性 / profile / summary 地基、summary -> candidate 桥、candidate priority shell 只读观察层是否已经足够完整，可以进入 v0.0.6.x final candidate 冻结流程，并让 v0.0.7.x 聚焦参数、标签、阈值、severity、`scoreMultiplier` 和 golden expected 调整。
+
+本轮核对的已完成结构：
+
+- `tasteSummary` 已进入 `result`，由 `core/tasteSummaryEngine.js` 构建，保持 `values` / `tags` / `risks` / `evidence` / `metadata` 结构，并已有 golden 结构断言。
+- `textureSummary` 已进入 `result`，由 `core/textureSummaryEngine.js` 构建，保持同一 summary 容器，并已有 golden 结构断言。
+- `flavorSummary` 已进入 `result`，由 `core/flavorSummaryEngine.js` 读取 `data/ingredientFlavorProfiles.js` 构建，使用 stable `ingredientId` 作为 evidence `sourceId`，并已有 golden 结构断言。
+- `summaryCandidates` 已进入 `result`，由 `core/summaryCandidateEngine.js` 构建，承载 `candidateId`、`candidateType`、`sourceLayer`、`sourceSummary`、`triggerMetric`、`triggerValue`、`thresholds`、`evidence`、`priorityBand`、`severityHint`、`feedbackTags`、`accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`ruleFamilyId` 和 `metadata`，并已有 golden 结构断言。
+- `candidatePriorityShell` 已进入 `result`，由 `core/candidatePriorityShellEngine.js` 构建，承载 `orderedCandidates`、`byPriorityBand`、`topCandidates` 和 `metadata`，并已有 golden 结构断言。
+- `ingredientFlavorProfiles` 已覆盖当前 37 个 `ingredientId`，profile 主 key 使用 stable ID，不使用中文 displayName 作为 profile key。
+
+只读边界核对：
+
+- 三层 summary、`summaryCandidates`、`candidatePriorityShell` 均通过 `metadata.readonly: true` 表达只读边界。
+- 三层 summary metadata 均保持 `weightsEnabled: false`；candidate / priority shell metadata 进一步保持 `affectsFinalResult: false`。
+- `tasteJudge.js` 仍由既有 analyzer / judge 主链路决定 `score`、事故、饮品类型、feedback、`result.type`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId` 和 `feedbackTags`。
+- 新结构当前只并行暴露到 `result`，服务 debug、golden 结构保护和后续调度设计，不参与最终判定。
+- `index.html` 和 golden runner 的加载顺序均在 `core/tasteJudge.js` 之前加载 summary / candidate / priority shell engine。
+
+字段和扩展位核对：
+
+- summary 层已有 `values` / `tags` / `risks` / `evidence` / `metadata`。
+- candidate 层已有 `sourceLayer` / `sourceSummary` / `triggerMetric` / `triggerValue` / `thresholds` / `priorityBand` / `severityHint` / `feedbackTags` / `accidentTypeId` / `outcomeTypeId` / `drinkTypeId` / `ruleFamilyId`。
+- priority shell 层保留 candidate 快照，因此 summary evidence 和 candidate metadata 可以继续被观察、调试和断言。
+- `weights` 的完整数值系统尚未启用；当前用 `weightsEnabled: false` 明确关闭权重调参，具体权重表、阈值校准、severity 数值和 `scoreMultiplier` 留到 v0.0.7.x。
+
+golden 结构保护核对：
+
+- golden runner 已支持并检查 `tasteSummary`、`textureSummary`、`flavorSummary`、`summaryCandidates`、`candidatePriorityShell` expected。
+- 当前 golden 覆盖已经保护关键容器、metadata、只读状态、`sourceLayer`、`weightsEnabled`、`affectsFinalResult`、代表 evidence、代表 candidate 字段和 priority band。
+- 当前覆盖足以保护进入 v0.0.7.x 前的系统地基；更丰富样本覆盖属于后续增强，不构成 v0.0.6.x 收口阻塞。
+
+最终分级结论：
+
+- P0：无。可以进入 v0.0.6.x final candidate 冻结流程。
+- P1：无。进入 v0.0.7.x 前不需要再补系统地基。
+- P2：可留到 v0.0.7.x 或更后面的方向，包括更丰富 golden 覆盖、flavor relation matrix、candidate relation matrix、表格化内容管线、更多 candidate 类型（例如 `audience` / `operation` / `customerPreference`，但必须等对应系统进入真实范围再做）、更细的 profile / tag / metadata 扩展、多语言 / 内容管理管线，以及更完整的调参、内容管理和数据审计。P2 不阻塞 v0.0.6.x 收口。
+
+结论：未发现 P0 / P1，v0.0.6.x 系统地基可以进入 final candidate 冻结；v0.0.7.x 可开始以参数、标签、阈值、severity、`scoreMultiplier`、golden expected 调优和表格化内容管线为主。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

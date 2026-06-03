@@ -1,5 +1,36 @@
 # 版本记录
 
+## v0.0.6.18
+
+本轮为 v0.0.6.x final 收口审计。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 v0.0.6.x final 收口审计结论。
+  - 确认三层 summary、`summaryCandidates`、`candidatePriorityShell` 均已进入 `result`，且均已有 golden 结构保护。
+  - 明确 P0 / P1 / P2 分级：P0 无，P1 无，P2 留到 v0.0.7.x 或更后续方向。
+  - 明确 v0.0.6.x 系统地基可以进入 final candidate 冻结流程。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 summary -> candidate -> priority shell -> legacy result 的完整链路审计。
+  - 核对 `result` 输出字段、只读边界、evidence / metadata / source / trigger / priority / severity hint 贯通。
+  - 记录 `feedbackTags` / `outcomeTypeId` / `drinkTypeId` / `accidentTypeId` 等候选承载位已具备位置。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.18 final 审计状态。
+  - 记录当前未创建 `v0.0.6.18-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / final 收口审计，不改 runtime、data、runner 或 golden expected。
+- 本轮不实现新 engine，不改 `tasteJudge`、summary engines、candidate engine、priority shell engine 或 `index.html`。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 本轮不做 severity / `scoreMultiplier`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.17 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

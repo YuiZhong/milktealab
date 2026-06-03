@@ -703,6 +703,56 @@ legacy judge result（当前仍由既有 analyzer / judge 决定）
 
 表格化内容管线可以作为 v0.0.7.x 调参阶段方向，例如把候选规则、阈值、反馈标签、severity 提示和后续权重整理为更容易审计的数据表。但本轮不实现表格化内容管线，也不把它作为 v0.0.6.x 的阻塞项。
 
+#### v0.0.6.18 final 收口审计：链路与 result 边界
+
+v0.0.6.18 对当前三层 summary -> candidate -> priority shell 链路做 final 收口审计。审计结论是：当前系统地基已经足够进入 v0.0.6.x final candidate 冻结流程；进入 v0.0.7.x 前不需要再补新的系统地基。
+
+当前完整只读链路为：
+
+```text
+ingredient profiles / structure analysis
+↓
+tasteSummary / textureSummary / flavorSummary
+↓
+summaryCandidates
+↓
+candidatePriorityShell
+↓
+legacy judge result（最终判定仍由既有 analyzer / judge 决定）
+```
+
+result 输出字段核对：
+
+- `result.tasteSummary`：基础味觉中间理解层，结构为 `values` / `tags` / `risks` / `evidence` / `metadata`。
+- `result.textureSummary`：物理质地和可饮用性中间理解层，结构同 summary 通用容器。
+- `result.flavorSummary`：风味身份 / 香气身份中间理解层，读取 `ingredientFlavorProfiles`，不靠中文 displayName 或 UI category 推断风味身份。
+- `result.summaryCandidates`：summary 到最终 result 之间的只读候选层，包含 `candidates` / `byType` / `metadata`。
+- `result.candidatePriorityShell`：candidate 到未来调度之间的只读观察层，包含 `orderedCandidates` / `byPriorityBand` / `topCandidates` / `metadata`。
+
+这些字段都不改写最终 `score`、事故、饮品类型、feedback、`result.type`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId` 或 `feedbackTags`。当前最终判定仍由既有主链路负责，新结构只是并行可读输出。
+
+关键扩展位核对：
+
+- summary 层：`values` / `tags` / `risks` / `evidence` / `metadata` 已贯通。
+- candidate 层：`candidateId` / `candidateType` / `sourceLayer` / `sourceSummary` / `triggerMetric` / `triggerValue` / `thresholds` / `evidence` / `priorityBand` / `severityHint` / `feedbackTags` / `accidentTypeId` / `outcomeTypeId` / `drinkTypeId` / `ruleFamilyId` / `metadata` 已有位置。
+- priority shell 层：`orderedCandidates` / `byPriorityBand` / `topCandidates` / `metadata` 已有位置。
+- 只读边界：summary metadata 使用 `readonly: true` 和 `weightsEnabled: false`；candidate / priority shell metadata 使用 `readonly: true`、`weightsEnabled: false`、`affectsFinalResult: false`。
+- 权重和阈值：当前已记录 `thresholds` 快照和 `weightsEnabled: false` 状态，完整权重表、阈值调校、severity 数值和 `scoreMultiplier` 留给 v0.0.7.x。
+
+golden 结构保护核对：
+
+- runner 已支持 `tasteSummary`、`textureSummary`、`flavorSummary`、`summaryCandidates`、`candidatePriorityShell` expected。
+- 少量代表 golden samples 已覆盖 summary 容器、metadata、evidence、candidate 字段、priority band 和只读 / 不影响最终结果边界。
+- 当前覆盖足以保护 v0.0.6.x 系统地基进入 final candidate；更多样本、更多风险场景和更细字段覆盖属于后续增强。
+
+分级结论：
+
+- P0：无。可以进入 v0.0.6.x final candidate 冻结流程。
+- P1：无。进入 v0.0.7.x 前不需要再补系统地基。
+- P2：更丰富 golden 覆盖、flavor relation matrix、candidate relation matrix、表格化内容管线、更多 candidate 类型、更细 profile / tag / metadata 扩展、多语言 / 内容管理管线，以及完整调参和数据审计，可以留到 v0.0.7.x 或更后面，不阻塞 v0.0.6.x 收口。
+
+v0.0.7.x 的边界因此可以更清楚：它应主要处理参数、标签、阈值、`severityLevel`、`scoreMultiplier`、candidate 排序 / 冲突解决、golden expected 有意识调整和表格化内容管线，而不是一边补 v0.0.6.x 系统地基一边调参。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：
