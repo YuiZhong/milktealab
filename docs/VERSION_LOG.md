@@ -1,5 +1,37 @@
 # 版本记录
 
+## docs: sync v0.0.7.4 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.4-candidate`。
+  - 记录 candidate 指向 `9fc76b912f4e5c92f0920cf6f556f0c15f053119`。
+  - 记录 `v0.0.7.4-candidate` 已冻结并推送。
+  - 记录 v0.0.7.4 已完成 feedback_texts 样例表格 / JSON 草案。
+  - 记录当前未推进 v0.0.7.5。
+
+### 阶段边界
+
+- v0.0.7.4 已新增 feedback_texts 样例表格 / JSON 草案。
+- CSV 已修复为 UTF-8 with BOM。
+- 用户已从文件夹直接打开当前 repo CSV，确认中文正常、列正确分开、表格可读。
+- Excel 最近文件缓存不作为验收依据。
+- 样例文件不接 runtime，不替代 `data/feedbackTexts.js`。
+- 未改 `data/feedbackTexts.js` / `core/feedbackEngine.js`。
+- 未新增 validate script / build script / generated data。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.4`。
+- 当前未推进 v0.0.7.5。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- CSV 编码：`content_sheets/examples/feedback_texts.sample.csv` 为 UTF-8 with BOM。
+- JSON 合法性：`python3 -m json.tool content_sheets/examples/feedback_texts.sample.json` 通过。
+
 ## v0.0.7.4
 
 本轮新增 feedback_texts 样例表格 / JSON 草案。
