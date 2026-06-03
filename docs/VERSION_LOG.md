@@ -1,5 +1,40 @@
 # 版本记录
 
+## docs: sync v0.0.7.11 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.11-candidate`。
+  - 记录 candidate 指向 `0c6b70a0f17540edeb55e31eddf7a4d81b5f7c2a`。
+  - 记录 `v0.0.7.11-candidate` 已冻结并推送。
+  - 记录 v0.0.7.11 已完成 feedback runtime adapter docs / schema。
+  - 记录当前未推进 v0.0.7.12。
+
+### 阶段边界
+
+- `v0.0.7.11-candidate` 已冻结并推送。
+- candidate 指向 `0c6b70a0f17540edeb55e31eddf7a4d81b5f7c2a`。
+- v0.0.7.11 已完成 feedback runtime adapter docs / schema。
+- 已明确 adapter 不承载机制判断。
+- 已明确 adapter 不读 CSV / Google Sheets，只读 generated data。
+- 已明确 fallback 策略和渐进接入路线。
+- 本轮未实现 runtime adapter。
+- 未改 `core/feedbackEngine.js` / `data/feedbackTexts.js`。
+- 未改 generated feedback JSON / `content_sheets`。
+- 未改 runtime、data、scripts、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.11`。
+- 当前未推进 v0.0.7.12。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.11
 
 本轮为 feedback runtime adapter docs / schema。
