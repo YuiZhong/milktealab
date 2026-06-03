@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.6.16-candidate`
-- 最新 candidate commit：`303b5834821669d4e928acd3321994e607135c15`
-- `v0.0.6.16-candidate` 已冻结并推送，指向 `303b5834821669d4e928acd3321994e607135c15`；正式 tag `v0.0.6.16` 未创建。
-- 最新 main：本轮 docs commit 是 `v0.0.6.16-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.6.17-candidate`
+- 最新 candidate commit：`c6c369c9f3a95ffad01c3a85869b4b4cc7a7f67a`
+- `v0.0.6.17-candidate` 已冻结并推送，指向 `c6c369c9f3a95ffad01c3a85869b4b4cc7a7f67a`；正式 tag `v0.0.6.17` 未创建。
+- 最新 main：本轮 docs commit 是 `v0.0.6.17-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -165,8 +165,9 @@
 - 当前仍未让新系统接管最终判定；评分、事故、饮品类型、feedback、`result.type` 和 golden score expected 仍由现有主链路保护。
 - 本轮复盘未发现阻止进入 v0.0.6.x final 收口审计的 P0；P1 是完成 final 收口审计本身，具体核对三层 summary / `summaryCandidates` / `candidatePriorityShell` 结构一致性、`result` 输出字段、`evidence` / `metadata` / `sourceLayer` / `sourceSummary` / `triggerMetric` / `triggerValue` / `priorityBand` / `severityHint` 贯通、`feedbackTags` / `outcomeTypeId` / `drinkTypeId` / `accidentTypeId` 等承载位、golden 结构断言覆盖，以及是否仍有进入 v0.0.7.x 前必须补的结构缺口。
 - P2 是可留到 v0.0.7.x 或更后的方向，包括更丰富 golden 覆盖、flavor relation matrix / candidate relation matrix、表格化内容管线、更多 candidate 类型（例如 `audience` / `operation` / `customerPreference`）、更细的 profile / tag / metadata 扩展，以及更完整的调参、内容管理和数据审计。
-- 当前未创建 `v0.0.6.17-candidate`。
-- 下一步可考虑 `v0.0.6.17-candidate` 冻结、v0.0.6.x final 收口审计，或补齐复盘发现的 P0 / P1（当前未发现 P0）。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.6.17 已完成 v0.0.6.x 后半段收口复盘，且 `v0.0.6.17-candidate` 已冻结并推送。
+- 当前未推进 v0.0.6.18。
+- 下一步可考虑 v0.0.6.x final 收口审计，或补齐 final 审计发现的 P0 / P1。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

@@ -1,5 +1,33 @@
 # 版本记录
 
+## docs: sync v0.0.6.17 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.17-candidate`。
+  - 记录 candidate 指向 `c6c369c9f3a95ffad01c3a85869b4b4cc7a7f67a`。
+  - 记录 `v0.0.6.17-candidate` 已冻结并推送。
+  - 记录 v0.0.6.17 已完成 v0.0.6.x 后半段收口复盘。
+  - 记录当前未推进 v0.0.6.18。
+
+### 阶段边界
+
+- 三层 summary、`summaryCandidates`、`candidatePriorityShell` 均已接入 `result`，且有 golden 结构保护。
+- 未发现阻止进入 final 收口审计的 P0。
+- P1 / P2 遗留项已具体展开。
+- 未改 runtime、data、scripts、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.6.17`。
+- 未推进 v0.0.6.18。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.17
 
 本轮为 v0.0.6.x 后半段收口复盘。
