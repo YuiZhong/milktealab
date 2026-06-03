@@ -112,6 +112,46 @@ candidate / priority 的初始结构可继续预留：
 
 v0.0.6.x 后续可考虑的收口方向是：summary -> candidate docs / schema 复核、只读 candidate 输出地基、candidate golden 结构断言、priority 调度壳层边界复查，以及 v0.0.6.x 阶段总复盘。v0.0.7.x 再集中处理具体参数、阈值、`severityLevel`、`scoreMultiplier`、反馈标签权重和 golden expected 有意识更新。
 
+### v0.0.6.11 summary -> candidate 架构边界
+
+summary -> candidate 是三层 summary 之后、最终 result 之前的桥。candidate 的职责是把 `tasteSummary` / `textureSummary` / `flavorSummary` 中已经出现的中间理解结果，整理成“可被后续调度读取的候选”。它不是最终判定，不直接改写 `score`、事故、饮品类型、feedback 或 `result.type`。
+
+v0.0.6.x 的目标是把 candidate 的结构搭稳，先允许只读输出、结构断言和调度接口小步落地。v0.0.7.x 再集中处理具体阈值、`severityLevel`、`scoreMultiplier`、反馈标签权重和 golden expected 调优。
+
+第一批 candidate 类型应保持克制：
+
+- `accident`：事故候选，例如 taste 过载、texture 可饮用性事故、flavor 强身份风险。
+- `outcome`：结果兜底候选，例如无法归入普通 drinkType 但有明确 outcome 方向的情况。
+- `drinkType`：饮品类型候选，例如 classic milk tea、fruit tea、dessert drink 等类型方向。
+- `feedback`：反馈焦点候选，例如酸度过高、吸管阻力、香气压迫等可被文案系统读取的结构化标签。
+
+未来可以扩展 `audience`、`operation`、`customerPreference` 等 candidateType，但只有对应系统进入真实实现范围时再补 schema，不在 v0.0.6.11 为未来系统造空架子。
+
+candidate 应携带足够 evidence 和来源信息，例如：
+
+- `candidateId`
+- `candidateType`
+- `sourceLayer`
+- `sourceSummary`
+- `triggerMetric`
+- `triggerValue`
+- `thresholds`
+- `evidence`
+- `priorityBand`
+- `severityHint`
+- `feedbackTags`
+- `accidentTypeId`
+- `outcomeTypeId`
+- `drinkTypeId`
+- `ruleFamilyId`
+- `metadata`
+
+`priorityBand` 只表达候选的大类优先级，例如 `texture_blocking`、`taste_overload`、`flavor_identity`、`positive_combo`；它不等于最终 severity 数值。`severityHint` 只是给后续 severity 系统的提示，不是最终扣分，也不能在 v0.0.6.x 初期直接决定 `scoreMultiplier`。
+
+好组合或高适配 candidate 未来也只能作为加分 / 类型 / feedback 的候选来源，不能洗白高 severity 事故 candidate。candidate 排序和调度接口可以在 v0.0.6.x 后续小步设计，但候选排序、冲突解决、具体 severityLevel、scoreMultiplier 和阈值调优不属于 v0.0.6.11。
+
+candidate 层尤其不能变成新的 if 地狱。错误方向是把 `if 榴莲 + 咖啡`、`if 奥利奥 > 30`、`if 某 tag + 某 tag` 挪到 candidate engine 里继续堆内容判断。正确方向是：summary 提供结构化指标，规则表 / relation matrix / 阈值表读取这些指标并产出 candidate，调度层只负责排序、冲突处理和最终选择。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

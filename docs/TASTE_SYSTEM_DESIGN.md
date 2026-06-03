@@ -512,6 +512,84 @@ candidate 是 summary 到最终 result 的桥。v0.0.6.x 可以先设计 acciden
 
 v0.0.6.x 可以先做 candidate schema、只读输出和 golden 结构保护；完整候选排序、冲突解决、severity 数值、`scoreMultiplier`、阈值校准和 golden expected 调整，应放到 v0.0.7.x 或明确调参任务中处理。
 
+#### v0.0.6.11 summary -> candidate 通用 schema
+
+v0.0.6.11 只定义 docs / schema，不实现 runtime。candidate 是 summary 到最终 result 的桥，第一版应保持只读，不接管评分、事故、饮品类型、feedback 或 `result.type`。
+
+通用 candidate schema 可以采用：
+
+```js
+{
+  candidateId: "taste_acid_overload_candidate",
+  candidateType: "accident",
+  sourceLayer: "taste",
+  sourceSummary: "tasteSummary",
+  triggerMetric: "acidity",
+  triggerValue: 82,
+  thresholds: {
+    warning: 60,
+    accident: 75
+  },
+  evidence: [],
+  priorityBand: "taste_overload",
+  severityHint: "medium",
+  feedbackTags: ["acid_accident"],
+  accidentTypeId: "taste_acid_overload",
+  outcomeTypeId: null,
+  drinkTypeId: null,
+  ruleFamilyId: "taste_overload_rules",
+  metadata: {
+    schemaVersion: "summaryCandidate.v0.0.6.11",
+    readonly: true,
+    weightsEnabled: false,
+    source: "summary"
+  }
+}
+```
+
+字段用途：
+
+- `candidateId`：候选自身的稳定 ID，用于 golden 结构断言、debug 和后续调度；不能使用显示文案。
+- `candidateType`：候选类型。v0.0.6.11 先定义 `accident`、`outcome`、`drinkType`、`feedback`；未来可扩展 `audience`、`operation`、`customerPreference`，但不提前创建未来系统。
+- `sourceLayer`：候选来自哪一层，例如 `taste`、`texture`、`flavor`。
+- `sourceSummary`：候选读取的 summary，例如 `tasteSummary`、`textureSummary`、`flavorSummary`。
+- `triggerMetric`：触发候选的指标，例如 `acidity`、`strawResistance`、`aromaPressure`。
+- `triggerValue`：触发时的实际 summary 数值，便于 debug、调参和反馈解释。
+- `thresholds`：候选使用的阈值快照。v0.0.6.x 可先只记录结构，具体阈值调优留到 v0.0.7.x。
+- `evidence`：来自 summary 的证据链，解释候选为什么出现。
+- `priorityBand`：大类优先级，例如 `texture_blocking`、`taste_overload`、`flavor_identity`、`positive_combo`。它不是最终 severity 数值。
+- `severityHint`：严重度提示，例如 `low`、`medium`、`high`，只作为后续 severity 系统的输入，不直接扣分。
+- `feedbackTags`：候选建议的反馈标签，供 feedback 系统未来读取。
+- `accidentTypeId`：事故候选指向的事故 ID；非事故候选可为 `null`。
+- `outcomeTypeId`：outcome 候选指向的结果 ID；非 outcome 候选可为 `null`。
+- `drinkTypeId`：drinkType 候选指向的饮品类型 ID；非 drinkType 候选可为 `null`。
+- `ruleFamilyId`：候选来自哪组规则，便于后续调试、审计和分组调参。
+- `metadata`：版本、只读状态、权重启用状态和来源说明。
+
+candidateType 边界：
+
+- `accident`：只表达“某个 summary 指标已形成事故候选”。它不等于最终事故结果，也不直接改分。
+- `outcome`：只表达“存在一个 outcome 方向”。它不覆盖事故优先级，也不替代 `drinkTypeId`。
+- `drinkType`：只表达“存在一个饮品类型候选”。普通类型候选不能洗白高优先级事故候选。
+- `feedback`：只表达“存在一个反馈焦点候选”。它提供 `feedbackTags` 和 evidence，不直接生成最终文案。
+
+三层 summary 到 candidate 的初始方向：
+
+- `tasteSummary` 可产出 acid overload、sweet overload、bitterness / astringency overload、cloying taste risk 等 candidate。v0.0.6.11 不写具体 runtime，不调阈值。
+- `textureSummary` 可产出 straw resistance、low drinkability、high solid load、powder / sediment / gel / viscosity risk 等 candidate。v0.0.6.11 不新增事故规则。
+- `flavorSummary` 可产出 strong identity pressure、high aroma pressure、novelty risk、savory identity risk、low beverage fit、identity conflict risk 等 candidate。v0.0.6.11 不做 relation matrix，也不写具体组合 if。
+
+priority / severity 边界：
+
+- `priorityBand` 用来表达候选的大类优先级，不等于最终 severity 数值。
+- `severityHint` 只是提示，不是最终扣分。
+- `scoreMultiplier` 不在本轮实现。
+- 具体 `severityLevel`、`scoreMultiplier`、阈值调优和 golden expected 调整留给 v0.0.7.x。
+- 好组合 candidate 未来不能洗白高 severity 事故 candidate。
+- candidate 排序 / 调度接口可以在 v0.0.6.x 后续小步做，但 v0.0.6.11 只写 schema。
+
+candidate 输出必须保留 evidence，方便后续 debug、调参、反馈解释和 golden 断言。如果没有 evidence，candidate 只会变成新的黑箱 if。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

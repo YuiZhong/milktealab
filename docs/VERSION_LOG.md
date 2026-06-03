@@ -1,5 +1,42 @@
 # 版本记录
 
+## v0.0.6.11
+
+本轮为 summary -> candidate docs / schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 summary -> candidate 架构边界。
+  - 明确 candidate 是 summary 到最终 result 的桥。
+  - 明确 candidate 是只读中间层，不接管最终判定。
+  - 记录 v0.0.6.x 搭 candidate 结构，v0.0.7.x 再调参数、severity、`scoreMultiplier` 和 golden expected。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 设计 summary candidate 通用 schema。
+  - 记录 `accident` / `outcome` / `drinkType` / `feedback` candidateType 边界。
+  - 记录 `candidateId`、`sourceLayer`、`sourceSummary`、`triggerMetric`、`triggerValue`、`thresholds`、`evidence`、`priorityBand`、`severityHint`、`feedbackTags`、`accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`ruleFamilyId`、`metadata` 等字段用途。
+  - 记录 taste / texture / flavor summary 可能产出的 candidate 方向。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.11 本地实现状态。
+  - 记录当前未创建 `v0.0.6.11-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / candidate schema 设计。
+- 不实现 summary -> candidate runtime。
+- 不新增 candidate engine。
+- 不改 `tasteJudge` 或 summary engines。
+- 不改 runtime、data、runner、golden samples 或 `index.html`。
+- 不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 不做 severity / `scoreMultiplier`。
+- 不做 relation matrix runtime。
+- candidate 不应成为新的 if 地狱；内容判断仍应由 summary、规则表、relation matrix 和阈值表驱动。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.10 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
