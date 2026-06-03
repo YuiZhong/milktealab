@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.6.15 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.15-candidate`。
+  - 记录 candidate 指向 `b1e145eb69525359fd815d4f545ca248dfcafdcd`。
+  - 记录 `v0.0.6.15-candidate` 已冻结并推送。
+  - 记录 v0.0.6.15 已完成 `candidatePriorityShell` 只读地基。
+  - 记录当前未推进 v0.0.6.16。
+
+### 阶段边界
+
+- `result.candidatePriorityShell` 已暴露。
+- priority shell 是只读中间观察层，不接管最终判定。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 未做最终调度 / severity / `scoreMultiplier`。
+- UI smoke 已通过，console error 数为 0。
+- 未创建正式 tag `v0.0.6.15`。
+- 未推进 v0.0.6.16。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.15
 
 本轮新增 `candidatePriorityShell` 只读地基。
