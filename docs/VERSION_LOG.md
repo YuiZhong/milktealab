@@ -1,5 +1,48 @@
 # 版本记录
 
+## v0.0.7.25
+
+本轮为 severity / threshold 样例表 schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充未来 `candidate_severity_rules` 样例表 schema。
+  - 说明表名选择理由：它不只服务事故，也可服务 outcome / drinkType / feedback candidate。
+  - 逐字段说明 `ruleId`、`enabled`、`candidateType`、目标 ID、来源与触发字段、priority / severity 字段、分数与反馈强度字段、审核与备注字段。
+  - 明确 `ruleId` / `accidentTypeId` / `severityLevel` 边界。
+  - 明确 `accidentTypeId` 不按原料拆分，也不携带 severity 后缀。
+  - 明确 sampleId 只用于 golden / review pack / 测试定位，不进入机制规则主键。
+  - 补充错误示例与正确示例。
+  - 补充 future validator / generated severity data 边界。
+  - 补充 validator 合法性边界：`accidentTypeId` 必须以 known stable ID registry / enum / schema 校验，字符串后缀 / substring 检查只能作为辅助 warning / lint hint。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 severity / threshold 表 schema 在整体架构中的位置。
+  - 明确 future severity table 读取 summary / candidate / priority 的结构字段。
+  - 明确 future severity table 不能变成新的 if 地狱。
+  - 明确 future validator 不应把 `includes("_high")`、`endsWith("_lemon")` 之类字符串规则写成 `accidentTypeId` 合法性来源。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.25 已完成 severity / threshold 样例表 schema。
+  - 记录当前未创建 severity sheet / validator / build / generated data。
+
+### 阶段边界
+
+- 本轮只做 docs / schema 设计。
+- 不新增表格文件。
+- 不新增 JSON 文件。
+- 不新增 generated data。
+- 不实现 validator。
+- 不实现 build。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports 或 `index.html`。
+- 不改 candidate / priority shell。
+- 不改 final score、feedback、accident、type 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.24 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

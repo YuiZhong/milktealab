@@ -2033,6 +2033,240 @@ notes
 
 golden expected 的更新原则也要同步：本轮不改 expected。正式接管前，可以先增加 shadow / structure expected；一旦会改变 final score、feedback、accident、type 或 `result.type`，必须说明产品理由，并记录是机制判断、阈值、severity 档、反馈策略还是分数策略变化。不能为了“让测试变绿”而改 expected，也不能把 sampleId 当 accidentTypeId。
 
+#### v0.0.7.25 severity / threshold 样例表 schema
+
+v0.0.7.25 继续细化未来 severity / threshold 表格的字段 schema 和人类编辑边界。本轮仍只做 docs / schema 设计，不创建 CSV、JSON 或 generated data，不实现 validator / build script，不接 runtime，不调具体数值，不改 golden expected。
+
+推荐未来表名优先使用：
+
+```text
+candidate_severity_rules
+```
+
+推荐理由：
+
+- 它不只服务事故，也可以服务 `outcome` / `drinkType` / `feedback` candidate。
+- 它表达的是“candidate 进入 severity 调参层”，不会误导为只处理事故。
+- 它比 `severity_threshold_rules` 更具体，比 `accident_severity_rules` 更宽。
+
+暂不优先使用：
+
+- `accident_severity_rules`：容易误导为只处理事故，无法自然覆盖 outcome、drinkType、feedback candidate。
+- `severity_threshold_rules`：名称过泛，不容易看出它位于 `summaryCandidates` / `candidatePriorityShell` 后面的 candidate 调参层。
+
+未来样例表头草案：
+
+```text
+ruleId,enabled,candidateType,accidentTypeId,outcomeTypeId,drinkTypeId,feedbackTag,sourceLayer,sourceSummary,triggerMetric,triggerMin,triggerMax,priorityBand,severityHint,severityLevel,severityLabel,scoreMultiplier,scoreCap,scoreFloor,feedbackIntensity,requiresHumanReview,notes
+```
+
+字段说明：
+
+- `ruleId`
+  - stable rule ID。
+  - 例如未来可有 `taste_acid_overload_high`，但它是 `ruleId`，不是 `accidentTypeId`。
+  - 不使用中文，不使用 displayName，不使用 sampleId。
+- `enabled`
+  - 是否启用。
+  - 未来人类编辑源可使用 `TRUE` / `FALSE`，由 validator 规范化。
+- `candidateType`
+  - rule 作用的候选类型，例如 `accident`、`outcome`、`drinkType`、`feedback`。
+- `accidentTypeId`
+  - 机制大类，例如 `taste_acid_overload`。
+  - 禁止写成 `taste_acid_overload_lemon`、`taste_acid_overload_hawthorn`。
+  - 禁止携带 severity 后缀，例如 `taste_acid_overload_high`。
+  - 合法性最终应由 known stable ID registry / enum / schema 判断。
+  - 原料后缀 / severity 后缀检查只能作为辅助 warning / lint hint，不能替代 registry 校验。
+  - future validator 不应仅靠 `includes("_high")`、`endsWith("_lemon")`、`includes("lemon")` 这类字符串猜测判定 `accidentTypeId` 非法。
+  - 如果未来确有合法机制 ID 包含看起来像原料或 severity 的词，也应以 registry / enum / schema 为准，不能被字符串规则误杀。
+- `outcomeTypeId`
+  - 可选 outcome stable ID。
+- `drinkTypeId`
+  - 可选 drink type stable ID。
+- `feedbackTag`
+  - 可选 feedback stable tag。
+- `sourceLayer`
+  - 稳定来源枚举，例如 `taste`、`texture`、`flavor`、`structure`、`legacy`。
+- `sourceSummary`
+  - 结构来源，例如 `tasteSummary`、`textureSummary`、`flavorSummary`、`summaryCandidates`、`candidatePriorityShell`。
+- `triggerMetric`
+  - 结构化触发指标，例如 `acidity`、`strawResistance`、`fatLoad`、`aromaPressure`。
+- `triggerMin` / `triggerMax`
+  - 指标区间边界，描述“看哪个结构化指标落在哪个区间”。
+  - 本轮不填写真实阈值数字。
+- `priorityBand`
+  - 粗分组，用于候选观察 / 排序，不等于 severity。
+- `severityHint`
+  - candidate 层已有提示，不是最终扣分。
+- `severityLevel`
+  - 未来真正严重度层级。
+- `severityLabel`
+  - 人类可读严重度说明。
+- `scoreMultiplier`
+  - 未来可能影响分数的乘区字段。
+  - 本轮只设计字段，不填具体值，不让它影响 runtime。
+- `scoreCap`
+  - 未来可能限制分数上限的字段。
+- `scoreFloor`
+  - 未来可能限制分数下限的字段。
+- `feedbackIntensity`
+  - 未来可能影响反馈语气强度的字段。
+- `requiresHumanReview`
+  - 标记未来哪些规则需要制作人复核。
+- `notes`
+  - 制作人 / 调参备注，不参与机制判断。
+
+这些 candidate 目标字段用于说明 rule 作用于哪类 candidate。`accidentTypeId` / `outcomeTypeId` / `drinkTypeId` / `feedbackTag` 为空表示不限制，不代表未知主键。
+
+必须保持以下边界：
+
+```text
+priorityBand != severityLevel
+severityHint != final severity
+severityLevel 才是未来真正调参层级
+```
+
+错误示例与正确示例：
+
+错误 1：把原料拆成事故类型。
+
+```text
+错误：
+accidentTypeId: taste_acid_overload_lemon
+accidentTypeId: taste_acid_overload_hawthorn
+
+正确：
+accidentTypeId: taste_acid_overload
+```
+
+柠檬、山楂、百香果等应该作为 evidence / recipe / sample source，不应该拆事故 ID。
+
+错误 2：把 severity 写进 `accidentTypeId`。
+
+```text
+错误：
+accidentTypeId: taste_acid_overload_high
+
+正确：
+ruleId: taste_acid_overload_high
+accidentTypeId: taste_acid_overload
+severityLevel: high
+```
+
+validator 判错边界：
+
+```text
+taste_acid_overload_high 的错误原因：
+它不是已登记的 accidentTypeId。
+
+不是因为 validator 只看到 "_high" 后缀就硬判非法。
+```
+
+错误方向：
+
+```js
+if (accidentTypeId.includes("_high")) error
+if (accidentTypeId.includes("_lemon")) error
+```
+
+原因：这会把 validator 做成新的脆弱 if 树，后续一旦出现合法但名字里带相似片段的 stable ID，就可能被误杀。
+
+正确方向：
+
+```text
+knownAccidentTypeIds = [
+  "taste_acid_overload",
+  "texture_straw_resistance",
+  "dairy_fat_overload",
+  ...
+]
+
+if accidentTypeId not in knownAccidentTypeIds -> error
+```
+
+可以保留通用 lint / warning：如果 `accidentTypeId` 看起来像 sampleId、displayName、具体原料拆分 ID 或带 severity 后缀，可以提示人工复查；但最终合法性仍以 known stable ID registry / enum / schema 为准。
+
+错误 3：把 sampleId 当 rule key。
+
+```text
+错误：
+ruleId: extreme_lemon_accident
+
+正确：
+ruleId: taste_acid_overload_high
+accidentTypeId: taste_acid_overload
+```
+
+sampleId 只用于 golden / review pack / 测试定位，不是正式机制规则主键。
+
+示意行只能用于说明字段，不是最终参数，不代表真实阈值，不代表真实 `scoreMultiplier`，不进入 runtime，也不改 golden expected：
+
+```text
+ruleId: taste_acid_overload_high
+candidateType: accident
+accidentTypeId: taste_acid_overload
+sourceLayer: taste
+sourceSummary: tasteSummary
+triggerMetric: acidity
+triggerMin: [TBD]
+triggerMax: [TBD]
+priorityBand: taste_overload
+severityHint: high
+severityLevel: [TBD]
+scoreMultiplier: [TBD]
+notes: 酸度过载机制大类，不按柠檬/山楂/百香果拆事故类型。
+```
+
+未来 validator 应检查：
+
+- `ruleId` 必填且唯一。
+- `ruleId` 不能是中文、displayName、sampleId。
+- `enabled` 合法。
+- `candidateType` 合法。
+- `accidentTypeId` / `outcomeTypeId` / `drinkTypeId` / `feedbackTag` 若填写，必须是已知 stable ID。
+- `accidentTypeId` 合法性必须来自 known stable ID registry / enum / schema，不应只靠字符串后缀 / substring 猜测。
+- `accidentTypeId` 若看起来携带原料后缀或 severity 后缀，可以给 warning / lint hint；但是否 error 应以已登记机制 ID 集合为准。
+- `sourceLayer` / `sourceSummary` / `triggerMetric` 必须属于已知集合。
+- `triggerMin` / `triggerMax` 为空或数字区间合法。
+- `scoreMultiplier` / `scoreCap` / `scoreFloor` 若填写，必须在未来允许范围内。
+- 不允许把 `zhCN`、displayName、sampleId 当机制主键。
+- 不允许手改 generated data 绕过 source sheet。
+
+validator 不应：
+
+- 为某个 sampleId 写例外。
+- 为某个中文文案写例外。
+- 为某个具体原料写例外。
+- 自行判断文案好坏。
+- 自行改分数。
+
+未来 generated severity data 边界：
+
+- 必须由已通过 validator 的表生成。
+- 按 `ruleId` 建索引。
+- 可按 `candidateType` / `accidentTypeId` / `sourceLayer` / `triggerMetric` 建分组。
+- generated data 必须 deterministic。
+- runtime 不读取 Google Sheets / CSV。
+- runtime 只读取随版本打包的本地 generated JSON / JS。
+- generated data 不手改。
+
+与现有系统关系：
+
+- 当前 legacy analyzer / judge 仍负责最终 score / accident / type / feedback。
+- `summaryCandidates` 和 `candidatePriorityShell` 仍是只读观察层。
+- severity / threshold 表未来应读取 summary / candidate / priority 的结构字段。
+- 本轮不接管，不改 runtime。
+- future shadow severity 应先类似 `generatedFeedbackShadow`，不影响最终结果。
+- partial / active 接管必须另开任务。
+
+需要用户制作人确认的点：
+
+- 未来是否愿意在表格里填写 `scoreCap` / `scoreFloor` / `feedbackIntensity` 这类复杂字段。
+- 未来是否需要新增或修改事故类型 ID。
+- 未来何时填写具体阈值数字和 `scoreMultiplier` 数字。
+- 未来何时允许 severity 影响玩家最终 score / feedback / accident / `result.type`。
+- 未来哪些 golden expected 属于有意识调参更新。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

@@ -1440,6 +1440,56 @@ runtime 只应读取 bundled generated data，不读 CSV、Google Sheets、Drive
 - 禁止把 `priorityBand` 当 `severityLevel`，禁止把 `severityHint` 当最终扣分，禁止把 `scoreMultiplier` 藏在 summary / candidate builder。
 - 允许通用区间判断、枚举校验、stable ID 引用、generated data lookup、severity mapping、fallback 和 golden assertion helper。
 
+## v0.0.7.25 severity / threshold 样例表 schema
+
+v0.0.7.25 把 v0.0.7.24 的路线进一步细化为未来样例表 schema。它仍是 docs-only 设计，不创建表格，不创建 generated data，不实现 validator / build，不接 runtime。
+
+推荐表名：
+
+```text
+candidate_severity_rules
+```
+
+这个名字强调 severity / threshold 位于 candidate 调参层：输入来自 `summaryCandidates` / `candidatePriorityShell` 以及三层 summary 的结构字段，输出未来才可能成为 severity shadow / partial takeover 的依据。它不只服务事故，也可能服务 outcome、drinkType 或 feedback candidate。`accident_severity_rules` 太窄，`severity_threshold_rules` 太泛。
+
+表头草案：
+
+```text
+ruleId,enabled,candidateType,accidentTypeId,outcomeTypeId,drinkTypeId,feedbackTag,sourceLayer,sourceSummary,triggerMetric,triggerMin,triggerMax,priorityBand,severityHint,severityLevel,severityLabel,scoreMultiplier,scoreCap,scoreFloor,feedbackIntensity,requiresHumanReview,notes
+```
+
+核心边界：
+
+- `ruleId` 是 stable rule ID，可以表达某个 severity 区间，例如 `taste_acid_overload_high`；它不是事故类型。
+- `accidentTypeId` 是机制大类，例如 `taste_acid_overload`；不能写成 `taste_acid_overload_lemon`、`taste_acid_overload_hawthorn` 或 `taste_acid_overload_high`。
+- `severityLevel` 才是未来真正严重度层级；`priorityBand` 只是粗分组，`severityHint` 只是提示。
+- sampleId 只用于 golden / review pack / 测试定位，不能进入机制规则主键。
+- `notes` 是制作人 / 调参备注，不参与机制判断。
+- future validator 校验 `accidentTypeId` 合法性时，必须以 known stable ID registry / enum / schema 为准。
+- `includes("_high")`、`endsWith("_lemon")`、`includes("lemon")` 这类字符串检查最多只能作为 warning / lint hint，不能成为合法性判断本身。
+- 如果未来某个合法 stable ID 包含看起来像原料或 severity 的词，registry / enum / schema 应优先于字符串规则。
+
+错误模式必须被挡住：
+
+```text
+错误：accidentTypeId = taste_acid_overload_lemon
+正确：accidentTypeId = taste_acid_overload
+
+错误：accidentTypeId = taste_acid_overload_high
+正确：ruleId = taste_acid_overload_high, accidentTypeId = taste_acid_overload, severityLevel = high
+
+错误：ruleId = extreme_lemon_accident
+正确：ruleId = taste_acid_overload_high, sampleId 只留在 golden / review pack
+```
+
+future validator 是防错层，不是机制判断层。它可以检查 `ruleId` 唯一、stable ID 是否存在、枚举是否合法、数字区间是否合法、`accidentTypeId` 是否带了原料 / severity 后缀、是否误用 `zhCN` / displayName / sampleId、是否手改 generated data 绕过 source sheet；它不能为某个 sample、中文文案或具体原料写例外，也不能自行判断文案好坏或改分数。
+
+其中 `accidentTypeId` 的 error 判定应来自已登记机制 ID 集合，例如 `knownAccidentTypeIds`；不能把 `if (accidentTypeId.includes("_high")) error` 或 `if (accidentTypeId.includes("_lemon")) error` 写成新的字符串 if 地狱。原料 / severity 后缀检查可以提示人工复查，但不能替代 stable ID registry / enum / schema。
+
+future generated severity data 应由通过 validator 的 source sheet 生成，按 `ruleId` 建索引，并可按 `candidateType`、`accidentTypeId`、`sourceLayer`、`triggerMetric` 建分组。generated data 必须 deterministic，runtime 只读取随版本打包的本地 generated JSON / JS，不读 Google Sheets / CSV，也不手改 generated data。
+
+现有系统关系不变：legacy analyzer / judge 仍负责最终 score、accident、type 和 feedback；`summaryCandidates` 与 `candidatePriorityShell` 仍是只读观察层；future severity shadow 应先类似 `generatedFeedbackShadow`，不影响最终结果。任何 partial / active 接管都必须另开任务，并经过制作人审核和 golden expected 记录。
+
 ## 4. 三层 summary 原则
 
 未来应逐步形成：
