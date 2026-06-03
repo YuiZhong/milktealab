@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.6.8
+
+本轮新增 `flavorSummary` 只读地基。
+
+### 本轮新增 / 更新
+
+- 新增 `core/flavorSummaryEngine.js`
+  - 读取 `data/ingredientFlavorProfiles.js` 中的 `flavorProfile` 数据地基。
+  - 汇总并输出 `values` / `tags` / `risks` / `evidence` / `metadata` 结构。
+  - evidence 记录 `sourceLayer: "flavor"`、`sourceType: "ingredient"`、`sourceId`、`ratio` 和 `contribution`。
+- 更新 `core/tasteJudge.js`
+  - 调用 `buildFlavorSummary(context)`。
+  - 在最终 result 中暴露 `flavorSummary`。
+- 更新 `index.html`
+  - 页面版本号更新为 v0.0.6.8。
+  - 在 `core/tasteJudge.js` 前加载 `core/flavorSummaryEngine.js`。
+  - 加载 `data/ingredientFlavorProfiles.js`，并同步相关 cache query。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.8 本地实现状态。
+  - 记录当前未创建 `v0.0.6.8-candidate`。
+
+### 阶段边界
+
+- `flavorSummary` 只读输出，不接管最终判定。
+- 不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 不做 relation matrix。
+- 不做 candidate。
+- 不做 severity / `scoreMultiplier`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.7 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

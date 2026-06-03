@@ -6,6 +6,7 @@ const { createTasteContext } = window.MILK_TEA_LAB_TASTE_CONTEXT;
 const { analyzeDrinkStructure } = window.MILK_TEA_LAB_DRINK_STRUCTURE_ANALYZER;
 const tasteSummaryEngine = window.MILK_TEA_LAB_TASTE_SUMMARY_ENGINE;
 const textureSummaryEngine = window.MILK_TEA_LAB_TEXTURE_SUMMARY_ENGINE;
+const flavorSummaryEngine = window.MILK_TEA_LAB_FLAVOR_SUMMARY_ENGINE;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -87,6 +88,7 @@ function evaluateCup(cup) {
   context.structure = analyzeDrinkStructure(context);
   const tasteSummary = tasteSummaryEngine?.buildTasteSummary(context) || null;
   const textureSummary = textureSummaryEngine?.buildTextureSummary(context) || null;
+  const flavorSummary = flavorSummaryEngine?.buildFlavorSummary(context) || null;
 
   const attr = ingredientAnalyzer.analyzeBaseAttributes(context);
   const score = scoreEngine.createScoreState(54);
@@ -219,7 +221,7 @@ function evaluateCup(cup) {
   const feedbackTags = feedbackEngine.getFeedbackTags(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
   const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
 
-  const result = { attr, score: finalScore, type, audience, audienceIds, feedback, feedbackTags, tasteSummary, textureSummary };
+  const result = { attr, score: finalScore, type, audience, audienceIds, feedback, feedbackTags, tasteSummary, textureSummary, flavorSummary };
   if (primaryAccident?.accidentTypeId) {
     result.accidentTypeId = primaryAccident.accidentTypeId;
   }
