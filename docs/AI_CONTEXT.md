@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.7.19-candidate`
-- 最新 candidate commit：`0bca500949d645af146194576227757cad4c5eff`
-- `v0.0.7.19-candidate` 已冻结并推送，指向 `0bca500949d645af146194576227757cad4c5eff`；正式 tag `v0.0.7.19` 未创建。
-- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.19-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.7.20-candidate`
+- 最新 candidate commit：`6cbdb05d0184fb55f8f1c892c593e50213929d7a`
+- `v0.0.7.20-candidate` 已冻结并推送，指向 `6cbdb05d0184fb55f8f1c892c593e50213929d7a`；正式 tag `v0.0.7.20` 未创建。
+- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.20-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -85,12 +85,12 @@
 - `core/feedbackEngine.js` 已新增 generated feedback shadow 构建能力；`result.generatedFeedbackShadow` 只用于观察 / debug。
 - shadow mode 当前不影响玩家最终 feedback，不替换 `result.feedback`，不改变 `feedbackTags`。
 - 当前未做 partial / active 接管。
-- v0.0.7.20 已完成 `generatedFeedbackShadow` golden 结构断言，本地 commit 后以 `git log -1` 为准。
+- v0.0.7.20 已完成 `generatedFeedbackShadow` golden 结构断言。
 - golden runner 已支持 `generatedFeedbackShadow` expected，少量代表样本已补充 shadow expected。
 - shadow mode 当前仍不影响玩家最终 feedback。
 - 当前未做 partial / active 接管。
-- 当前未创建 `v0.0.7.20-candidate`。
-- 下一步可考虑：`v0.0.7.20-candidate` 冻结，或继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.21｜severity / threshold 表格化路线设计`。
+- 当前未推进 v0.0.7.21。
+- 下一步可考虑：继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.21｜severity / threshold 表格化路线设计`，或 `v0.0.7.21｜feedback shadow 评审包 / 对比输出设计`。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。

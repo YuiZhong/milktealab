@@ -1,5 +1,42 @@
 # 版本记录
 
+## docs: sync v0.0.7.20 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.20-candidate`。
+  - 记录 candidate 指向 `6cbdb05d0184fb55f8f1c892c593e50213929d7a`。
+  - 记录 `v0.0.7.20-candidate` 已冻结并推送。
+  - 记录 v0.0.7.20 已完成 `generatedFeedbackShadow` golden 结构断言。
+  - 记录当前未推进 v0.0.7.21。
+
+### 阶段边界
+
+- `v0.0.7.20-candidate` 已冻结并推送。
+- candidate 指向 `6cbdb05d0184fb55f8f1c892c593e50213929d7a`。
+- v0.0.7.20 已新增 `generatedFeedbackShadow` golden 结构断言。
+- 少量既有 golden samples 已补 shadow expected。
+- 本轮只保护 shadow 输出结构，不改 runtime。
+- shadow mode 当前仍不影响玩家最终 feedback。
+- 未改 final feedback / score / type / accident / feedbackTags。
+- 未锁死具体中文文案或文案选择算法。
+- 未改 runtime / core / generated data / content_sheets / index.html。
+- shadow check / browser loading check / adapter check / golden 均通过。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.20`。
+- 当前未推进 v0.0.7.21。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- Shadow check 通过。
+- Generated browser loading check 通过。
+- Adapter check 通过。
+- `git diff --check` 通过。
+
 ## v0.0.7.20
 
 本轮新增 `generatedFeedbackShadow` golden 结构断言能力。
