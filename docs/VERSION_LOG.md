@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.6.9 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.9-candidate`。
+  - 记录 candidate 指向 `86f3c357c234accd5a5b3c1545eb327692b4e74d`。
+  - 记录 `v0.0.6.9-candidate` 已冻结并推送。
+  - 记录 v0.0.6.9 已完成 `flavorSummary` golden 结构断言。
+  - 记录当前未推进 v0.0.6.10。
+
+### 阶段边界
+
+- runner 支持 `flavorSummary` expected。
+- 少量 golden samples 已补 `flavorSummary` 结构 expected。
+- 未改 runtime、core、index.html 或 `ingredientFlavorProfiles`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 未做 relation matrix / candidate / severity / `scoreMultiplier`。
+- 未创建正式 tag `v0.0.6.9`。
+- 未推进 v0.0.6.10。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.9
 
 本轮新增 `flavorSummary` golden 结构断言能力。
