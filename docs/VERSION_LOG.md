@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.6.10 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.10-candidate`。
+  - 记录 candidate 指向 `b8ed079b89e90b282a69a96559ca61f5fc53e7f0`。
+  - 记录 `v0.0.6.10-candidate` 已冻结并推送。
+  - 记录 v0.0.6.10 已完成三层 summary 中段复盘。
+  - 记录当前未推进 v0.0.6.11。
+
+### 阶段边界
+
+- `tasteSummary` / `textureSummary` / `flavorSummary` 均已接入 result，且均有 golden 结构保护。
+- summary 仍是只读中间理解层，不接管最终判定。
+- 已记录下一阶段可考虑 summary -> candidate docs / schema 或只读地基。
+- 未改 runtime、data、scripts、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 未创建正式 tag `v0.0.6.10`。
+- 未推进 v0.0.6.11。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.10
 
 本轮为三层 summary 中段复盘。
