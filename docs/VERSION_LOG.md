@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.7.1
+
+本轮为表格化内容管线 docs / schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 v0.0.7.x 调参阶段为什么需要内容管线。
+  - 明确 Excel / Google Sheets / CSV / JSON 是人类编辑源，generated JSON / JS 是游戏 runtime 读取源。
+  - 明确 stable ID / display text 分离原则继续适用，表格主键不得使用中文 displayName 或显示文案。
+  - 明确校验层是必要安全网，表格化管线不能绕过 golden samples。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充适合表格化的内容范围：feedback 文案、tags、severity、threshold、profile 可调字段、golden expected 和 localization。
+  - 设计 future CSV / Excel / Google Sheets / JSON 工作流边界。
+  - 补充 future 目录规划示例，但本轮不创建目录或文件。
+  - 补充 `feedback_texts.csv`、`severity_rules.csv`、`candidate_thresholds.csv`、`localization_texts.csv` 代表 schema 示例。
+  - 记录初期优先级：feedback 文案 / `feedbackTags` 优先，其次 severity / threshold，再到 profile 可调字段和多语言文案。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.1 已完成表格化内容管线 docs / schema。
+  - 记录当前未实现表格化内容管线，未新增 CSV / JSON / build script，未创建 `v0.0.7.1-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / schema。
+- 本轮不新增 CSV / Excel / JSON 文件。
+- 本轮不新增 generated data，不新增 build script。
+- 本轮不实现导入，不改 runtime，不改 data，不改 runner，不改 golden expected。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback 或 `result.type`。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.7.0 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

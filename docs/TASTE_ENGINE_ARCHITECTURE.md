@@ -278,6 +278,76 @@ v0.0.7.x 不应再做：
 
 初期表格化优先级宜从低风险、高收益内容开始，例如 feedback 文案 / `feedbackTags` 表、candidate 阈值 / `severityHint` 表、profile 可调字段表或 golden expected 审计表。导入前必须校验 stable ID 是否存在、是否误用 `displayName` 当主键、数值是否越界、必填字段是否缺失、枚举值是否已定义、重复 ID 是否存在，以及变更是否影响 golden samples。
 
+### v0.0.7.1 表格化内容管线 docs / schema
+
+v0.0.7.x 进入调参阶段后，内容和数值会从“少量代码维护”变成“持续编辑、审阅、校验和回归”的工作。用户不是程序员，后续不应长期直接编辑 JS 来改反馈文案、标签、阈值、profile 数值或 golden expected。表格化内容管线的目标，是让人类编辑源、校验层和 runtime 数据源分离。
+
+建议长期管线：
+
+```text
+Excel / Google Sheets / CSV / JSON = 人类编辑源
+校验脚本 = 防错层
+generated JSON / JS = 游戏 runtime 读取源
+```
+
+正式 runtime 不建议直接读取 `.xlsx`。原因是 xlsx 对浏览器 runtime 太重，不利于版本管理，不利于自动化校验，也不利于未来跨平台迁移。更稳的方向是把表格作为编辑源，经校验后生成 runtime 可读的 JSON 或 JS。
+
+stable ID 仍是所有表格主键。表格可以包含 `displayName`、中文文案或多语言列帮助人阅读，但机制判断和引用必须优先使用 stable ID，例如：
+
+- `ingredientId`
+- `feedbackTag`
+- `accidentTypeId`
+- `drinkTypeId`
+- `outcomeTypeId`
+- `candidateId`
+- `ruleFamilyId`
+
+禁止把中文 `displayName`、反馈文案、饮品显示名或 UI category 当作系统主键。显示文案可以改，系统身份不能跟着漂移。
+
+校验层是表格化管线的必要安全网。导入 / 构建前至少应检查：
+
+- stable ID 是否存在，是否出现未知 ID。
+- 是否重复 ID。
+- 是否缺必填字段。
+- 枚举值是否合法。
+- 数值是否越界。
+- 是否把 `displayName` / 中文名误当主键。
+- 是否改了不该改的 generated 文件。
+- 生成结果是否破坏 runtime 可读结构。
+- 变更是否影响 golden samples，以及是否需要有意识更新 golden expected。
+
+表格化管线不能绕过 golden samples。凡是会影响评分、事故、饮品类型、feedback、candidate、severity 或 expected 的内容变更，都应在构建后跑 golden samples，并在必要时说明 expected 调整理由。
+
+未来可以规划类似目录，但 v0.0.7.1 不创建这些文件：
+
+```text
+content_sheets/
+  feedback_texts.csv
+  ingredient_flavor_profiles.csv
+  severity_rules.csv
+  candidate_thresholds.csv
+  localization_texts.csv
+
+scripts/content/
+  validateContentSheets.js
+  buildContentData.js
+
+data/generated/
+  feedbackTexts.generated.js
+  ingredientFlavorProfiles.generated.js
+  severityRules.generated.js
+  candidateThresholds.generated.js
+```
+
+v0.0.7.x 初期优先级建议：
+
+1. feedback 文案 / `feedbackTags`：最适合非程序员编辑，风险相对低，能明显改善游戏表达，不直接改评分。
+2. severity / threshold 配置：属于 v0.0.7.x 调参核心，但风险较高，必须先有校验和 golden 保护。
+3. profile 可调字段：`tasteProfile` / `textureProfile` / `flavorProfile` 影响面较大，适合在表格管线成熟后迁移。
+4. 多语言文案：未来重要，但当前不急，应建立在 stable ID + localization key 基础上。
+
+v0.0.7.1 只设计管线边界、未来目录、校验原则和代表 schema，不新增 CSV / Excel / JSON 文件，不新增 generated data，不新增 build script，不改 runtime，不改 data，不调参数，也不改 golden expected。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。
