@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.6.17-candidate`
-- 最新 candidate commit：`c6c369c9f3a95ffad01c3a85869b4b4cc7a7f67a`
-- `v0.0.6.17-candidate` 已冻结并推送，指向 `c6c369c9f3a95ffad01c3a85869b4b4cc7a7f67a`；正式 tag `v0.0.6.17` 未创建。
-- 最新 main：本轮 v0.0.6.18 docs commit 是 `v0.0.6.17-candidate` 之后的 final 收口审计 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.6.18-candidate`
+- 最新 candidate commit：`dfac8e70ba4880e6f49eae3bcb1ff45a32b1bd35`
+- `v0.0.6.18-candidate` 已冻结并推送，指向 `dfac8e70ba4880e6f49eae3bcb1ff45a32b1bd35`；正式 tag `v0.0.6.18` 未创建。
+- 最新 main：本轮 docs commit 是 `v0.0.6.18-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -167,9 +167,10 @@
 - final 审计结论：P0：无。可以进入 v0.0.6.x final candidate 冻结流程。
 - final 审计结论：P1：无。进入 v0.0.7.x 前不需要再补系统地基。
 - P2 是可留到 v0.0.7.x 或更后的方向，包括更丰富 golden 覆盖、flavor relation matrix / candidate relation matrix、表格化内容管线、更多 candidate 类型（例如 `audience` / `operation` / `customerPreference`）、更细的 profile / tag / metadata 扩展、多语言 / 内容管理管线，以及更完整的调参、内容管理和数据审计。
-- v0.0.6.x 系统地基可以进入 final candidate 冻结；v0.0.7.x 可开始以参数、标签、阈值、severity、`scoreMultiplier`、golden expected 调优和表格化内容管线为主。
-- 当前未创建 `v0.0.6.18-candidate`，未创建正式 tag `v0.0.6.18`。
-- 下一步可考虑 `v0.0.6.18-candidate` 冻结、v0.0.6.x final candidate 冻结，或在发现新 P0 / P1 时先补齐审计问题。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.6.x 系统地基可以进入 final candidate / 收口流程；v0.0.7.x 可开始以参数、标签、阈值、severity、`scoreMultiplier`、golden expected 调优和表格化内容管线为主。
+- 当前未推进 v0.0.7.x。
+- 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
+- 下一步可考虑 v0.0.6.x final candidate 冻结、进入 v0.0.7.x 前的调参路线设计，或先做 repo 路径体检 / 标准化 housekeeping。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
