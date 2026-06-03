@@ -985,6 +985,116 @@ v0.0.7.4 新增 `content_sheets/examples/feedback_texts.sample.csv` 与 `content
 
 后续可考虑单独设计 validate feedback sheet 脚本，检查 `textId` 去重、`feedbackTag` 必填、`scene` / `enabled` 枚举、分数区间、已知 stable ID、启用文案非空，以及禁止把 `zhCN` / 显示文案当机制主键。本轮不新增 validate script，不新增 build script，不新增 runtime generated data。
 
+#### v0.0.7.5 validate feedback sheet 脚本设计
+
+v0.0.7.5 只设计未来 feedback sheet validator 的规则边界，不实现脚本，不新增 generated data，不改 runtime。validator 的目标是确保 feedback 表格能被机器安全读取，也能让用户在 Excel / Google Sheets 中编辑后不破坏结构；它是内容管线安全层，不是味觉判定层。
+
+未来 validator 可能读取：
+
+```text
+content_sheets/examples/feedback_texts.sample.csv
+content_sheets/feedback_texts.csv
+```
+
+目录边界建议：
+
+```text
+content_sheets/examples/ = 样例，不接 runtime
+content_sheets/ = 未来正式人类编辑源
+data/generated/ = 未来 generated runtime 数据
+```
+
+本轮不创建 `content_sheets/feedback_texts.csv`，不新增 validate script，不新增 build script。validator 未来只报告 error / warning / info，不自动修改源 CSV、不自动改文案、不自动调参数，也不绕过 golden samples。
+
+文件编码 / 格式校验：
+
+- CSV 面向 Excel 直接打开时必须是 UTF-8 with BOM。
+- CSV 必须能被标准 CSV parser 正确读取。
+- 表头必须完整；字段顺序可以建议固定，但 validator 不应过度依赖顺序。
+- 不允许列串位、未闭合引号，或因为逗号 / 双引号 / 换行导致文案破列。
+- 行尾和 trailing whitespace 不应导致 `git diff --check` 失败。
+
+主键与唯一性校验：
+
+- `textId` 必填且唯一。
+- `textId` 必须是 stable ID，不可使用中文或显示文案。
+- `feedbackTag` 必填。
+- `zhCN` / `notes` 不是主键。
+- 不允许以 `displayName`、中文文案或反馈句作为机制身份。
+
+枚举字段建议集中登记，不散落在脚本 if 里：
+
+```text
+scene: normal / accident / followup / fallback
+tone: classic / teasing / cute / premium / warning / explanatory / weird
+enabled: TRUE / FALSE
+```
+
+枚举可以后续扩展，但应通过集中配置或 schema 扩展，而不是在 validator 内写具体内容特例。
+
+分数字段校验：
+
+- `minScore` / `maxScore` 可以为空。
+- 如果填写，必须是 0-100 的数字。
+- 如果两个都填写，必须 `minScore <= maxScore`。
+- 禁用行可以允许空 score。
+- validator 只校验格式，不调分数逻辑。
+
+stable ID 引用校验：
+
+- `accidentTypeId`、`drinkTypeId`、`outcomeTypeId`、`audienceId` 若填写，未来应校验是否属于已知 ID 集合。
+- ID 来源可来自 golden samples、规则 docs、registry 或后续统一 ID registry；本轮只设计边界，不实现读取逻辑。
+
+文案字段校验：
+
+- `zhCN` 在 `enabled=TRUE` 时不可为空。
+- 禁用行可以允许空文案，用于草稿 / 占位。
+- 文案不应包含破坏 CSV 的未转义换行 / 引号。
+- 长文案适合在人类编辑源中维护，runtime 使用后续 generated data。
+- 文案重复不一定是错误，但可以作为 warning。
+
+内容管线 guardrail：
+
+- validator 不根据某个具体中文文案做机制判断。
+- validator 不为某条样本写例外。
+- validator 不为某个具体原料组合写 if。
+- validator 不修改源 CSV，不自动改文案，不自动调参数。
+- validator 不绕过 golden samples。
+
+错误等级：
+
+- `error`：必须修复，否则不能 build / candidate。例如 CSV 乱码 / 无 BOM、解析失败、缺必填字段、`textId` 重复、`enabled` 非法、score 越界、ID 引用未知、启用行 `zhCN` 为空。
+- `warning`：可人工审核，不一定阻塞。例如文案重复、某个 `feedbackTag` 文案数量过少、optional ID 为空、`notes` 为空、`tone` 过于笼统、分数区间很宽、可能存在风格不一致。
+- `info`：仅报告。例如总行数、启用行数、禁用行数、tag 覆盖、scene 覆盖、tone 覆盖。
+
+未来 CLI 可以先保持简单：
+
+```bash
+node scripts/content/validateFeedbackSheet.js content_sheets/feedback_texts.csv
+```
+
+输出建议：
+
+```text
+Feedback sheet validation
+Rows: 120
+Enabled: 104
+Disabled: 16
+Errors: 0
+Warnings: 5
+```
+
+未来可考虑 `--json` / `--strict`，但不在本轮过度设计。
+
+validate / build / runtime 边界：
+
+- validate 只负责校验和报告。
+- build 才负责生成 runtime data。
+- validate 不写文件，除非未来明确增加 fix mode。
+- 本阶段不实现 build。
+- runtime 不读取 sample CSV。
+- generated data 必须来自已通过 validate 的源。
+
 代表 schema 示例：
 
 ```text

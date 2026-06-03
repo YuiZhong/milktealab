@@ -418,6 +418,27 @@ CSV 样例应使用 UTF-8 with BOM，确保 Excel 直接打开时中文可读。
 
 sample 也不能绕过 validator 和 golden samples。后续如果从表格生成 runtime 数据，必须先校验 stable ID、枚举、分数区间、启用文案、重复 `textId` 和文案主键误用，再运行 golden samples；如果影响反馈选择、反馈文案、评分、事故、饮品类型、`result.type` 或 expected，必须明确说明原因。
 
+### v0.0.7.5 validate feedback sheet 脚本设计
+
+validator 是内容管线安全层，不是 runtime 判定层。它负责检查 feedback sheet 是否可读、字段是否完整、stable ID 是否可靠、枚举和分数是否合规，以及中文 / 多语言文案是否适合作为人类编辑源；它不负责决定一杯饮品该得到什么 feedback。
+
+未来分层应保持清楚：
+
+```text
+validate = 校验源表，只报告 error / warning / info
+build = 从已通过 validate 的源表生成 runtime data
+runtime = 读取 generated data 或现有兼容数据，不直接读取 sample CSV
+```
+
+validator 不承载机制判断，不允许写具体内容 if：
+
+- 不根据某个 `zhCN` / 中文片段 / `displayName` 做系统判断。
+- 不为某个 golden sample、具体原料组合或具体审美结论写例外。
+- 不自动修改源 CSV，不自动改文案，不自动调参数。
+- 不绕过 golden samples 或表格化内容管线。
+
+未来 `validateFeedbackSheet` 可以检查 UTF-8 with BOM、CSV parser 可读性、完整表头、`textId` 唯一、`feedbackTag` 必填、`scene` / `tone` / `enabled` 枚举、score 范围、stable ID 引用、启用行文案非空、重复文案 warning、tag 覆盖和启用 / 禁用行统计。本轮只设计这些边界，不创建 `scripts/content/validateFeedbackSheet.js`，不新增 build script，不新增 generated data。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

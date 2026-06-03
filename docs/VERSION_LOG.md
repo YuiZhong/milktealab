@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.5
+
+本轮为 validate feedback sheet 脚本设计。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充未来 feedback sheet validator 的输入 / 输出设计。
+  - 设计文件编码、CSV 格式、主键唯一性、枚举、分数、stable ID 引用和文案字段校验规则。
+  - 设计 error / warning / info 等级。
+  - 明确人类编辑源、validate、build、generated data 和 runtime 的边界。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 明确 validator 是内容管线安全层，不是 runtime 判定层。
+  - 明确 validator 不承载机制判断，不允许写具体内容 if。
+  - 明确 validate / build / runtime 三层边界。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.5 已完成 validate feedback sheet 脚本设计。
+  - 记录当前仍未实现 validate script / build script / generated data。
+
+### 阶段边界
+
+- 本轮只做 docs / schema 设计。
+- 本轮不改 runtime，不改 data，不改 runner，不改 golden samples。
+- 本轮不改 `content_sheets` 样例，不新增 / 修改 CSV 或 JSON。
+- 本轮不新增 validate script / build script / generated data。
+- 本轮不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.7.4 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
