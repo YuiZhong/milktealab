@@ -1,5 +1,34 @@
 # 版本记录
 
+## docs: sync v0.0.7.2 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.2-candidate`。
+  - 记录 candidate 指向 `d75df9c530f261de19e8c67eb3811ee85b663926`。
+  - 记录 `v0.0.7.2-candidate` 已冻结并推送。
+  - 记录 v0.0.7.2 已完成 feedback 文案表格化 schema docs。
+  - 记录当前未推进 v0.0.7.3。
+
+### 阶段边界
+
+- 已明确用户后续不应长期直接编辑 JS。
+- 已明确 stable ID / `feedbackTag` / `textId` 是主路径。
+- 已明确 `zhCN` / 文案不是机制主键。
+- 本轮未新增 CSV / JSON / generated data / validate script / build script。
+- 未改 runtime、data、scripts、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.2`。
+- 当前未推进 v0.0.7.3。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.7.2
 
 本轮为 feedback 文案表格化 schema docs。
