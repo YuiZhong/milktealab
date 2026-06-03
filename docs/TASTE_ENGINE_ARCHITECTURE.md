@@ -1498,6 +1498,75 @@ v0.0.7.26 只新增 `content_sheets/examples/candidate_severity_rules.sample.csv
 
 后续如果要从样例表进入可运行内容管线，必须先依次补上 validator / build / generated data validator / shadow output / review pack，再考虑 partial takeover。任何 partial / active 接管都必须另开任务，且要记录制作人审核和 golden expected 变化理由。
 
+## v0.0.7.27 AI 生成 ID / 机制命名 guardrail
+
+ID 命名是架构边界的一部分，不只是字符串风格。AI / Codex 批量生成的 ID 不能因为“看起来像 stable ID”就默认正确；英文 ID 不等于好设计。任何进入 docs、sample sheet、generated data、golden 或 runtime 的 ID，都可能被未来对话当成事实来源，因此新增或沿用机制相关 ID 前必须先做层级确认和语义审计。
+
+机制层 ID 与测试、展示、规则行和候选层必须分开：
+
+- `ingredientId` 标识原料，例如 `fruit_lemon`；它不是事故机制。
+- `accidentTypeId` 标识事故机制大类，例如 `taste_acid_overload`；不能按原料拆成 `taste_acid_overload_lemon`，也不能带 severity 后缀如 `taste_acid_overload_high`。
+- `outcomeTypeId` 标识结果 / outcome 机制，例如 `taste_conflict`；名字里有 taste 不代表它一定来自 `tasteSummary`。
+- `drinkTypeId` 标识饮品类型，例如 `classic_milk_tea`；不等于玩家自定义饮品名或 recipe ID。
+- `feedbackTag` 只用于文案选择，必须来自已登记 / 已确认的文案池、registry 或 generated data；summary 风险名和旧 tag 不能无审计地塞进新机制。
+- `textId` 只标识单条文案，不能代表机制。
+- `sampleId` 只用于 golden / review pack / 测试定位，不能进入机制规则主键。
+- `ruleId` 标识规则行，可以表达 draft / high / low 等规则语义；它不是 `accidentTypeId`。
+- `candidateId` 标识 candidate 层候选；candidate 可以引用事故 / outcome / drinkType ID，但自身不是最终结果。
+- `priorityBand` 是粗调度分组，`severityHint` 是候选提示，`severityLevel` 才是未来真实严重度层级。
+- `displayName`、`zhCN` 和 `notes` 是人类可读文本，不是机制主键。
+
+不要仅根据 ID 字符串前缀推断 `sourceLayer`。历史 ID 可能包含原料或内容语义，例如 `dairy_fat_overload`，但如果规则行写明 `sourceLayer=texture`、`sourceSummary=textureSummary`、`triggerMetric=fatLoad`，就应按 texture / drinkability 方向理解；ID 名称不能覆盖 `sourceLayer` / `sourceSummary` / `triggerMetric`。
+
+sample sheet 虽然不接 runtime，也会影响未来 AI 的理解。草案行应默认 disabled / draft；未注册的 tag 不应写进稳定字段；未来可能值应写入 `notes`，而不是填进 stable ID 字段。使用旧系统已有 tag 时，也必须确认语义适合当前机制场景。
+
+典型错误和正确边界：
+
+```text
+错误：accidentTypeId = taste_acid_overload_lemon
+正确：accidentTypeId = taste_acid_overload，lemon 只是 evidence / recipe source
+
+错误：accidentTypeId = taste_acid_overload_high
+正确：ruleId = taste_acid_overload_high, accidentTypeId = taste_acid_overload, severityLevel = high
+
+错误：ruleId = extreme_lemon_accident
+正确：sampleId = extreme_lemon_accident, accidentTypeId = taste_acid_overload
+
+错误：feedbackTag = aroma_pressure
+正确：feedbackTag 为空，notes 说明未来如需使用必须先注册 / 审计
+
+错误：把 bubble_conflict 默认绑定 generic flavor identity conflict
+正确：feedbackTag 为空，notes 说明需随 shadow data / registry 另行确认
+```
+
+future validator 不能靠字符串猜合法性。`includes("_high")`、`endsWith("_lemon")` 或 `includes("lemon")` 这类规则最多只能作为 warning / lint hint；正式 error 应以 known stable ID registry / enum / schema 为准。这不是一句口号；validator 实现前必须明确 known stable ID 的来源，例如现有 data / rules 中已登记的 stable ID、统一 ID registry、generated schema，或明确维护的 enum / allowed values。如果当时没有可用的 registry / enum / schema，应先做 registry / enum / schema docs / schema 设计任务，不能直接写猜测式 validator。
+
+错误方向还包括从字符串模式反推 known ID 集合：
+
+```js
+const knownAccidentTypeIds = inferFromStringPatterns();
+```
+
+正确方向是：
+
+```text
+knownAccidentTypeIds must come from an explicit registry / enum / schema / existing stable data source.
+if accidentTypeId not in knownAccidentTypeIds -> error
+if no known stable ID source exists -> stop and design the ID registry / enum / schema first
+```
+
+如果某个合法 stable ID 看起来像带原料或 severity 词，也应以 registry 为准，不能被字符串规则误杀。
+
+后续 validate candidate severity sheet 开工前，必须检查 known stable ID source 是否已经存在；如果不存在，前置任务应是 registry / enum / schema 设计，而不是实现 validator。
+
+在正式调参、severity partial 接管或 generated data 进入 active 路线前，需要安排一刀系统性审计：
+
+```text
+v0.0.7.x｜AI 生成 ID 与机制命名审计
+```
+
+审计对象包括 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric`，以及 profile / tag / generated sample 中的 draft ID。审计目标是防止按原料拆机制、sampleId 混进机制主键、severity 后缀混进 `accidentTypeId`、显示文案变主键、草案 tag 被当正式 tag、旧 tag 语义误导新机制，以及 `ruleId` / `candidateId` / `accidentTypeId` 层级混用。
+
 ## 4. 三层 summary 原则
 
 未来应逐步形成：

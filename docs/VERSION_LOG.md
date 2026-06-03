@@ -1,5 +1,46 @@
 # 版本记录
 
+## v0.0.7.27
+
+本轮为 AI 生成 ID / 机制命名 guardrail。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 AI / Codex 生成 ID 不能因为“看起来像 stable ID”就默认正确。
+  - 明确 ID 层级分类：`ingredientId`、`accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer` / `sourceSummary` / `triggerMetric`、draft / sample 后缀和 display 文本。
+  - 明确草案 ID / sample sheet guardrail：sample CSV / JSON 虽不接 runtime，也不能随便填稳定字段；未注册 tag 应放入 notes，不应写入 stable 字段。
+  - 补充新增 ID 前检查清单、错误示例 / 正确示例，以及 future validator / registry guardrail。
+  - 明确 validator 实现前必须先明确 known stable ID 的 source of truth；如果没有 registry / enum / schema，应先设计 ID source，不应直接实现猜测式 validator。
+  - 明确不能仅根据 ID 字符串前缀推断 `sourceLayer`；历史 ID 名称不能覆盖 `sourceLayer` / `sourceSummary` / `triggerMetric`。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 ID 命名在系统架构中的位置。
+  - 明确机制层 ID 与测试样本、显示文案、规则行、candidate 和 severity 档位的边界。
+  - 明确 future validator 不能只靠字符串后缀 / substring 猜合法性，应以 known stable ID registry / enum / schema 为准。
+  - 明确不能通过 `inferFromStringPatterns()` 之类字符串模式反推 known ID 集合；validate candidate severity sheet 开工前必须检查 known stable ID source 是否存在。
+  - 记录 future `v0.0.7.x｜AI 生成 ID 与机制命名审计` 应在正式调参 / partial 接管前安排。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.27 已完成 AI 生成 ID / 机制命名 guardrail。
+  - 记录当前未重命名现有 ID，未做全量 ID 审计，未新增 registry / validator。
+
+### 阶段边界
+
+- 本轮只做 docs / guardrail。
+- 不重命名现有 ID。
+- 不做全量 ID 审计。
+- 不新增 registry。
+- 不实现 validator。
+- 不定义新的 ID source of truth，只记录 validator 前置条件。
+- 不新增表格 / JSON / generated data。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports 或 `index.html`。
+- 不改玩家最终 score、feedback、accident、type 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.26 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
