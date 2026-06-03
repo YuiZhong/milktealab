@@ -1095,6 +1095,34 @@ validate / build / runtime 边界：
 - runtime 不读取 sample CSV。
 - generated data 必须来自已通过 validate 的源。
 
+#### v0.0.7.6 validate feedback sheet 第一版脚本
+
+v0.0.7.6 已实现第一版 `scripts/content/validateFeedbackSheet.js`，当前用于校验 `content_sheets/examples/feedback_texts.sample.csv`。它仍是内容管线安全层，不是 runtime 判定层；本轮不接 runtime，不生成 `data/generated`，不迁移现有 `data/feedbackTexts.js`，也不自动修改 CSV 或文案。
+
+当前 CLI：
+
+```bash
+node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv
+```
+
+当前 error 校验包括：
+
+- CSV 必须是 UTF-8 with BOM。
+- CSV 必须能被通用 parser 读取，不能有未闭合引号、列数错位或破坏结构的逗号 / 引号 / 换行。
+- 表头必须包含 `textId`、`feedbackTag`、`scene`、`zhCN`、`tone`、`minScore`、`maxScore`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId`、`audienceId`、`enabled`、`notes`。
+- `textId` / `feedbackTag` / `scene` / `tone` / `enabled` 必填；启用行 `zhCN` 必填。
+- `textId` 必须唯一，且 `textId` / `feedbackTag` 不能是中文文案或显示文本。
+- `scene`、`tone`、`enabled` 必须属于当前枚举。
+- `minScore` / `maxScore` 若填写，必须是 0-100；两者都填写时 `minScore <= maxScore`。
+- `accidentTypeId` / `drinkTypeId` / `outcomeTypeId` / `audienceId` 若填写，先校验为非中文、无空格的 stable ID 格式。
+
+当前 warning / info 包括：
+
+- warning：禁用行 `zhCN` 为空、`notes` 为空、某个 `feedbackTag` 只有 1 条、分数区间较宽、`tone` 较笼统、`scene=accident` 但 optional ID 全空。
+- info：总行数、启用行数、禁用行数、`feedbackTag` 覆盖、`scene` 覆盖、`tone` 覆盖。
+
+warning 不阻塞第一版样例通过；error 必须修复后才能进入后续 build / candidate。validator 不根据具体 `zhCN`、某个 golden sample、某个原料组合或某条文案写例外，也不把 `zhCN` / `notes` 当主键。
+
 代表 schema 示例：
 
 ```text

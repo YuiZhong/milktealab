@@ -1,5 +1,43 @@
 # 版本记录
 
+## v0.0.7.6
+
+本轮实现 validate feedback sheet 第一版脚本。
+
+### 本轮新增 / 更新
+
+- 新增 `scripts/content/validateFeedbackSheet.js`
+  - 支持 `node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv`。
+  - 检查 UTF-8 with BOM、CSV parser 可读性、完整表头、列数错位、未闭合引号、必填字段、`textId` 唯一性、启用行 `zhCN`、枚举、score 范围和 optional stable ID 基础格式。
+  - 输出 error / warning / info；error 非 0 退出，warning 默认不阻塞。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 记录 validator 第一版已实现。
+  - 记录当前支持的 error / warning / info。
+  - 记录当前只校验 sample CSV / 显式传入 CSV。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 明确 validator 是内容管线安全层，不承载机制判断。
+  - 明确 validator 不自动修文案、不调参数、不生成 runtime data。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.6 已完成 validate feedback sheet 第一版脚本。
+  - 记录当前仍未实现 build script / generated data / runtime 导入。
+
+### 阶段边界
+
+- 本轮不改 runtime，不改 data，不改 runner，不改 golden samples。
+- 本轮不改 `content_sheets/examples/feedback_texts.sample.csv` 或 `content_sheets/examples/feedback_texts.sample.json`。
+- 本轮不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+- 本轮不新增 build script，不新增 generated data。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- sample CSV validation 通过：Errors 0，warning 仅作人工审核提醒，不阻塞。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/validateFeedbackSheet.js` 通过。
+- `node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.7.5 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
