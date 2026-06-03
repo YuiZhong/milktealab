@@ -152,6 +152,28 @@ candidate 应携带足够 evidence 和来源信息，例如：
 
 candidate 层尤其不能变成新的 if 地狱。错误方向是把 `if 榴莲 + 咖啡`、`if 奥利奥 > 30`、`if 某 tag + 某 tag` 挪到 candidate engine 里继续堆内容判断。正确方向是：summary 提供结构化指标，规则表 / relation matrix / 阈值表读取这些指标并产出 candidate，调度层只负责排序、冲突处理和最终选择。
 
+### v0.0.6.14 candidate priority shell 架构边界
+
+candidate priority shell 位于 `summaryCandidates` 和最终 result 调度之间。它的职责是把已经产出的 candidate 按粗粒度优先级组织成只读观察结构，帮助后续调试、golden 断言和调度设计；它不是最终判定层，不直接改写 `score`、事故、饮品类型、feedback、`result.type`、`accidentTypeId`、`drinkTypeId` 或 `outcomeTypeId`。
+
+v0.0.6.14 只定义 docs / schema，不实现 runtime，不新增 priority engine，不接管 `tasteJudge`，也不改变既有 `summaryCandidateEngine` 的输出。当前最终结果仍以现有 legacy analyzer / judge 链路为准，直到后续有明确任务把 priority shell 接入只读输出，再通过单独任务评估是否接管最终调度。
+
+priority shell 应继续坚持反 if 地狱原则：
+
+- 不在 priority shell 里写具体组合 if，例如 `榴莲 + 咖啡`、`奥利奥 > 30`、`某 tag + 某 tag`。
+- 不用玩家可见文案、中文 displayName 或 UI category 作为调度主键。
+- 不让正向组合候选洗白高优先级事故候选。
+- 不用 `priorityBand` 直接决定最终 severity 或扣分。
+- 不把 `severityHint` 当成 `severityLevel`、`scoreMultiplier` 或最终事故严重度。
+
+`priorityBand` 与 `severityHint` 的边界必须清楚：
+
+- `priorityBand` 是候选进入后续调度时的粗分组，例如 `hard_physical`、`texture_drinkability`、`taste_overload`、`flavor_identity`、`normal_conflict`、`positive_synergy`、`type_classification`、`feedback_hint`。它回答“这类候选大概应该在哪个调度区域被看见”，不回答“扣多少分”。
+- `severityHint` 是后续 severity 系统可参考的语义提示，例如 `info`、`low`、`medium`、`high` 或 `critical`。它不是最终 `severityLevel`，也不能在 v0.0.6.x 直接推出 `scoreMultiplier`。
+- 事故优先级不等于事故严重度。一个候选可以优先被检查，但真正 severity、分数乘区和反馈强度应留到明确调参阶段。
+
+v0.0.6.x 可以准备 priority shell 的 schema、只读输出和结构断言。v0.0.7.x 再集中处理参数权重、阈值校准、`severityLevel`、`scoreMultiplier`、候选排序策略和 golden expected 有意识更新。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

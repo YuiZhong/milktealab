@@ -590,6 +590,65 @@ priority / severity 边界：
 
 candidate 输出必须保留 evidence，方便后续 debug、调参、反馈解释和 golden 断言。如果没有 evidence，candidate 只会变成新的黑箱 if。
 
+#### v0.0.6.14 candidate priority shell 通用 schema
+
+v0.0.6.14 只定义 priority shell 的 docs / schema，不实现 runtime。priority shell 是 `summaryCandidates` 之后、最终 result 之前的只读中间层，用来观察 candidate 的粗分组和潜在调度顺序。它不接管评分、事故、饮品类型、feedback、`result.type` 或任何最终 ID。
+
+第一版 schema 可以采用：
+
+```js
+{
+  orderedCandidates: [],
+  byPriorityBand: {
+    hard_physical: [],
+    texture_drinkability: [],
+    taste_overload: [],
+    flavor_identity: [],
+    normal_conflict: [],
+    positive_synergy: [],
+    type_classification: [],
+    feedback_hint: []
+  },
+  topCandidates: {
+    accident: null,
+    outcome: null,
+    drinkType: null,
+    feedback: []
+  },
+  metadata: {
+    schemaVersion: "candidatePriorityShell.v0.0.6.14",
+    readonly: true,
+    affectsFinalResult: false,
+    weightsEnabled: false,
+    source: "summaryCandidates"
+  }
+}
+```
+
+字段边界：
+
+- `orderedCandidates`：候选的只读观察顺序。它可以帮助后续调试“哪个候选更靠前”，但不是最终 dispatch 列表，也不直接决定结果。
+- `byPriorityBand`：按粗粒度 priority band 分组，方便检查硬物理事故、饮用性风险、味觉过载、风味身份冲突、普通冲突、正向协同、类型候选和反馈提示是否进入正确区域。
+- `topCandidates`：每类 candidate 当前最显眼的候选快照。它只用于观察，不覆盖 legacy analyzer / judge 链路给出的最终 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId` 或 feedback。
+- `metadata`：记录 schema 版本、只读状态、是否影响最终结果、权重是否启用以及来源。
+
+`priorityBand` 建议先保持粗粒度：
+
+- `hard_physical`：硬阻断或物理不可饮用风险，例如未来可能来自结构事故的候选。
+- `texture_drinkability`：质地、吸管阻力、固体负载和可饮用性候选。
+- `taste_overload`：甜 / 酸 / 苦 / 涩等基础味觉过载候选。
+- `flavor_identity`：强风味身份、香气压力、料理感、猎奇感或身份冲突候选。
+- `normal_conflict`：普通冲突或不协调候选。
+- `positive_synergy`：正向组合、适配度或特色亮点候选。
+- `type_classification`：饮品类型方向候选。
+- `feedback_hint`：只用于反馈焦点的候选。
+
+`priorityBand` 不等于最终 severity。它只回答“这类候选应该在哪个粗分组被查看”。`severityHint` 也只是后续 severity 系统的语义提示，不等于最终 `severityLevel`、扣分档或 `scoreMultiplier`。
+
+未来如果需要更稳定排序，可以在 candidate 或 shell 中预留 `priorityScore` / `sortKey` / `priorityOrder` 一类字段，但 v0.0.6.14 不锁具体数值表。具体权重、阈值、排序策略、`severityLevel`、`scoreMultiplier` 和 golden expected 调整应放到 v0.0.7.x 或明确调参任务。
+
+priority shell 不能变成新的 if 地狱。它不应该写具体原料组合判断，也不应该靠中文 displayName、玩家可见文案或 UI category 推断系统身份。正确方向是：summary 产出结构化理解，`summaryCandidates` 产出候选，priority shell 只读组织候选，最终调度在未来单独设计。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

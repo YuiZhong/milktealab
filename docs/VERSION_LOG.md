@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.6.14
+
+本轮定义 candidate priority shell docs / schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 明确 priority shell 位于 `summaryCandidates` 与最终 result 调度之间。
+  - 明确 priority shell 是只读中间观察层，不接管最终判定。
+  - 补充 `priorityBand` 与 `severityHint` 的职责边界。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 candidate priority shell 通用 schema。
+  - 记录 `orderedCandidates`、`byPriorityBand`、`topCandidates` 和 `metadata` 的建议结构。
+  - 记录 priority band 初始粗分组和反 if 地狱边界。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.14 本地 docs / schema 状态。
+  - 记录当前未创建 `v0.0.6.14-candidate`。
+
+### 阶段边界
+
+- priority shell 是 summary candidate 到最终 result 之间的只读中间层。
+- 本轮不实现 priority shell runtime，不新增 priority engine。
+- 本轮不改 runtime、data、scripts、`index.html` 或 golden samples。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不做 priority 接管、最终 dispatch、severity 或 `scoreMultiplier`。
+- `priorityBand` 是粗分组，不是最终 severity。
+- `severityHint` 是提示，不是 `severityLevel` 或扣分乘区。
+- 具体参数、阈值、severity、`scoreMultiplier` 和 golden expected 调整留到 v0.0.7.x。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.13 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
