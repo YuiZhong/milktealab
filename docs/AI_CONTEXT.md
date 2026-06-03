@@ -58,12 +58,12 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.6.18-candidate`
-- 最新 candidate commit：`dfac8e70ba4880e6f49eae3bcb1ff45a32b1bd35`
-- `v0.0.6.18-candidate` 已冻结并推送，指向 `dfac8e70ba4880e6f49eae3bcb1ff45a32b1bd35`；正式 tag `v0.0.6.18` 未创建。
-- 最新 main：本轮 v0.0.7.0 docs / planning commit 完成后以 `git log -1` 为准；本轮不 push，main 可 ahead origin/main 1 commit。
+- 最新 candidate：`v0.0.7.0-candidate`
+- 最新 candidate commit：`f0b5e945fc4c51984162226e7aa4e9da4d235688`
+- `v0.0.7.0-candidate` 已冻结并推送，指向 `f0b5e945fc4c51984162226e7aa4e9da4d235688`；正式 tag `v0.0.7.0` 未创建。
+- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.0-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
-- 本轮开工前 main 与 origin/main 已同步；本地提交后工作区应干净，main 可 ahead origin/main 1 commit。
+- main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
@@ -169,11 +169,11 @@
 - P2 是可留到 v0.0.7.x 或更后的方向，包括更丰富 golden 覆盖、flavor relation matrix / candidate relation matrix、表格化内容管线、更多 candidate 类型（例如 `audience` / `operation` / `customerPreference`）、更细的 profile / tag / metadata 扩展、多语言 / 内容管理管线，以及更完整的调参、内容管理和数据审计。
 - v0.0.6.x 系统地基已完成 final 收口审计；v0.0.7.x 规划开始。
 - v0.0.7.x 主要目标是参数、标签、阈值、severity、`scoreMultiplier`、golden expected 有意识调整和表格化内容管线。
-- v0.0.7.0 已完成 v0.0.7.x 调参路线与表格化内容管线边界设计，本地 commit 后以 `git log -1` 为准。
+- v0.0.7.0 已完成 v0.0.7.x 调参路线与表格化内容管线边界设计，且 `v0.0.7.0-candidate` 已冻结并推送。
 - 当前未实现表格化管线，未新增 CSV / Excel / JSON 文件、导入脚本、build script 或 runtime。
-- 当前未创建 `v0.0.7.0-candidate`。
+- 当前未推进 v0.0.7.1。
 - 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 `v0.0.7.0-candidate` 冻结、v0.0.7.x 第一刀表格化内容管线 docs / schema，或 severity / threshold 调参计划拆分。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 下一步可考虑 v0.0.7.1 表格化内容管线 docs / schema、v0.0.7.1 severity / threshold 调参计划拆分，或换新 ChatGPT 对话后继续 v0.0.7.x。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
