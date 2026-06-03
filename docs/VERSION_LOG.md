@@ -1,5 +1,52 @@
 # 版本记录
 
+## v0.0.7.9
+
+本轮实现 feedback sheet build script 第一版。
+
+### 本轮新增 / 更新
+
+- 新增 `scripts/content/buildFeedbackData.js`
+  - 支持 `node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json`。
+  - build 前调用 `scripts/content/validateFeedbackSheet.js`。
+  - validator 有 error 时停止；只有 warning 时继续并报告 warning 数量。
+  - 不修改源 CSV，不自动修文案，不自动改 `tone` / score / `scene`，不调参数。
+- 新增 `data/generated/feedbackTexts.generated.json`
+  - 由 sample CSV 生成。
+  - 以 stable `textId` 建 `textsById`。
+  - 按 `feedbackTag` / `scene` 生成分组。
+  - 保留 disabled 文案，并通过 `enabled: false` 表达状态。
+  - 空 score 转为 `null`；空 optional stable ID 转为 `null`。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 记录 build 第一版输入 / 输出路径、generated JSON 结构和字段转换规则。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 build 是离线生成层，不是机制判断层。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.9 已实现 feedback sheet build script 第一版。
+
+### 阶段边界
+
+- 本轮只建立 validate → build → generated JSON 的离线链路。
+- generated data 当前不接 runtime，不替代 `data/feedbackTexts.js`。
+- 本轮不实现 runtime adapter。
+- 本轮不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+- 本轮不改 `content_sheets` 源 CSV / JSON 样例。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- validator 通过 sample CSV：Errors 0，Warnings 12，均为人工审核提醒。
+- Generated JSON 合法。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/validateFeedbackSheet.js` 通过。
+- `node --check scripts/content/buildFeedbackData.js` 通过。
+- `node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0，Warnings 12。
+- `node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json` 通过。
+- `python3 -m json.tool data/generated/feedbackTexts.generated.json` 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.8 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

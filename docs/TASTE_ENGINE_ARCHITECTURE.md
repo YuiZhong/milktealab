@@ -508,6 +508,35 @@ node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv --dr
 
 本轮不创建 `scripts/content/buildFeedbackData.js`，不新增 generated data，不改 runtime，不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
 
+### v0.0.7.9 feedback sheet build script 第一版
+
+v0.0.7.9 已新增 `scripts/content/buildFeedbackData.js`，实现 feedback sheet 的第一版离线生成链路：
+
+```text
+content_sheets/examples/feedback_texts.sample.csv
+↓ validateFeedbackSheet
+data/generated/feedbackTexts.generated.json
+```
+
+当前 generated data 是旁路输出，不接 runtime，不替代 `data/feedbackTexts.js`，不让 `core/feedbackEngine.js` 读取，也不改变评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+
+build 已依赖 validator：
+
+- build 前先调用 `scripts/content/validateFeedbackSheet.js`。
+- validator Errors 非 0 时 build 停止。
+- validator Warnings 可继续，但必须报告 warning 数量和 validation 输出。
+- build 不修改源 CSV，不自动修文案，不调参数。
+
+第一版 generated data 以 stable ID 为主：
+
+- `textsById` 以 `textId` 建索引。
+- `textsByTag` 按 `feedbackTag` 分组。
+- `textsByScene` 按 `scene` 分组。
+- `enabledTextIdsByTag` / `enabledTextIdsByScene` 只包含启用文案。
+- disabled 文案仍保留在 `textsById` 供审计，并通过 `enabled: false` 表达状态。
+
+第一版 build 只做通用格式转换和索引生成，例如 score 转 number / `null`、optional stable ID 空值转 `null`、`enabled` 转 boolean、metadata 写入和分组索引。它不根据具体 `zhCN`、具体 `textId`、具体 golden sample、具体原料组合或 displayName 写机制判断；也不自动改 `tone`、score、`scene` 或用户文案。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

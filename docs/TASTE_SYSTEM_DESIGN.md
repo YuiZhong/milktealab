@@ -1244,6 +1244,69 @@ node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv --dr
 - build 不绕过 stable ID。
 - build 不直接接管 `feedbackEngine`。
 
+#### v0.0.7.9 feedback sheet build script 第一版
+
+v0.0.7.9 已实现第一版 `scripts/content/buildFeedbackData.js`，把通过 validator 的 feedback sheet CSV 转成旁路 generated JSON。它仍是离线内容管线，不接 runtime，不替代 `data/feedbackTexts.js`，也不让 `core/feedbackEngine.js` 读取 generated data。
+
+当前命令：
+
+```bash
+node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json
+```
+
+如果不传 `--out`，默认输出到：
+
+```text
+data/generated/feedbackTexts.generated.json
+```
+
+当前输入 / 输出：
+
+- 输入：`content_sheets/examples/feedback_texts.sample.csv`
+- 输出：`data/generated/feedbackTexts.generated.json`
+- 输出格式：UTF-8、格式化 JSON、中文可读。
+
+build 前置规则已经落地：
+
+- build 会先调用 `scripts/content/validateFeedbackSheet.js`。
+- validator 有 error 时 build 停止并返回非 0。
+- validator 只有 warning 时 build 继续，但报告 warning 数量。
+- build 不吞掉 validation 输出。
+- build 不修改源 CSV，不自动修文案，不自动改 `tone` / `score` / `scene`，不调参数。
+
+第一版 generated JSON 结构：
+
+```js
+{
+  schemaVersion: "feedbackTexts.generated.v0.0.7.9",
+  generatedFrom: "content_sheets/examples/feedback_texts.sample.csv",
+  textsById: {},
+  textsByTag: {},
+  textsByScene: {},
+  enabledTextIdsByTag: {},
+  enabledTextIdsByScene: {},
+  metadata: {
+    readonly: true,
+    sourceType: "generated",
+    stableIdRequired: true,
+    affectsRuntime: false
+  }
+}
+```
+
+字段转换规则：
+
+- `textId` 是 `textsById` 主 key。
+- `feedbackTag` / `scene` 用于稳定分组。
+- `zhCN` 是显示文案，不是主 key，也不参与机制判断。
+- `notes` 是制作人备注，不参与 runtime 选择。
+- `enabled` 从 `"TRUE"` / `"FALSE"` / `"true"` / `"false"` 转成 boolean。
+- `minScore` / `maxScore` 转成 number；空值转成 `null`。
+- `accidentTypeId` / `drinkTypeId` / `outcomeTypeId` / `audienceId` 为空时，本轮 generated JSON 转成 `null`。
+- disabled 文案保留在 `textsById`、`textsByTag`、`textsByScene` 供审计，但不进入 `enabledTextIdsByTag` / `enabledTextIdsByScene`。
+
+当前 generated data 仍是旁路样例，不接 UI / runtime。未来 runtime adapter 必须作为单独任务设计和实现，并继续保留 `zhCN` / `notes` 不作为机制主键的边界。
+
 允许的通用逻辑：
 
 - 按 `textId` 建索引。
