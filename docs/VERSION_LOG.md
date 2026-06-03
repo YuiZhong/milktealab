@@ -1,5 +1,36 @@
 # 版本记录
 
+## v0.0.6.4
+
+本轮新增 `textureSummary` golden 结构断言能力，保护 v0.0.6.3 已暴露的只读 `result.textureSummary`。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 加载 `core/textureSummaryEngine.js`，让 golden runner 覆盖 `result.textureSummary` 运行链路。
+  - 新增 `expectations.textureSummary` 结构断言能力。
+  - 支持检查 `exists`、`valueKeysInclude`、`tagIncludes`、`tagIncludesAny`、`forbiddenTagIncludes`、`riskIncludes`、`riskIncludesAny`、`forbiddenRiskIncludes`、`metadataIncludes`、`evidenceIncludesAny`。
+  - `evidenceIncludesAny` 只匹配 expected object 写到的字段，不要求整条 evidence 深度全等。
+- 更新 `data/goldenSamples.js`
+  - 给少量代表性 golden samples 增加 `textureSummary` expected。
+  - 只保护 summary 结构、metadata 和少量 evidence 来源，不锁死具体 values 数值。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.4 本地实现状态。
+  - 记录当前未创建 `v0.0.6.4-candidate`。
+
+### 阶段边界
+
+- 不改评分、事故、饮品类型、feedback 或 `result.type`。
+- 不改 golden score expected。
+- 不改 core runtime。
+- 不做 `flavorSummary`。
+- 不做 severity / `scoreMultiplier`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.3 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

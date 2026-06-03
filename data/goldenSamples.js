@@ -29,6 +29,19 @@
             { sourceLayer: "taste", sourceType: "ingredient", sourceId: "tea_black" },
             { sourceLayer: "taste", sourceType: "ingredient", sourceId: "dairy_milk" }
           ]
+        },
+        textureSummary: {
+          exists: true,
+          valueKeysInclude: ["solidLoad", "strawResistance", "drinkability"],
+          metadataIncludes: {
+            sourceLayer: "texture",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_pearl" },
+            { metric: "drinkability", sourceLayer: "texture", sourceType: "structure", sourceId: "drinkStructure" }
+          ]
         }
       },
       notes: "经典稳定样本，不应被事故规则误伤。"
@@ -61,6 +74,19 @@
           evidenceIncludesAny: [
             { sourceLayer: "taste", sourceType: "ingredient", sourceId: "tea_black" },
             { sourceLayer: "taste", sourceType: "ingredient", sourceId: "dairy_milk" }
+          ]
+        },
+        textureSummary: {
+          exists: true,
+          valueKeysInclude: ["solidLoad", "strawResistance", "drinkability"],
+          metadataIncludes: {
+            sourceLayer: "texture",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_pearl" },
+            { metric: "drinkability", sourceLayer: "texture", sourceType: "structure", sourceId: "drinkStructure" }
           ]
         }
       },
@@ -292,7 +318,22 @@
         scoreMax: 25,
         feedbackTagIncludes: ["straw_disaster"],
         feedbackTagIncludesAny: ["straw_followup", "thick_straw_followup"],
-        feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
+        feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"],
+        textureSummary: {
+          exists: true,
+          valueKeysInclude: ["solidLoad", "strawResistance", "drinkability"],
+          riskIncludesAny: ["high_solid_load_risk", "high_straw_resistance_risk"],
+          metadataIncludes: {
+            sourceLayer: "texture",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_taro_paste" },
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_oreo_crumble" },
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "structure", sourceId: "drinkStructure" }
+          ]
+        }
       },
       notes: "高固体负载样本，应保持吸管阻力事故方向。"
     },
@@ -312,7 +353,22 @@
         scoreMax: 25,
         feedbackTagIncludes: ["straw_disaster"],
         feedbackTagIncludesAny: ["straw_followup", "thick_straw_followup"],
-        feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"]
+        feedbackIncludesAny: ["吸管", "半固体", "物理", "勺子", "水泥", "阻力"],
+        textureSummary: {
+          exists: true,
+          valueKeysInclude: ["solidLoad", "strawResistance", "drinkability"],
+          riskIncludesAny: ["high_solid_load_risk", "high_straw_resistance_risk"],
+          metadataIncludes: {
+            sourceLayer: "texture",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_taro_paste" },
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_oreo_crumble" },
+            { metric: "strawResistance", sourceLayer: "texture", sourceType: "structure", sourceId: "drinkStructure" }
+          ]
+        }
       },
       notes: "与 straw_resistance_accident 等价，用 ingredientId 覆盖 strawResistance / texture ID 输入路径。"
     },

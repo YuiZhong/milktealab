@@ -34,6 +34,7 @@ const scriptFiles = [
   "core/combinationAnalyzer.js",
   "core/drinkTypeAnalyzer.js",
   "core/tasteSummaryEngine.js",
+  "core/textureSummaryEngine.js",
   "core/tasteJudge.js",
   "data/goldenSamples.js"
 ];
@@ -134,6 +135,10 @@ function getTasteSummary(result) {
   return result?.tasteSummary || null;
 }
 
+function getTextureSummary(result) {
+  return result?.textureSummary || null;
+}
+
 function formatIds(ids) {
   return `[${ids.join(", ")}]`;
 }
@@ -202,11 +207,11 @@ function checkTasteSummaryStructure(summary, failures) {
   if (summary.metadata.weightsEnabled !== false) failures.push("tasteSummary.metadata.weightsEnabled should be false");
 }
 
-function checkMetadataIncludes(actualMetadata, expectedMetadata, failures) {
+function checkMetadataIncludes(actualMetadata, expectedMetadata, failures, label = "summary.metadata") {
   if (!expectedMetadata) return;
   Object.entries(expectedMetadata).forEach(([key, expectedValue]) => {
     if (actualMetadata?.[key] !== expectedValue) {
-      failures.push(`tasteSummary.metadata.${key} should be ${JSON.stringify(expectedValue)} but got ${JSON.stringify(actualMetadata?.[key])}`);
+      failures.push(`${label}.${key} should be ${JSON.stringify(expectedValue)} but got ${JSON.stringify(actualMetadata?.[key])}`);
     }
   });
 }
@@ -215,13 +220,13 @@ function evidenceMatches(actualEvidence, expectedEvidence) {
   return Object.entries(expectedEvidence).every(([key, expectedValue]) => actualEvidence?.[key] === expectedValue);
 }
 
-function checkEvidenceIncludesAny(actualEvidence, expectedCandidates, failures) {
+function checkEvidenceIncludesAny(actualEvidence, expectedCandidates, failures, label = "summary.evidence") {
   if (!expectedCandidates?.length) return;
   const matched = expectedCandidates.some(expectedEvidence =>
     actualEvidence.some(evidence => evidenceMatches(evidence, expectedEvidence))
   );
   if (!matched) {
-    failures.push(`expected tasteSummary.evidence to include one of ${JSON.stringify(expectedCandidates)}`);
+    failures.push(`expected ${label} to include one of ${JSON.stringify(expectedCandidates)}`);
   }
 }
 
@@ -245,8 +250,46 @@ function checkTasteSummaryExpectation(result, expectation, failures) {
   checkArrayIncludes("tasteSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludes, failures);
   checkArrayIncludesAny("tasteSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludesAny, failures);
   checkForbiddenArrayIncludes("tasteSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.forbiddenRiskIncludes, failures);
-  checkMetadataIncludes(summary.metadata, expectation.metadataIncludes, failures);
-  checkEvidenceIncludesAny(Array.isArray(summary.evidence) ? summary.evidence : [], expectation.evidenceIncludesAny, failures);
+  checkMetadataIncludes(summary.metadata, expectation.metadataIncludes, failures, "tasteSummary.metadata");
+  checkEvidenceIncludesAny(Array.isArray(summary.evidence) ? summary.evidence : [], expectation.evidenceIncludesAny, failures, "tasteSummary.evidence");
+}
+
+function checkTextureSummaryStructure(summary, failures) {
+  if (!isPlainObject(summary?.values)) failures.push("textureSummary.values should be an object");
+  if (!Array.isArray(summary?.tags)) failures.push("textureSummary.tags should be an array");
+  if (!Array.isArray(summary?.risks)) failures.push("textureSummary.risks should be an array");
+  if (!Array.isArray(summary?.evidence)) failures.push("textureSummary.evidence should be an array");
+  if (!isPlainObject(summary?.metadata)) {
+    failures.push("textureSummary.metadata should be an object");
+    return;
+  }
+  if (summary.metadata.readonly !== true) failures.push("textureSummary.metadata.readonly should be true");
+  if (summary.metadata.sourceLayer !== "texture") failures.push('textureSummary.metadata.sourceLayer should be "texture"');
+  if (summary.metadata.weightsEnabled !== false) failures.push("textureSummary.metadata.weightsEnabled should be false");
+}
+
+function checkTextureSummaryExpectation(result, expectation, failures) {
+  if (!expectation) return;
+
+  const summary = getTextureSummary(result);
+  if (expectation.exists === true && !summary) {
+    failures.push("textureSummary should exist");
+    return;
+  }
+  if (!summary) return;
+
+  if (expectation.exists === true) checkTextureSummaryStructure(summary, failures);
+
+  const valueKeys = isPlainObject(summary.values) ? Object.keys(summary.values) : [];
+  checkArrayIncludes("textureSummary value keys", valueKeys, expectation.valueKeysInclude, failures);
+  checkArrayIncludes("textureSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.tagIncludes, failures);
+  checkArrayIncludesAny("textureSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.tagIncludesAny, failures);
+  checkForbiddenArrayIncludes("textureSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.forbiddenTagIncludes, failures);
+  checkArrayIncludes("textureSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludes, failures);
+  checkArrayIncludesAny("textureSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludesAny, failures);
+  checkForbiddenArrayIncludes("textureSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.forbiddenRiskIncludes, failures);
+  checkMetadataIncludes(summary.metadata, expectation.metadataIncludes, failures, "textureSummary.metadata");
+  checkEvidenceIncludesAny(Array.isArray(summary.evidence) ? summary.evidence : [], expectation.evidenceIncludesAny, failures, "textureSummary.evidence");
 }
 
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
@@ -312,6 +355,7 @@ function checkSample(sample, result) {
   checkIncludesAny("feedback", feedback, expectations.feedbackIncludesAny, failures);
   checkForbidden("feedback", feedback, expectations.feedbackForbiddenAny, failures);
   checkTasteSummaryExpectation(result, expectations.tasteSummary, failures);
+  checkTextureSummaryExpectation(result, expectations.textureSummary, failures);
 
   if (typeof expectations.scoreMin === "number" && score < expectations.scoreMin) {
     failures.push(`score ${score} is below ${expectations.scoreMin}`);
