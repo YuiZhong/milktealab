@@ -1,5 +1,40 @@
 # 版本记录
 
+## docs: sync v0.0.7.14 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.14-candidate`。
+  - 记录 candidate 指向 `aa8f64c54c254a7902dcabac1cb8d9c5019f8cca`。
+  - 记录 `v0.0.7.14-candidate` 已冻结并推送。
+  - 记录 v0.0.7.14 已完成 feedbackEngine 旁路读取 generated data docs / schema。
+  - 记录当前未推进 v0.0.7.15。
+
+### 阶段边界
+
+- `v0.0.7.14-candidate` 已冻结并推送。
+- candidate 指向 `aa8f64c54c254a7902dcabac1cb8d9c5019f8cca`。
+- v0.0.7.14 已完成 feedbackEngine 旁路读取 generated data docs / schema。
+- 已明确 debug-only / shadow / partial / active 边界。
+- 已明确 generated 缺失、校验失败、adapter unavailable 时走 legacy，且必须可报告，不能静默吞错。
+- 已明确玩家可见 feedback 变化需要制作人审核和 golden 记录。
+- 本轮未实现 runtime 接入。
+- 未改 `feedbackEngine` / `feedbackRuntimeAdapter`。
+- 未改 generated JSON / `content_sheets`。
+- 未改 runtime、data、scripts、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.14`。
+- 当前未推进 v0.0.7.15。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.14
 
 本轮为 feedbackEngine 旁路读取 generated data docs / schema。
