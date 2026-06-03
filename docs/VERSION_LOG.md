@@ -1,5 +1,38 @@
 # 版本记录
 
+## docs: sync v0.0.7.6 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.6-candidate`。
+  - 记录 candidate 指向 `f3c71351c77bf7e50f97e92533a0546ccddaf363`。
+  - 记录 `v0.0.7.6-candidate` 已冻结并推送。
+  - 记录 v0.0.7.6 已实现 validate feedback sheet 第一版脚本。
+  - 记录当前未推进 v0.0.7.7。
+
+### 阶段边界
+
+- `v0.0.7.6-candidate` 已冻结并推送。
+- candidate 指向 `f3c71351c77bf7e50f97e92533a0546ccddaf363`。
+- v0.0.7.6 已实现 validate feedback sheet 第一版脚本。
+- validator 通过 sample CSV，Errors 0；warnings 为人工审核提醒。
+- validator 检查 UTF-8 with BOM、`textId` 唯一性、`enabled`、`scene`、`tone`、score、optional stable ID 等基础规则。
+- validator 不承载机制判断、不自动修改 CSV、不调参数。
+- 未改 runtime、data、`content_sheets`、`index.html`。
+- 未改 `data/feedbackTexts.js` / `core/feedbackEngine.js`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.6`。
+- 当前未推进 v0.0.7.7。
+
+### 验证结果
+
+- `node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0，Warnings 14。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.7.6
 
 本轮实现 validate feedback sheet 第一版脚本。
