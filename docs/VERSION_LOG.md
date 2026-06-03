@@ -1,5 +1,34 @@
 # 版本记录
 
+## docs: sync v0.0.6.x agent guardrails
+
+本轮只更新 `AGENTS.md` / docs，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `AGENTS.md`
+  - 同步 v0.0.6.x 三层属性 / profile / summary 工作守则。
+  - 明确 v0.0.6.x 不等于完整“三层判定”或 severity 调参。
+  - 明确 profile / summary 是中间理解层，不是最终判定。
+  - 明确 summary schema 需要可扩展，并预留权重、阈值和 evidence。
+  - 明确不要在 v0.0.6.1 直接重写 analyzer 或接管最终评分。
+- 更新 `docs/AI_CONTEXT.md`
+  - 短同步 `AGENTS.md` 已更新 v0.0.6.x 工作守则。
+  - 记录最新 candidate 仍是 `v0.0.6.0-candidate`。
+  - 记录当前未推进 v0.0.6.1。
+  - 记录下一步仍是 v0.0.6.1 `tasteSummary` 只读地基。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.6.1。
+- 不创建 tag。
+
 ## docs: sync v0.0.6.0 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

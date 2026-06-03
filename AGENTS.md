@@ -34,20 +34,38 @@
 当前阶段是：
 
 ```text
-v0.0.5.x｜现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基阶段
+v0.0.6.x｜三层属性 / profile / summary 地基阶段
 ```
 
-本阶段优先解决“系统里的东西是谁”：现有味觉实验室核心链路中，已经参与判断 / 测试 / 保存 / 展示的对象，应逐步进入 stable ID + displayName / text 双轨。玩家可见文案不再长期承担系统主键职责；中文只是当前最常见的显示文案例子，英文 / 日文 / 任何未来可能改名、本地化或换风格的 label 也一样不能当系统身份。
+v0.0.5.x 已基本完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”。玩家可见文案不应长期承担系统主键职责；中文只是当前最常见的显示文案例子，英文 / 日文 / 任何未来可能改名、本地化或换风格的 label 也一样不能当系统身份。不要把“显示文案主键”退回成“中文主键”的狭义理解。
 
-v0.0.5.x 不默认推进完整三层 summary，也不为未来还不存在的顾客、家具、事件、成就、本地化等系统提前造空架子。后续新增系统 / 新数据结构应从第一天使用 stable ID，但只有进入真实实现范围时才建立对应数据结构。
+v0.0.6.x 的阶段名应写作“三层属性 / profile / summary 地基阶段”，不要简单写成“三层判定阶段”。`tasteProfile` / `textureProfile` / `flavorProfile` 描述结构化属性，`tasteSummary` / `textureSummary` / `flavorSummary` 汇总一杯饮品的中间理解结果；profile / summary 不是最终判定。最终事故、类型、反馈、severity、score、经营成本、顾客偏好等，应在 summary 之后由 candidate / rule / 调度层决定。
+
+v0.0.6.x 第一阶段不做完整 severity / `scoreMultiplier` / 大规模数值调参，这些留到 v0.0.7.x。不要在 v0.0.6.1 直接重写 analyzer、接管最终评分或把旧逻辑一次性改成完整三层 runtime。
+
+三层 summary 应采用可扩展结构，例如：
+
+```js
+{
+  values: {},
+  tags: [],
+  risks: [],
+  evidence: [],
+  metadata: {}
+}
+```
+
+`tasteSummary` / `textureSummary` / `flavorSummary` 的细分项后续会增删，字段、类别、阈值、说明和权重不能写死在 analyzer if 中。summary schema 应预留 `weights` / `thresholds` / `evidence` / `sourceLayer` / `priorityBand` / `severityHint` 等未来扩展口。
+
+代码负责汇总 / 调度，数据和规则负责“判什么”。不要把具体组合判断长期写成 if 某原料 + 某原料；legacy 逻辑可以暂存，但不能继续扩张。
 
 阶段边界：
 
 - v0.0.5.x：解决“系统里的东西是谁”。
-- v0.0.6.x：解决“这些东西如何被三层系统判断”，正式推进 `tasteProfile` / `textureProfile` / `flavorProfile` 与三层 summary。
+- v0.0.6.x：解决“这些东西如何被三层属性系统理解并汇总”，正式推进 `tasteProfile` / `textureProfile` / `flavorProfile` 与三层 summary。
 - v0.0.7.x：解决“判断得好不好、数值顺不顺”，推进 severity、数值调优和 golden samples 扩容。
 
-v0.0.5.x 后续候选事项应保持小步、可回归、可冻结，例如显示文案主键残留盘点、`accidentTypeId` / `drinkTypeId` / `outcomeTypeId` / `audienceId` 双轨、规则表 refs 小批迁移、golden samples ID 断言、feedbackTag 边界复查和 ID 化收口审计。不要把这些候选写成已经完成，也不要机械扩成固定版本清单。
+v0.0.6.x 后续候选事项应保持小步、可回归、可冻结，例如 `tasteSummary` 只读地基、summary / candidate schema 小批落地、显示文案主键 legacy fallback 收口审计、规则 metadata 小批补充。不要把这些候选写成已经完成，也不要机械扩成固定版本清单。
 
 每一刀都应小、可回归、可冻结。
 
@@ -111,7 +129,7 @@ node scripts/runGoldenSamples.js
 - `textureProfile`：物理质地。
 - `flavorProfile`：风味身份 / 香气身份。
 
-三层 profile / summary 仍是长期重要方向，但正式开工应放在 v0.0.6.x 阶段，除非用户明确重新调整路线。v0.0.5.x 当前优先级是现有系统 ID 化和去显示文案主键。
+三层 profile / summary 是 v0.0.6.x 当前主线，但它们仍是中间理解层，不是最终判定层。新增 summary 逻辑应优先输出可解释的 values / tags / risks / evidence / metadata，再由后续规则和候选层决定事故、类型、反馈和评分。
 
 事故优先级不等于事故严重度。severity 长期应数据化为 `severityLevel` / `scoreMultiplier` 等可调结构。
 
