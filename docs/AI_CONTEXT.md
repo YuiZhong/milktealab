@@ -58,10 +58,11 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.6.11-candidate`
-- 最新 candidate commit：`d0946a79245ccac853985ee7e736e01d606578d2`
-- `v0.0.6.11-candidate` 已冻结并推送，指向 `d0946a79245ccac853985ee7e736e01d606578d2`；正式 tag `v0.0.6.11` 未创建。
-- 最新 main：本轮 v0.0.6.12 本地 commit 是 `v0.0.6.11-candidate` 之后的实现 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.6.12-candidate`
+- 最新 candidate commit：`d8440f248086ac0f8a5e5ad02b330508f350c78c`
+- `v0.0.6.12-candidate` 已冻结并推送，指向 `d8440f248086ac0f8a5e5ad02b330508f350c78c`；正式 tag `v0.0.6.12` 未创建。
+- 最新 main：本轮 docs commit 是 `v0.0.6.12-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
@@ -136,10 +137,10 @@
 - 本轮复盘确认：`tasteSummary`、`textureSummary`、`flavorSummary` 都是只读中间理解层，已经进入 result，且均有 golden 结构保护；它们仍不接管评分、事故、饮品类型、feedback 或 `result.type`。
 - v0.0.6.11 已完成 summary -> candidate docs / schema，且 `v0.0.6.11-candidate` 已冻结并推送。
 - 本轮设计了 candidate 通用结构和 `accident` / `outcome` / `drinkType` / `feedback` candidateType 边界；candidate 仍是只读中间层，不接管最终判定。
-- v0.0.6.12 已完成 `summaryCandidates` 只读地基，本地 commit 后以 `git log -1` 为准。
+- v0.0.6.12 已完成 `summaryCandidates` 只读地基，且 `v0.0.6.12-candidate` 已冻结并推送。
 - `result.summaryCandidates` 已暴露；candidate 是 summary 到最终 result 的只读中间层，不影响评分、事故、饮品类型、feedback、`result.type`、`audience`、`drinkTypeId`、`accidentTypeId`、`outcomeTypeId` 或 `feedbackTags`。
-- 当前未创建 `v0.0.6.12-candidate`。
-- 下一步可考虑 `v0.0.6.12-candidate` 冻结，或 `v0.0.6.13｜summaryCandidates golden 结构断言`，或 `v0.0.6.13｜candidate priority shell docs / schema`。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 当前未推进 v0.0.6.13。
+- 下一步可考虑 `v0.0.6.13｜summaryCandidates golden 结构断言`，或 `v0.0.6.13｜candidate priority shell docs / schema`。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

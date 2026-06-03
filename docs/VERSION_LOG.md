@@ -1,5 +1,33 @@
 # 版本记录
 
+## docs: sync v0.0.6.12 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.12-candidate`。
+  - 记录 candidate 指向 `d8440f248086ac0f8a5e5ad02b330508f350c78c`。
+  - 记录 `v0.0.6.12-candidate` 已冻结并推送。
+  - 记录 v0.0.6.12 已完成 `summaryCandidates` 只读地基。
+  - 记录当前未推进 v0.0.6.13。
+
+### 阶段边界
+
+- `result.summaryCandidates` 已暴露。
+- candidate 是 summary 到最终 result 的只读中间层。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 未做 priority 接管 / severity / `scoreMultiplier`。
+- UI smoke：用户已完成人工可见 smoke；本轮未做人工 Console 检查。
+- 未创建正式 tag `v0.0.6.12`。
+- 未推进 v0.0.6.13。
+- main 在 candidate 后还有 AGENTS guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`，这是工作守则更新，不属于 candidate 实现内容。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.12
 
 本轮新增 `summaryCandidates` 只读地基。
