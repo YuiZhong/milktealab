@@ -1,5 +1,41 @@
 # 版本记录
 
+## docs: sync v0.0.7.25 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.25-candidate`。
+  - 记录 candidate 指向 `50cd161ca871810dada7261769ecfdf7db1ba7e6`。
+  - 记录 `v0.0.7.25-candidate` 已冻结并推送。
+  - 记录 v0.0.7.25 已完成 severity / threshold sample table schema。
+  - 记录当前未推进 v0.0.7.26。
+
+### 阶段边界
+
+- `v0.0.7.25-candidate` 已冻结并推送。
+- candidate 指向 `50cd161ca871810dada7261769ecfdf7db1ba7e6`。
+- v0.0.7.25 已完成 severity / threshold sample table schema。
+- 推荐未来表名 `candidate_severity_rules`。
+- 已明确 `ruleId` / `accidentTypeId` / `severityLevel` 边界。
+- 已明确 `accidentTypeId` 不按原料拆分、不携带 severity 后缀。
+- 已明确 future validator 校验 `accidentTypeId` 合法性应以 known stable ID registry / enum / schema 为准，字符串后缀 / substring 检查只能作为 warning / lint hint，不能成为合法性来源。
+- 已明确 sampleId 不进入机制规则主键。
+- 已明确 future validator / generated data 边界。
+- 本轮未新增表格文件 / JSON / generated data。
+- 未改 runtime、data、generated data、content_sheets、scripts、reports、`index.html`。
+- 未改玩家最终 score、feedback、accident、type 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.25`。
+- 当前未推进 v0.0.7.26。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.25
 
 本轮为 severity / threshold 样例表 schema。
