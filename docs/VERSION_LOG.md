@@ -1,5 +1,65 @@
 # 版本记录
 
+## v0.0.7.19
+
+本轮实现 `feedbackEngine` shadow mode 只读旁路。
+
+### 本轮新增 / 更新
+
+- 更新 `core/feedbackEngine.js`
+  - 新增 `buildGeneratedFeedbackShadow`。
+  - 通过 `MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS` 和 `feedbackRuntimeAdapter` 只读查询 generated feedback 候选。
+  - 仅按 stable `feedbackTag` 与 score 做保守候选查询。
+  - shadow 输出明确 `affectsFinalFeedback: false` / `affectsFinalResult: false`。
+  - generated data 不可用时记录 fallback，不让 runtime 崩溃。
+- 更新 `core/tasteJudge.js`
+  - 在 `result.generatedFeedbackShadow` 暴露只读 shadow 结果。
+  - 不替换 `result.feedback`，不改变 `feedbackTags`。
+- 更新 `index.html`
+  - 页面顶部版本号更新为 `v0.0.7.19`。
+  - 加载 `core/feedbackRuntimeAdapter.js?v=00719`，位置在 generated JS data module 之后、`feedbackEngine` 之前。
+  - 更新 `core/feedbackEngine.js` cache query 为 `v=00719`。
+- 新增 `scripts/content/checkFeedbackShadowMode.js`
+  - 对比 legacy runtime 与 generated shadow runtime。
+  - 确认 final feedback / score / type / stable IDs / feedbackTags 不变。
+  - 确认 shadow 候选存在且不影响最终反馈。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.19 已完成 feedbackEngine shadow mode 只读实现。
+  - 记录当前未做 partial / active 接管。
+
+### 阶段边界
+
+- shadow 读取 generated feedback data 候选，但不接管最终 feedback。
+- 玩家最终 feedback / score / accident / drink type / `result.type` 不变。
+- generated 文案不展示到 UI。
+- 本轮不改用户文案，不改 Google Sheets / CSV 字段。
+- 本轮不改 generated JSON / generated JS。
+- 本轮不改 `data/feedbackTexts.js`。
+- 本轮不改 golden samples / runner，不改 golden expected。
+- 本轮不做 partial / active 接管。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check core/feedbackRuntimeAdapter.js` 通过。
+- `node --check core/feedbackEngine.js` 通过。
+- `node --check core/tasteJudge.js` 通过。
+- `node --check scripts/content/checkGeneratedFeedbackBrowserLoad.js` 通过。
+- `node --check scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- `node --check scripts/content/checkFeedbackShadowMode.js` 通过。
+- Feedback shadow mode check 通过，final feedback 保持 legacy，shadow 不影响最终反馈。
+- Generated browser load check 通过。
+- Adapter check 通过。
+- Feedback sheet validator：Errors 0，Warnings 12；warnings 为人工审核提醒。
+- JSON build 通过。
+- JS module build 通过。
+- Generated JSON validator：Errors 0，Warnings 0。
+- Generated JS module check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+- UI smoke 通过：页面 HTTP 200，页面顶部版本号为 `v0.0.7.19`，generated JS / adapter / feedbackEngine script URL 均为 HTTP 200；普通试喝和事故路径正常，legacy feedback 仍显示为最终反馈，generated shadow 文案未显示到 UI，页面无可见 `undefined` / `[object Object]`。
+- Console 检查：Playwright + 本机 Chrome 捕获到一条泛化 `Failed to load resource` 404 提示，但未捕获业务 JS `pageerror`，也未发现 generated JS / adapter / feedbackEngine 等业务脚本 HTTP 错误。
+
 ## docs: sync v0.0.7.18 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

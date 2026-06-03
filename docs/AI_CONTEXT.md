@@ -81,9 +81,12 @@
 - v0.0.7.18 已完成 generated feedback JS module browser loading 结构保护。
 - 新增 `scripts/content/checkGeneratedFeedbackBrowserLoad.js`，用 Node `vm` 模拟 browser-like global 环境，确认 generated JS module 可挂载 `MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`，且不依赖 CSV / Google Sheets / `feedbackEngine`。
 - browser-like loading check 通过，generated global object 可读。
-- 当前仍未实现 feedbackEngine 接入，仍未改变玩家最终 feedback。
-- 当前未推进 v0.0.7.19。
-- 下一步可考虑：`v0.0.7.19｜feedbackEngine shadow mode 只读实现`，或继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.19｜severity / threshold 表格化路线设计`。
+- v0.0.7.19 已完成 feedbackEngine shadow mode 只读实现，本地 commit 后以 `git log -1` 为准。
+- `core/feedbackEngine.js` 已新增 generated feedback shadow 构建能力；`result.generatedFeedbackShadow` 只用于观察 / debug。
+- shadow mode 当前不影响玩家最终 feedback，不替换 `result.feedback`，不改变 `feedbackTags`。
+- 当前未做 partial / active 接管。
+- 当前未创建 `v0.0.7.19-candidate`。
+- 下一步可考虑：`v0.0.7.19-candidate` 冻结，或 `v0.0.7.20｜feedback shadow output 结构保护`，或继续 feedback 文案评审会 / 样例扩充。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。

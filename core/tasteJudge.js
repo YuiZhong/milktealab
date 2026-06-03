@@ -306,6 +306,15 @@ function evaluateCup(cup) {
   if (outcomeTypeId) {
     result.outcomeTypeId = outcomeTypeId;
   }
+  if (feedbackEngine.buildGeneratedFeedbackShadow) {
+    result.generatedFeedbackShadow = feedbackEngine.buildGeneratedFeedbackShadow({
+      feedbackTags,
+      score: finalScore,
+      accidentTypeId: result.accidentTypeId,
+      drinkTypeId: result.drinkTypeId,
+      outcomeTypeId: result.outcomeTypeId
+    });
+  }
   return result;
 }
 

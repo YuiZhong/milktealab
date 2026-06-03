@@ -22,6 +22,22 @@ const fallbackFeedbackTagPools = {
 };
 const feedbackTagPools = feedbackTexts.feedbackTagPools || fallbackFeedbackTagPools;
 const { pick } = window.MILK_TEA_LAB_HELPERS;
+const generatedFeedbackData = window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS || null;
+const feedbackRuntimeAdapterApi = window.MILK_TEA_LAB_FEEDBACK_RUNTIME_ADAPTER || null;
+
+function createGeneratedFeedbackAdapter() {
+  if (!feedbackRuntimeAdapterApi?.createFeedbackRuntimeAdapter || !generatedFeedbackData) {
+    return null;
+  }
+
+  try {
+    return feedbackRuntimeAdapterApi.createFeedbackRuntimeAdapter(generatedFeedbackData);
+  } catch (error) {
+    return null;
+  }
+}
+
+const generatedFeedbackAdapter = createGeneratedFeedbackAdapter();
 
 function pickByTag(tag) {
   const poolName = feedbackTagPools[tag];
@@ -83,6 +99,100 @@ function getFeedbackTags(attr, score, notes, hasAccident = false, options = {}) 
   return [...new Set([primaryTag, ...getFollowupTags(attr)].filter(Boolean))];
 }
 
+function toShadowCandidate(record) {
+  return Object.freeze({
+    textId: record.textId,
+    feedbackTag: record.feedbackTag,
+    scene: record.scene,
+    zhCN: record.zhCN,
+    tone: record.tone,
+    minScore: record.minScore,
+    maxScore: record.maxScore,
+    accidentTypeId: record.accidentTypeId,
+    drinkTypeId: record.drinkTypeId,
+    outcomeTypeId: record.outcomeTypeId
+  });
+}
+
+function buildEmptyGeneratedFeedbackShadow(reason, details = {}) {
+  const adapterMetadata = generatedFeedbackAdapter?.getMetadata?.() || null;
+
+  return Object.freeze({
+    enabled: true,
+    mode: "shadow",
+    affectsFinalFeedback: false,
+    affectsFinalResult: false,
+    source: "generatedFeedbackTexts",
+    candidates: Object.freeze([]),
+    fallbackReason: reason,
+    metadata: Object.freeze({
+      readonly: true,
+      generatedDataAvailable: Boolean(generatedFeedbackData),
+      adapterAvailable: Boolean(generatedFeedbackAdapter?.isAvailable?.()),
+      adapterIssues: adapterMetadata?.issues || [],
+      ...details
+    })
+  });
+}
+
+function dedupeCandidates(records) {
+  const seen = new Set();
+  return records.filter(record => {
+    if (!record?.textId || seen.has(record.textId)) return false;
+    seen.add(record.textId);
+    return true;
+  });
+}
+
+function buildGeneratedFeedbackShadow(options = {}) {
+  const feedbackTags = normalizeFeedbackTags(options);
+  if (!generatedFeedbackAdapter?.isAvailable?.()) {
+    return buildEmptyGeneratedFeedbackShadow("generated_feedback_adapter_unavailable", {
+      checkedFeedbackTags: feedbackTags
+    });
+  }
+
+  if (!feedbackTags.length) {
+    return buildEmptyGeneratedFeedbackShadow("no_feedback_tags", {
+      checkedFeedbackTags: feedbackTags
+    });
+  }
+
+  const candidates = dedupeCandidates(feedbackTags.flatMap(tag => generatedFeedbackAdapter.getTextsByTag(tag, {
+    score: options.score
+  })));
+
+  if (!candidates.length) {
+    return buildEmptyGeneratedFeedbackShadow("no_generated_candidates_for_feedback_tags", {
+      checkedFeedbackTags: feedbackTags,
+      score: options.score
+    });
+  }
+
+  const adapterMetadata = generatedFeedbackAdapter.getMetadata();
+
+  return Object.freeze({
+    enabled: true,
+    mode: "shadow",
+    affectsFinalFeedback: false,
+    affectsFinalResult: false,
+    source: "generatedFeedbackTexts",
+    candidates: Object.freeze(candidates.map(toShadowCandidate)),
+    fallbackReason: null,
+    metadata: Object.freeze({
+      readonly: true,
+      generatedDataAvailable: true,
+      adapterAvailable: true,
+      checkedFeedbackTags: feedbackTags,
+      score: options.score,
+      accidentTypeId: options.accidentTypeId || null,
+      drinkTypeId: options.drinkTypeId || null,
+      outcomeTypeId: options.outcomeTypeId || null,
+      adapterVersion: adapterMetadata.adapterVersion || null
+    })
+  });
+}
+
 function makeFeedback(attr, score, notes, hasAccident = false, options = {}) {
   const parts = [];
   if (notes.length) parts.push(hasAccident ? notes[0] : pick(notes));
@@ -98,6 +208,7 @@ window.MILK_TEA_LAB_FEEDBACK_ENGINE = {
   getPrimaryFeedbackTag,
   getFollowupTags,
   getFeedbackTags,
+  buildGeneratedFeedbackShadow,
   makeFeedback
 };
 })();
