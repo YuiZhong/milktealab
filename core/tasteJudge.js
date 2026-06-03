@@ -4,11 +4,27 @@ const scoreEngine = window.MILK_TEA_LAB_SCORE_ENGINE;
 const feedbackEngine = window.MILK_TEA_LAB_FEEDBACK_ENGINE;
 const { createTasteContext } = window.MILK_TEA_LAB_TASTE_CONTEXT;
 const { analyzeDrinkStructure } = window.MILK_TEA_LAB_DRINK_STRUCTURE_ANALYZER;
+const { getTasteProfile } = window.MILK_TEA_LAB_INGREDIENT_TASTE_PROFILES;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
 const combinationAnalyzer = window.MILK_TEA_LAB_COMBINATION_ANALYZER;
 const drinkTypeAnalyzer = window.MILK_TEA_LAB_DRINK_TYPE_ANALYZER;
+
+const tasteSummaryMetrics = {
+  sweetness: "sweetness",
+  acidity: "acidity",
+  bitterness: "bitterness",
+  astringency: "astringency",
+  teaStrength: "tea",
+  milkiness: "milkiness",
+  creaminess: "creaminess",
+  coffeeRoast: "coffeeRoast",
+  freshness: "freshness",
+  cloyingRisk: "cloyingRisk",
+  acidSharpness: "acidSharpness",
+  tasteBalance: "tasteBalance"
+};
 
 function getRuleIngredientIds(rule) {
   const refs = [
@@ -79,10 +95,73 @@ function inferOutcomeTypeId(type, accidentTypeId, drinkTypeId) {
   return outcomeTypeIdByDisplayType[type] || null;
 }
 
+function createEmptyTasteValues() {
+  return Object.fromEntries(Object.keys(tasteSummaryMetrics).map(metric => [metric, 0]));
+}
+
+function roundTasteValue(value) {
+  return Math.round(clamp(value));
+}
+
+function buildTasteSummary(context) {
+  const values = createEmptyTasteValues();
+  const tags = [];
+  const evidence = [];
+
+  context.activeCup.forEach(item => {
+    const profile = getTasteProfile({ ingredientId: item.ingredientId, name: item.name });
+    const ratio = item.ratio || 0;
+    const ratioWeight = ratio / 100;
+
+    Object.entries(tasteSummaryMetrics).forEach(([metric, profileKey]) => {
+      const sourceValue = profile[profileKey] || 0;
+      const contribution = sourceValue * ratioWeight;
+      values[metric] += contribution;
+      if (contribution !== 0) {
+        evidence.push({
+          metric,
+          sourceLayer: "taste",
+          sourceType: "ingredient",
+          sourceId: item.ingredientId || null,
+          ratio,
+          contribution: roundTasteValue(contribution)
+        });
+      }
+    });
+
+    (profile.tags || []).forEach(tag => {
+      if (tag && !tags.includes(tag)) tags.push(tag);
+    });
+  });
+
+  Object.keys(values).forEach(metric => {
+    values[metric] = roundTasteValue(values[metric]);
+  });
+
+  const risks = [];
+  if (values.acidity >= 24) risks.push("acid_overload_risk");
+  if (values.sweetness >= 22) risks.push("sweet_overload_risk");
+  if (values.bitterness >= 18) risks.push("bitterness_overload_risk");
+
+  return {
+    values,
+    tags,
+    risks,
+    evidence,
+    metadata: {
+      schemaVersion: "tasteSummary.v0.0.6.1",
+      sourceLayer: "taste",
+      weightsEnabled: false,
+      readonly: true
+    }
+  };
+}
+
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
   context.structure = analyzeDrinkStructure(context);
+  const tasteSummary = buildTasteSummary(context);
 
   const attr = ingredientAnalyzer.analyzeBaseAttributes(context);
   const score = scoreEngine.createScoreState(54);
@@ -215,7 +294,7 @@ function evaluateCup(cup) {
   const feedbackTags = feedbackEngine.getFeedbackTags(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
   const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
 
-  const result = { attr, score: finalScore, type, audience, audienceIds, feedback, feedbackTags };
+  const result = { attr, score: finalScore, type, audience, audienceIds, feedback, feedbackTags, tasteSummary };
   if (primaryAccident?.accidentTypeId) {
     result.accidentTypeId = primaryAccident.accidentTypeId;
   }

@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.6.1
+
+本轮新增 `tasteSummary` 只读地基，作为 v0.0.6.x 三层属性 / profile / summary 的第一刀 runtime 地基。
+
+### 本轮新增 / 更新
+
+- 更新 `core/tasteJudge.js`
+  - 新增只读 `tasteSummary` 构建逻辑。
+  - 最终 `result` 暴露 `tasteSummary`。
+  - `tasteSummary` 使用 `values` / `tags` / `risks` / `evidence` / `metadata` 结构。
+  - `evidence` 记录 taste 层 ingredient 来源、`ingredientId`、ratio 和 contribution。
+- 更新 `index.html`
+  - 页面版本号同步为 v0.0.6.1。
+  - 刷新 `core/tasteJudge.js` runtime cache query。
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 v0.0.6.1 已完成 `tasteSummary` 只读地基。
+  - 记录最新 candidate 仍是 `v0.0.6.0-candidate`。
+  - 记录当前未创建 v0.0.6.1 tag。
+
+### 阶段边界
+
+- 本轮不改评分。
+- 本轮不改事故触发。
+- 本轮不改饮品类型。
+- 本轮不改反馈。
+- 本轮不改 golden expected。
+- 本轮不做 `textureSummary` / `flavorSummary`。
+- 本轮不做 severity / `scoreMultiplier`。
+- 本轮不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- UI smoke：普通试喝、事故路径和页面加载通过，console 无业务 JS error。
+
 ## docs: sync v0.0.6.x agent guardrails
 
 本轮只更新 `AGENTS.md` / docs，不改运行逻辑。

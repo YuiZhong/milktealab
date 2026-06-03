@@ -105,8 +105,10 @@
 - 当前未创建正式 tag `v0.0.5.40`，未创建正式 tag `v0.0.6.0`。
 - v0.0.6.0 已完成 docs-only 三层属性 / profile / summary schema 设计；本轮不实现运行逻辑，不改 data / core / scripts / index.html。
 - `AGENTS.md` 已同步 v0.0.6.x 工作守则：当前阶段是三层属性 / profile / summary 地基，profile / summary 是中间理解层，不是最终判定；完整 severity / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
-- 当前未推进 v0.0.6.1。
-- 下一步：可考虑 v0.0.6.1 `tasteSummary` 只读地基，或继续细化 summary / candidate schema。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.6.1 已完成 `tasteSummary` 只读地基，提交后以 `git log -1` 为准。
+- `tasteSummary` 已进入最终 `result`，采用 `values` / `tags` / `risks` / `evidence` / `metadata` 结构，但不影响评分、事故、饮品类型、反馈、audience 或 outcome。
+- golden samples 当前应为 `20/20 passed`；当前未创建 v0.0.6.1 tag。
+- 下一步：可考虑 `tasteSummary` golden 结构断言，或继续推进 `textureSummary` 只读地基。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
