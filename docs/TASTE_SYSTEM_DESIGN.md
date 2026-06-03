@@ -1775,6 +1775,138 @@ textKey,zhCN,enUS,jaJP,esES,context,notes
 
 v0.0.7.x 初期建议先做 feedback 文案 / `feedbackTags`。原因是它最适合非程序员编辑、风险较低、能明显改善游戏表达，而且不直接改评分。第二优先级是 severity / threshold 配置，因为它是调参核心，但必须先有校验和 golden 保护。第三优先级是 profile 可调字段，影响面较大，适合在管线成熟后再迁。第四优先级是多语言文案，未来重要但当前不急，应建立在 stable ID + localization key 之上。
 
+#### v0.0.7.21 feedback shadow 评审包 / 对比输出设计
+
+feedback shadow review pack 是给制作人看的评审入口，不是给 runtime 自动判定的机制层。它的目标是把 legacy 最终 feedback 与 generated shadow 候选放在同一份报告里，让制作人判断旧反馈是否还能用、generated 候选是否合适、哪些 `feedbackTag` / `scene` / `tone` 需要调整，以及哪些文案未来可以进入 partial / active 接管。
+
+评审包应清楚回答：
+
+- 当前 sample 的 legacy final feedback、score、type、stable IDs 和 `feedbackTags` 是什么。
+- `result.generatedFeedbackShadow` 是否存在，且 `affectsFinalFeedback` 必须是 `false`。
+- generated shadow candidates 来自哪些 `textId`、`feedbackTag`、`scene`、`tone` 和 `zhCN`。
+- 是否存在 `fallbackReason`、adapter unavailable、generated data unavailable 或 validator / generated validator warnings。
+- 这个 sample 是否需要制作人审核，审核重点是什么。
+- 制作人的审核结论和备注应记录在哪里，但不自动反写到 CSV、generated data、golden expected 或 runtime。
+
+建议 JSON source 结构：
+
+```json
+{
+  "schemaVersion": "feedbackShadowReview.v0.0.7.x",
+  "generatedAt": null,
+  "source": {
+    "goldenSampleId": "classic_milk_tea",
+    "recipeName": "经典奶茶",
+    "recipe": [
+      { "ingredientId": "tea_black", "name": "红茶", "ratio": 45 }
+    ]
+  },
+  "legacy": {
+    "feedback": "legacy final feedback",
+    "score": 74,
+    "type": "经典奶茶",
+    "accidentTypeId": null,
+    "drinkTypeId": "classic_milk_tea",
+    "outcomeTypeId": null,
+    "feedbackTags": ["classic"]
+  },
+  "shadow": {
+    "enabled": true,
+    "mode": "shadow",
+    "affectsFinalFeedback": false,
+    "source": "generatedFeedbackTexts",
+    "fallbackReason": null,
+    "candidates": [
+      {
+        "textId": "feedback_classic_001",
+        "feedbackTag": "classic",
+        "scene": "normal",
+        "tone": "classic",
+        "zhCN": "generated candidate text",
+        "matchReason": "feedbackTag"
+      }
+    ],
+    "metadata": {
+      "readonly": true,
+      "generatedDataAvailable": true,
+      "adapterAvailable": true,
+      "checkedFeedbackTags": ["classic"]
+    }
+  },
+  "checks": {
+    "shadowAffectsFinalFeedback": false,
+    "finalFeedbackChanged": false,
+    "validatorWarnings": [],
+    "generatedDataWarnings": [],
+    "info": []
+  },
+  "review": {
+    "needsHumanReview": true,
+    "reviewFocus": ["tone", "text", "tag coverage"],
+    "reviewStatus": "pending",
+    "producerComment": "",
+    "preferredTextId": null,
+    "needsNewText": false,
+    "toneIssue": false,
+    "tagIssue": false,
+    "tooAI": false,
+    "tooHarsh": false,
+    "notFunny": false,
+    "wrongTrigger": false,
+    "suggestedRewrite": ""
+  }
+}
+```
+
+字段边界：
+
+- `legacy` 只记录玩家当前真正会看到的最终输出，不由评审包改写。
+- `shadow` 只记录 generated 候选和 fallback 状态，必须保持 `affectsFinalFeedback: false`。
+- `checks` 是机器可收集的结构信息和 warning 汇总，不判断文案好坏。
+- `review` 是制作人审核区，记录主观判断、偏好和改写建议；它不是 runtime 输入，也不是自动接管开关。
+
+未来输出格式建议：
+
+1. 第一步优先做 Markdown review pack + JSON source。
+   - Markdown 适合快速阅读，按 golden sample 分块展示 legacy feedback、generated candidates、fallback / warnings 和 review focus。
+   - JSON 作为机器可处理正本，便于后续生成 Markdown、Sheets 或差异报告。
+2. 样本量变多后，再导出 Google Sheets 审核表。
+   - Sheets 适合筛选 `feedbackTag`、`scene`、`tone`、`reviewStatus` 和批量填写 `producerComment`。
+   - 如果未来要把 review 字段加入正式 Google Sheets 工作台，必须先由用户制作人确认；本设计不要求现在改变 `feedback_texts` CSV / Sheets 字段。
+
+Markdown 代表形态：
+
+```text
+## classic_milk_tea
+
+Legacy feedback:
+红茶和牛奶配合得很稳……
+
+Generated shadow candidates:
+- feedback_classic_001 / classic / normal / classic
+  经典的珍珠奶茶……
+
+Checks:
+- affectsFinalFeedback: false
+- fallbackReason: none
+
+Review focus:
+- tone 是否合适
+- 文案是否太平
+- tag coverage 是否足够
+```
+
+评审包生成边界：
+
+- 读取 golden samples / sample recipes，运行 `tasteJudge`，收集 legacy final output 和 `generatedFeedbackShadow`。
+- 可以汇总 validator warnings、generated validator warnings、adapter info 和 fallbackReason。
+- 不改变 `result`，不改 golden expected，不改 runtime，不写入 generated data，不自动采纳制作人意见。
+- 不根据中文文案、`zhCN`、displayName 或某个 sample 自动判断好坏。
+- 不为某个 sample 写特殊结论，不自动决定 partial / active 接管，不自动改文案。
+- 允许通用收集字段、通用 legacy / shadow 对比、通用 `needsHumanReview` 标记和通用 warning / info 汇总。
+
+制作人审核是 partial / active 接管前的必要环节。任何会改变玩家可见 feedback 的后续任务，都应先明确哪些 generated 文案已经经过制作人审核、哪些仍需保留 legacy、哪些需要新增或重写文案，并同步 golden 记录。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

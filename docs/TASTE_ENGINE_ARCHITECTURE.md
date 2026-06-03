@@ -767,6 +767,44 @@ data/generated/feedbackTexts.generated.js
 
 本轮不需要 UI smoke，因为 generated JS 尚未被页面加载，也未改变 runtime 行为。
 
+### v0.0.7.21 feedback shadow 评审包 / 对比输出设计
+
+feedback shadow review pack 属于评审工具层，不是 runtime 判定层。它读取当前 golden sample 试喝结果、legacy final feedback 和 `result.generatedFeedbackShadow`，把二者整理成制作人可读的对比报告，用于决定 generated 文案是否值得未来接管。
+
+分层关系应保持：
+
+```text
+golden sample / sample recipe
+↓
+tasteJudge result
+↓
+legacy final feedback + generatedFeedbackShadow
+↓
+feedback shadow review pack
+↓
+producer review notes
+```
+
+review pack 不承载机制判断：
+
+- 不改 `result.feedback`。
+- 不改 `result.score`、`result.type`、事故、饮品类型或 `feedbackTags`。
+- 不改 golden expected。
+- 不改 runtime、generated data、CSV / Google Sheets 或文案源。
+- 不根据中文文案、`zhCN`、displayName、某个 `textId`、某个 sample 或具体原料组合自动判断好坏。
+- 不自动决定 partial / active 接管，不自动改文案。
+
+review pack 可以做的通用工作：
+
+- 收集 legacy final feedback、score、type、stable IDs 和 `feedbackTags`。
+- 收集 generated shadow candidates 的 `textId`、`feedbackTag`、`scene`、`tone`、`zhCN` 和 score range。
+- 记录 `affectsFinalFeedback: false`、`fallbackReason`、adapter metadata、validator / generated validator warnings 和通用 info。
+- 标记 `needsHumanReview`，并提供制作人审核字段，例如 `reviewStatus`、`producerComment`、`preferredTextId`、`needsNewText`、`toneIssue`、`tagIssue`、`tooAI`、`tooHarsh`、`notFunny`、`wrongTrigger`、`suggestedRewrite`。
+
+未来输出路线建议先采用 Markdown review pack + JSON source。Markdown 便于制作人快速阅读，JSON 便于后续生成报告和机器汇总。样本量变多后，可再导出 Google Sheets 审核表；如果要把审核字段加入正式 Google Sheets 工作台或改变 `feedback_texts` CSV 字段，必须先由用户制作人确认。
+
+制作人审核是 partial / active 接管前的必要环节。只有经过审核、记录原因并有 golden / UI 验收保护的 generated 文案，才应进入后续玩家可见 feedback 接管任务。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

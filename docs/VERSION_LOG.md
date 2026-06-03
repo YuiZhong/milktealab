@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.21
+
+本轮为 feedback shadow 评审包 / 对比输出 docs / schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 feedback shadow review pack 设计。
+  - 明确 legacy final output、generated shadow candidates、machine checks 与 producer review notes 的结构边界。
+  - 设计制作人审核字段，例如 `reviewStatus`、`producerComment`、`preferredTextId`、`needsNewText`、`toneIssue`、`tagIssue`、`tooAI`、`tooHarsh`、`notFunny`、`wrongTrigger`、`suggestedRewrite`。
+  - 建议未来先输出 Markdown review pack + JSON source，样本量变多后再导出 Google Sheets 审核表。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 明确 review pack 是评审工具层，不是 runtime 判定层。
+  - 明确制作人审核是 partial / active 接管前的必要环节。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.21 已完成 feedback shadow 评审包 / 对比输出设计。
+
+### 阶段边界
+
+- 本轮只做 docs / schema 设计。
+- 不实现 review pack script。
+- 不新增 review output。
+- 不改 runtime、data、scripts、`content_sheets` 或 `index.html`。
+- 不改 golden samples / runner。
+- 不改 final feedback / score / type / accident / feedbackTags。
+- 不改 CSV / Google Sheets 字段。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.20 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
