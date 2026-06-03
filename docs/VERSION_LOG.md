@@ -1,5 +1,42 @@
 # 版本记录
 
+## docs: sync v0.0.7.9 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.9-candidate`。
+  - 记录 candidate 指向 `bcb5dd0e72f64660c08bb4121ee06310fc044f42`。
+  - 记录 `v0.0.7.9-candidate` 已冻结并推送。
+  - 记录 v0.0.7.9 已实现 feedback sheet build script 第一版。
+  - 记录当前未推进 v0.0.7.10。
+
+### 阶段边界
+
+- `v0.0.7.9-candidate` 已冻结并推送。
+- candidate 指向 `bcb5dd0e72f64660c08bb4121ee06310fc044f42`。
+- v0.0.7.9 已实现 feedback sheet build script 第一版。
+- 已新增 generated feedback JSON。
+- build 依赖 validator。
+- validator Errors 0；warnings 为人工审核提醒。
+- generated JSON 合法且中文可读。
+- 当前仍未实现 runtime adapter / feedbackEngine 接入。
+- 未改 `core/feedbackEngine.js` / `data/feedbackTexts.js`。
+- 未改 runtime、`content_sheets`、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.9`。
+- 当前未推进 v0.0.7.10。
+
+### 验证结果
+
+- Validator：`node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0，Warnings 12。
+- Build：`node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json` 通过。
+- Generated JSON：`python3 -m json.tool data/generated/feedbackTexts.generated.json` 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.7.9
 
 本轮实现 feedback sheet build script 第一版。
