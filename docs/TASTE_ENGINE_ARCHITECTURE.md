@@ -465,6 +465,49 @@ build = 未来从已通过 validate 的表格生成 runtime data
 runtime = 未来读取 generated data 或继续读取现有兼容数据，不直接读取 sample CSV
 ```
 
+### v0.0.7.8 feedback sheet build script 设计
+
+build script 是内容管线生成层，不是机制判断层。未来 `buildFeedbackData` 只应读取已经通过 `validateFeedbackSheet` 的 feedback sheet，把人类编辑源转换成 runtime 可读 generated data；它不负责决定一杯饮品该选哪条 feedback。
+
+未来边界：
+
+```text
+Google Sheets / CSV = 人类编辑源
+validateFeedbackSheet = 校验层
+buildFeedbackData = 生成层
+data/generated = runtime 未来读取源
+feedbackEngine adapter = 未来单独任务
+```
+
+build 必须依赖 validate：
+
+- build 前必须先跑 `validateFeedbackSheet`。
+- validate 有 error 时 build 必须停止。
+- validate 只有 warning 时 build 可以继续，但必须报告 warning。
+- build 不应该吞掉 validation 结果。
+- build 输出后应运行 golden samples。
+
+generated data 应以 stable ID 为主：
+
+- 以 `textId` 建 `textsById`。
+- 以 `feedbackTag` 生成 tag 分组。
+- 以 `scene` 生成 scene 分组。
+- `zhCN` 只作为显示文案，不作为 key。
+- `notes` 只作为制作人备注，不参与 runtime 选择。
+- disabled 文案建议保留在 `textsById` 供审计，但默认不进入 enabled 分组。
+
+build 允许的通用逻辑只有格式化和索引生成，例如 `"TRUE"` -> `true`、空字符串转 `null`、score 转 number / `null`、metadata 生成、按 `textId` / `feedbackTag` / `scene` 分组。build 不允许为具体文案、具体 golden sample、具体原料组合或具体审美结论写 if，也不允许根据 `zhCN` / `displayName` 决定机制逻辑。
+
+未来 CLI 可以考虑：
+
+```bash
+node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv
+node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv --out data/generated/feedbackTexts.generated.js
+node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv --dry-run
+```
+
+本轮不创建 `scripts/content/buildFeedbackData.js`，不新增 generated data，不改 runtime，不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

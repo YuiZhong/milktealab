@@ -1123,6 +1123,139 @@ node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_t
 
 warning 不阻塞第一版样例通过；error 必须修复后才能进入后续 build / candidate。validator 不根据具体 `zhCN`、某个 golden sample、某个原料组合或某条文案写例外，也不把 `zhCN` / `notes` 当主键。
 
+#### v0.0.7.8 feedback sheet build script 设计
+
+v0.0.7.8 只设计未来 `buildFeedbackData` 的规则边界，不实现 build script，不新增 `data/generated`，不接 runtime，不迁移现有 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。build script 是内容管线生成层，不是机制判断层；它只把已通过 validate 的人类编辑源转换成 runtime 可读的数据形状。
+
+未来分层关系：
+
+```text
+Google Sheets / CSV = 人类编辑源
+validateFeedbackSheet = 校验层
+buildFeedbackData = 生成层
+data/generated = runtime 未来读取源
+feedbackEngine adapter = 未来单独任务
+```
+
+未来 build 输入：
+
+```text
+content_sheets/feedback_texts.csv
+```
+
+当前样例仍是：
+
+```text
+content_sheets/examples/feedback_texts.sample.csv
+```
+
+未来 build 输出可以是：
+
+```text
+data/generated/feedbackTexts.generated.js
+```
+
+或：
+
+```text
+data/generated/feedbackTexts.generated.json
+```
+
+本轮不创建以上文件。正式 build 前必须先跑 `validateFeedbackSheet`；validate 有 error 时 build 必须停止，只有 warning 时 build 可以继续但必须报告 warning。build 不应吞掉 validation 结果，也不应把 warning 包装成无事发生。build 输出后仍应运行 golden samples；如果未来 adapter / runtime 接入导致反馈选择、反馈文案、评分、事故、饮品类型、`result.type` 或 expected 变化，必须说明原因。
+
+未来 generated data 可以采用类似结构：
+
+```js
+{
+  schemaVersion: "feedbackTexts.generated.v0.0.7.x",
+  generatedFrom: "content_sheets/feedback_texts.csv",
+  generatedAt: "2026-06-03T00:00:00.000Z",
+  textsById: {
+    feedback_classic_001: {
+      textId: "feedback_classic_001",
+      feedbackTag: "classic",
+      scene: "normal",
+      zhCN: "...",
+      tone: "classic",
+      minScore: 60,
+      maxScore: 90,
+      accidentTypeId: null,
+      drinkTypeId: "classic_milk_tea",
+      outcomeTypeId: null,
+      audienceId: null,
+      enabled: true,
+      notes: "..."
+    }
+  },
+  textIdsByTag: {
+    classic: ["feedback_classic_001"]
+  },
+  enabledTextIdsByTag: {
+    classic: ["feedback_classic_001"]
+  },
+  textIdsByScene: {
+    normal: ["feedback_classic_001"]
+  },
+  enabledTextIdsByScene: {
+    normal: ["feedback_classic_001"]
+  },
+  metadata: {
+    readonly: true,
+    sourceType: "generated",
+    stableIdRequired: true
+  }
+}
+```
+
+结构原则：
+
+- generated data 以 stable `textId` 建索引。
+- `feedbackTag` / `scene` 只作为稳定分组 key，不是显示文案。
+- `zhCN` 是显示文案，不是主键，也不参与机制判断。
+- `notes` 是制作人备注，可以保留用于审计，但不参与 runtime 选择。
+- `minScore` / `maxScore` 建议转成 number；空分数字段建议转成 `null`。
+- optional stable ID 字段空值建议转成 `null`，避免 adapter 分不清空字符串和真实 ID。
+- `enabled` 建议从 `"TRUE"` / `"FALSE"` 转成 boolean。
+
+disabled 文案处理建议：保留在 `textsById`，但默认不进入 `enabledTextIdsByTag` / `enabledTextIdsByScene`。这样可以保留制作人草稿和历史审计信息，也能让未来 adapter 默认只从启用文案池取候选。build 不负责选择哪条文案，选择逻辑仍由后续 adapter / feedbackEngine 任务处理。
+
+未来 CLI 可以先保持简单：
+
+```bash
+node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv
+```
+
+可考虑的扩展：
+
+```bash
+node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv --out data/generated/feedbackTexts.generated.js
+node scripts/content/buildFeedbackData.js content_sheets/feedback_texts.csv --dry-run
+```
+
+不要过度设计 CLI。第一版 build 应优先保证可审计、可回归、不会改变 runtime。
+
+反 if 边界：
+
+- build 不为某个具体文案写特殊判断。
+- build 不为某个具体 golden sample 写硬编码。
+- build 不根据 `zhCN` / `displayName` 决定机制逻辑。
+- build 不自动改 `tone` / score / `scene`。
+- build 不自动修复用户文案。
+- build 不绕过 stable ID。
+- build 不直接接管 `feedbackEngine`。
+
+允许的通用逻辑：
+
+- 按 `textId` 建索引。
+- 按 `feedbackTag` 分组。
+- 按 `scene` 分组。
+- 类型转换，例如 `"TRUE"` -> `true`。
+- 空字符串按字段语义转成 `null`。
+- 分数字段转 number / `null`。
+- 生成只读 metadata。
+
+本设计不要求用户改变当前 Google Sheets 字段，也不要求用户额外填新字段。未来如果为了 build / adapter 改变人类表格字段或 Google Sheets 工作台使用方式，应先由用户作为制作人确认。
+
 代表 schema 示例：
 
 ```text

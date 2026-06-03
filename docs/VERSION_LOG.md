@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.7.8
+
+本轮为 feedback sheet build script 设计。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充未来 `buildFeedbackData` 的输入 / 输出边界。
+  - 设计 generated feedback data 的轻量结构建议。
+  - 明确 `validateFeedbackSheet` / build / generated data / runtime adapter 边界。
+  - 明确 disabled 文案处理建议、`textId` / `feedbackTag` / `scene` 分组策略和空值转换规则。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 明确 build script 是内容管线生成层，不是机制判断层。
+  - 明确 build 必须依赖 validate。
+  - 明确 generated data 以 stable ID 为主。
+  - 明确 build 不允许写内容 if 或样本硬编码。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.8 已完成 feedback sheet build script 设计。
+  - 记录当前未实现 build script，未新增 generated data / runtime 导入。
+
+### 阶段边界
+
+- 本轮只做 docs / schema 设计。
+- 本轮不改 runtime，不改 data，不改 runner，不改 `content_sheets` 样例。
+- 本轮不改 `scripts/content/validateFeedbackSheet.js`，不新增 build script。
+- 本轮不新增 generated data，不接 runtime。
+- 本轮不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.7.7 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

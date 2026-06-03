@@ -191,11 +191,15 @@
 - `content_sheets/examples/feedback_texts.sample.csv` 已按项目稳定字段顺序写回并保持 UTF-8 with BOM；`content_sheets/examples/feedback_texts.sample.json` 已从同一份 CSV 同步更新并保持中文可读。
 - v0.0.7.7 是内容样例更新，不接 runtime，不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`，不改评分、事故、饮品类型、feedback runtime、`result.type` 或 golden expected。
 - `v0.0.7.7-candidate` 已冻结并推送。
+- v0.0.7.8 已完成 feedback sheet build script 设计，本地 commit 后以 `git log -1` 为准。
+- build 设计边界：未来 `buildFeedbackData` 只读取已通过 `validateFeedbackSheet` 的 feedback sheet，把人类编辑源转换成 runtime 可读 generated data；它不承载机制判断、不自动改文案、不调参数、不接管 `feedbackEngine`。
+- generated feedback data 设计方向是以 stable `textId` 建索引，并按 `feedbackTag` / `scene` 生成分组；`zhCN` 仍是显示文案，不是主键；`notes` 仍是制作人备注，不参与 runtime 选择。
 - 当前未新增 generated data / build script。
 - 当前未实现 runtime 导入。
-- 当前未推进 v0.0.7.8。
+- 当前未创建 `v0.0.7.8-candidate`。
+- 当前未推进 v0.0.7.9。
 - 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 v0.0.7.8 feedback sheet build script 设计、v0.0.7.8 feedback 文案评审会继续，或 v0.0.7.8 feedback_texts 样例内容继续扩充 / 制作人审核。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 下一步可考虑 `v0.0.7.8-candidate` 冻结、v0.0.7.9 feedback sheet build script 实现，或 v0.0.7.x feedback 文案评审会继续。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
