@@ -1,5 +1,49 @@
 # 版本记录
 
+## v0.0.7.22
+
+本轮实现 feedback shadow review pack 第一版脚本，并按制作人可读性反馈调整 Markdown 输出结构。
+
+### 本轮新增 / 更新
+
+- 新增 `scripts/content/buildFeedbackShadowReviewPack.js`
+  - 读取既有 golden samples、legacy final output 与 generated shadow candidates。
+  - 输出制作人可读的 Markdown review pack。
+  - Markdown 优先展示“你需要审什么 / 旧反馈 / 新候选文案 / 制作人审核”，再展示机器详情。
+  - 不承载机制判断、不自动接管 generated feedback、不自动改文案、不自动改 golden expected。
+- 新增 `reports/feedbackShadowReview.sample.md`
+  - 覆盖 `classic_milk_tea`、`extreme_lemon_accident`、`straw_resistance_accident` 三个代表样本。
+  - 区分 legacy final output 与 generated shadow candidates。
+  - 制作人审核区使用数字状态码：1 keep / 2 revise / 3 reject / 4 pending。
+  - 制作人审核区保留英文 key，并在后面补中文解释，例如 `reviewStatus（审核状态）`、`preferredTextId（偏好文案ID）`、`issueTags（问题标签）`、`suggestedRewrite（建议改写）`、`producerComment（制作人备注）`。
+  - 常见问题标签使用中文自然语言，例如 AI味浓、太狠、不好笑、触发不对、太平、太长、太抽象、想留但要改。
+  - 不再要求制作人填写 `tooAI` / `tooHarsh` / `notFunny` / `wrongTrigger` 等程序化独立字段，改为 `issueTags`。
+  - 将 metadata、resultIds、matchReason、fallbackReason、affectsFinalFeedback、scoreChanged / typeChanged / feedbackTagsChanged 等机器字段降级到“机器详情（一般不用制作人细看）”。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.22 已实现 feedback shadow review pack 第一版脚本。
+  - 同步 report 已按用户反馈改成制作人速读版 + 机器详情两层结构。
+  - 记录当前仍未改变玩家最终 feedback，仍未做 partial / active 接管。
+
+### 阶段边界
+
+- 本轮只新增 review pack 生成脚本与样例 Markdown 报告。
+- report 是制作人评审材料，不是 runtime data。
+- report 机器详情仍保留，但不放在制作人主阅读路径。
+- 不改 runtime、core、data、generated data、content_sheets 或 `index.html`。
+- 不改 `feedbackEngine` / `feedbackRuntimeAdapter`。
+- 不改玩家最终 feedback、score、type、accident 或 feedbackTags。
+- 不改 CSV / Google Sheets 字段。
+- 不改 golden samples / runner / golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/buildFeedbackShadowReviewPack.js` 通过。
+- `node scripts/content/buildFeedbackShadowReviewPack.js --out reports/feedbackShadowReview.sample.md` 通过。
+- Shadow check / browser loading check / adapter check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.21 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

@@ -90,10 +90,19 @@
 - shadow mode 当前仍不影响玩家最终 feedback。
 - 当前未做 partial / active 接管。
 - v0.0.7.21 已完成 feedback shadow 评审包 / 对比输出设计。
-- 当前未实现 review pack script。
+- v0.0.7.22 已实现 feedback shadow review pack 第一版脚本，本地 commit 后以 `git log -1` 为准。
+- 新增 `scripts/content/buildFeedbackShadowReviewPack.js`，用于输出制作人可读的 legacy final output vs generated shadow candidates 对比报告。
+- 新增 `reports/feedbackShadowReview.sample.md`，覆盖 `classic_milk_tea`、`extreme_lemon_accident`、`straw_resistance_accident` 三个代表样本。
+- 用户已反馈第一版 report 信息太多、字段不够友好；当前已调整为制作人速读版 + 机器详情两层结构。
+- report 前半部分优先展示旧反馈、新候选文案、场景匹配和制作人审核区；metadata、resultIds、matchReason、fallbackReason、affectsFinalFeedback、scoreChanged / typeChanged / feedbackTagsChanged 等机器字段降级到“机器详情（一般不用制作人细看）”。
+- 制作人审核区当前使用数字状态码：1 keep / 2 revise / 3 reject / 4 pending；常见问题标签使用中文自然语言；英文 key 保留并补中文解释，例如 `reviewStatus（审核状态）`、`preferredTextId（偏好文案ID）`、`issueTags（问题标签）`、`suggestedRewrite（建议改写）`、`producerComment（制作人备注）`。
+- `tooAI` / `tooHarsh` / `notFunny` / `wrongTrigger` 等程序化独立字段不再作为制作人主填写项，已合并为 `issueTags`。
+- review pack 只是制作人评审材料，不是 runtime data，不自动接管 generated feedback，不自动改文案，不自动改 golden expected。
 - 当前未改变玩家最终 feedback。
-- 当前未推进 v0.0.7.22。
-- 下一步可考虑：`v0.0.7.22｜feedback shadow review pack 脚本实现`，或继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.22｜severity / threshold 表格化路线设计`。
+- 当前仍未做 partial / active 接管。
+- 当前未推进 v0.0.7.23。
+- 当前未创建 `v0.0.7.22-candidate`。
+- 下一步可考虑：`v0.0.7.22-candidate` 冻结，或让用户查看 `reports/feedbackShadowReview.sample.md`，或继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.23｜severity / threshold 表格化路线设计`。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。
