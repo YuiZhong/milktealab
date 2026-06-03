@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.6.13 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.13-candidate`。
+  - 记录 candidate 指向 `a18cac01ea5a71c94cab676f1149ddeadaa4f2e4`。
+  - 记录 `v0.0.6.13-candidate` 已冻结并推送。
+  - 记录 v0.0.6.13 已完成 `summaryCandidates` golden 结构断言。
+  - 记录当前未推进 v0.0.6.14。
+
+### 阶段边界
+
+- runner 已支持 `summaryCandidates` expected。
+- 少量 golden samples 已补 `summaryCandidates` 结构 expected。
+- 未改 runtime、core、`index.html` 或 `summaryCandidateEngine`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 未做 priority 接管 / severity / `scoreMultiplier`。
+- 未创建正式 tag `v0.0.6.13`。
+- 未推进 v0.0.6.14。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.13
 
 本轮新增 `summaryCandidates` golden 结构断言能力。
