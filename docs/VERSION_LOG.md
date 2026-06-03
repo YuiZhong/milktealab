@@ -1,5 +1,34 @@
 # 版本记录
 
+## docs: sync v0.0.6.14 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.14-candidate`。
+  - 记录 candidate 指向 `9118ccbebbf2af6e8221fc8e1b5b9f49e13207cd`。
+  - 记录 `v0.0.6.14-candidate` 已冻结并推送。
+  - 记录 v0.0.6.14 已完成 candidate priority shell docs / schema。
+  - 记录当前未推进 v0.0.6.15。
+
+### 阶段边界
+
+- priority shell 是只读中间观察层，不接管最终判定。
+- 已明确 `priorityBand` / `severityHint` 边界。
+- 未实现 priority shell runtime。
+- 未新增 priority engine。
+- 未改 runtime、data、scripts、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.6.14`。
+- 未推进 v0.0.6.15。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.14
 
 本轮定义 candidate priority shell docs / schema。
