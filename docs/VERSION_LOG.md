@@ -1,5 +1,31 @@
 # 版本记录
 
+## docs: sync v0.0.7.3 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.3-candidate`。
+  - 记录 candidate 指向 `0a7c6331440c95195f931f776c79a31abfda1f96`。
+  - 记录 `v0.0.7.3-candidate` 已冻结并推送。
+  - 记录 v0.0.7.3 已完成调参阶段反 if guardrail。
+  - 记录当前未推进 v0.0.7.4。
+
+### 阶段边界
+
+- 已明确 v0.0.7.x 后续调参、文案、severity、threshold、golden expected 和表格化内容管线任务仍需防止内容 if。
+- 未改 runtime、data、scripts、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.3`。
+- 当前未推进 v0.0.7.4。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.7.3
 
 本轮为 v0.0.7.x 调参阶段反 if guardrail。
