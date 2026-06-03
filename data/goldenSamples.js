@@ -73,6 +73,22 @@
             weightsEnabled: false,
             affectsFinalResult: false
           }
+        },
+        generatedFeedbackShadow: {
+          exists: true,
+          candidateCountMin: 1,
+          metadataIncludes: {
+            readonly: true,
+            generatedDataAvailable: true,
+            adapterAvailable: true
+          },
+          candidateIncludesAny: [
+            {
+              textId: "feedback_classic_001",
+              feedbackTag: "classic",
+              scene: "normal"
+            }
+          ]
         }
       },
       notes: "经典稳定样本，不应被事故规则误伤。"
@@ -260,6 +276,22 @@
               sourceLayer: "taste",
               sourceSummary: "tasteSummary",
               accidentTypeId: "taste_acid_overload"
+            }
+          ]
+        },
+        generatedFeedbackShadow: {
+          exists: true,
+          candidateCountMin: 1,
+          metadataIncludes: {
+            readonly: true,
+            generatedDataAvailable: true,
+            adapterAvailable: true
+          },
+          candidateIncludesAny: [
+            {
+              textId: "feedback_acid_accident_001",
+              feedbackTag: "acid_accident",
+              scene: "accident"
             }
           ]
         }
@@ -514,6 +546,22 @@
               candidateType: "accident",
               sourceLayer: "texture",
               sourceSummary: "textureSummary"
+            }
+          ]
+        },
+        generatedFeedbackShadow: {
+          exists: true,
+          candidateCountMin: 1,
+          metadataIncludes: {
+            readonly: true,
+            generatedDataAvailable: true,
+            adapterAvailable: true
+          },
+          candidateIncludesAny: [
+            {
+              textId: "feedback_straw_disaster_001",
+              feedbackTag: "straw_disaster",
+              scene: "accident"
             }
           ]
         }

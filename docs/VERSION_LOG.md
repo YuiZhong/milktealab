@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.7.20
+
+本轮新增 `generatedFeedbackShadow` golden 结构断言能力。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - golden runner 测试环境加载 generated feedback JS data module 与 `feedbackRuntimeAdapter`。
+  - 新增 `generatedFeedbackShadow` expected 结构断言。
+  - 检查 shadow 容器存在、`enabled`、`mode: "shadow"`、`affectsFinalFeedback: false`、`affectsFinalResult: false`、`source`、`candidates`、`fallbackReason` 和 `metadata` 基础结构。
+  - 支持用局部 candidate 匹配检查代表 `textId` / `feedbackTag` / `scene`，不深度锁死完整 object。
+- 更新 `data/goldenSamples.js`
+  - 少量代表 golden samples 补充 `generatedFeedbackShadow` expected。
+
+### 阶段边界
+
+- 本轮只保护 shadow 输出结构，不改 runtime。
+- 不改 `feedbackEngine` / `feedbackRuntimeAdapter` / generated data / `content_sheets` / `index.html`。
+- 不改玩家最终 feedback、score、事故、饮品类型、`result.type`、`feedbackTags` 或 golden score expected。
+- 不锁死具体中文文案或 generated 文案选择算法。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `classic_milk_tea` 补充 shadow expected：检查 classic generated 候选。
+- `extreme_lemon_accident` 补充 shadow expected：检查 acid accident generated 候选。
+- `straw_resistance_accident` 补充 shadow expected：检查 straw disaster generated 候选。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `node --check scripts/runGoldenSamples.js` 通过。
+- `node --check data/goldenSamples.js` 通过。
+- Shadow check 通过。
+- Generated browser loading check 通过。
+- Adapter check 通过。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.19 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

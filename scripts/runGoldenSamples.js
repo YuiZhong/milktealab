@@ -20,6 +20,8 @@ const scriptFiles = [
   "data/feedbackTexts.js",
   "core/recipeEngine.js",
   "core/scoreEngine.js",
+  "data/generated/feedbackTexts.generated.js",
+  "core/feedbackRuntimeAdapter.js",
   "core/feedbackEngine.js",
   "core/tasteContext.js",
   "core/drinkStructureAnalyzer.js",
@@ -153,6 +155,10 @@ function getSummaryCandidates(result) {
 
 function getCandidatePriorityShell(result) {
   return result?.candidatePriorityShell || null;
+}
+
+function getGeneratedFeedbackShadow(result) {
+  return result?.generatedFeedbackShadow || null;
 }
 
 function formatIds(ids) {
@@ -463,6 +469,56 @@ function checkCandidatePriorityShellExpectation(result, expectation, failures) {
   );
 }
 
+function checkGeneratedFeedbackShadowStructure(shadow, failures) {
+  if (shadow?.enabled !== true) failures.push("generatedFeedbackShadow.enabled should be true");
+  if (shadow?.mode !== "shadow") failures.push('generatedFeedbackShadow.mode should be "shadow"');
+  if (shadow?.affectsFinalFeedback !== false) failures.push("generatedFeedbackShadow.affectsFinalFeedback should be false");
+  if (shadow?.affectsFinalResult !== false) failures.push("generatedFeedbackShadow.affectsFinalResult should be false");
+  if (shadow?.source !== "generatedFeedbackTexts") failures.push('generatedFeedbackShadow.source should be "generatedFeedbackTexts"');
+  if (!Array.isArray(shadow?.candidates)) failures.push("generatedFeedbackShadow.candidates should be an array");
+  if (shadow?.fallbackReason !== null && typeof shadow?.fallbackReason !== "string") {
+    failures.push("generatedFeedbackShadow.fallbackReason should be null or string");
+  }
+  if (!isPlainObject(shadow?.metadata)) {
+    failures.push("generatedFeedbackShadow.metadata should be an object");
+    return;
+  }
+  if (shadow.metadata.readonly !== true) failures.push("generatedFeedbackShadow.metadata.readonly should be true");
+  if (
+    Object.prototype.hasOwnProperty.call(shadow.metadata, "generatedDataAvailable") &&
+    typeof shadow.metadata.generatedDataAvailable !== "boolean"
+  ) {
+    failures.push("generatedFeedbackShadow.metadata.generatedDataAvailable should be boolean when present");
+  }
+  if (
+    Object.prototype.hasOwnProperty.call(shadow.metadata, "adapterAvailable") &&
+    typeof shadow.metadata.adapterAvailable !== "boolean"
+  ) {
+    failures.push("generatedFeedbackShadow.metadata.adapterAvailable should be boolean when present");
+  }
+}
+
+function checkGeneratedFeedbackShadowExpectation(result, expectation, failures) {
+  if (!expectation) return;
+
+  const shadow = getGeneratedFeedbackShadow(result);
+  if (expectation.exists === true && !shadow) {
+    failures.push("generatedFeedbackShadow should exist");
+    return;
+  }
+  if (!shadow) return;
+
+  if (expectation.exists === true) checkGeneratedFeedbackShadowStructure(shadow, failures);
+
+  const candidates = Array.isArray(shadow.candidates) ? shadow.candidates : [];
+  checkMetadataIncludes(shadow.metadata, expectation.metadataIncludes, failures, "generatedFeedbackShadow.metadata");
+  checkCandidateIncludesAny(candidates, expectation.candidateIncludesAny, failures, "generatedFeedbackShadow.candidates");
+
+  if (typeof expectation.candidateCountMin === "number" && candidates.length < expectation.candidateCountMin) {
+    failures.push(`generatedFeedbackShadow.candidates length ${candidates.length} is below ${expectation.candidateCountMin}`);
+  }
+}
+
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
   if (item?.name) return { ...item };
 
@@ -530,6 +586,7 @@ function checkSample(sample, result) {
   checkFlavorSummaryExpectation(result, expectations.flavorSummary, failures);
   checkSummaryCandidatesExpectation(result, expectations.summaryCandidates, failures);
   checkCandidatePriorityShellExpectation(result, expectations.candidatePriorityShell, failures);
+  checkGeneratedFeedbackShadowExpectation(result, expectations.generatedFeedbackShadow, failures);
 
   if (typeof expectations.scoreMin === "number" && score < expectations.scoreMin) {
     failures.push(`score ${score} is below ${expectations.scoreMin}`);
