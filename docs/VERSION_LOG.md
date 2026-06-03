@@ -1,5 +1,43 @@
 # 版本记录
 
+## v0.0.7.4
+
+本轮新增 feedback_texts 样例表格 / JSON 草案。
+
+### 本轮新增 / 更新
+
+- 新增 `content_sheets/examples/feedback_texts.sample.csv`
+  - 提供 10 行人类可编辑样例，覆盖 classic、premium、acid_accident、greasy_overload、straw_disaster、durian、normal_good、followup、fallback 和 disabled 等代表场景。
+  - 使用 stable `textId` / `feedbackTag`，`zhCN` 仅作为显示文案列。
+  - 保存为 UTF-8 with BOM，避免 Excel 直接打开时中文乱码。
+- 新增 `content_sheets/examples/feedback_texts.sample.json`
+  - 提供与 CSV 对应的 JSON 草案，用于观察未来 generated / adapter 数据形状。
+  - 当前不是 generated data，不接 runtime。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 明确 sample 用于验证人类编辑体验和后续 validate 脚本设计。
+  - 明确 sample 不是正式数据源，不替代 `data/feedbackTexts.js`。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 明确 `content_sheets/examples/` 属于内容管线草案层。
+  - 明确 runtime 不直接读取 sample，generated data / adapter 必须等后续任务单独实现。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.4 已新增 feedback_texts 样例表格 / JSON 草案。
+  - 记录当前仍未实现 validate script / build script / generated data。
+
+### 阶段边界
+
+- 本轮不改 runtime，不改 data，不改 runner，不改 golden samples。
+- 本轮不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+- 本轮不新增 validate script / build script / generated data。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- JSON 合法性：`python3 -m json.tool content_sheets/examples/feedback_texts.sample.json` 通过。
+- CSV 编码：`content_sheets/examples/feedback_texts.sample.csv` 已确认 UTF-8 with BOM。
+
 ## docs: sync v0.0.7.3 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

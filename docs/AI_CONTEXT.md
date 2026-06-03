@@ -177,9 +177,13 @@
 - v0.0.7.2 只细化未来 `feedback_texts` 表格字段、校验规则、现有 `feedbackEngine` / `feedbackTexts` 边界和后续小步路线；当前未实现表格化内容管线，未新增 CSV / JSON / generated data / validate script / build script，未改 runtime、data、runner 或 golden expected。
 - v0.0.7.3 已完成调参阶段反 if guardrail，且 `v0.0.7.3-candidate` 已冻结并推送。
 - v0.0.7.x 后续实现任务必须自查是否新增内容 if、是否锁死具体数值、是否为了某个 golden sample 临时硬编码、是否绕过表格化内容管线、是否让 `displayName` / 中文文案成为主键，以及是否影响评分、事故、饮品类型、feedback 或 `result.type`。
-- 当前未推进 v0.0.7.4。
+- v0.0.7.4 已新增 feedback_texts 样例表格 / JSON 草案，本地 commit 后以 `git log -1` 为准。
+- `content_sheets/examples/feedback_texts.sample.csv` 与 `content_sheets/examples/feedback_texts.sample.json` 是非 runtime 样例，不替代 `data/feedbackTexts.js`。
+- `content_sheets/examples/feedback_texts.sample.csv` 应保持 UTF-8 with BOM，保证 Excel 直接打开中文不乱码；后续正式 CSV 导出也应照顾 Excel / Google Sheets 编辑体验。
+- 当前仍未实现 validate script / build script / generated data。
+- 当前未创建 `v0.0.7.4-candidate`。
 - 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 v0.0.7.4 feedback_texts 样例表格 / JSON 草案、v0.0.7.4 validate feedback sheet 脚本设计，或 v0.0.7.x 第一轮反馈文案评审会。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 下一步可考虑 v0.0.7.4-candidate 冻结、v0.0.7.5 validate feedback sheet 脚本设计，或 v0.0.7.x 第一轮反馈文案评审会。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
