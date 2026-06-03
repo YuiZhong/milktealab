@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.14
+
+本轮为 feedbackEngine 旁路读取 generated data docs / schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 设计未来 `feedbackEngine` 旁路读取 generated feedback data 的渐进路线。
+  - 明确 feature flag、debug-only、shadow、partial、active 和 fallback 边界。
+  - 明确 legacy feedback 与 generated candidate 的 comparison 方式。
+  - 明确制作人审核节点和 active 接管前的 golden expected 规则。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 adapter / generated data / `feedbackEngine` 分层边界。
+  - 明确 generated data 是文案池来源，不是机制判断层。
+  - 明确不允许内容 if 或文案主键回潮。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.14 已完成 feedbackEngine 旁路读取 generated data docs / schema。
+
+### 阶段边界
+
+- 本轮只做 docs / schema 设计。
+- 本轮不实现 runtime 接入。
+- 本轮不改 `core/feedbackEngine.js`，不改 `core/feedbackRuntimeAdapter.js`。
+- 本轮不改 generated JSON，不改 `content_sheets` CSV / JSON 样例。
+- 本轮不改 data、scripts、runtime、UI、`index.html`。
+- 本轮不改 golden samples / runner。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.13 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

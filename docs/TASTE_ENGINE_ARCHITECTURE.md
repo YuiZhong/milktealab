@@ -640,6 +640,48 @@ v0.0.7.13 强化 `scripts/content/checkFeedbackRuntimeAdapter.js`，用于在接
 
 该检查脚本仍不是机制判断层：它不判事故、不调分、不选最终 feedback、不为具体 golden sample 或中文文案写例外。它只保护 adapter 在未来接入前保持只读、stable ID、通用过滤和清晰 unavailable 状态。
 
+### v0.0.7.14 feedbackEngine 旁路读取 generated data docs / schema
+
+v0.0.7.14 只补充 `feedbackEngine` 未来旁路读取 generated feedback data 的架构边界，不实现 runtime 接入，不修改 `feedbackEngine`、adapter、generated data、CSV / JSON 样例或玩家最终 feedback。
+
+未来链路应保持分层：
+
+```text
+generated feedback data
+↓
+feedbackRuntimeAdapter = 只读候选查询
+↓
+feedbackEngine = 最终 feedback 选择边界之一
+↓
+result.feedback
+```
+
+generated data 是文案池来源，不是机制判断层；adapter 是只读读取层，不是最终选择层；`feedbackEngine` 在接入 generated data 时也不能把具体内容 if 写回 engine。
+
+未来模式边界：
+
+- `off`：完全使用 legacy `data/feedbackTexts.js` / `feedbackEngine`，玩家结果不变。
+- `debug`：可读取 generated 候选，但只用于脚本或调试输出，玩家结果不变。
+- `shadow`：legacy feedback 仍作为玩家最终输出，同时记录 generated candidate `textId`、`scene`、`tone`、score range 和 fallback reason，用于制作人评审。
+- `partial`：只对 tag whitelist 中极少数低风险 `feedbackTag` 试点 generated 文案池，必须有 fallback、golden 和制作人审核。
+- `active`：逐步扩大 generated 接管范围；必须单独任务实现，不允许默认开启。
+
+fallback 不能静默吞错：
+
+- generated data 缺失、validator 失败、adapter unavailable 或 adapter 创建失败时，legacy 文案系统仍应可用。
+- fallback 必须报告 mode、reason、adapter issues 和是否使用 legacy。
+- 坏 generated data 不能被当作正常数据继续使用。
+- engine 不应通过写死某个 `textId`、`zhCN`、displayName、golden sample 或具体文案池来“修复”坏数据。
+
+shadow comparison 只做旁路观察，不替换玩家最终 feedback。它可比较 legacy `feedbackTags`、legacy feedback、generated candidate `textIds`、filter 条件、fallback reason 和 adapter metadata。比较结果用于制作人判断文案体验，不自动改变 golden expected。
+
+golden / UI 验收边界：
+
+- debug / shadow 模式不应改现有 golden expected。
+- 任何玩家可见 feedback 变化都必须明确记录，并有意识新增或更新 golden expected。
+- runtime 接入任务必须做 UI smoke；本轮 docs-only 不需要 UI smoke。
+- 改 Google Sheets / CSV 字段、文案内容、generated 结构、`feedbackTag` / `scene` / `tone` 语义，或把 warning 改成 error，都需要用户制作人确认。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

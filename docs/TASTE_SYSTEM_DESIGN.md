@@ -1518,6 +1518,94 @@ v0.0.7.13 不改 adapter 本体，只强化 `scripts/content/checkFeedbackRuntim
 
 这些检查保护的是“adapter 如何安全提供候选”，不是“哪杯饮品应该选哪句反馈”。最终 feedback 选择、机制判断、fallback 到 legacy 文案系统、接入 `feedbackEngine` 都仍留到后续单独任务。
 
+#### v0.0.7.14 feedbackEngine 旁路读取 generated data docs / schema
+
+v0.0.7.14 只设计未来 `feedbackEngine` 如何旁路读取 generated feedback data，不实现 runtime 接入，不修改 `core/feedbackEngine.js`，不修改 `core/feedbackRuntimeAdapter.js`，不修改 generated data，也不改变玩家最终看到的 feedback。
+
+核心边界：
+
+- `feedbackEngine` 仍是最终 feedback 选择的边界之一。
+- generated feedback data 只是新的文案池来源，不是机制判断来源。
+- `feedbackRuntimeAdapter` 只提供只读候选查询，不决定最终 feedback。
+- legacy `data/feedbackTexts.js` / `feedbackEngine` 在默认状态下继续产出玩家最终文案。
+- 任何玩家可见 feedback 变化都必须单独记录、跑 golden，并由用户作为制作人审核体验。
+
+未来可考虑的配置边界：
+
+```js
+{
+  useGeneratedFeedbackTexts: false,
+  generatedFeedbackMode: "off", // "off" | "debug" | "shadow" | "partial" | "active"
+  enabledGeneratedFeedbackTags: []
+}
+```
+
+默认模式应为 `off` 或 `debug`，不改变玩家结果。任何 `active` 接管都必须作为单独任务实现，不能通过散落 if 控制某个具体 `textId`、`zhCN` 或文案池。
+
+渐进接入路线：
+
+1. Phase 1：旁路读取 / debug-only。
+   - `feedbackEngine` 可读取 generated 候选池，但不用于最终输出。
+   - 仅通过 debug 字段、脚本或 comparison 报告观察候选。
+   - 不改现有 golden expected。
+2. Phase 2：shadow comparison。
+   - legacy feedback 仍是玩家最终结果。
+   - generated 候选作为旁路结果记录，用于制作人评审。
+   - 可比较 `legacy feedbackTag`、generated candidate `textId`、`scene`、`tone`、score range 和 fallback reason。
+3. Phase 3：小范围 tag 试点 / partial。
+   - 只允许极少数低风险 `feedbackTag` 进入 generated 文案池试点。
+   - 必须有 feature flag、tag whitelist、legacy fallback、golden 保护和制作人审核。
+   - 每次试点都应有明确变更记录，不能一次性替换全部反馈系统。
+4. Phase 4：active 逐步扩大。
+   - 只能按 `feedbackTag` / `scene` / stable result ID 分批迁移。
+   - 每次玩家可见 feedback 改变都需要有意识更新 golden expected。
+   - 仍保留 fallback 和关闭开关，便于回滚。
+
+fallback 边界：
+
+- generated data 缺失时，legacy `data/feedbackTexts.js` 仍可工作。
+- generated data validator 失败、adapter unavailable 或 adapter 创建失败时，不应让 `tasteJudge` / `feedbackEngine` 崩溃。
+- fallback 必须可报告，例如记录 mode、reason、adapter issues 和是否使用 legacy。
+- 不要为了维持输出把坏 generated data 当正常数据用，也不要吞掉错误后假装 generated 路径成功。
+- generated data 有问题时应回到 validate / build / generated validator 修复，而不是在 engine 里补内容特例。
+
+shadow comparison 只用于观察，不自动替换最终结果。代表结构可考虑：
+
+```js
+{
+  mode: "shadow",
+  legacy: {
+    feedbackTags: [],
+    feedback: ""
+  },
+  generated: {
+    available: true,
+    candidateTextIds: [],
+    scene: "normal",
+    tone: "classic",
+    fallbackReason: null
+  }
+}
+```
+
+反 if 边界：
+
+- 不允许 `if (textId === "xxx")` 这种接管逻辑。
+- 不允许 `if (zhCN.includes("榴莲"))` 或按中文文案决定机制逻辑。
+- 不允许 `if (displayName === "榴莲")` 这类显示文案主键回潮。
+- 不允许为某个 golden sample、具体文案池或具体原料组合写散落 if。
+- 不允许自动调 `tone` / score / `scene`，也不允许自动改 generated data。
+- 允许通用 feature flag、通用 tag whitelist、通用 `scene` / `feedbackTag` / `accidentTypeId` / `drinkTypeId` / `outcomeTypeId` 过滤、通用 fallback 和通用 debug comparison。
+
+golden / 验收边界：
+
+- debug-only / shadow mode 不应改现有 golden expected。
+- active 接管前必须新增或更新 golden expected。
+- 任何玩家可见 feedback 变化都需要明确记录。
+- 任何 generated data 接管都需要制作人审核。
+- runtime 接入任务必须做 UI smoke；docs-only 的 v0.0.7.14 不需要 UI smoke。
+- 如果未来设计改变 Google Sheets / CSV 字段、文案内容、generated 结构、`feedbackTag` / `scene` / `tone` 含义，或把 warning 改成 error，必须先标记为“需要用户制作人确认”。
+
 允许的通用逻辑：
 
 - 按 `textId` 建索引。
