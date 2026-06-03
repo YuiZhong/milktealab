@@ -1,5 +1,39 @@
 # 版本记录
 
+## docs: sync v0.0.7.15 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.15-candidate`。
+  - 记录 candidate 指向 `18baed4f4375594db69c8d841249f1b4fce423dd`。
+  - 记录 `v0.0.7.15-candidate` 已冻结并推送。
+  - 记录 v0.0.7.15 已完成 generated feedback data runtime loading docs / schema。
+  - 记录当前未推进 v0.0.7.16。
+
+### 阶段边界
+
+- `v0.0.7.15-candidate` 已冻结并推送。
+- candidate 指向 `18baed4f4375594db69c8d841249f1b4fce423dd`。
+- v0.0.7.15 已完成 generated feedback data runtime loading docs / schema。
+- 已比较 JSON fetch / JS data module / Node-only 三种方案。
+- 推荐方向是 generated JS data module，更贴合当前同步 script 架构。
+- 已明确 runtime 不读 CSV / Google Sheets / 人类编辑源。
+- 本轮未实现 runtime loading。
+- 未改 runtime、data、scripts、generated data、`content_sheets`、`index.html`。
+- 未改 `feedbackEngine` / adapter。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.15`。
+- 当前未推进 v0.0.7.16。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.15
 
 本轮为 generated feedback data runtime loading docs / schema。
