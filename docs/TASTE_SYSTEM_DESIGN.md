@@ -1606,6 +1606,64 @@ golden / 验收边界：
 - runtime 接入任务必须做 UI smoke；docs-only 的 v0.0.7.14 不需要 UI smoke。
 - 如果未来设计改变 Google Sheets / CSV 字段、文案内容、generated 结构、`feedbackTag` / `scene` / `tone` 含义，或把 warning 改成 error，必须先标记为“需要用户制作人确认”。
 
+#### v0.0.7.15 generated feedback data runtime loading docs / schema
+
+v0.0.7.15 只设计 generated feedback data 未来如何进入 browser / runtime，不实现 runtime loading，不修改 `index.html`，不修改 build script，不生成 JS data module，不修改 generated JSON，也不改变玩家最终 feedback。
+
+当前仓库仍是普通 browser script 架构：`index.html` 通过同步 `<script>` 加载 `data/*.js`、`core/*.js` 和 `ui/*.js`，现有 `data/feedbackTexts.js` 通过全局对象提供 legacy 文案池。基于这个结构，未来 loading 方案应优先减少 async 初始化和缓存误判风险。
+
+三种路线比较：
+
+1. 方案 A：runtime fetch JSON。
+   - 形态：浏览器通过 `fetch("data/generated/feedbackTexts.generated.json")` 加载。
+   - 优点：保留 JSON 作为标准 generated artifact，便于 Node 工具链校验。
+   - 风险：会引入 async 初始化，`feedbackEngine` / `tasteJudge` / UI 点击路径需要等待加载状态；本地 file 直接打开、dev server、GitHub Pages、缓存和网络错误都需要单独处理。
+   - fallback：fetch 失败、JSON parse 失败或 generated validator 未通过时必须报告并走 legacy，不能把缺失数据当成功。
+   - 当前判断：不适合现在优先做；除非项目切到更明确的 async app 初始化或 bundler 流程。
+2. 方案 B：build 生成 JS data module。
+   - 形态：未来 build 从已验证 CSV 生成 `data/generated/feedbackTexts.generated.js`，通过 script 标签暴露只读全局对象，例如 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`。
+   - 优点：贴合当前同步 script 架构，比 fetch JSON 少 async 风险；可通过 `index.html` script 顺序确保 generated data 在 adapter / shadow mode 之前可用；cache query 可延续现有 `?v=...` 管理方式；fallback 也更接近现有 `data/feedbackTexts.js`。
+   - 校验：JS module 仍必须由 CSV -> `validateFeedbackSheet` -> build 生成；build 可同时输出 JSON 和 JS，JSON 继续做结构校验与中文可读审计，JS 需要语法检查和全局对象结构检查。
+   - 风险：`index.html` script 顺序和 cache query 必须同步，新增 generated JS 的 UI smoke 要检查脚本 200、版本 freshness、无白屏和无 console error。
+   - 当前判断：优先推荐作为后续小步方向。
+3. 方案 C：runtime 继续只读 legacy，generated data 只给 Node / 工具链。
+   - 形态：继续保持 generated JSON 只用于 validator / build / adapter check，不进入 browser。
+   - 优点：短期最安全，适合继续评审文案和完善内容管线。
+   - 风险：会推迟真实 shadow mode，generated 文案池无法在浏览器路径下验证加载、缓存和 fallback。
+   - 当前判断：适合作为 v0.0.7.15 之后的一小段缓冲，但不应长期停留。
+
+推荐方向：
+
+> 当前阶段优先考虑方案 B：generated JS data module。
+
+推荐理由：
+
+- 当前项目不是 async app / bundler 架构，而是普通 script 标签顺序加载。
+- JS data module 更接近现有 `data/*.js` 数据加载方式。
+- 可以避免 fetch JSON 带来的 async 初始化、file 打开、GitHub Pages 路径和网络错误复杂度。
+- 更适合小步进入 `feedbackEngine` shadow mode：先加载全局 generated data，但不接最终 feedback，再由 adapter 做只读 comparison。
+- cache query、script 顺序和 UI smoke 风险都能沿用现有 runtime cache-busting 工作流。
+
+无论采用哪条路线，都必须保持以下边界：
+
+- generated data 仍来自已通过 validate / build / generated validation 的源。
+- runtime 不读取 CSV，不读取 Google Sheets，不直接读取人类编辑源。
+- runtime 不修复 generated data，不自动改文案，不自动调参数。
+- generated data 加载失败不能静默当成功；fallback 到 legacy 必须可报告。
+- 任何玩家可见 feedback 变化都必须作为单独任务推进，并经过制作人审核和 golden 记录。
+- 本轮不接 runtime，不改最终反馈，不需要用户人工看表。
+
+后续小步可考虑：
+
+1. generated JS data module docs / build 设计。
+2. build script 输出 JS data module。
+3. validate generated JS / JSON 结构。
+4. `index.html` 只加载 generated data module，但不接 `feedbackEngine`。
+5. `feedbackEngine` shadow mode 只读实现。
+6. shadow output / comparison check。
+7. 制作人审核。
+8. partial / active 接管另开任务。
+
 允许的通用逻辑：
 
 - 按 `textId` 建索引。

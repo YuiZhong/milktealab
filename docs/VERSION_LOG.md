@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.7.15
+
+本轮为 generated feedback data runtime loading docs / schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 比较 runtime fetch JSON、build 生成 JS data module、Node-only generated data 三种路线。
+  - 推荐当前阶段优先考虑 generated JS data module。
+  - 明确 runtime 不读取 CSV / Google Sheets / 人类编辑源。
+  - 明确 future loading 失败必须可报告，不能静默吞错。
+  - 记录后续小步路线：JS data module build 设计、build 输出、JS / JSON 校验、`index.html` 加载但不接 `feedbackEngine`、shadow mode、comparison、制作人审核和 partial / active 接管。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 generated data loading 架构边界。
+  - 比较 JSON fetch / JS data module / Node-only 三种路线的 async、script 顺序、cache query、fallback 和 UI smoke 风险。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.15 已完成 generated feedback data runtime loading docs / schema。
+
+### 阶段边界
+
+- 本轮只做 docs / schema 设计。
+- 本轮不实现 runtime loading。
+- 本轮不生成 JS data module。
+- 本轮不改 build script，不改 validator scripts。
+- 本轮不改 generated JSON，不改 data，不改 `content_sheets`。
+- 本轮不改 `index.html`，不改 `feedbackEngine`，不改 `feedbackRuntimeAdapter`。
+- 本轮不改 golden samples / runner。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.14 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

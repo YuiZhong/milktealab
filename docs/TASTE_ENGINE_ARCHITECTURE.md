@@ -682,6 +682,59 @@ golden / UI 验收边界：
 - runtime 接入任务必须做 UI smoke；本轮 docs-only 不需要 UI smoke。
 - 改 Google Sheets / CSV 字段、文案内容、generated 结构、`feedbackTag` / `scene` / `tone` 语义，或把 warning 改成 error，都需要用户制作人确认。
 
+### v0.0.7.15 generated feedback data runtime loading docs / schema
+
+v0.0.7.15 只设计 generated feedback data 的 runtime loading 边界，不实现 loading，不修改 `index.html`，不修改 build / validator / adapter / `feedbackEngine`，不修改 generated JSON。
+
+当前 runtime 架构是同步 script 链：
+
+```text
+index.html
+↓
+data/*.js
+↓
+core/*.js
+↓
+ui/*.js / game.js
+```
+
+因此 generated feedback data 进入 browser 前，需要先决定它是 JSON fetch、JS data module，还是继续 Node-only。
+
+方案 A：runtime fetch JSON。
+
+- 优点：直接复用 `data/generated/feedbackTexts.generated.json`。
+- 风险：引入 async 初始化，`tasteJudge` / `feedbackEngine` / UI 点击路径需要明确等待或 fallback；本地 file 直接打开可能不稳定；GitHub Pages 路径、CORS / MIME、404、parse error 和缓存都要处理。
+- cache：需要 query string 或版本化路径，并确认 UI smoke 覆盖 fresh load。
+- fallback：fetch / parse / validation 失败必须可报告并走 legacy，不能静默吞错。
+- 当前不推荐优先实现，除非项目先建立统一 async boot 流程。
+
+方案 B：build 生成 JS data module。
+
+- 形态：`data/generated/feedbackTexts.generated.js` 通过 script 标签暴露全局只读数据对象。
+- 优点：贴合当前纯前端 script 架构，加载顺序可控，不引入 fetch async；更接近现有 `data/feedbackTexts.js`；便于通过 `index.html` cache query 管理；fallback 路径也更直观。
+- script 顺序：generated data module 应在 `core/feedbackRuntimeAdapter.js` 和未来 shadow mode 入口之前加载；`feedbackEngine` active 接管前仍保持 legacy 结果。
+- cache：新增 generated JS 必须带 cache query；修改 build 输出或 adapter 读取方式时必须同步更新 `index.html` query。
+- 校验：CSV 仍先过 `validateFeedbackSheet`；build 可输出 JSON + JS；JSON 继续做 `validateGeneratedFeedbackData`，JS 需要 `node --check` 或等价语法检查，以及全局对象结构 check。
+- 当前推荐优先作为后续路线。
+
+方案 C：Node-only generated data。
+
+- 形态：generated JSON 继续只用于 validator / build / adapter check，不进入 browser runtime。
+- 优点：最安全，不影响 UI，不需要 cache query 或 script 顺序调整。
+- 风险：无法验证浏览器加载、cache、fallback 和 shadow comparison，可能拖慢真正接入 `feedbackEngine`。
+- 当前适合短期继续文案评审，但不宜作为长期终点。
+
+无论选择哪条路线：
+
+- runtime 不读取 CSV / Google Sheets / 人类编辑源。
+- generated data 必须来自 validate / build / generated validation。
+- runtime 不修复 generated data。
+- loading 失败不能假装成功，fallback 必须可报告。
+- 玩家可见 feedback 变化必须另开任务，做制作人审核、golden 记录和 UI smoke。
+- docs-only 的 v0.0.7.15 不需要 UI smoke。
+
+后续小步可考虑：先设计 generated JS data module build，再实现 build 输出 JS module，再校验 JSON / JS 结构，再让 `index.html` 只加载 generated module 但不接 `feedbackEngine`，随后才进入 shadow mode、comparison check、制作人审核和 partial / active 接管。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。
