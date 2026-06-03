@@ -1,5 +1,48 @@
 # 版本记录
 
+## v0.0.6.0
+
+本轮为 docs-only 三层属性 / profile / summary schema 设计，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 明确 v0.0.6.x 不是“三层判定”，而是“三层属性 / 三层 profile / 三层 summary”的中间理解层。
+  - 记录 `tasteSummary` / `textureSummary` / `flavorSummary` 初始方向。
+  - 记录 summary 通用结构：`values` / `tags` / `risks` / `evidence` / `metadata`。
+  - 记录 `thickStrawNeed`、`chewDensity`、`foamLoad`、`settlingRisk`、`layeringStability` 等未来可扩展字段示例。
+  - 记录 evidence 对 debug、调参、反馈解释和事故候选生成的重要性。
+  - 记录 accident candidate schema 与 rule metadata 方向。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 将 v0.0.6.x 边界进一步收口为三层属性 / profile / summary 地基。
+  - 记录 candidate / rule metadata 应预留 `sourceLayer`、`triggerMetric`、`thresholds`、`weights`、`evidence`、`priorityBand`、`severityHint` 等字段。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.0 已完成 docs-only schema 设计。
+  - 记录 v0.0.6.0 未实现运行逻辑、未创建 tag。
+  - 记录下一步可考虑 v0.0.6.1 `tasteSummary` 只读地基，或继续 schema 细化。
+
+### 阶段边界
+
+- v0.0.6.0 不实现完整三层 summary runtime。
+- 不重写 analyzer。
+- 不做完整 severity / `scoreMultiplier`。
+- 不做大规模调参。
+- 不做完整 flavor relation matrix。
+- 不做经营 / 顾客 / 图鉴 / 成就系统。
+- 不做正式存档系统。
+- 完整 severity / `scoreMultiplier` / 大规模数值调优留到 v0.0.7.x。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不修改页面版本号。
+- 不创建 tag。
+
 ## docs: record v0.0.6.x three-layer summary boundaries
 
 本轮只更新 docs，记录 v0.0.6.x 开工前的三层属性 / profile / summary 边界。

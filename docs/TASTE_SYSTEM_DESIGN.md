@@ -188,7 +188,7 @@ v0.0.5.21 后明确 golden samples 的定位：它们是重构期回归安全网
 
 截至 v0.0.5.40 docs 收口，v0.0.5.x 已基本把现有结果身份、规则引用和保存边界推进到 stable ID / display text 双轨：原料有 `ingredientId`，规则表具备 refs / `ingredientIds` 主路径，结果暴露 `accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`，golden runner 支持对应 ID 断言，保存的 `result` 也已定义为历史展示快照。
 
-v0.0.6.x 可以开始设计 `tasteSummary` / `textureSummary` / `flavorSummary`，把现有 ID 地基转化为三层判定输入。profile 表仍以 canonical name 作为 key、部分 category label 仍承担分类语义、少量 feedback / outcome fallback 仍保留 legacy 显示文案路径，这些遗留项不建议在 v0.0.5.x 末尾硬拆；更适合在 v0.0.6.x profile / summary 阶段自然收口。
+v0.0.6.x 可以开始设计 `tasteSummary` / `textureSummary` / `flavorSummary`，把现有 ID 地基转化为三层属性输入。profile 表仍以 canonical name 作为 key、部分 category label 仍承担分类语义、少量 feedback / outcome fallback 仍保留 legacy 显示文案路径，这些遗留项不建议在 v0.0.5.x 末尾硬拆；更适合在 v0.0.6.x profile / summary 阶段自然收口。
 
 ### v0.0.6.x summary schema 预留
 
@@ -200,7 +200,226 @@ profile / summary / rule / candidate 后续应允许携带 `metadata`、`weights
 
 不只原料需要 profile。组合规则、事故规则、反馈规则、结果候选也应逐步有结构化 metadata，用来表达触发来源、触发指标、阈值、反馈标签、结果 ID、优先级区间和严重度提示。数据负责描述“判什么”，代码负责“怎么汇总 / 调度”。
 
-## 4. if 治理原则
+## 4. v0.0.6.0 三层属性 / profile / summary schema 正本
+
+v0.0.6.x 的设计核心是“三层属性 / 三层 profile / 三层 summary”，不是简单的“三层判定”。`tasteProfile` / `textureProfile` / `flavorProfile` 描述原料、规则或候选的结构化属性；`tasteSummary` / `textureSummary` / `flavorSummary` 汇总一杯饮品的中间理解结果；最终事故、类型、反馈、severity、score、经营成本和顾客偏好，都应在 summary 之后由 candidate / rule / 调度层决定。
+
+v0.0.6.0 不追求立刻调好味觉数值，也不立刻实现完整 severity / `scoreMultiplier` / flavor relation matrix。它应先把容器、字段语义、扩展点和迁移边界写清楚，让后续实现可以小步接入。
+
+### 4.1 summary 通用结构
+
+三层 summary 都应采用可扩展容器，而不是固定死字段：
+
+```js
+{
+  values: {},
+  tags: [],
+  risks: [],
+  evidence: [],
+  metadata: {}
+}
+```
+
+字段含义：
+
+- `values`：可扩展数值指标，例如 `acidity`、`solidLoad`、`flavorIntensity`。
+- `tags`：结构化标签，例如 `high_solid_load`、`requires_thick_straw`。
+- `risks`：风险信号，例如 `straw_resistance_risk`、`acid_overload_risk`。
+- `evidence`：为什么得到该值、标签或风险。
+- `metadata`：预留版本、权重、阈值、调参说明和来源信息。
+
+这些字段是容器约定，不是封闭 schema。后续可以新增 / 删除具体指标，不应让 analyzer 代码依赖某个永远固定的字段全集。
+
+### 4.2 tasteSummary：基础味觉
+
+`tasteSummary` 负责基础味觉，不负责风味身份。它回答：
+
+```text
+甜不甜、酸不酸、茶感够不够、奶感重不重，基础味觉有没有失衡？
+```
+
+初始指标方向可包括：
+
+- `sweetness`
+- `acidity`
+- `bitterness`
+- `astringency`
+- `teaStrength`
+- `milkiness`
+- `creaminess`
+- `coffeeRoast`
+- `freshness`
+- `cloyingRisk`
+- `acidSharpness`
+- `tasteBalance`
+
+`tasteSummary` 应逐步接管酸爆、甜腻、奶脂压力、茶感失衡等基础味觉问题。柠檬过量未来应逐步泛化为 `acid_overload` 这一类 taste 层风险，而不是长期保留柠檬专属 if。
+
+### 4.3 textureSummary：物理质地和可饮用性
+
+`textureSummary` 负责物理质地、液体支撑和可饮用性。它回答：
+
+```text
+这杯能不能顺利喝到？是液体、糊状、半固体，还是吸管阻力过高？
+```
+
+初始指标方向可包括：
+
+- `solidLoad`
+- `strawResistance`
+- `drinkability`
+- `viscosity`
+- `liquidSupport`
+- `fatLoad`
+- `sedimentRisk`
+- `gelLoad`
+- `powderiness`
+- `chewiness`
+- `mouthCoating`
+- `flowDifficulty`
+
+明确预留可扩展指标示例：
+
+- `thickStrawNeed`
+- `chewDensity`
+- `foamLoad`
+- `settlingRisk`
+- `layeringStability`
+
+`thickStrawNeed` 现在不一定实现，但 schema 必须允许未来自然加字段。奥利奥、芋泥、珍珠、椰果、仙草、蜂蜜、奶盖、粉类等材料主要影响 textureSummary。不要用“原料数量超过 N 直接事故”这类硬 if 取代 textureSummary。
+
+### 4.4 flavorSummary：风味身份 / 香气身份
+
+`flavorSummary` 负责风味身份、香气身份和搭配语义。它回答：
+
+```text
+这杯像什么风味家族？主风味是谁？风味身份是否冲突？
+```
+
+初始指标方向可包括：
+
+- `primaryFlavorIds`
+- `flavorFamilies`
+- `flavorIntensity`
+- `aromaPressure`
+- `beverageFit`
+- `dessertFit`
+- `savoryRisk`
+- `noveltyRisk`
+- `identityConflictRisk`
+- `dominantFlavor`
+- `supportingFlavors`
+
+`flavorSummary` 用来区分“酸甜相近但风味身份不同”的原料，例如橙子 vs 西红柿。榴莲、咖啡、茶香、甜品感、蔬菜感、料理感、热带水果等都属于 flavor identity 问题。flavor 层最容易形成 if 地狱，后续应走 `flavorProfile` -> `flavorSummary` -> relation rules / matrix，而不是在 analyzer 里继续写标签组合 if。
+
+### 4.5 evidence 是 v0.0.6.x 的关键
+
+`evidence` 用来解释 summary 结果从哪里来：
+
+```js
+{
+  metric: "thickStrawNeed",
+  sourceLayer: "texture",
+  sourceType: "ingredient",
+  sourceId: "topping_pearl",
+  contribution: 30,
+  reason: "large chewy topping increases straw requirement"
+}
+```
+
+或：
+
+```js
+{
+  metric: "acidity",
+  sourceLayer: "taste",
+  sourceType: "ingredient",
+  sourceId: "fruit_lemon",
+  contribution: 45
+}
+```
+
+`evidence` 服务于 debug、调参、反馈解释、事故候选生成和 golden 回归诊断。没有 evidence，后续权重、severity 和候选排序会变成黑箱。第一版不必全量实现 evidence，但 schema 必须预留，并且后续新增 summary 计算应优先带 evidence。
+
+### 4.6 权重、阈值和 metadata 预留
+
+v0.0.6.x 不需要立刻做完整权重调参，但不能把未来权重堵死。profile / summary / rule / candidate 应允许未来扩展：
+
+- `weights`
+- `thresholds`
+- `metadata`
+- `evidence`
+- `sourceLayer`
+- `priorityBand`
+- `severityHint`
+
+默认权重可以先不启用，或统一按 `1` 理解。完整 `severityLevel` / `scoreMultiplier` / priority 数值调优留到 v0.0.7.x。
+
+### 4.7 candidate 层
+
+summary 之后应该产出候选，而不是直接最终判定。事故候选可以采用类似结构：
+
+```js
+{
+  candidateId: "acid_overload_candidate",
+  accidentTypeId: "taste_acid_overload",
+  sourceLayer: "taste",
+  triggerMetric: "acidity",
+  threshold: 75,
+  evidence: [],
+  priorityBand: "taste_overload",
+  severityHint: "medium",
+  feedbackTags: []
+}
+```
+
+candidate 是 summary 到最终 result 的桥。v0.0.6.x 可以先设计 accident / outcome / drinkType / feedback candidate schema；完整 candidate 排序、severity、`scoreMultiplier` 和大规模数值平衡留到 v0.0.7.x。
+
+### 4.8 不只原料有属性
+
+原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：
+
+- `sourceLayer`
+- `triggerMetric`
+- `thresholds`
+- `weights`
+- `evidence`
+- `priorityBand`
+- `severityHint`
+- `feedbackTags`
+- `outcomeTypeId`
+- `ruleFamilyId`
+
+不要长期把“某原料 + 某原料”写在代码 if 里。数据负责“判什么”，代码负责“怎么汇总 / 调度”。
+
+### 4.9 if 地狱风险图谱进入 v0.0.6.x 设计
+
+根据 v0.0.6.0 前置只读审计，未来 summary 接管重点是：
+
+- `core/accidentAnalyzer.js`：事故候选、阈值、score / cap / add 等内容判断风险最高。
+- `core/proportionAnalyzer.js`：比例段效果、质地负载、乳脂压力等适合逐步进入 summary / effect rules。
+- `core/drinkTypeAnalyzer.js`：水果茶泛化、客群启发式和类型候选适合逐步由 summary / drinkType candidate 接管。
+- `core/combinationAnalyzer.js`：目前相对健康，主要由数据规则驱动；未来 flavor relation matrix 可接管更复杂关系。
+- `core/feedbackEngine.js`：主路径已是 `feedbackTags`，legacy fallback 只允许兼容，不应继续增长。
+- `core/tasteJudge.js`：应保持调度层，不应继续积累具体内容判断。
+
+v0.0.6.0 不大规模重写 analyzer，而是先用 schema 定未来迁移方向。
+
+### 4.10 v0.0.6.0 明确不做
+
+本阶段不做：
+
+- 不实现完整三层 summary runtime。
+- 不重写 analyzer。
+- 不做完整 severity / `scoreMultiplier`。
+- 不做大规模调参。
+- 不做完整 flavor relation matrix。
+- 不做经营 / 顾客 / 图鉴 / 成就系统。
+- 不做正式存档系统。
+- 不新增大 UI。
+- 不为了“消灭所有 if”破坏 engine 调度。
+
+## 5. if 治理原则
 
 核心原则：
 
@@ -342,9 +561,9 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 一次性全表格化所有事故
 - 大量新增原料和全面调分
 
-## 5. 主要判断层级
+## 6. 主要判断层级
 
-### 5.1 极端比例事故
+### 6.1 极端比例事故
 
 单个强风味、强质地或强争议原料比例过高时，应优先触发事故。
 
@@ -357,7 +576,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 淡奶油 / 厚乳：高脂、高油腻
 - 小料单项过高：咀嚼负担、吸管阻力
 
-### 5.2 质地事故
+### 6.2 质地事故
 
 质地事故拆成两类，不要混用：
 
@@ -370,7 +589,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 
 吸管阻力代表物理意义上难吸，像半固体、需要勺子。
 
-### 5.3 冲突组合
+### 6.3 冲突组合
 
 冲突组合要解释问题来源，但优先级低于极端比例和质地事故。
 
@@ -382,7 +601,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 柠檬 + 牛奶
 - 芋泥 + 气泡水
 
-### 5.4 正常好组合
+### 6.4 正常好组合
 
 好组合可以加分，但只能在比例合理时生效。
 
@@ -397,7 +616,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 芒果 + 椰奶
 - 茉莉茶 / 绿茶 / 乌龙茶 + 2 到 3 种协调水果
 
-### 5.5 普通分类
+### 6.5 普通分类
 
 只有前面没有触发明显事故、冲突或明确好组合时，才进入普通分类。
 
@@ -413,9 +632,9 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 实验特调
 - 口感事故
 
-## 6. 厚重度和吸管阻力的区别
+## 7. 厚重度和吸管阻力的区别
 
-### 6.1 厚重度 / 油腻感
+### 7.1 厚重度 / 油腻感
 
 表示这杯喝起来重、腻、奶感强、负担感强。
 
@@ -441,7 +660,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 
 应该是奶脂过载或高油腻，不应该直接说吸管辞职。
 
-### 6.2 吸管阻力 / 固形物感
+### 7.2 吸管阻力 / 固形物感
 
 表示杯中块状、颗粒、泥状、咀嚼物太多，影响吸管能不能吸动。
 
@@ -458,7 +677,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 
 淡奶油、厚乳、奶盖主要是奶脂与厚重，不应单独算作固体。
 
-## 7. 评分原则
+## 8. 评分原则
 
 评分应先扣事故，再加组合。
 
@@ -474,7 +693,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 
 不要让“命中好组合”成为万能满分按钮。
 
-## 8. 《疯狂摇摇杯》机制考古对 0.0.5.x 的启发
+## 9. 《疯狂摇摇杯》机制考古对 0.0.5.x 的启发
 
 本次考古只作为机制参考，不复制素材、代码、完整数据或破解方式。
 
@@ -487,7 +706,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 试喝员反馈显示系统还有隐藏判断：例如红豆 / 绿豆成分比例过高时，虽然酸甜苦酒精数值不一定极端，但试喝评分会崩，推测存在“固体感 / 流动性 / 饮品结构合理性”惩罚。
 - 老游戏会把“同样材料、不同配比”的饮品视为同一种并覆盖。这是它的局限，也是《奶茶实验室》的升级点。
 
-### 8.1 红豆水泥实验：质地 / 流动性 / 吸管阻力
+### 9.1 红豆水泥实验：质地 / 流动性 / 吸管阻力
 
 通过同一杯“红豆红茶”的两次覆盖存档对比，观察到只改变比例就会导致评分巨大变化。
 
@@ -501,7 +720,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 《奶茶实验室》不能只做 `tasteVector`，还应预留 `textureVector`、`drinkability`、`solidLoad`、`strawResistance`、`accidentFlags` 等概念。
 - “吸管阻力”不是单纯玩笑，而是判断高固体负载、流动性不足、半固体事故的重要机制。
 
-### 8.2 风味搭配不和谐实验：老前辈在风味理解上可能较粗
+### 9.2 风味搭配不和谐实验：老前辈在风味理解上可能较粗
 
 测试若干当前材料池中的边界组合，例如水果 + 红豆、蕃茄 + 红豆、葡萄 + 红豆 / 绿茶等。结果显示，只要比例正常，这些组合大多没有明显低分。
 
@@ -511,7 +730,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 《奶茶实验室》的机会在于更细地判断风味桥接、风味冲突、清爽与厚重的冲突、客群差异接受度，而不是只靠基础数值加权。
 - 不要把所有怪组合一刀切判死；应区分“有点怪但可成立”“需要桥接”“明显冲突”“结构事故”。
 
-### 8.3 热饮 / 温度适配实验：温度不是默认惩罚项
+### 9.3 热饮 / 温度适配实验：温度不是默认惩罚项
 
 热水果茶相较冰水果茶出现轻度扣分，但热红茶、热红豆红茶并未明显崩坏。因此不应简单理解为“夏天热饮统一惩罚”。
 
@@ -522,7 +741,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 - 温度不是惩罚项，而是风味放大器；冷热适配要看具体原料、茶底、甜味来源、季节、天气和客群。
 - 温度可能强化香气、提升舒适感，也可能放大酸涩、破坏清爽感。
 
-### 8.4 调配界面的分层计算思想
+### 9.4 调配界面的分层计算思想
 
 老游戏调配界面看起来不是单纯把所有材料平铺相加，而是拆成自选成分块、茶 / 咖啡底块、水 / 冷热底块。自选成分内部也有比例，再整体并入饮品结构。
 
@@ -546,7 +765,7 @@ v0.0.6.0 前置：反馈 tags 与 audience 数据化评估。
 baseLiquidRatio flavorRatio textureRatio sweetenerRatio solidLoad drinkability strawResistance textureBalance temperatureFit
 ```
 
-### 8.5 玩家自定义命名 + 后台完整配方 + 派生标签
+### 9.5 玩家自定义命名 + 后台完整配方 + 派生标签
 
 玩家做出的饮品应允许自定义名称，以增强创作感和归属感。“清爽版 / 厚重版 / 翻车版”等不应强行作为玩家看到的饮品名。
 
@@ -571,7 +790,7 @@ baseLiquidRatio flavorRatio textureRatio sweetenerRatio solidLoad drinkability s
 
 不要让“版本标签”替代真实配方数据。
 
-### 8.6 经营阶段反投机启发
+### 9.6 经营阶段反投机启发
 
 看到玩家评论提到，当年尝试“加价 100%，再打一折”仍然失败，说明老游戏的商业模块可能考虑过虚高原价 + 大折扣这类玩家投机行为。该信息来自玩家评论，不是严格实证，但适合作为后续经营系统设计提醒。
 
@@ -591,7 +810,7 @@ baseLiquidRatio flavorRatio textureRatio sweetenerRatio solidLoad drinkability s
 - 需要学习的是机制闭环：研发库不等于上架菜单，配方探索最终要进入库存 / 价目 / 销售验证。
 - 实现方式必须原创，不能把老游戏的数据结构、内容表或呈现方式直接搬进项目。
 
-### 8.7 配方复杂度作为经营软成本
+### 9.7 配方复杂度作为经营软成本
 
 自由实验室阶段不应急着硬限制原料数量。玩家可以把很多原料加入同一杯，这是自由研发和整活的乐趣，系统应允许这种实验空间。
 
@@ -611,7 +830,7 @@ baseLiquidRatio flavorRatio textureRatio sweetenerRatio solidLoad drinkability s
 
 核心原则：实验室允许发疯，市场会教育你。
 
-## 9. 后续扩展方向
+## 10. 后续扩展方向
 
 未来可以扩展：
 
