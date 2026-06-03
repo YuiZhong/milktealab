@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.6.6 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.6-candidate`。
+  - 记录 candidate 指向 `066635863238525c1a0b6eea6c1420ed2e75b87d`。
+  - 记录 `v0.0.6.6-candidate` 已冻结并推送。
+  - 记录 v0.0.6.6 已完成 `flavorProfile` / `flavorSummary` 数据来源轻量评估。
+  - 记录当前未推进 v0.0.6.7。
+
+### 阶段边界
+
+- 已确认当前仓库缺少独立 `flavorProfile` 数据来源。
+- 已明确 `flavorSummary` 不应靠中文原料名、displayName 或 UI category 推断。
+- 本轮未新增 data 文件，未实现 runtime。
+- 未改 runtime、data、scripts、index.html。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 未创建正式 tag `v0.0.6.6`。
+- 未推进 v0.0.6.7。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.6
 
 本轮为 `flavorProfile` / `flavorSummary` 数据来源轻量评估，不实现 runtime。
