@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.6.3
+
+本轮新增 `textureSummary` 只读地基，作为 v0.0.6.x 三层属性 / profile / summary 的第二刀 runtime 地基。
+
+### 本轮新增 / 更新
+
+- 新增 `core/textureSummaryEngine.js`
+  - 承载 `textureSummary` 构建逻辑。
+  - 汇总现有 `textureProfile` effects 与 `drinkStructure` 结构指标。
+  - 使用 `values` / `tags` / `risks` / `evidence` / `metadata` 输出结构。
+  - evidence 记录 texture 层 ingredient / structure 来源、`sourceLayer`、`sourceType`、ratio 和 contribution。
+- 更新 `core/tasteJudge.js`
+  - 只调用 `textureSummary` 构建入口并暴露 `result.textureSummary`。
+  - 保持 `tasteJudge.js` 的调度层职责。
+- 更新 `index.html`
+  - 页面版本号同步为 v0.0.6.3。
+  - 在 `core/tasteJudge.js` 之前加载 `core/textureSummaryEngine.js`。
+  - 刷新相关 runtime script cache query。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.3 本地实现状态。
+  - 记录最新 candidate 仍是 `v0.0.6.2-candidate`。
+
+### 阶段边界
+
+- `textureSummary` 只读输出，不参与最终判定。
+- 不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 不做 `flavorSummary`。
+- 不做 severity / `scoreMultiplier`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.2 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
