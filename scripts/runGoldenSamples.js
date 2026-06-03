@@ -33,6 +33,7 @@ const scriptFiles = [
   "core/accidentAnalyzer.js",
   "core/combinationAnalyzer.js",
   "core/drinkTypeAnalyzer.js",
+  "core/tasteSummaryEngine.js",
   "core/tasteJudge.js",
   "data/goldenSamples.js"
 ];
@@ -129,8 +130,16 @@ function getFeedbackTags(result) {
   return [...new Set(feedbackTags.filter(Boolean))];
 }
 
+function getTasteSummary(result) {
+  return result?.tasteSummary || null;
+}
+
 function formatIds(ids) {
   return `[${ids.join(", ")}]`;
+}
+
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
 function checkIdIncludes(label, actualIds, expectedIds, failures) {
@@ -154,6 +163,90 @@ function checkForbiddenIds(label, actualIds, forbiddenIds, failures) {
   if (matchedIds.length) {
     failures.push(`expected ${label} not to include ${formatIds(forbiddenIds)} but got ${formatIds(actualIds)}`);
   }
+}
+
+function checkArrayIncludes(label, actualItems, expectedItems, failures) {
+  if (!expectedItems?.length) return;
+  const missingItems = expectedItems.filter(item => !actualItems.includes(item));
+  if (missingItems.length) {
+    failures.push(`expected ${label} to include ${formatIds(expectedItems)} but got ${formatIds(actualItems)}`);
+  }
+}
+
+function checkArrayIncludesAny(label, actualItems, expectedItems, failures) {
+  if (!expectedItems?.length) return;
+  if (!expectedItems.some(item => actualItems.includes(item))) {
+    failures.push(`expected ${label} to include one of ${formatIds(expectedItems)} but got ${formatIds(actualItems)}`);
+  }
+}
+
+function checkForbiddenArrayIncludes(label, actualItems, forbiddenItems, failures) {
+  if (!forbiddenItems?.length) return;
+  const matchedItems = forbiddenItems.filter(item => actualItems.includes(item));
+  if (matchedItems.length) {
+    failures.push(`expected ${label} not to include ${formatIds(forbiddenItems)} but got ${formatIds(actualItems)}`);
+  }
+}
+
+function checkTasteSummaryStructure(summary, failures) {
+  if (!isPlainObject(summary?.values)) failures.push("tasteSummary.values should be an object");
+  if (!Array.isArray(summary?.tags)) failures.push("tasteSummary.tags should be an array");
+  if (!Array.isArray(summary?.risks)) failures.push("tasteSummary.risks should be an array");
+  if (!Array.isArray(summary?.evidence)) failures.push("tasteSummary.evidence should be an array");
+  if (!isPlainObject(summary?.metadata)) {
+    failures.push("tasteSummary.metadata should be an object");
+    return;
+  }
+  if (summary.metadata.readonly !== true) failures.push("tasteSummary.metadata.readonly should be true");
+  if (summary.metadata.sourceLayer !== "taste") failures.push('tasteSummary.metadata.sourceLayer should be "taste"');
+  if (summary.metadata.weightsEnabled !== false) failures.push("tasteSummary.metadata.weightsEnabled should be false");
+}
+
+function checkMetadataIncludes(actualMetadata, expectedMetadata, failures) {
+  if (!expectedMetadata) return;
+  Object.entries(expectedMetadata).forEach(([key, expectedValue]) => {
+    if (actualMetadata?.[key] !== expectedValue) {
+      failures.push(`tasteSummary.metadata.${key} should be ${JSON.stringify(expectedValue)} but got ${JSON.stringify(actualMetadata?.[key])}`);
+    }
+  });
+}
+
+function evidenceMatches(actualEvidence, expectedEvidence) {
+  return Object.entries(expectedEvidence).every(([key, expectedValue]) => actualEvidence?.[key] === expectedValue);
+}
+
+function checkEvidenceIncludesAny(actualEvidence, expectedCandidates, failures) {
+  if (!expectedCandidates?.length) return;
+  const matched = expectedCandidates.some(expectedEvidence =>
+    actualEvidence.some(evidence => evidenceMatches(evidence, expectedEvidence))
+  );
+  if (!matched) {
+    failures.push(`expected tasteSummary.evidence to include one of ${JSON.stringify(expectedCandidates)}`);
+  }
+}
+
+function checkTasteSummaryExpectation(result, expectation, failures) {
+  if (!expectation) return;
+
+  const summary = getTasteSummary(result);
+  if (expectation.exists === true && !summary) {
+    failures.push("tasteSummary should exist");
+    return;
+  }
+  if (!summary) return;
+
+  if (expectation.exists === true) checkTasteSummaryStructure(summary, failures);
+
+  const valueKeys = isPlainObject(summary.values) ? Object.keys(summary.values) : [];
+  checkArrayIncludes("tasteSummary value keys", valueKeys, expectation.valueKeysInclude, failures);
+  checkArrayIncludes("tasteSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.tagIncludes, failures);
+  checkArrayIncludesAny("tasteSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.tagIncludesAny, failures);
+  checkForbiddenArrayIncludes("tasteSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.forbiddenTagIncludes, failures);
+  checkArrayIncludes("tasteSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludes, failures);
+  checkArrayIncludesAny("tasteSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludesAny, failures);
+  checkForbiddenArrayIncludes("tasteSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.forbiddenRiskIncludes, failures);
+  checkMetadataIncludes(summary.metadata, expectation.metadataIncludes, failures);
+  checkEvidenceIncludesAny(Array.isArray(summary.evidence) ? summary.evidence : [], expectation.evidenceIncludesAny, failures);
 }
 
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
@@ -218,6 +311,7 @@ function checkSample(sample, result) {
   checkForbiddenIds("forbiddenFeedbackTagIncludes", feedbackTags, expectations.forbiddenFeedbackTagIncludes, failures);
   checkIncludesAny("feedback", feedback, expectations.feedbackIncludesAny, failures);
   checkForbidden("feedback", feedback, expectations.feedbackForbiddenAny, failures);
+  checkTasteSummaryExpectation(result, expectations.tasteSummary, failures);
 
   if (typeof expectations.scoreMin === "number" && score < expectations.scoreMin) {
     failures.push(`score ${score} is below ${expectations.scoreMin}`);

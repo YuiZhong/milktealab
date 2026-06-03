@@ -16,7 +16,20 @@
         scoreMin: 65,
         scoreMax: 85,
         feedbackTagIncludes: ["classic"],
-        feedbackIncludesAny: ["红茶", "牛奶", "经典"]
+        feedbackIncludesAny: ["红茶", "牛奶", "经典"],
+        tasteSummary: {
+          exists: true,
+          valueKeysInclude: ["teaStrength", "milkiness", "sweetness"],
+          metadataIncludes: {
+            sourceLayer: "taste",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { sourceLayer: "taste", sourceType: "ingredient", sourceId: "tea_black" },
+            { sourceLayer: "taste", sourceType: "ingredient", sourceId: "dairy_milk" }
+          ]
+        }
       },
       notes: "经典稳定样本，不应被事故规则误伤。"
     },
@@ -36,7 +49,20 @@
         scoreMin: 74,
         scoreMax: 74,
         feedbackTagIncludes: ["classic"],
-        feedbackIncludesAny: ["红茶", "牛奶", "经典"]
+        feedbackIncludesAny: ["红茶", "牛奶", "经典"],
+        tasteSummary: {
+          exists: true,
+          valueKeysInclude: ["teaStrength", "milkiness", "sweetness"],
+          metadataIncludes: {
+            sourceLayer: "taste",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { sourceLayer: "taste", sourceType: "ingredient", sourceId: "tea_black" },
+            { sourceLayer: "taste", sourceType: "ingredient", sourceId: "dairy_milk" }
+          ]
+        }
       },
       notes: "与 classic_milk_tea 等价，用 ingredientId 覆盖 golden sample 的 ID 输入路径。"
     },
@@ -115,7 +141,20 @@
         accidentTypeIdIncludes: ["taste_acid_overload"],
         scoreMin: 0,
         scoreMax: 20,
-        feedbackIncludesAny: ["柠檬", "酸", "味蕾", "清爽"]
+        feedbackIncludesAny: ["柠檬", "酸", "味蕾", "清爽"],
+        tasteSummary: {
+          exists: true,
+          valueKeysInclude: ["acidity", "acidSharpness", "freshness"],
+          riskIncludesAny: ["acid_overload_risk"],
+          metadataIncludes: {
+            sourceLayer: "taste",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { metric: "acidity", sourceLayer: "taste", sourceType: "ingredient", sourceId: "fruit_lemon" }
+          ]
+        }
       },
       notes: "极端酸度样本，不应被清爽组合洗白。"
     },
@@ -220,7 +259,20 @@
         scoreMin: 0,
         scoreMax: 35,
         feedbackTagIncludes: ["greasy_overload"],
-        feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"]
+        feedbackIncludesAny: ["奶", "沉重", "负担", "压迫", "油"],
+        tasteSummary: {
+          exists: true,
+          valueKeysInclude: ["milkiness", "creaminess", "cloyingRisk"],
+          metadataIncludes: {
+            sourceLayer: "taste",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { sourceLayer: "taste", sourceType: "ingredient", sourceId: "dairy_thick_milk" },
+            { sourceLayer: "taste", sourceType: "ingredient", sourceId: "dairy_cream" }
+          ]
+        }
       },
       notes: "与 greasy_overload 等价，用 ingredientId 覆盖 dairy / highFatDairy ID 输入路径。"
     },
