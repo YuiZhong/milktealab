@@ -1,5 +1,43 @@
 # 版本记录
 
+## docs: sync v0.0.7.27 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.27-candidate`。
+  - 记录 candidate 指向 `f33f298444cf25222c95cad11f0fb1d1e5ec46f3`。
+  - 记录 `v0.0.7.27-candidate` 已冻结并推送。
+  - 记录当前未推进 v0.0.7.28。
+
+### 阶段边界
+
+- `v0.0.7.27-candidate` 已冻结并推送。
+- candidate 指向 `f33f298444cf25222c95cad11f0fb1d1e5ec46f3`。
+- v0.0.7.27 已完成 AI 生成 ID / 机制命名 guardrail。
+- 已明确 AI / Codex 生成 ID 不能因为“看起来像 stable ID”就默认正确，英文 ID 不等于好设计。
+- 已明确 `sampleId`、`accidentTypeId`、`ruleId`、`candidateId`、`feedbackTag`、`severityLevel`、`sourceLayer` / `sourceSummary` / `triggerMetric` 等层级边界。
+- 已明确草案 ID / sample sheet guardrail。
+- 已明确 validator / registry guardrail。
+- 已明确 future validator 实现前必须先明确 known stable ID registry / enum / schema / source of truth；没有 stable ID source 时应先设计 registry / enum / schema。
+- 已明确字符串后缀 / substring 只能作为 lint / warning，不能作为合法性来源。
+- 已明确 ID 名称不能覆盖 `sourceLayer` / `sourceSummary` / `triggerMetric`。
+- 已记录未来 AI 生成 ID 与机制命名审计计划。
+- 本轮未重命名任何现有 ID。
+- 未新增 registry / validator / generated data。
+- 未改 runtime、data、generated data、content_sheets、scripts、reports、`index.html`。
+- 未改玩家最终 score、feedback、accident、type 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.27`。
+- 当前未推进 v0.0.7.28。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.27
 
 本轮为 AI 生成 ID / 机制命名 guardrail。

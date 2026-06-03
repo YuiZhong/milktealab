@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.7.26-candidate`
-- 最新 candidate commit：`cd47d0b5c63f75a28ae2adea43ecff7822be7ade`
-- `v0.0.7.26-candidate` 已冻结并推送，指向 `cd47d0b5c63f75a28ae2adea43ecff7822be7ade`；正式 tag `v0.0.7.26` 未创建。
-- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.23-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.7.27-candidate`
+- 最新 candidate commit：`f33f298444cf25222c95cad11f0fb1d1e5ec46f3`
+- `v0.0.7.27-candidate` 已冻结并推送，指向 `f33f298444cf25222c95cad11f0fb1d1e5ec46f3`；正式 tag `v0.0.7.27` 未创建。
+- 最新 main：本轮 docs 状态同步 commit 提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -136,13 +136,14 @@
 - 当前未新增 registry / validator。
 - 当前未改变玩家最终 score / feedback / accident / `result.type`。
 - 当前未改 golden expected。
-- 当前未创建 `v0.0.7.27-candidate`。
+- `v0.0.7.27-candidate` 已冻结并推送。
 - v0.0.7.27 已明确 AI / Codex 生成 ID 不能因为“看起来像 stable ID”就默认正确；英文 ID 不等于好设计。
 - v0.0.7.27 已明确 `sampleId`、`accidentTypeId`、`ruleId`、`candidateId`、`feedbackTag`、`severityLevel`、`sourceLayer` / `sourceSummary` / `triggerMetric` 等层级边界。
 - v0.0.7.27 已明确不能仅根据 ID 字符串前缀推断 `sourceLayer`；历史 ID 名称不能覆盖 `sourceLayer` / `sourceSummary` / `triggerMetric`。
 - v0.0.7.27 已明确 future validator 合法性应以 known stable ID registry / enum / schema 为准，字符串后缀 / substring 检查只能作为 warning / lint hint。
 - v0.0.7.27 已明确 future validator 实现前必须先明确 known stable ID registry / enum / schema 等 source of truth；如果没有稳定 ID 来源，应先设计 registry / enum / schema，不能用字符串后缀 / substring 猜合法性。
-- 下一步可考虑：`v0.0.7.27-candidate` 冻结，或 `v0.0.7.28｜validate candidate severity sheet 脚本设计`，或 `v0.0.7.x｜AI 生成 ID 与机制命名审计`，或继续 feedback 文案评审会 / 样例扩充。
+- 当前未推进 v0.0.7.28。
+- 下一步可考虑：`v0.0.7.28｜validate candidate severity sheet 脚本设计`，或 `v0.0.7.x｜AI 生成 ID 与机制命名审计`，或继续 feedback 文案评审会 / 样例扩充。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。
