@@ -1,5 +1,39 @@
 # 版本记录
 
+## docs: sync v0.0.7.21 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.21-candidate`。
+  - 记录 candidate 指向 `d7b25bfb3790474db73a6081a245c8f8cbd5199a`。
+  - 记录 `v0.0.7.21-candidate` 已冻结并推送。
+  - 记录 v0.0.7.21 已完成 feedback shadow review pack / 对比输出 docs schema。
+  - 记录当前未推进 v0.0.7.22。
+
+### 阶段边界
+
+- `v0.0.7.21-candidate` 已冻结并推送。
+- candidate 指向 `d7b25bfb3790474db73a6081a245c8f8cbd5199a`。
+- v0.0.7.21 已完成 feedback shadow review pack / 对比输出 docs schema。
+- 已明确 legacy final output vs generated shadow candidates 的对比结构。
+- 已明确制作人审核字段，例如 `reviewStatus`、`producerComment`、`preferredTextId`、`needsNewText`、`toneIssue`、`tagIssue`、`tooAI`、`tooHarsh`、`notFunny`、`wrongTrigger`、`suggestedRewrite` 等。
+- 已明确 review pack 不承载机制判断、不自动接管、不自动改文案。
+- 本轮未实现 review pack script。
+- 未新增 review output。
+- 未改 runtime、data、scripts、content_sheets、index.html。
+- 未改 final feedback、score、type、accident、feedbackTags 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.21`。
+- 当前未推进 v0.0.7.22。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.21
 
 本轮为 feedback shadow 评审包 / 对比输出 docs / schema。
