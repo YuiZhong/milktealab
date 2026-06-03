@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.6.9
+
+本轮新增 `flavorSummary` golden 结构断言能力。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 加载 `data/ingredientFlavorProfiles.js` 与 `core/flavorSummaryEngine.js`。
+  - 支持 `flavorSummary` expected。
+  - 新增 `flavorSummary` 的 `values` / `tags` / `risks` / `evidence` / `metadata` 结构检查。
+  - 支持 `valueKeysInclude`、tags / risks include、`metadataIncludes` 与局部字段匹配的 `evidenceIncludesAny`。
+- 更新 `data/goldenSamples.js`
+  - 给少量代表样本补充 `flavorSummary` expected。
+  - 覆盖经典奶茶 name / ingredientId 输入路径。
+  - 覆盖高榴莲强身份 name / ingredientId 输入路径。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.9 本地实现状态。
+  - 记录当前未创建 `v0.0.6.9-candidate`。
+
+### 阶段边界
+
+- 本轮只保护 summary 结构，不锁死具体 values 数值。
+- 不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 不改 core runtime。
+- 不改 `ingredientFlavorProfiles`。
+- 不做 relation matrix / candidate / severity / `scoreMultiplier`。
+- 不让 `flavorSummary` 接管最终判定。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.8 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

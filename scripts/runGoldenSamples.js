@@ -10,6 +10,7 @@ const scriptFiles = [
   "core/ingredientRegistry.js",
   "data/ingredientTasteProfiles.js",
   "data/ingredientTextureProfiles.js",
+  "data/ingredientFlavorProfiles.js",
   "data/combinationRules.js",
   "data/drinkTypeRules.js",
   "data/accidentRules.js",
@@ -35,6 +36,7 @@ const scriptFiles = [
   "core/drinkTypeAnalyzer.js",
   "core/tasteSummaryEngine.js",
   "core/textureSummaryEngine.js",
+  "core/flavorSummaryEngine.js",
   "core/tasteJudge.js",
   "data/goldenSamples.js"
 ];
@@ -137,6 +139,10 @@ function getTasteSummary(result) {
 
 function getTextureSummary(result) {
   return result?.textureSummary || null;
+}
+
+function getFlavorSummary(result) {
+  return result?.flavorSummary || null;
 }
 
 function formatIds(ids) {
@@ -292,6 +298,44 @@ function checkTextureSummaryExpectation(result, expectation, failures) {
   checkEvidenceIncludesAny(Array.isArray(summary.evidence) ? summary.evidence : [], expectation.evidenceIncludesAny, failures, "textureSummary.evidence");
 }
 
+function checkFlavorSummaryStructure(summary, failures) {
+  if (!isPlainObject(summary?.values)) failures.push("flavorSummary.values should be an object");
+  if (!Array.isArray(summary?.tags)) failures.push("flavorSummary.tags should be an array");
+  if (!Array.isArray(summary?.risks)) failures.push("flavorSummary.risks should be an array");
+  if (!Array.isArray(summary?.evidence)) failures.push("flavorSummary.evidence should be an array");
+  if (!isPlainObject(summary?.metadata)) {
+    failures.push("flavorSummary.metadata should be an object");
+    return;
+  }
+  if (summary.metadata.readonly !== true) failures.push("flavorSummary.metadata.readonly should be true");
+  if (summary.metadata.sourceLayer !== "flavor") failures.push('flavorSummary.metadata.sourceLayer should be "flavor"');
+  if (summary.metadata.weightsEnabled !== false) failures.push("flavorSummary.metadata.weightsEnabled should be false");
+}
+
+function checkFlavorSummaryExpectation(result, expectation, failures) {
+  if (!expectation) return;
+
+  const summary = getFlavorSummary(result);
+  if (expectation.exists === true && !summary) {
+    failures.push("flavorSummary should exist");
+    return;
+  }
+  if (!summary) return;
+
+  if (expectation.exists === true) checkFlavorSummaryStructure(summary, failures);
+
+  const valueKeys = isPlainObject(summary.values) ? Object.keys(summary.values) : [];
+  checkArrayIncludes("flavorSummary value keys", valueKeys, expectation.valueKeysInclude, failures);
+  checkArrayIncludes("flavorSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.tagIncludes, failures);
+  checkArrayIncludesAny("flavorSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.tagIncludesAny, failures);
+  checkForbiddenArrayIncludes("flavorSummary.tags", Array.isArray(summary.tags) ? summary.tags : [], expectation.forbiddenTagIncludes, failures);
+  checkArrayIncludes("flavorSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludes, failures);
+  checkArrayIncludesAny("flavorSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.riskIncludesAny, failures);
+  checkForbiddenArrayIncludes("flavorSummary.risks", Array.isArray(summary.risks) ? summary.risks : [], expectation.forbiddenRiskIncludes, failures);
+  checkMetadataIncludes(summary.metadata, expectation.metadataIncludes, failures, "flavorSummary.metadata");
+  checkEvidenceIncludesAny(Array.isArray(summary.evidence) ? summary.evidence : [], expectation.evidenceIncludesAny, failures, "flavorSummary.evidence");
+}
+
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
   if (item?.name) return { ...item };
 
@@ -356,6 +400,7 @@ function checkSample(sample, result) {
   checkForbidden("feedback", feedback, expectations.feedbackForbiddenAny, failures);
   checkTasteSummaryExpectation(result, expectations.tasteSummary, failures);
   checkTextureSummaryExpectation(result, expectations.textureSummary, failures);
+  checkFlavorSummaryExpectation(result, expectations.flavorSummary, failures);
 
   if (typeof expectations.scoreMin === "number" && score < expectations.scoreMin) {
     failures.push(`score ${score} is below ${expectations.scoreMin}`);

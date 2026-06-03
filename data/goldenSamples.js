@@ -42,6 +42,19 @@
             { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_pearl" },
             { metric: "drinkability", sourceLayer: "texture", sourceType: "structure", sourceId: "drinkStructure" }
           ]
+        },
+        flavorSummary: {
+          exists: true,
+          valueKeysInclude: ["flavorIntensity", "beverageFit", "dessertFit"],
+          metadataIncludes: {
+            sourceLayer: "flavor",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { sourceLayer: "flavor", sourceType: "ingredient", sourceId: "tea_black" },
+            { sourceLayer: "flavor", sourceType: "ingredient", sourceId: "dairy_milk" }
+          ]
         }
       },
       notes: "经典稳定样本，不应被事故规则误伤。"
@@ -87,6 +100,19 @@
           evidenceIncludesAny: [
             { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_pearl" },
             { metric: "drinkability", sourceLayer: "texture", sourceType: "structure", sourceId: "drinkStructure" }
+          ]
+        },
+        flavorSummary: {
+          exists: true,
+          valueKeysInclude: ["flavorIntensity", "beverageFit", "dessertFit"],
+          metadataIncludes: {
+            sourceLayer: "flavor",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { sourceLayer: "flavor", sourceType: "ingredient", sourceId: "tea_black" },
+            { sourceLayer: "flavor", sourceType: "ingredient", sourceId: "dairy_milk" }
           ]
         }
       },
@@ -232,7 +258,22 @@
         accidentTypeIdIncludes: ["flavor_durian_overload"],
         scoreMin: 0,
         scoreMax: 50,
-        feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"]
+        feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"],
+        flavorSummary: {
+          exists: true,
+          valueKeysInclude: ["aromaPressure", "noveltyRisk", "identityConflictRisk"],
+          tagIncludesAny: ["durian", "dominant:durian"],
+          riskIncludesAny: ["high_aroma_pressure_risk", "high_novelty_risk"],
+          metadataIncludes: {
+            sourceLayer: "flavor",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { metric: "aromaPressure", sourceLayer: "flavor", sourceType: "ingredient", sourceId: "fruit_durian" },
+            { metric: "noveltyRisk", sourceLayer: "flavor", sourceType: "ingredient", sourceId: "fruit_durian" }
+          ]
+        }
       },
       notes: "保护榴莲 60-80 高争议猎奇事故档；当前 type 断言用于保护现阶段输出稳定，不代表“猎奇实验品”是最终正式版命名。"
     },
@@ -249,7 +290,22 @@
         accidentTypeIdIncludes: ["flavor_durian_overload"],
         scoreMin: 0,
         scoreMax: 50,
-        feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"]
+        feedbackIncludesAny: ["榴莲", "香气", "吸管", "心理建设", "挖矿"],
+        flavorSummary: {
+          exists: true,
+          valueKeysInclude: ["aromaPressure", "noveltyRisk", "identityConflictRisk"],
+          tagIncludesAny: ["durian", "dominant:durian"],
+          riskIncludesAny: ["high_aroma_pressure_risk", "high_novelty_risk"],
+          metadataIncludes: {
+            sourceLayer: "flavor",
+            readonly: true,
+            weightsEnabled: false
+          },
+          evidenceIncludesAny: [
+            { metric: "aromaPressure", sourceLayer: "flavor", sourceType: "ingredient", sourceId: "fruit_durian" },
+            { metric: "noveltyRisk", sourceLayer: "flavor", sourceType: "ingredient", sourceId: "fruit_durian" }
+          ]
+        }
       },
       notes: "与 high_durian_oddity_accident 等价，用 ingredientId 覆盖强身份和榴莲事故 ID 输入路径。"
     },
