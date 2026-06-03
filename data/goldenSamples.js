@@ -64,6 +64,15 @@
             weightsEnabled: false,
             affectsFinalResult: false
           }
+        },
+        candidatePriorityShell: {
+          exists: true,
+          priorityBandIncludes: ["hard_physical", "taste_overload", "flavor_identity", "feedback_hint"],
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          }
         }
       },
       notes: "经典稳定样本，不应被事故规则误伤。"
@@ -235,6 +244,24 @@
               accidentTypeId: "taste_acid_overload"
             }
           ]
+        },
+        candidatePriorityShell: {
+          exists: true,
+          priorityBandIncludes: ["taste_overload"],
+          orderedCandidateCountMin: 1,
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          },
+          candidateIncludesAny: [
+            {
+              candidateType: "accident",
+              sourceLayer: "taste",
+              sourceSummary: "tasteSummary",
+              accidentTypeId: "taste_acid_overload"
+            }
+          ]
         }
       },
       notes: "极端酸度样本，不应被清爽组合洗白。"
@@ -317,6 +344,22 @@
               sourceSummary: "flavorSummary",
               priorityBand: "flavor_identity",
               severityHint: "medium"
+            }
+          ]
+        },
+        candidatePriorityShell: {
+          exists: true,
+          priorityBandIncludes: ["flavor_identity"],
+          orderedCandidateCountMin: 1,
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          },
+          candidateIncludesAny: [
+            {
+              sourceLayer: "flavor",
+              sourceSummary: "flavorSummary"
             }
           ]
         }
@@ -454,6 +497,23 @@
               sourceSummary: "textureSummary",
               accidentTypeId: "texture_straw_resistance",
               priorityBand: "texture_blocking"
+            }
+          ]
+        },
+        candidatePriorityShell: {
+          exists: true,
+          priorityBandIncludes: ["hard_physical"],
+          orderedCandidateCountMin: 1,
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          },
+          candidateIncludesAny: [
+            {
+              candidateType: "accident",
+              sourceLayer: "texture",
+              sourceSummary: "textureSummary"
             }
           ]
         }

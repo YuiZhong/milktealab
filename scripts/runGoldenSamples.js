@@ -38,6 +38,7 @@ const scriptFiles = [
   "core/textureSummaryEngine.js",
   "core/flavorSummaryEngine.js",
   "core/summaryCandidateEngine.js",
+  "core/candidatePriorityShellEngine.js",
   "core/tasteJudge.js",
   "data/goldenSamples.js"
 ];
@@ -148,6 +149,10 @@ function getFlavorSummary(result) {
 
 function getSummaryCandidates(result) {
   return result?.summaryCandidates || null;
+}
+
+function getCandidatePriorityShell(result) {
+  return result?.candidatePriorityShell || null;
 }
 
 function formatIds(ids) {
@@ -414,6 +419,50 @@ function checkSummaryCandidatesExpectation(result, expectation, failures) {
   checkCandidateIncludesAny(candidates, expectation.candidateIncludesAny, failures);
 }
 
+function checkCandidatePriorityShellStructure(shell, failures) {
+  if (!Array.isArray(shell?.orderedCandidates)) failures.push("candidatePriorityShell.orderedCandidates should be an array");
+  if (!isPlainObject(shell?.byPriorityBand)) failures.push("candidatePriorityShell.byPriorityBand should be an object");
+  if (!isPlainObject(shell?.topCandidates)) failures.push("candidatePriorityShell.topCandidates should be an object");
+  if (!isPlainObject(shell?.metadata)) {
+    failures.push("candidatePriorityShell.metadata should be an object");
+    return;
+  }
+  if (shell.metadata.readonly !== true) failures.push("candidatePriorityShell.metadata.readonly should be true");
+  if (shell.metadata.weightsEnabled !== false) failures.push("candidatePriorityShell.metadata.weightsEnabled should be false");
+  if (shell.metadata.affectsFinalResult !== false) failures.push("candidatePriorityShell.metadata.affectsFinalResult should be false");
+}
+
+function checkCandidatePriorityShellExpectation(result, expectation, failures) {
+  if (!expectation) return;
+
+  const shell = getCandidatePriorityShell(result);
+  if (expectation.exists === true && !shell) {
+    failures.push("candidatePriorityShell should exist");
+    return;
+  }
+  if (!shell) return;
+
+  if (expectation.exists === true) checkCandidatePriorityShellStructure(shell, failures);
+
+  const orderedCandidates = Array.isArray(shell.orderedCandidates) ? shell.orderedCandidates : [];
+  const byPriorityBand = isPlainObject(shell.byPriorityBand) ? shell.byPriorityBand : {};
+  const priorityBandKeys = Object.keys(byPriorityBand);
+
+  checkArrayIncludes("candidatePriorityShell.byPriorityBand keys", priorityBandKeys, expectation.priorityBandIncludes, failures);
+  checkMetadataIncludes(shell.metadata, expectation.metadataIncludes, failures, "candidatePriorityShell.metadata");
+
+  if (typeof expectation.orderedCandidateCountMin === "number" && orderedCandidates.length < expectation.orderedCandidateCountMin) {
+    failures.push(`candidatePriorityShell.orderedCandidates length ${orderedCandidates.length} is below ${expectation.orderedCandidateCountMin}`);
+  }
+
+  checkCandidateIncludesAny(
+    orderedCandidates,
+    expectation.candidateIncludesAny,
+    failures,
+    "candidatePriorityShell.orderedCandidates"
+  );
+}
+
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
   if (item?.name) return { ...item };
 
@@ -480,6 +529,7 @@ function checkSample(sample, result) {
   checkTextureSummaryExpectation(result, expectations.textureSummary, failures);
   checkFlavorSummaryExpectation(result, expectations.flavorSummary, failures);
   checkSummaryCandidatesExpectation(result, expectations.summaryCandidates, failures);
+  checkCandidatePriorityShellExpectation(result, expectations.candidatePriorityShell, failures);
 
   if (typeof expectations.scoreMin === "number" && score < expectations.scoreMin) {
     failures.push(`score ${score} is below ${expectations.scoreMin}`);

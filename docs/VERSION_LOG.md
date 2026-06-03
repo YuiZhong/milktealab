@@ -1,5 +1,34 @@
 # 版本记录
 
+## v0.0.6.16
+
+本轮新增 `candidatePriorityShell` golden 结构断言能力。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 加载 `core/candidatePriorityShellEngine.js`，确保 golden runner 与页面 runtime 的 summary candidate -> priority shell 链路一致。
+  - 新增 `candidatePriorityShell` 结构检查，保护 `orderedCandidates` / `byPriorityBand` / `topCandidates` / `metadata` 容器结构。
+  - 支持 `priorityBandIncludes`、`orderedCandidateCountMin`、`candidateIncludesAny` 和 `metadataIncludes` expected。
+- 更新 `data/goldenSamples.js`
+  - 给少量代表样本增加 `candidatePriorityShell` expected。
+  - 覆盖稳定普通样本、taste accident、flavor identity 和 texture blocking 路径。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.16 本地测试安全网状态。
+  - 记录当前未创建 `v0.0.6.16-candidate`。
+
+### 阶段边界
+
+- 本轮只新增测试安全网，不改 runtime、core、`index.html` 或 `candidatePriorityShellEngine`。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 本轮不做最终调度 / priority 接管 / severity / `scoreMultiplier`。
+- 本轮不锁死具体排序数值、severity 数值或 `scoreMultiplier`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.15 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
