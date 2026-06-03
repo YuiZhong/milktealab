@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.6.17
+
+本轮为 v0.0.6.x 后半段收口复盘。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 v0.0.6.x 后半段收口复盘。
+  - 确认三层 summary、`summaryCandidates`、`candidatePriorityShell` 均已接入 `result`，且均有 golden 结构保护。
+  - 记录当前未发现阻止进入 final 收口审计的 P0。
+  - 具体列出 P1 final 收口审计核对项，包括结构一致性、`result` 输出字段、evidence / metadata / source / trigger / priority / severity hint 贯通、ID 承载位和 golden 结构断言覆盖。
+  - 具体列出 P2 后续方向，包括更丰富 golden、relation matrix、表格化内容管线、更多 candidate 类型、profile / tag / metadata 扩展和内容管理 / 数据审计。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充三层 summary -> candidate -> priority shell 的完整链路概览。
+  - 明确当前链路仍不接管最终 result。
+  - 记录 v0.0.7.x 之后再逐步接入 severity / `scoreMultiplier` / golden expected 调优。
+  - 明确 P2 不属于 v0.0.6.x final 收口审计前必须完成的阻塞项。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.17 本地复盘状态。
+  - 记录当前未创建 `v0.0.6.17-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / 复盘，不改 runtime、data、runner 或 golden expected。
+- 本轮不实现新 runtime，不新增 engine，不改 `tasteJudge`、summary engines、candidate engine 或 priority shell engine。
+- 本轮不改评分、事故、饮品类型、feedback 或 `result.type`。
+- 本轮不做 severity / `scoreMultiplier`。
+- 本轮不做表格化内容管线。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.16 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

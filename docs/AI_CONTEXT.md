@@ -160,8 +160,13 @@
 - v0.0.6.16 不做最终调度 / priority 接管 / severity / `scoreMultiplier`，不锁死具体排序数值、severity 数值或 `scoreMultiplier`。
 - v0.0.6.16 已完成 `candidatePriorityShell` golden 结构断言，且 `v0.0.6.16-candidate` 已冻结并推送。
 - 三层 summary、`summaryCandidates`、`candidatePriorityShell` 均已进入 result，且均已有 golden 结构保护。
-- 当前未推进 v0.0.6.17。
-- 下一步可考虑 v0.0.6.x 后半段收口复盘、v0.0.6.x final 收口审计，或进入 v0.0.7.x 前的调参路线设计。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.6.17 已完成 v0.0.6.x 后半段收口复盘，本地 commit 后以 `git log -1` 为准。
+- 本轮复盘确认：三层 summary、`summaryCandidates`、`candidatePriorityShell` 均已进入 `result`，且均已有 golden 结构保护。
+- 当前仍未让新系统接管最终判定；评分、事故、饮品类型、feedback、`result.type` 和 golden score expected 仍由现有主链路保护。
+- 本轮复盘未发现阻止进入 v0.0.6.x final 收口审计的 P0；P1 是完成 final 收口审计本身，具体核对三层 summary / `summaryCandidates` / `candidatePriorityShell` 结构一致性、`result` 输出字段、`evidence` / `metadata` / `sourceLayer` / `sourceSummary` / `triggerMetric` / `triggerValue` / `priorityBand` / `severityHint` 贯通、`feedbackTags` / `outcomeTypeId` / `drinkTypeId` / `accidentTypeId` 等承载位、golden 结构断言覆盖，以及是否仍有进入 v0.0.7.x 前必须补的结构缺口。
+- P2 是可留到 v0.0.7.x 或更后的方向，包括更丰富 golden 覆盖、flavor relation matrix / candidate relation matrix、表格化内容管线、更多 candidate 类型（例如 `audience` / `operation` / `customerPreference`）、更细的 profile / tag / metadata 扩展，以及更完整的调参、内容管理和数据审计。
+- 当前未创建 `v0.0.6.17-candidate`。
+- 下一步可考虑 `v0.0.6.17-candidate` 冻结、v0.0.6.x final 收口审计，或补齐复盘发现的 P0 / P1（当前未发现 P0）。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

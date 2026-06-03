@@ -649,6 +649,60 @@ v0.0.6.14 只定义 priority shell 的 docs / schema，不实现 runtime。prior
 
 priority shell 不能变成新的 if 地狱。它不应该写具体原料组合判断，也不应该靠中文 displayName、玩家可见文案或 UI category 推断系统身份。正确方向是：summary 产出结构化理解，`summaryCandidates` 产出候选，priority shell 只读组织候选，最终调度在未来单独设计。
 
+#### v0.0.6.17 三层 summary -> candidate -> priority shell 链路复盘
+
+截至 v0.0.6.16-candidate，当前完整只读链路是：
+
+```text
+ingredient profiles / structure analysis
+↓
+tasteSummary / textureSummary / flavorSummary
+↓
+summaryCandidates
+↓
+candidatePriorityShell
+↓
+legacy judge result（当前仍由既有 analyzer / judge 决定）
+```
+
+这条链路已经进入 `result`，但仍不接管最终结果。`tasteSummary`、`textureSummary`、`flavorSummary` 负责输出中间理解；`summaryCandidates` 负责把风险和指标整理为候选；`candidatePriorityShell` 负责把候选按粗粒度 priority band 组织成只读观察结构。最终 `score`、事故、饮品类型、feedback、`result.type` 和各类最终 ID 仍由现有 runtime 主链路决定。
+
+当前结构贯通状态：
+
+- summary 层：三层 summary 均保持 `values` / `tags` / `risks` / `evidence` / `metadata` 结构。
+- candidate 层：候选已承载 `sourceLayer`、`sourceSummary`、`triggerMetric`、`triggerValue`、`thresholds`、`evidence`、`priorityBand`、`severityHint`、`feedbackTags`、`accidentTypeId`、`outcomeTypeId`、`drinkTypeId` 和 `ruleFamilyId`。
+- priority shell 层：已承载 `orderedCandidates`、`byPriorityBand`、`topCandidates` 和 `metadata`。
+- metadata 边界：当前结构均通过 `readonly`、`weightsEnabled`、`affectsFinalResult` 等字段表达“只读、不影响最终判定、不启用权重调参”。
+- golden 保护：三层 summary、`summaryCandidates` 和 `candidatePriorityShell` 都已有结构断言，保护容器、metadata 和少量代表字段。
+
+因此，v0.0.6.x 后半段可以进入 final 收口审计。final 审计应关注结构一致性和边界一致性，而不是开始调参数。特别要确认：
+
+- 新结构没有改写最终判定。
+- 三层 summary / `summaryCandidates` / `candidatePriorityShell` 的结构与 docs、runner、runtime 暴露命名一致。
+- `result` 输出字段稳定包含三层 summary、`summaryCandidates` 和 `candidatePriorityShell`，但不改变最终 `score`、事故、类型、feedback 或 `result.type`。
+- candidate 的 evidence 仍可解释候选来源。
+- `evidence` / `metadata` / `sourceLayer` / `sourceSummary` / `triggerMetric` / `triggerValue` / `priorityBand` / `severityHint` 已贯通到候选层。
+- `feedbackTags` / `outcomeTypeId` / `drinkTypeId` / `accidentTypeId` 等后续调度需要的 ID 承载位已经存在。
+- golden 结构断言足以保护关键容器、metadata 和代表字段。
+- 没有进入 v0.0.7.x 前必须补的结构缺口。
+- `priorityBand` 仍只是粗分组，不是 severity。
+- `severityHint` 仍只是提示，不是 `severityLevel` 或 `scoreMultiplier`。
+
+进入 v0.0.7.x 之后，才适合逐步处理：
+
+- 参数、标签、阈值的增删。
+- `severityLevel` 和 `scoreMultiplier`。
+- candidate 排序、冲突解决和最终调度接管。
+- golden expected 的有意识调整。
+- 表格化内容管线的正式规划或初步落地。
+- 更丰富的 golden 覆盖。
+- flavor relation matrix / candidate relation matrix。
+- 更多 candidate 类型，例如 `audience`、`operation`、`customerPreference`，但等对应系统进入真实范围再做。
+- 更细的 profile / tag / metadata 扩展。
+- 更完整的调参、内容管理和数据审计方向。
+
+表格化内容管线可以作为 v0.0.7.x 调参阶段方向，例如把候选规则、阈值、反馈标签、severity 提示和后续权重整理为更容易审计的数据表。但本轮不实现表格化内容管线，也不把它作为 v0.0.6.x 的阻塞项。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

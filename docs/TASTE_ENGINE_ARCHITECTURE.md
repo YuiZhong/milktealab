@@ -174,6 +174,42 @@ priority shell 应继续坚持反 if 地狱原则：
 
 v0.0.6.x 可以准备 priority shell 的 schema、只读输出和结构断言。v0.0.7.x 再集中处理参数权重、阈值校准、`severityLevel`、`scoreMultiplier`、候选排序策略和 golden expected 有意识更新。
 
+### v0.0.6.17 后半段收口复盘
+
+截至 v0.0.6.16-candidate，v0.0.6.x 后半段需要的主要系统地基已经齐备：
+
+- `tasteSummary` 已进入 `result`，由 `core/tasteSummaryEngine.js` 独立构建，并已有 golden 结构断言。
+- `textureSummary` 已进入 `result`，由 `core/textureSummaryEngine.js` 独立构建，并已有 golden 结构断言。
+- `flavorSummary` 已进入 `result`，读取 `data/ingredientFlavorProfiles.js`，并已有 golden 结构断言。
+- `summaryCandidates` 已进入 `result`，把 summary 风险和指标整理为只读 candidate，并已有 golden 结构断言。
+- `candidatePriorityShell` 已进入 `result`，把 candidate 组织为只读 priority shell，并已有 golden 结构断言。
+
+这些结构当前都只承担中间观察 / 理解职责，不接管最终判定。最终评分、事故、饮品类型、feedback、`result.type`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId` 和 `feedbackTags` 仍由既有 analyzer / judge 链路产出；summary / candidate / priority shell 只提供并行可读结构，服务 debug、golden 保护和后续调度设计。
+
+从结构完整性看，进入 v0.0.6.x final 收口审计前没有发现阻塞项：
+
+- candidate 已具备 `candidateId`、`candidateType`、`sourceLayer`、`sourceSummary`、`triggerMetric`、`triggerValue`、`thresholds`、`evidence`、`priorityBand`、`severityHint`、`feedbackTags`、`accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`ruleFamilyId` 和 `metadata`。
+- priority shell 已具备 `orderedCandidates`、`byPriorityBand`、`topCandidates` 和 `metadata`。
+- metadata 已表达 `readonly`、`weightsEnabled` 和 `affectsFinalResult` 等边界。
+- summary evidence 已能进入 candidate；priority shell 保留 candidate 快照，因此 evidence 可以继续被观察和断言。
+- `priorityBand` 与 `severityHint` 已预留，但仍未变成最终 severity 或扣分规则。
+
+建议下一步可以进入 v0.0.6.x final 收口审计。final 审计应检查：
+
+- 文档、runner、golden samples 与 runtime 暴露结构是否一致。
+- `tasteJudge.js` 是否仍保持调度层职责，没有重新承载 summary / candidate / priority shell 细节。
+- golden 结构断言是否覆盖三层 summary、summaryCandidates 和 candidatePriorityShell 的关键容器、metadata 与代表字段。
+- 是否仍没有让新系统改写评分、事故、类型、feedback、`result.type` 或 golden score expected。
+- 是否有文档把下一步写死、把 priorityBand 写成 severity、或把 severityHint 写成 `scoreMultiplier`。
+
+当前遗留项分级：
+
+- P0：无。未发现阻止进入 final 收口审计的系统结构缺口。
+- P1：进入 v0.0.7.x 前建议完成 final 收口审计和结构核对。审计应明确检查三层 summary / `summaryCandidates` / `candidatePriorityShell` 的结构一致性，核对 `result` 输出字段是否稳定暴露，确认 `evidence` / `metadata` / `sourceLayer` / `sourceSummary` / `triggerMetric` / `triggerValue` / `priorityBand` / `severityHint` 已贯通；同时核对 `feedbackTags` / `outcomeTypeId` / `drinkTypeId` / `accidentTypeId` 等候选承载位是否齐全，golden 结构断言是否足够保护关键容器、metadata 和代表字段，以及是否仍有进入 v0.0.7.x 前必须补的结构缺口。审计中也可整理 docs 中旧“本地 commit 后以 git log -1 为准”等短期状态描述，并确认 `index.html` runtime 加载顺序和 cache query 与当前结构一致。
+- P2：可以留到 v0.0.7.x 或更后面的后续方向，包括更丰富的 golden 覆盖、flavor relation matrix / candidate relation matrix、表格化内容管线、更多 candidate 类型（例如 `audience` / `operation` / `customerPreference`，但应等对应系统进入真实范围再做）、更细的 profile / tag / metadata 扩展，以及更完整的调参、内容管理和数据审计工作。这些不应被写成 v0.0.6.x final 收口审计前必须完成。
+
+v0.0.7.x 不应再一边补 v0.0.6.x 地基一边调参。它的重点应转为参数增删、标签增删、阈值调优、`severityLevel`、`scoreMultiplier`、golden expected 有意识调整，以及让 summary / candidate / priority shell 在明确任务中逐步接管旧判定。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。
