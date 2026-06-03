@@ -1377,6 +1377,69 @@ profile → summary → accident candidate → severityLevel → scoreMultiplier
 - 事故 severity 应数据化、可调参。
 - 后续新增原料或规则时，应先判断问题属于哪一层，再决定数据和规则落点。
 
+## v0.0.7.24 severity / threshold 表格化路线设计
+
+v0.0.7.24 只补 severity / threshold 的架构路线，不实现 severity engine，不新增表格、validator、build script、generated data，也不接 runtime。
+
+架构边界：
+
+- `accidentTypeId` 是机制类别，回答“这是什么问题”。
+- `priorityBand` 是候选排序 / 调度观察，回答“先看哪类问题”。
+- `severityHint` 是 candidate 输出给未来 severity 系统的提示，不是最终扣分。
+- `severityLevel` 是未来严重度档位，回答“这个问题有多重”。
+- `scoreMultiplier` 是未来分数影响方式，只有明确调参任务才能接入。
+
+高优先级不等于高 severity。硬性物理事故可能优先且严重，例如热水 + 鸡蛋凝固；热饮 + 珍珠 / 粗吸管可能只是服务 warning；芋泥 + 奥利奥 + 珍珠造成明显吸管阻力时，才可能成为高 severity 质地事故。低 severity warning 可以只影响文案或小扣分，高 severity 才进入重大事故、重扣分或归零路线。
+
+机制 ID 不应按样本或单一原料机械拆分。`taste_acid_overload` 是酸度过载机制；柠檬、山楂、百香果、青柠或酸梅只是触发来源 / 测试配方。`sampleId`、sample title、`accidentTypeId` 和 displayName 必须分离：
+
+```text
+sampleId: extreme_lemon_accident
+sample title: 极端柠檬事故
+accidentTypeId: taste_acid_overload
+displayName: 酸度过载 / 酸度超标 / 酸度爆炸
+```
+
+未来如果真的需要原料相关机制，必须先证明它是独立机制，而不是为了某个配方写特例。榴莲可以落到风味身份 / 香气压力 / 争议风险；奥利奥可以落到沉积、固形物负载或甜腻风险；芋泥可以落到泥糊质地、液体支撑或吸管阻力。原则是：
+
+```text
+不能按原料机械拆事故；只能按机制拆事故。
+```
+
+severity / threshold 规则应读取 stable ID 和 summary / candidate 结构字段，例如 `sourceLayer`、`sourceSummary`、`triggerMetric`、`triggerValue`、`thresholds`、`evidence`、`priorityBand`、`severityHint`、`ruleFamilyId`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId` 和 `feedbackTag`。禁止读取 `zhCN`、displayName、sampleId、单个 textId、单个原料名或某个 golden sample 来决定机制。
+
+未来表名建议优先使用 `candidate_severity_rules`，因为它能覆盖 accident / outcome / drinkType / feedback candidate 的 severity 和 threshold 映射。`accident_severity_rules` 太窄，`severity_threshold_rules` 太泛。
+
+未来 schema 可考虑：
+
+```text
+ruleId,enabled,candidateType,accidentTypeId,outcomeTypeId,drinkTypeId,feedbackTag,sourceLayer,sourceSummary,triggerMetric,triggerMin,triggerMax,priorityBand,severityHint,severityLevel,severityLabel,scoreMultiplier,scoreCap,scoreFloor,feedbackIntensity,requiresHumanReview,notes
+```
+
+本轮不写具体阈值、不写具体 `scoreMultiplier` 数值、不改变 score / accident / feedback / result.type。
+
+推荐路线：
+
+```text
+docs/schema
+→ severity / threshold sample table or JSON draft
+→ validator
+→ build generated data
+→ generated validator / structure check
+→ shadow / comparison
+→ producer review + golden review
+→ partial takeover
+→ active expansion
+```
+
+runtime 只应读取 bundled generated data，不读 CSV、Google Sheets、Drive、在线 API 或人工草稿。正式接管前应先 shadow/debug，类似 `generatedFeedbackShadow` 的只读路线；任何玩家可见变化都需要制作人审核和 golden 记录。
+
+反 if guardrail：
+
+- 禁止 sampleId rule、中文文案 rule、displayName rule、单原料特殊扣分、golden hardcode、engine 中散落 threshold if、validator 样本例外和手改 generated data。
+- 禁止把 `priorityBand` 当 `severityLevel`，禁止把 `severityHint` 当最终扣分，禁止把 `scoreMultiplier` 藏在 summary / candidate builder。
+- 允许通用区间判断、枚举校验、stable ID 引用、generated data lookup、severity mapping、fallback 和 golden assertion helper。
+
 ## 4. 三层 summary 原则
 
 未来应逐步形成：

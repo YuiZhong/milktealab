@@ -1907,6 +1907,132 @@ Review focus:
 
 制作人审核是 partial / active 接管前的必要环节。任何会改变玩家可见 feedback 的后续任务，都应先明确哪些 generated 文案已经经过制作人审核、哪些仍需保留 legacy、哪些需要新增或重写文案，并同步 golden 记录。
 
+#### v0.0.7.24 severity / threshold 表格化路线设计
+
+v0.0.7.24 只设计 severity / threshold 的表格化路线，不实现 severity engine，不新增 severity / threshold CSV、JSON 或 generated data，不接 runtime，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+
+本轮首先把几个容易混在一起的概念拆开：
+
+- `accidentTypeId` 回答“这是什么机制问题”，例如 `taste_acid_overload` 表示酸度过载机制。
+- `priorityBand` 回答“这类候选应该先被哪个粗分组查看”，用于候选排序 / 调度观察。
+- `severityHint` 回答“当前候选给未来 severity 系统的语义提示”，还不是最终扣分档。
+- `severityLevel` 回答“这个问题有多严重”，未来才可能进入分数、反馈强度或重大事故判断。
+- `scoreMultiplier` 回答“severity 对最终分数怎样施加影响”，必须在明确调参任务中显式接入。
+
+因此，事故判定顺序和 severity 是两条线。事故类型回答“是什么问题”，优先级回答“先处理哪个问题”，severity 回答“问题有多严重 / 对分数影响多大”。高优先级类别不等于自动高 severity：热水 + 鸡蛋凝固可以是硬性物理重大事故；热饮 + 珍珠 / 粗吸管更可能只是服务 warning；芋泥 + 奥利奥 + 珍珠导致吸不上来，才可能是高 severity 质地事故。低 severity warning 可以只影响文案或少量扣分；高 severity 才进入重大事故、重扣分或归零路线。
+
+`accidentTypeId` 应是机制类别，不是某个配方样本名，也不是某个具体原料名。`taste_acid_overload` 是酸度过载机制；柠檬、山楂、百香果、青柠、酸梅等可以是触发来源或测试配方，不应机械拆成 `taste_acid_overload_lemon`、`taste_acid_overload_hawthorn` 等样本式事故。未来文档和 report 应清楚分离：
+
+- `sampleId`：例如 `extreme_lemon_accident`，代表某个 golden / review sample。
+- sample title：例如“极端柠檬事故”，给人类读。
+- `accidentTypeId`：例如 `taste_acid_overload`，给机制和回归使用。
+- `displayName`：例如“酸度过载 / 酸度超标 / 酸度爆炸”，给 UI 或报告显示。
+
+本轮不重命名现有 sampleId / golden ID。未来如果要改 sampleId，必须单独做迁移任务，并保护 golden expected、review pack、历史报告和文档引用。
+
+也不能机械禁止所有“原料相关机制”。关键判断是：它是否真的是独立机制。榴莲可以是风味身份 / 香气压力 / 争议风险；奥利奥可能进入沉积、固形物负载、甜腻风险；芋泥可能进入泥糊质地、液体支撑、吸管阻力。原则是：
+
+```text
+不能按原料机械拆事故；只能按机制拆事故。
+```
+
+severity / threshold 表格未来应基于 stable ID 和结构化 summary / candidate 字段，而不是基于 `zhCN`、displayName、sampleId、单个 textId、单个原料名或单个 golden sample。更合适的输入包括：
+
+- 三层 summary 的 `values` / `tags` / `risks` / `evidence` / `metadata`。
+- candidate 的 `candidateType`、`sourceLayer`、`sourceSummary`、`triggerMetric`、`triggerValue`、`thresholds`、`priorityBand`、`severityHint`、`ruleFamilyId`。
+- stable ID：`accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`candidateId`、`ruleId`。
+- generated table data 中经过校验的阈值、severity 档、score 边界和人工审核标记。
+
+未来建议表名优先使用 `candidate_severity_rules`。原因是 severity 不只服务 accident，也可能服务 outcome、drinkType、feedback candidate；`accident_severity_rules` 太窄，`severity_threshold_rules` 太泛。`candidate_severity_rules` 更能表达“基于 summary candidate 做 severity / threshold 映射”的位置。
+
+未来表格字段可以考虑：
+
+```text
+ruleId
+enabled
+candidateType
+accidentTypeId
+outcomeTypeId
+drinkTypeId
+feedbackTag
+sourceLayer
+sourceSummary
+triggerMetric
+triggerMin
+triggerMax
+priorityBand
+severityHint
+severityLevel
+severityLabel
+scoreMultiplier
+scoreCap
+scoreFloor
+feedbackIntensity
+requiresHumanReview
+notes
+```
+
+这些字段只是 schema 草案，本轮不填写具体阈值，不给出具体 `scoreMultiplier` 数值，不让它们影响 runtime。
+
+设计目标需要回答九个问题：
+
+1. severity / threshold 表描述的是“候选问题在什么指标区间内多严重”，不是样本文案或原料特例。
+2. 它位于 `summaryCandidates` / `candidatePriorityShell` 之后，读取候选和 summary 的结构化字段。
+3. `severityHint` 只是 candidate 侧提示，未来由表格和校验生成明确 `severityLevel`。
+4. `scoreMultiplier` 只有在单独接入任务中影响分数，不能隐藏在 summary 或 candidate builder 里。
+5. 第一阶段应 shadow / debug 先行，不直接接管 final score、事故、feedback 或 `result.type`。
+6. 管线应沿用 Google Sheets / CSV → validate → build → generated data 的离线内容流程。
+7. 反 if 原则优先：内容进表格，校验进 validator，runtime 只做通用读取、匹配、排序和 fallback。
+8. golden expected 只能有意识更新，且必须说明是 severity、threshold、score 或反馈策略变化。
+9. 机制事故类别与测试 sample 必须分离；sample 只是验证配方，不是机制 ID。
+
+可考虑的小步路线：
+
+1. Phase 0：docs / schema，本轮只完成路线设计。
+2. Phase 1：创建少量 severity / threshold 样例表或 JSON 草案，不接 runtime。
+3. Phase 2：实现 validator，检查 stable ID、枚举、数值区间、字段完整性和反显示文案主键。
+4. Phase 3：build generated data，保持 deterministic，不手改 generated 文件。
+5. Phase 4：generated validator / structure check，保护索引、中文可读性和字段边界。
+6. Phase 5：shadow / comparison，只输出 debug 或 review 数据，不改变玩家最终结果。
+7. Phase 6：制作人 review + golden review，确认体验、文案、判定和 expected 是否需要有意识更新。
+8. Phase 7：partial takeover，小范围让 generated severity 影响非玩家可见字段或单一路径。
+9. Phase 8：active expansion，在 golden、review 和 fallback 充分后扩大接管。
+
+这只是可考虑路线，不代表本轮已决定后续版本，也不代表已经创建任何表格、脚本、generated data 或 runtime 入口。
+
+与现有系统关系：
+
+- legacy analyzer / `tasteJudge` 仍负责最终 score、事故、饮品类型、feedback 和 `result.type`。
+- `summaryCandidates` 和 `candidatePriorityShell` 当前仍是只读观察结构。
+- 未来 severity shadow 可以参考 `generatedFeedbackShadow`：只读、可报告、不可静默吞错、默认不影响玩家最终输出。
+- runtime 只应读取 bundled generated data，不读 Google Sheets、在线 Drive、远程 CSV、人工草稿或 Excel 文件。
+- active takeover 必须单独开任务，先有制作人审核、golden expected 记录、fallback 策略和必要 UI smoke。
+
+明确禁止：
+
+- 按 `sampleId` 写规则。
+- 按中文文案、displayName、`zhCN` 或反馈文本片段写机制判断。
+- 按单个原料名写特殊扣分。
+- 为某个 golden sample 写硬编码。
+- 在 engine 中堆散落 threshold if。
+- 在 validator 中写具体样本例外。
+- 绕过表格化内容管线直接手改 generated data。
+- 把 `priorityBand` 当成 `severityLevel`。
+- 把 `severityHint` 当成最终扣分档。
+- 把 `scoreMultiplier` 藏在 summary / candidate builder 里。
+
+允许存在：
+
+- 通用区间判断。
+- 通用枚举校验。
+- stable ID 引用检查。
+- generated data lookup。
+- 通用 severity mapping。
+- 通用 fallback。
+- 通用 golden assertion helper。
+
+golden expected 的更新原则也要同步：本轮不改 expected。正式接管前，可以先增加 shadow / structure expected；一旦会改变 final score、feedback、accident、type 或 `result.type`，必须说明产品理由，并记录是机制判断、阈值、severity 档、反馈策略还是分数策略变化。不能为了“让测试变绿”而改 expected，也不能把 sampleId 当 accidentTypeId。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

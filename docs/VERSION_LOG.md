@@ -1,5 +1,42 @@
 # 版本记录
 
+## v0.0.7.24
+
+本轮为 severity / threshold 表格化路线设计。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 severity / threshold 表格化路线。
+  - 明确 `accidentTypeId` 是机制类别，不是 sampleId、displayName 或单一原料名。
+  - 明确 sampleId / sample title / `accidentTypeId` / displayName 的边界。
+  - 明确 `priorityBand`、`severityHint`、`severityLevel`、`scoreMultiplier` 的分工。
+  - 推荐未来表名优先使用 `candidate_severity_rules`，并记录字段草案。
+  - 设计 validate / build / generated / shadow / review / partial / active 的可考虑路线。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 severity / threshold 的架构位置。
+  - 明确高优先级不等于高 severity。
+  - 明确 severity / threshold 规则应读取 stable ID、summary / candidate 结构字段和 generated table data。
+  - 明确禁止 sampleId rule、中文文案 rule、单原料特殊扣分、golden hardcode 和 engine 散落 threshold if。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.24 已完成 severity / threshold 表格化路线设计。
+  - 记录当前仍未实现 severity sheet、validator、build、generated data 或 runtime takeover。
+
+### 阶段边界
+
+- 本轮只做 docs / schema / route design。
+- 不实现 severity engine。
+- 不新增 severity / threshold CSV、JSON、generated data、validate script 或 build script。
+- 不改 runtime、data、scripts、generated data、content_sheets、reports 或 `index.html`。
+- 不改 `feedbackEngine`、candidate priority shell、summary candidate engine 或事故 analyzer。
+- 不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.23 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

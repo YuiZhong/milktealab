@@ -109,8 +109,11 @@
 - 当前 report 需要用户查看多候选情况下是否好用，重点确认多条候选显示是否清楚、制作人审核区是否好填、状态码 + 中文问题标签是否够用、机器详情是否不碍眼。
 - 当前未改变玩家最终 feedback。
 - 当前仍未做 partial / active 接管。
-- 当前未推进 v0.0.7.24。
-- 下一步可考虑：继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.24｜severity / threshold 表格化路线设计`，或 `v0.0.7.24｜feedback review pack 正式评审记录工作流`。
+- v0.0.7.24 已完成 severity / threshold 表格化路线设计，本地 commit 后以 `git log -1` 为准。
+- 本轮只做 docs / schema / route design；当前仍未实现 severity sheet、threshold sheet、validator、build script、generated data、runtime takeover 或 active scoring 接管。
+- 当前未改变玩家最终 feedback，未改变 final score、accident、drinkType、feedbackTags、`result.type` 或 golden expected。
+- 当前未创建 `v0.0.7.24-candidate`。
+- 下一步可考虑：`v0.0.7.24-candidate` 冻结，或 `v0.0.7.25｜severity / threshold 样例表格草案`，或继续 feedback 文案评审会 / 样例扩充。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。
