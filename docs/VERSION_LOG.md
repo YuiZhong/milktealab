@@ -1,5 +1,38 @@
 # 版本记录
 
+## docs: sync v0.0.7.8 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.8-candidate`。
+  - 记录 candidate 指向 `98b1dc3b19f25bf0b2394546de1255c19dad9d1f`。
+  - 记录 `v0.0.7.8-candidate` 已冻结并推送。
+  - 记录 v0.0.7.8 已完成 feedback sheet build pipeline 设计。
+  - 记录当前未推进 v0.0.7.9。
+
+### 阶段边界
+
+- `v0.0.7.8-candidate` 已冻结并推送。
+- candidate 指向 `98b1dc3b19f25bf0b2394546de1255c19dad9d1f`。
+- v0.0.7.8 已完成 feedback sheet build pipeline 设计。
+- 已明确 build 不承载机制判断。
+- 已明确 validate / build / runtime adapter 边界。
+- 已明确 generated data 使用 stable ID。
+- 本轮未新增 build script / generated data。
+- 未改 validate script / CSV / JSON 样例。
+- 未改 runtime、data、scripts、`content_sheets`、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.8`。
+- 当前未推进 v0.0.7.9。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.7.8
 
 本轮为 feedback sheet build script 设计。
