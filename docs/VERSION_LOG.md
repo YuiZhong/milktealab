@@ -1,5 +1,29 @@
 # 版本记录
 
+## docs: sync v0.0.6.1 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.1-candidate`。
+  - 记录 candidate 指向 `44d58211b19e0dc2614bdef502955fe7b06631cc`。
+  - 记录 v0.0.6.1 已完成 `tasteSummary` 只读地基。
+  - 记录 `core/tasteSummaryEngine.js` 已拆出，`tasteJudge.js` 保持调度层。
+  - 记录 `result.tasteSummary` 已暴露。
+
+### 阶段边界
+
+- 本轮不改运行逻辑。
+- 未改 data / core / scripts / index.html。
+- 未推进 v0.0.6.2。
+- 未创建 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## bugfix: extract tasteSummaryEngine
 
 本轮为 v0.0.6.1 冻结前 bugfix，不创建 tag。
