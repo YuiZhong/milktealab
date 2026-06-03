@@ -1,5 +1,43 @@
 # 版本记录
 
+## docs: sync v0.0.7.13 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.13-candidate`。
+  - 记录 candidate 指向 `baf90df2b1c67f15d53b8c26c2edf3b0dedf452a`。
+  - 记录 `v0.0.7.13-candidate` 已冻结并推送。
+  - 记录 v0.0.7.13 已增强 feedback runtime adapter 结构保护。
+  - 记录当前未推进 v0.0.7.14。
+
+### 阶段边界
+
+- `v0.0.7.13-candidate` 已冻结并推送。
+- candidate 指向 `baf90df2b1c67f15d53b8c26c2edf3b0dedf452a`。
+- v0.0.7.13 已增强 feedback runtime adapter 结构保护。
+- adapter check 覆盖 metadata、stable ID 查询、tag / scene 查询、includeDisabled、filters、只读行为、invalid data。
+- adapter 当前仍不接 `feedbackEngine`，不影响玩家最终 feedback。
+- adapter 仍只读，不承载机制判断，不自动选择最终 feedback。
+- validator / build / generated validator / adapter check / golden 均通过。
+- 未改 `feedbackEngine` / `data/feedbackTexts.js` / generated JSON / `content_sheets`。
+- 未改 runtime、UI、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.13`。
+- 当前未推进 v0.0.7.14。
+
+### 验证结果
+
+- `node scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- Feedback sheet validator：Errors 0，Warnings 12，warnings 均为制作人审核提醒。
+- Build：通过，且未造成 generated JSON 无意义 diff。
+- Generated validator：Errors 0，Warnings 0。
+- Golden samples：20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.13
 
 本轮强化 feedback runtime adapter 结构保护。
