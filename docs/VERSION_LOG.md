@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.6.10
+
+本轮为三层 summary 中段复盘。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 复盘 `tasteSummary` / `textureSummary` / `flavorSummary` 均已进入 result。
+  - 明确三层 summary 均为只读中间理解层，不接管最终判定。
+  - 补充 summary -> candidate 的下一阶段边界。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 summary -> candidate 桥接 schema。
+  - 记录 candidate 应保留 `sourceLayer`、`triggerMetric`、`evidence`、`priorityBand`、`severityHint`、`feedbackTags`、`outcomeTypeId`、`ruleFamilyId` 等扩展口。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.10 本地实现状态。
+  - 记录当前未创建 `v0.0.6.10-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / summary 中段复盘。
+- 不实现 summary -> candidate runtime。
+- 不新增 candidate engine。
+- 不改 runtime、data、runner、golden samples 或 `index.html`。
+- 不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- `tasteSummary`、`textureSummary`、`flavorSummary` 均已有 golden 结构保护，但仍不影响最终判定。
+- v0.0.6.x 下一步可考虑 summary -> candidate docs / schema 复核，或 summary candidate 只读地基。
+- 完整参数、阈值、severity、`scoreMultiplier` 和 golden expected 调优留到 v0.0.7.x。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.9 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

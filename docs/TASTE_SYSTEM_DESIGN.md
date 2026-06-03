@@ -464,6 +464,54 @@ summary 之后应该产出候选，而不是直接最终判定。事故候选可
 
 candidate 是 summary 到最终 result 的桥。v0.0.6.x 可以先设计 accident / outcome / drinkType / feedback candidate schema；完整 candidate 排序、severity、`scoreMultiplier` 和大规模数值平衡留到 v0.0.7.x。
 
+#### v0.0.6.10 中段复盘：summary -> candidate 桥
+
+截至 v0.0.6.9-candidate，`tasteSummary`、`textureSummary`、`flavorSummary` 均已进入 `result`，并且均有 golden 结构断言保护。三层 summary 已经能提供 `values`、`tags`、`risks`、`evidence`、`metadata` 这组中间理解结果，但它们仍不等于最终判定。
+
+下一步如果推进 summary -> candidate，第一刀应继续保持只读输出。candidate 用来表达“有哪些后续结果可以被调度”，而不是直接改变最终 `score`、事故、饮品类型、feedback 或 `result.type`。推荐的候选结构可以从克制版本开始：
+
+```js
+{
+  candidateId: "taste_acid_overload_candidate",
+  candidateType: "accident",
+  sourceLayer: "taste",
+  triggerMetric: "acidity",
+  thresholds: {
+    min: 75
+  },
+  weights: {
+    base: 1
+  },
+  evidence: [],
+  priorityBand: "taste_overload",
+  severityHint: "medium",
+  feedbackTags: ["acid_overload"],
+  outcomeTypeId: null,
+  ruleFamilyId: "taste_overload",
+  metadata: {
+    readonly: true,
+    weightsEnabled: false
+  }
+}
+```
+
+字段边界：
+
+- `candidateId`：候选本身的稳定 ID，不使用显示文案。
+- `candidateType`：候选类别，例如 `accident`、`drinkType`、`outcome`、`feedback`。
+- `sourceLayer`：来自 `taste`、`texture`、`flavor` 或后续组合层。
+- `triggerMetric`：触发候选的 summary 指标，例如 `acidity`、`strawResistance`、`aromaPressure`。
+- `thresholds` / `weights`：预留未来调参，不要求 v0.0.6.x 立即启用完整权重系统。
+- `evidence`：复用 summary evidence，解释候选为什么出现。
+- `priorityBand`：用于后续调度的粗分组，不等于最终 severity。
+- `severityHint`：只作为后续 severity 的提示，不在 v0.0.6.x 初期直接决定分数乘区。
+- `feedbackTags`：让 feedbackEngine 未来可以读取结构化标签，而不是回到文案片段匹配。
+- `outcomeTypeId` / `ruleFamilyId`：用于结果归类、规则族审计和 golden 断言。
+
+后续系统读取字段时，应优先读取 stable ID 和结构化字段：`accidentTypeId`、`drinkTypeId`、`outcomeTypeId`、`audienceIds`、`feedbackTags`、三层 summary 的 `values` / `tags` / `risks` / `evidence` / `metadata`，以及 candidate 的 `candidateId` / `candidateType` / `sourceLayer` / `triggerMetric` / `priorityBand` / `severityHint` / `ruleFamilyId`。显示文案仍可用于 UI、历史快照和文案回归，但不应回到系统主键位置。
+
+v0.0.6.x 可以先做 candidate schema、只读输出和 golden 结构保护；完整候选排序、冲突解决、severity 数值、`scoreMultiplier`、阈值校准和 golden expected 调整，应放到 v0.0.7.x 或明确调参任务中处理。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：
