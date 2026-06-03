@@ -456,6 +456,8 @@ v0.0.6.x 的 flavor 工作应先准备 `flavorProfile` / `flavorSummary` / candi
 
 `flavorSummary` 第一版如果进入 runtime，应保持只读输出，不直接接管事故、饮品类型、评分或 feedback。最终判断应通过 relation matrix / rule table / candidate 层进入 `tasteJudge` 的调度，而不是把 `if 榴莲 + 咖啡`、`if 某 flavor tag + 某 flavor tag` 之类内容判断写进 analyzer。
 
+数据来源上，`flavor` 层不应从玩家可见显示名、中文原料名或 UI category 直接推断风味身份。现有 `ingredientTasteProfiles.js` 中的 `aromaImpact`、`weirdness`、`isStrongAroma`、`worksInFreshDrinks` 和 tags 可以作为过渡期辅助线索，但它们不是完整 `flavorProfile`；`ingredientTextureProfiles.js`、`combinationRules.js` 和 `synergyRules.js` 也只能提供结构、组合或 legacy 线索。v0.0.6.x 更稳的顺序是先建立以 stable `ingredientId` 为主引用的 flavorProfile 数据地基，再接只读 `flavorSummary`；relation matrix / candidate 可以继续小步进入，系统性参数、阈值、标签和 severity 留到 v0.0.7.x 集中校准。
+
 不是：
 
 ```text

@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.6.6
+
+本轮为 `flavorProfile` / `flavorSummary` 数据来源轻量评估，不实现 runtime。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 `flavorSummary` 不应凭空从中文原料名、显示名或 UI category 推断。
+  - 记录当前仓库尚缺独立 `flavorProfile` 数据来源。
+  - 建议后续以 stable `ingredientId` 建立轻量 `ingredientFlavorProfiles` 数据地基。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 flavor 层工程边界：现有 taste / texture / combination / synergy 数据只能提供辅助线索，不应被反向挖成风味身份主来源。
+  - 明确 v0.0.6.x 应先建立 flavorProfile 数据地基和只读 summary，relation matrix / candidate 后续小步接入。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.6 本地 docs 评估状态。
+  - 记录当前仍未创建 `v0.0.6.6-candidate`。
+
+### 阶段边界
+
+- 不改 runtime。
+- 不改 data / runner / golden expected。
+- 不改评分、事故、饮品类型、feedback 或 `result.type`。
+- 不新增 `data/ingredientFlavorProfiles.js`。
+- 不新增 `core/flavorSummaryEngine.js`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.5 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
