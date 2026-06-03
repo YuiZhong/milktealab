@@ -121,8 +121,16 @@
 - 当前未改变玩家最终 score / feedback / accident / `result.type`。
 - 当前未改 golden expected。
 - `v0.0.7.25-candidate` 已冻结并推送。
-- 当前未推进 v0.0.7.26。
-- 下一步可考虑：`v0.0.7.26｜severity / threshold 样例表 CSV / JSON 草案`，或继续 feedback 文案评审会 / 样例扩充，或 `v0.0.7.x｜机制部分收口前置审计计划`。
+- v0.0.7.26 已新增 severity / threshold 样例表 CSV / JSON 草案，本地 commit 后以 `git log -1` 为准。
+- 新增 `content_sheets/examples/candidate_severity_rules.sample.csv` 和 `.json`，当前只是人类编辑源草案，不接 runtime，不生成 `data/generated`。
+- v0.0.7.26 样例表已做结构去歧义小修：奶脂行 `ruleId` 使用 texture 方向；`aroma_pressure` / `bubble_conflict` 不再填入 candidate severity sample 的 `feedbackTag` 字段，只在 notes 中说明后续需随 registry / schema 确认。
+- 当前未实现 severity validator / build / generated data。
+- 当前未实现 runtime 接管。
+- 当前未改变玩家最终 score / feedback / accident / `result.type`。
+- 当前未改 golden expected。
+- Golden samples 当前应为 20/20 passed。
+- 当前未创建 `v0.0.7.26-candidate`。
+- 下一步可考虑：`v0.0.7.26-candidate` 冻结，或 `v0.0.7.27｜validate candidate severity sheet 脚本设计`，或继续 feedback 文案评审会 / 样例扩充。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。

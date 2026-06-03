@@ -2267,6 +2267,24 @@ validator 不应：
 - 未来何时允许 severity 影响玩家最终 score / feedback / accident / `result.type`。
 - 未来哪些 golden expected 属于有意识调参更新。
 
+#### v0.0.7.26 severity / threshold 样例表草案
+
+v0.0.7.26 新增 `content_sheets/examples/candidate_severity_rules.sample.csv` 和 `content_sheets/examples/candidate_severity_rules.sample.json`，用于验证 `candidate_severity_rules` 的字段顺序、人类可读性和 future validator 方向。
+
+这两个文件是人类编辑源草案，不是 runtime data，不放入 `data/generated`，也不参与当前 taste judge / feedbackEngine / golden expected。CSV 使用 UTF-8 with BOM，方便 Excel / Numbers / Google Sheets 直接打开时中文不乱码；JSON 保持格式化和中文可读，方便 ChatGPT / Codex / 制作人复查字段。
+
+样例行默认 `enabled=FALSE`，只用于说明草案结构。`triggerMin` / `triggerMax`、`severityLevel`、`scoreMultiplier`、`scoreCap`、`scoreFloor` 等字段保持为空，不填写真实阈值或真实调参数字；需要说明“待定”或“只是草案”的内容写入 `notes`，避免未来 validator 把 `[TBD]` 当成真实枚举或真实数值。
+
+样例覆盖方向：
+
+- 酸度过载事故：`accidentTypeId=taste_acid_overload`，不按柠檬 / 山楂 / 百香果拆事故类型。
+- 吸管阻力 / 可饮用性质地事故：`accidentTypeId=texture_straw_resistance`，观察 `strawResistance`。
+- 奶脂 / 厚重负担机制：`accidentTypeId=dairy_fat_overload`，观察 `fatLoad`。
+- 风味身份 / 香气压力反馈方向：`feedbackTag=aroma_pressure`，仍需制作人确认是否形成独立反馈。
+- taste conflict outcome 方向：`outcomeTypeId=taste_conflict`，不代表当前 outcome 接管。
+
+这些样例只验证字段、人类可读性和 future validator 方向，不改变 summary / candidate / priority shell，不改变玩家最终 score、feedback、accident、type 或 `result.type`。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

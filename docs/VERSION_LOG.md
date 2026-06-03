@@ -1,5 +1,51 @@
 # 版本记录
 
+## v0.0.7.26
+
+本轮为 severity / threshold 样例表 CSV / JSON 草案。
+
+### 本轮新增 / 更新
+
+- 新增 `content_sheets/examples/candidate_severity_rules.sample.csv`
+  - 使用 v0.0.7.25 设计的 `candidate_severity_rules` 字段顺序。
+  - CSV 为 UTF-8 with BOM，面向人类编辑 / 审阅。
+  - 所有样例行默认 `enabled=FALSE`，表示草案未启用。
+- 新增 `content_sheets/examples/candidate_severity_rules.sample.json`
+  - 与 CSV 字段一一对应。
+  - JSON 合法、格式化、中文可读。
+- 小修样例行结构去歧义
+  - 将奶脂 / 厚重负担草案 `ruleId` 调整为 `texture_dairy_fat_load_draft`，保留 `accidentTypeId=dairy_fat_overload`。
+  - 清空香气压力草案的 `feedbackTag`，避免误读 `aroma_pressure` 为已注册 runtime 文案池 tag。
+  - 将 taste conflict outcome 草案调整为 `flavor_identity_conflict_outcome_draft`，清空 `bubble_conflict`，避免误读为 flavor identity conflict 默认反馈标签。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 说明样例 CSV / JSON 只是人类编辑源草案，不是 runtime data。
+  - 说明示意行不代表真实阈值 / multiplier。
+  - 说明 CSV / JSON 只验证字段、人类可读性和 future validator 方向。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 说明 candidate severity sample sheet 只是内容管线草案层。
+  - 说明它不改变 summary / candidate / priority shell，也不接管 legacy judge。
+  - 说明后续必须先有 validator / build / generated validator / shadow / review，才能考虑 partial 接管。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.26 已新增 severity / threshold 样例表 CSV / JSON 草案。
+  - 记录当前仍未实现 validator / build / generated data / runtime 接管。
+
+### 阶段边界
+
+- 本轮只新增样例 CSV / JSON 和 docs。
+- 不实现 validator。
+- 不实现 build script。
+- 不新增 runtime generated data。
+- 不改 runtime、data、generated data、scripts、reports 或 `index.html`。
+- 不改玩家最终 score、feedback、accident、type 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- CSV 编码：UTF-8 with BOM。
+- JSON 合法性：`python3 -m json.tool` 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.25 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

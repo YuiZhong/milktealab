@@ -1490,6 +1490,14 @@ future generated severity data 应由通过 validator 的 source sheet 生成，
 
 现有系统关系不变：legacy analyzer / judge 仍负责最终 score、accident、type 和 feedback；`summaryCandidates` 与 `candidatePriorityShell` 仍是只读观察层；future severity shadow 应先类似 `generatedFeedbackShadow`，不影响最终结果。任何 partial / active 接管都必须另开任务，并经过制作人审核和 golden expected 记录。
 
+## v0.0.7.26 candidate severity sample sheet
+
+v0.0.7.26 只新增 `content_sheets/examples/candidate_severity_rules.sample.csv` 和 `.json`，作为 severity / threshold 内容管线的样例表草案层。它们用于验证表头、人类可读性、CSV / JSON 同步方式和 future validator 的边界，不是 runtime generated data。
+
+当前样例表不改变 `tasteSummary` / `textureSummary` / `flavorSummary`，不改变 `summaryCandidates`，不改变 `candidatePriorityShell`，不接管 legacy judge，也不改变玩家最终 score、事故、饮品类型、feedback、`result.type` 或 golden expected。所有样例行默认 disabled / draft，不能被解释为已经启用的真实规则。
+
+后续如果要从样例表进入可运行内容管线，必须先依次补上 validator / build / generated data validator / shadow output / review pack，再考虑 partial takeover。任何 partial / active 接管都必须另开任务，且要记录制作人审核和 golden expected 变化理由。
+
 ## 4. 三层 summary 原则
 
 未来应逐步形成：
