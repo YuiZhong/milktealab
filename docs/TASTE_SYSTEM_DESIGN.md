@@ -753,6 +753,33 @@ golden 结构保护核对：
 
 v0.0.7.x 的边界因此可以更清楚：它应主要处理参数、标签、阈值、`severityLevel`、`scoreMultiplier`、candidate 排序 / 冲突解决、golden expected 有意识调整和表格化内容管线，而不是一边补 v0.0.6.x 系统地基一边调参。
 
+#### v0.0.7.0 调参路线与表格化内容管线边界
+
+v0.0.7.x 从系统地基阶段转入调参阶段。它可以调整参数、标签、阈值、`severityLevel`、`scoreMultiplier`、feedback / candidate / risk tags、candidate 排序和 golden expected，但不应再把三层 summary、`summaryCandidates` 或 `candidatePriorityShell` 当作大块新系统重搭。
+
+调参应遵守几个边界：
+
+- 每次参数或标签变化都应说明目标：修正哪类口感误判、风险误报、反馈不匹配或 candidate 排序问题。
+- golden expected 可以调整，但必须是有意识的产品判断，不是为了掩盖回归。
+- `severityHint` 可以逐步转向真正的 `severityLevel`，但需要明确何时开始影响最终判定、分数或反馈。
+- `scoreMultiplier` 只有在明确调参任务中接入，不应隐藏在 summary 或 candidate 构建细节里。
+- 玩家可见文案、中文名和 `displayName` 仍不能作为调参主键；表格和规则都应优先引用 stable ID。
+
+后续内容量会越来越大，用户不应长期直接编辑 JS 来改文案、标签、阈值和 expected。JS 更适合作为 runtime 数据承载或生成产物；Excel / CSV / Google Sheets / JSON 更适合作为内容编辑、审阅、批量校验和版本对比的工作流。
+
+适合逐步表格化的内容包括：
+
+- feedback 文案、多语言文案和反馈标签。
+- `tags`、`candidateTags`、`riskTags`、`feedbackTags`。
+- `thresholds`、`severityHint`、`severityLevel`、`scoreMultiplier`。
+- candidate rules、candidate relation matrix、priority shell 排序配置。
+- `tasteProfile` / `textureProfile` / `flavorProfile` 中后续需要频繁调的字段。
+- golden expected、样本说明和调参备注。
+
+初期不建议直接让 runtime 读取 xlsx。更稳的路线是：表格作为编辑源，导入脚本先校验，再生成 runtime 可读 JSON 或 JS 数据。校验至少应覆盖 stable ID 是否存在、是否把 `displayName` 当主键、必填字段是否缺失、数值是否越界、枚举值是否未知、重复 ID 是否出现、变更是否影响 golden samples。
+
+v0.0.7.0 只记录这条路线，不新增 CSV / Excel / JSON 文件，不新增导入脚本，不改 runtime，不调参数，也不改 golden expected。
+
 ### 4.8 不只原料有属性
 
 原料有 profile，但组合规则、事故规则、反馈规则和结果候选也应逐步拥有结构化 metadata，例如：

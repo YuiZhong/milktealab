@@ -252,6 +252,32 @@ golden 结构保护核对：
 
 结论：未发现 P0 / P1，v0.0.6.x 系统地基可以进入 final candidate 冻结；v0.0.7.x 可开始以参数、标签、阈值、severity、`scoreMultiplier`、golden expected 调优和表格化内容管线为主。
 
+### v0.0.7.0 调参路线与表格化内容管线边界
+
+v0.0.7.x 的阶段定位是调参 / 调标签 / 调 severity，而不是继续大规模重搭 v0.0.6.x 的系统地基。v0.0.6.x 已经完成三层 summary、`summaryCandidates` 和 `candidatePriorityShell` 的只读结构、result 输出与 golden 结构保护；v0.0.7.x 的调整应基于这些已有结构进行。
+
+v0.0.7.x 主要做：
+
+- 参数增删、标签增删和阈值调优。
+- `severityLevel`、`scoreMultiplier`、candidate 排序 / 冲突解决和 priority 规则的调校。
+- golden expected 的有意识调整，而不是为了让测试通过而临时改 expected。
+- `feedbackTags`、`candidateTags`、`riskTags` 等标签体系的整理。
+- 表格化内容管线规划 / 初步落地，让后续内容、阈值和标签可以被审计、校验和回归保护。
+
+v0.0.7.x 不应再做：
+
+- 大规模重搭三层 summary。
+- 大规模重搭 `summaryCandidates`。
+- 大规模重搭 `candidatePriorityShell`。
+- 一边补系统地基一边调参数。
+- 临时把中文名、玩家可见文案、`displayName` 或 UI category 当系统主键。
+
+调参入口应优先使用已有结构：summary 提供 `values` / `tags` / `risks` / `evidence` / `metadata`，candidate 提供 `sourceLayer` / `sourceSummary` / `triggerMetric` / `triggerValue` / `thresholds` / `priorityBand` / `severityHint`，priority shell 提供候选观察和排序壳层。具体数值可以调整，但调参任务应说明调整意图、影响范围和 golden expected 变化理由。
+
+表格化内容管线在本轮只设计边界，不实现导入。长期可用 Excel / CSV / Google Sheets / JSON 工作流承载 feedback 文案、tags、thresholds、`severityHint` / `severityLevel`、`scoreMultiplier`、candidate rules、三层 profile 可调字段、golden expected 和多语言文案。runtime 不应直接依赖 xlsx；更稳的方向是把表格作为编辑源，经校验后生成 runtime 可读 JSON 或 JS 数据。
+
+初期表格化优先级宜从低风险、高收益内容开始，例如 feedback 文案 / `feedbackTags` 表、candidate 阈值 / `severityHint` 表、profile 可调字段表或 golden expected 审计表。导入前必须校验 stable ID 是否存在、是否误用 `displayName` 当主键、数值是否越界、必填字段是否缺失、枚举值是否已定义、重复 ID 是否存在，以及变更是否影响 golden samples。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

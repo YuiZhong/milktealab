@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.0
+
+本轮为 v0.0.7.x 调参路线与表格化内容管线边界设计。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 v0.0.7.x 阶段边界：v0.0.7.x 主要是调参、调标签、调阈值、调 severity 和 `scoreMultiplier`。
+  - 明确 v0.0.6.x 已完成三层 summary、`summaryCandidates`、`candidatePriorityShell` 系统地基；v0.0.7.x 不应再承担大块系统搭建。
+  - 明确调参应基于已有 summary / candidate / priority shell 结构。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 v0.0.7.x 调参路线。
+  - 补充表格化内容管线方向：用户后续不应长期直接编辑 JS，表格可作为编辑源，runtime 更适合读取校验后生成的 JSON 或 JS。
+  - 记录适合表格化的内容范围，包括 feedback 文案、tags、thresholds、severity、`scoreMultiplier`、candidate rules、profile 可调字段、golden expected 和多语言文案。
+  - 记录导入前应校验 stable ID、显示文案主键、数值范围、必填字段、枚举值、重复 ID 和 golden samples 影响。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.x final 收口审计已完成，P0 / P1 均为无。
+  - 记录 v0.0.7.x 规划开始。
+  - 记录当前未实现表格化内容管线，未创建 `v0.0.7.0-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / planning。
+- 本轮不实现表格导入，不新增 CSV / Excel / JSON 文件，不新增 build script。
+- 本轮不改 runtime、data、runner 或 golden expected。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type`。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.18 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
