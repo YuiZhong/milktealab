@@ -1425,6 +1425,82 @@ fallback 边界：
 
 本设计不要求用户改变当前 Google Sheets / CSV 字段，也不改变文案工作台使用方式。未来如果 adapter 设计要改变人类表格字段、制作人填写方式或文案工作台流程，必须先由用户作为制作人确认。
 
+#### v0.0.7.12 feedback runtime adapter 第一版只读实现
+
+v0.0.7.12 已新增第一版 `core/feedbackRuntimeAdapter.js`。它实现 generated feedback data 的只读查询能力，但当前不接 `core/feedbackEngine.js`，不改 `data/feedbackTexts.js`，不改 runtime script 加载，也不影响玩家最终看到的 feedback。
+
+当前 adapter 创建入口：
+
+```js
+createFeedbackRuntimeAdapter(generatedFeedbackData)
+```
+
+输入边界：
+
+- 输入必须是已经 build 出来的 generated feedback data object。
+- adapter 不读取 CSV，不读取 Google Sheets，不读取 `content_sheets`。
+- adapter 不自己跑 validate / build / generated validation。
+- adapter 不修复 generated data，也不生成 generated data。
+
+第一版查询方法：
+
+```js
+adapter.isAvailable()
+adapter.getTextById(textId)
+adapter.getTextsByTag(feedbackTag, options)
+adapter.getTextsByScene(scene, options)
+adapter.getEnabledTexts(filters)
+adapter.getMetadata()
+```
+
+查询边界：
+
+- `getTextById(textId)` 只使用 stable `textId`；找不到返回 `null`；不根据 `zhCN` 查找。
+- `getTextsByTag(feedbackTag, options)` 只使用 stable `feedbackTag`，默认只返回 `enabled === true` 的候选。
+- `getTextsByScene(scene, options)` 只使用 stable `scene`，默认只返回 enabled 候选。
+- `getEnabledTexts(filters)` 做通用字段过滤和通用 score range 判断。
+- `includeDisabled: true` 只用于显式审阅 disabled 文案；默认查询不会把 disabled 文案放进候选池。
+- 返回对象是文案候选的浅拷贝，不应被当作 generated data 的可写入口。
+
+第一版支持的通用 filters：
+
+```js
+{
+  scene,
+  feedbackTag,
+  tone,
+  accidentTypeId,
+  drinkTypeId,
+  outcomeTypeId,
+  score,
+  minScore,
+  maxScore
+}
+```
+
+adapter 不承载机制判断：
+
+- 不调分，不判事故，不判饮品类型，不改 `result.type`。
+- 不自动选择最终 feedback，不修改 `result.feedback` 或 `feedbackTags`。
+- 不根据 `zhCN`、displayName、中文片段、notes 或具体文案内容判断机制。
+- 不为某个 `textId`、某个 golden sample 或某个具体文案池写特殊逻辑。
+- 不自动修文案，不自动调 `tone` / score / `scene`。
+
+invalid data 边界：
+
+- 第一版 adapter 会做轻量结构检查。
+- generated data 缺少必要结构时，返回不可用 adapter，并在 `getMetadata()` 中标记 `available: false` 和 issues。
+- 不可用 adapter 查询结果为空或 `null`。
+- 第一版 adapter 不自动 fallback 到 legacy 文案系统；legacy fallback 应留到未来 `feedbackEngine` 接入任务处理。
+
+当前配套检查脚本：
+
+```bash
+node scripts/content/checkFeedbackRuntimeAdapter.js
+```
+
+该脚本读取 `data/generated/feedbackTexts.generated.json`，验证 adapter 可创建、按 `textId` / `feedbackTag` / `scene` 查询、默认排除 disabled 文案、`includeDisabled` 可审阅 disabled 文案、不存在 textId 返回 `null`、查询不依赖 `zhCN`，并确认 invalid data 会产生不可用 adapter。
+
 允许的通用逻辑：
 
 - 按 `textId` 建索引。

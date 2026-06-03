@@ -600,6 +600,31 @@ adapter 不承载内容 if：
 
 接入必须小步、可回滚：先做只读 adapter，再做 adapter 结构检查，再考虑让 `feedbackEngine` 旁路读取 generated data，最后通过小范围样本对比和人类制作人审核决定是否接管部分 `feedbackTag`。不要在 adapter 第一版里一次性替换旧反馈系统。
 
+### v0.0.7.12 feedback runtime adapter 第一版只读实现
+
+v0.0.7.12 已新增 `core/feedbackRuntimeAdapter.js`，作为 generated feedback data 的只读访问层。它当前不接 `core/feedbackEngine.js`，不修改 `data/feedbackTexts.js`，不加入 runtime script 加载，也不改变评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+
+当前职责：
+
+- 接收已经 build 出来的 generated feedback data object。
+- 提供按 stable `textId`、`feedbackTag`、`scene` 的只读查询。
+- 提供 `getEnabledTexts(filters)` 做通用 enabled / stable ID / score range 过滤。
+- 默认只返回 enabled 文案；`includeDisabled: true` 仅用于审阅 disabled 文案。
+- 对缺少必要结构的 generated data 返回不可用 adapter，并在 metadata 中报告 issues。
+
+当前明确不做：
+
+- 不读取 CSV / Google Sheets / `content_sheets`。
+- 不自己跑 validate / build / generated validation。
+- 不修复 generated data，不生成 generated data。
+- 不承载机制判断，不根据 `zhCN` / displayName / notes 做判断。
+- 不自动选择最终 feedback，不接管 `feedbackEngine`。
+- 不自动 fallback 到 legacy 文案系统；legacy fallback 留到未来 `feedbackEngine` 接入任务。
+
+第一版检查脚本是 `scripts/content/checkFeedbackRuntimeAdapter.js`。它只验证 adapter 查询能力和 invalid data 状态，不改 generated data，不接 runtime。
+
+未来接入 `feedbackEngine` 必须继续小步、可回滚：先保护 adapter 结构，再做旁路读取 docs / schema，再进行小范围样本对比和制作人体验审核，最后再决定是否逐步接管部分 `feedbackTag`。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

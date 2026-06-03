@@ -1,5 +1,47 @@
 # 版本记录
 
+## v0.0.7.12
+
+本轮实现 feedback runtime adapter 第一版只读模块。
+
+### 本轮新增 / 更新
+
+- 新增 `core/feedbackRuntimeAdapter.js`
+  - 提供 `createFeedbackRuntimeAdapter(generatedFeedbackData)`。
+  - 支持 `getTextById`、`getTextsByTag`、`getTextsByScene`、`getEnabledTexts`、`getMetadata` 和 `isAvailable`。
+  - 默认只返回 enabled 文案；`includeDisabled: true` 可用于审阅 disabled 文案。
+  - 只接收 generated feedback data object，不读取 CSV / Google Sheets / `content_sheets`。
+  - 对 invalid generated data 返回不可用 adapter，并在 metadata 中报告 issues。
+- 新增 `scripts/content/checkFeedbackRuntimeAdapter.js`
+  - 验证 adapter 可创建、按 `textId` / `feedbackTag` / `scene` 查询、默认排除 disabled 文案、`includeDisabled` 可看到 disabled 文案、不存在 textId 返回 `null`、查询不依赖 `zhCN`、invalid data 会产生不可用 adapter。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 记录 adapter 第一版只读实现、查询方法、disabled 处理方式和 invalid data 边界。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 adapter 是 generated data 的只读访问层，不读取 CSV / Google Sheets，不接管 `feedbackEngine`。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.12 已完成 feedback runtime adapter 只读实现。
+
+### 阶段边界
+
+- 本轮不接 runtime，不修改 `index.html`。
+- 本轮不改 `core/feedbackEngine.js`，不改 `data/feedbackTexts.js`。
+- 本轮不改 generated feedback JSON，不改 `content_sheets` CSV / JSON 样例。
+- 本轮不改 validator / build scripts。
+- 本轮不改 golden samples / runner。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check core/feedbackRuntimeAdapter.js` 通过。
+- `node --check scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- Adapter check：`node scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- Feedback sheet validator：`node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0。
+- Build：`node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json` 通过，且未造成 generated JSON 无意义 diff。
+- Generated validator：`node scripts/content/validateGeneratedFeedbackData.js data/generated/feedbackTexts.generated.json` 通过，Errors 0。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.11 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
