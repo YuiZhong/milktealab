@@ -1,5 +1,30 @@
 # 版本记录
 
+## docs: sync v0.0.6.0 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.0-candidate`。
+  - 记录 candidate 指向 `22fa46c328b714f17b1615f51a4ed73987095697`。
+  - 记录 `v0.0.6.0-candidate` 已冻结并推送。
+  - 记录 v0.0.6.0 已完成 docs-only 三层属性 / profile / summary schema 设计。
+  - 记录 v0.0.6.0 未实现运行逻辑，未重写 analyzer。
+  - 记录当前未推进 v0.0.6.1。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
+### 本轮不做
+
+- 不改运行逻辑。
+- 不改 data / core / scripts / index.html。
+- 不推进 v0.0.6.1。
+- 不创建 tag。
+
 ## v0.0.6.0
 
 本轮为 docs-only 三层属性 / profile / summary schema 设计，不改运行逻辑。

@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.5.40-candidate`
-- 最新 candidate commit：`0c2a3c6f50ae598129276cc1223ef2536444d78d`
-- `v0.0.5.40-candidate` 已冻结并推送，指向 `0c2a3c6f50ae598129276cc1223ef2536444d78d`；正式 tag `v0.0.5.40` 未创建。
-- 最新 main：本轮 docs commit 是 v0.0.6.0 docs-only schema 设计 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.6.0-candidate`
+- 最新 candidate commit：`22fa46c328b714f17b1615f51a4ed73987095697`
+- `v0.0.6.0-candidate` 已冻结并推送，指向 `22fa46c328b714f17b1615f51a4ed73987095697`；正式 tag `v0.0.6.0` 未创建。
+- 最新 main：本轮 docs commit 是 `v0.0.6.0-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
@@ -102,8 +102,9 @@
 - v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。
 - v0.0.5.35 已完成保存 result / 历史快照边界小修，旧 result 缺字段时渲染安全兜底，保存 result 中文字段明确为历史展示快照，未来机制依赖结构化 ID。
 - v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
-- 当前未创建正式 tag `v0.0.5.40`，未创建 `v0.0.6.0` tag，也未创建 `v0.0.6.0-candidate`。
+- 当前未创建正式 tag `v0.0.5.40`，未创建正式 tag `v0.0.6.0`。
 - v0.0.6.0 已完成 docs-only 三层属性 / profile / summary schema 设计；本轮不实现运行逻辑，不改 data / core / scripts / index.html。
+- 当前未推进 v0.0.6.1。
 - 下一步：可考虑 v0.0.6.1 `tasteSummary` 只读地基，或继续细化 summary / candidate schema。不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
