@@ -1,5 +1,51 @@
 # 版本记录
 
+## docs: sync v0.0.7.17 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.17-candidate`。
+  - 记录 candidate 指向 `02cb1dc7c3eb172b684d1fa346779a851b05696d`。
+  - 记录 `v0.0.7.17-candidate` 已冻结并推送。
+  - 记录 v0.0.7.17 已让 `index.html` 加载 generated feedback JS module。
+  - 记录当前未推进 v0.0.7.18。
+
+### 阶段边界
+
+- `v0.0.7.17-candidate` 已冻结并推送。
+- candidate 指向 `02cb1dc7c3eb172b684d1fa346779a851b05696d`。
+- v0.0.7.17 已让 `index.html` 加载 generated feedback JS module。
+- 页面版本号更新为 `v0.0.7.17`。
+- generated JS module script URL 200，页面资源清单确认作为 script 加载。
+- Browser evaluate 隔离环境无法直接读取 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`，global 直读未完整确认；这是工具限制，已如实记录。
+- 可见 UI smoke 通过：普通试喝和事故路径正常，页面无可见 `undefined` / `[object Object]`。
+- console 监听受工具限制，未完整确认。
+- generated JS 尚未接 `feedbackEngine`，不改变玩家最终 feedback。
+- 未改 `feedbackEngine` / adapter / generated data / `content_sheets` / `data/feedbackTexts.js`。
+- validate / build / generated validator / adapter check / golden 均通过。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.17`。
+- 当前未推进 v0.0.7.18。
+
+### 验证结果
+
+- `node --check scripts/content/validateFeedbackSheet.js` 通过。
+- `node --check scripts/content/buildFeedbackData.js` 通过。
+- `node --check scripts/content/validateGeneratedFeedbackData.js` 通过。
+- `node --check scripts/content/checkGeneratedFeedbackDataModule.js` 通过。
+- `node --check core/feedbackRuntimeAdapter.js` 通过。
+- Feedback sheet validator：Errors 0，Warnings 12；warnings 为人工审核提醒。
+- JSON build 通过。
+- JS module build 通过。
+- Generated JSON validator：Errors 0，Warnings 0。
+- Generated JS module check 通过。
+- Adapter check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.17
 
 本轮让 `index.html` 只加载 generated feedback JS data module。

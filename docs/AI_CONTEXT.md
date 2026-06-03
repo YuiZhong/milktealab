@@ -58,25 +58,29 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.7.16-candidate`
-- 最新 candidate commit：`67d068af06c696d1a470c2d68ec47d9779cbe6d5`
-- `v0.0.7.16-candidate` 已冻结并推送，指向 `67d068af06c696d1a470c2d68ec47d9779cbe6d5`；正式 tag `v0.0.7.16` 未创建。
-- 最新 main：v0.0.7.17 本地实现 commit 后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.7.17-candidate`
+- 最新 candidate commit：`02cb1dc7c3eb172b684d1fa346779a851b05696d`
+- `v0.0.7.17-candidate` 已冻结并推送，指向 `02cb1dc7c3eb172b684d1fa346779a851b05696d`；正式 tag `v0.0.7.17` 未创建。
+- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.17-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.7.15 已完成 generated feedback data runtime loading docs / schema。
 - v0.0.7.15 已比较 JSON fetch / JS data module / Node-only 三种方案，推荐方向是 generated JS data module，更贴合当前同步 script 架构。
 - v0.0.7.15 已明确 runtime 不读 CSV / Google Sheets / 人类编辑源。
-- v0.0.7.16 已完成 generated feedback JS data module build 输出，本地 commit 后以 `git log -1` 为准。
+- v0.0.7.16 已完成 generated feedback JS data module build 输出。
 - `scripts/content/buildFeedbackData.js` 已支持根据 `--out` 后缀输出 `.json` 或 `.js`；JSON 输出保持兼容，JS 输出 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`。
-- 新增 `data/generated/feedbackTexts.generated.js`，作为 browser runtime 未来加载源；当前仍未让 `index.html` 加载 generated JS。
+- 新增 `data/generated/feedbackTexts.generated.js`，作为 browser runtime 未来加载源。
 - 新增 `scripts/content/checkGeneratedFeedbackDataModule.js`，用于校验 generated JS 全局对象、只读边界、中文可读性、metadata 和 generated JSON 对齐关系。
-- v0.0.7.17 已完成 generated feedback JS module 的 browser loading，本地 commit 后以 `git log -1` 为准。
+- v0.0.7.17 已完成 generated feedback JS module 的 browser loading。
 - `index.html` 已加载 `data/generated/feedbackTexts.generated.js?v=00717`。
+- generated JS module script URL 200，页面资源清单确认作为 script 加载。
+- Browser evaluate 隔离环境无法直接读取 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`，global 直读未完整确认；这是工具限制，已如实记录。
+- 可见 UI smoke 通过：普通试喝和事故路径正常，页面无可见 `undefined` / `[object Object]`。
+- console 监听受工具限制，未完整确认。
 - 当前仍未实现 feedbackEngine 接入，仍未改变玩家最终 feedback。
-- 当前未创建 `v0.0.7.17-candidate`。
-- 下一步可考虑：`v0.0.7.17-candidate` 冻结，或 `v0.0.7.18｜generated feedback JS module browser loading 结构保护`，或 `v0.0.7.18｜feedbackEngine shadow mode 只读实现`，或继续 feedback 文案评审会 / 样例扩充。
+- 当前未推进 v0.0.7.18。
+- 下一步可考虑：`v0.0.7.18｜generated feedback JS module browser loading 结构保护`，或 `v0.0.7.18｜feedbackEngine shadow mode 只读实现`，或继续 feedback 文案评审会 / 样例扩充。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。
