@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.6.7 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.7-candidate`。
+  - 记录 candidate 指向 `08565079a64e721e4f5f5e7ac8f5186c73060e38`。
+  - 记录 `v0.0.6.7-candidate` 已冻结并推送。
+  - 记录 v0.0.6.7 已新增 `data/ingredientFlavorProfiles.js`。
+  - 记录当前未推进 v0.0.6.8。
+
+### 阶段边界
+
+- 当前全部 37 个 ingredientId 已有第一版 `flavorProfile` 数据地基。
+- `flavorProfile` 主 key 使用 stable `ingredientId`，未使用中文 displayName 作为 profile key。
+- 本轮未实现 `flavorSummary` runtime。
+- 未改 runtime、runner、golden samples。
+- 未改评分、事故、饮品类型、feedback 或 `result.type`。
+- 未创建正式 tag `v0.0.6.7`。
+- 未推进 v0.0.6.8。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.7
 
 本轮新增 `ingredientFlavorProfiles` 数据地基，不实现 `flavorSummary` runtime。
