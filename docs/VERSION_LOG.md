@@ -1,5 +1,44 @@
 # 版本记录
 
+## docs: sync v0.0.7.23 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.23-candidate`。
+  - 记录 candidate 指向 `e1e3486b0fa13b7e05413f8fb21ba311bac1dae1`。
+  - 记录 `v0.0.7.23-candidate` 已冻结并推送。
+  - 记录 v0.0.7.23 已完成 feedback 多候选评审包压力测试。
+  - 记录当前未推进 v0.0.7.24。
+
+### 阶段边界
+
+- `v0.0.7.23-candidate` 已冻结并推送。
+- candidate 指向 `e1e3486b0fa13b7e05413f8fb21ba311bac1dae1`。
+- v0.0.7.23 已完成 feedback 多候选评审包压力测试。
+- 已新增 classic / acid 多候选，straw 保持既有 2 条多候选。
+- Adapter check 已从固定数量断言调整为结构 / 至少覆盖 / stable ID 断言。
+- Review pack 已改为“制作人审核区在前、机器详情附录在后”。
+- 每条 candidate 均有独立审核字段，支持多条候选同时 keep。
+- 本轮未改玩家最终 feedback。
+- 未改 runtime、feedbackEngine、generated data、content_sheets、index.html。
+- 未改 score、type、accident、feedbackTags 或 golden expected。
+- Validator / build / generated checks / shadow check / golden 均通过。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.23`。
+- 当前未推进 v0.0.7.24。
+
+### 验证结果
+
+- Review pack 生成通过。
+- Validator：Errors 0；Warnings 11，均为人工审核提醒。
+- Generated JSON / JS build 通过。
+- Generated validator / module check / browser loading / adapter / shadow checks 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.23
 
 本轮为 feedback 多候选评审包压力测试。
