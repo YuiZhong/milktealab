@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.7.11-candidate`
-- 最新 candidate commit：`0c6b70a0f17540edeb55e31eddf7a4d81b5f7c2a`
-- `v0.0.7.11-candidate` 已冻结并推送，指向 `0c6b70a0f17540edeb55e31eddf7a4d81b5f7c2a`；正式 tag `v0.0.7.11` 未创建。
-- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.11-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.7.12-candidate`
+- 最新 candidate commit：`9d849d835b998e4829a2fdf5eac225393c3f85fa`
+- `v0.0.7.12-candidate` 已冻结并推送，指向 `9d849d835b998e4829a2fdf5eac225393c3f85fa`；正式 tag `v0.0.7.12` 未创建。
+- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.12-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -218,11 +218,12 @@
 - 新增 `scripts/content/checkFeedbackRuntimeAdapter.js`，用于验证 adapter 查询能力和 invalid data 不可用状态。
 - adapter 当前只接收 generated feedback data object，不读取 CSV / Google Sheets / `content_sheets`，不自己跑 validate / build，不修复 generated data。
 - adapter 当前不接 `core/feedbackEngine.js`，不影响玩家最终 feedback，不修改 `result.feedback` / `feedbackTags` / score / accident / drinkType / `result.type`。
+- `v0.0.7.12-candidate` 已冻结并推送。
 - 当前仍未实现 `feedbackEngine` 接入。
 - 当前未改 generated feedback data。
-- 当前未创建 `v0.0.7.12-candidate`。
+- 当前未推进 v0.0.7.13。
 - 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 `v0.0.7.12-candidate` 冻结、`v0.0.7.13｜feedback runtime adapter 结构保护`、`v0.0.7.13｜feedbackEngine 旁路读取 generated data docs / schema`，或继续 feedback 文案评审会 / 样例扩充。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 下一步可考虑 `v0.0.7.13｜feedback runtime adapter 结构保护`、`v0.0.7.13｜feedbackEngine 旁路读取 generated data docs / schema`，或继续 feedback 文案评审会 / 样例扩充。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

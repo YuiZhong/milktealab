@@ -1,5 +1,45 @@
 # 版本记录
 
+## docs: sync v0.0.7.12 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.12-candidate`。
+  - 记录 candidate 指向 `9d849d835b998e4829a2fdf5eac225393c3f85fa`。
+  - 记录 `v0.0.7.12-candidate` 已冻结并推送。
+  - 记录 v0.0.7.12 已实现 feedback runtime adapter 第一版只读模块。
+  - 记录当前未推进 v0.0.7.13。
+
+### 阶段边界
+
+- `v0.0.7.12-candidate` 已冻结并推送。
+- candidate 指向 `9d849d835b998e4829a2fdf5eac225393c3f85fa`。
+- v0.0.7.12 已实现 feedback runtime adapter 第一版只读模块。
+- adapter 当前不接 `core/feedbackEngine.js`，不影响玩家最终 feedback。
+- adapter 不读取 CSV / Google Sheets，只接收 generated feedback data object。
+- adapter 不承载机制判断，不自动选择最终 feedback。
+- Adapter check / validator / build / generated validator / golden 均通过。
+- 未改 `core/feedbackEngine.js` / `data/feedbackTexts.js` / generated JSON / `content_sheets`。
+- 未改 runtime、UI、`index.html`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.12`。
+- 当前未推进 v0.0.7.13。
+
+### 验证结果
+
+- `node --check core/feedbackRuntimeAdapter.js` 通过。
+- `node --check scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- Adapter check：`node scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- Feedback sheet validator：`node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0，Warnings 12。
+- Build：`node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json` 通过，且未造成 generated JSON 无意义 diff。
+- Generated validator：`node scripts/content/validateGeneratedFeedbackData.js data/generated/feedbackTexts.generated.json` 通过，Errors 0，Warnings 0。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.12
 
 本轮实现 feedback runtime adapter 第一版只读模块。
