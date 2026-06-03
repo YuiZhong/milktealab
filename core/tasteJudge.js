@@ -7,6 +7,7 @@ const { analyzeDrinkStructure } = window.MILK_TEA_LAB_DRINK_STRUCTURE_ANALYZER;
 const tasteSummaryEngine = window.MILK_TEA_LAB_TASTE_SUMMARY_ENGINE;
 const textureSummaryEngine = window.MILK_TEA_LAB_TEXTURE_SUMMARY_ENGINE;
 const flavorSummaryEngine = window.MILK_TEA_LAB_FLAVOR_SUMMARY_ENGINE;
+const summaryCandidateEngine = window.MILK_TEA_LAB_SUMMARY_CANDIDATE_ENGINE;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -82,6 +83,29 @@ function inferOutcomeTypeId(type, accidentTypeId, drinkTypeId) {
   return outcomeTypeIdByDisplayType[type] || null;
 }
 
+function createEmptySummaryCandidates() {
+  return {
+    candidates: [],
+    byType: {
+      accident: [],
+      outcome: [],
+      drinkType: [],
+      feedback: []
+    },
+    metadata: {
+      schemaVersion: "summaryCandidates.v0.0.6.12",
+      readonly: true,
+      weightsEnabled: false,
+      affectsFinalResult: false
+    }
+  };
+}
+
+function buildSummaryCandidates(tasteSummary, textureSummary, flavorSummary) {
+  if (!summaryCandidateEngine?.buildSummaryCandidates) return createEmptySummaryCandidates();
+  return summaryCandidateEngine.buildSummaryCandidates({ tasteSummary, textureSummary, flavorSummary });
+}
+
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
@@ -89,6 +113,7 @@ function evaluateCup(cup) {
   const tasteSummary = tasteSummaryEngine?.buildTasteSummary(context) || null;
   const textureSummary = textureSummaryEngine?.buildTextureSummary(context) || null;
   const flavorSummary = flavorSummaryEngine?.buildFlavorSummary(context) || null;
+  const summaryCandidates = buildSummaryCandidates(tasteSummary, textureSummary, flavorSummary);
 
   const attr = ingredientAnalyzer.analyzeBaseAttributes(context);
   const score = scoreEngine.createScoreState(54);
@@ -221,7 +246,19 @@ function evaluateCup(cup) {
   const feedbackTags = feedbackEngine.getFeedbackTags(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
   const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
 
-  const result = { attr, score: finalScore, type, audience, audienceIds, feedback, feedbackTags, tasteSummary, textureSummary, flavorSummary };
+  const result = {
+    attr,
+    score: finalScore,
+    type,
+    audience,
+    audienceIds,
+    feedback,
+    feedbackTags,
+    tasteSummary,
+    textureSummary,
+    flavorSummary,
+    summaryCandidates
+  };
   if (primaryAccident?.accidentTypeId) {
     result.accidentTypeId = primaryAccident.accidentTypeId;
   }

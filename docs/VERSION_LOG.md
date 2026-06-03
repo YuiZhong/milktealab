@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.6.12
+
+本轮新增 `summaryCandidates` 只读地基。
+
+### 本轮新增 / 更新
+
+- 新增 `core/summaryCandidateEngine.js`
+  - 提供 `buildSummaryCandidates({ tasteSummary, textureSummary, flavorSummary })` 入口。
+  - 从三层 summary 的 `risks` 和少量明确 `values` 生成轻量 candidate。
+  - 使用小型规则配置表生成 candidate，未写具体原料组合 if。
+- 更新 `core/tasteJudge.js`
+  - `result.summaryCandidates` 已暴露。
+  - `tasteJudge` 只调用 summary candidate 构建入口，不接管 candidate 细节。
+- 更新 `index.html`
+  - 页面版本号更新为 `v0.0.6.12`。
+  - 在 `core/tasteJudge.js` 之前加载 `core/summaryCandidateEngine.js`。
+  - 更新相关 runtime script cache query。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.12 本地实现状态。
+  - 记录当前未创建 `v0.0.6.12-candidate`。
+
+### 阶段边界
+
+- candidate 是 summary 到最终 result 的只读中间层。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不影响 `audience`、`drinkTypeId`、`accidentTypeId`、`outcomeTypeId` 或 `feedbackTags`。
+- 本轮不做 severity / `scoreMultiplier` / priority 接管。
+- 本轮不做最终调度，不做 relation matrix runtime。
+- 本轮不改 golden samples，不改 runner，不改 UI 展示逻辑。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.11 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
