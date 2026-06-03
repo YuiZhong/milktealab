@@ -1,5 +1,43 @@
 # 版本记录
 
+## docs: sync v0.0.7.22 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.22-candidate`。
+  - 记录 candidate 指向 `5554977cdcd022ee585edcacc5bf08f167a9ea78`。
+  - 记录 `v0.0.7.22-candidate` 已冻结并推送。
+  - 记录 v0.0.7.22 已实现 feedback shadow review pack 第一版脚本。
+  - 记录当前未推进 v0.0.7.23。
+
+### 阶段边界
+
+- `v0.0.7.22-candidate` 已冻结并推送。
+- candidate 指向 `5554977cdcd022ee585edcacc5bf08f167a9ea78`。
+- v0.0.7.22 已实现 feedback shadow review pack 第一版脚本。
+- 已生成制作人可读 Markdown report。
+- report 覆盖 `classic_milk_tea`、`extreme_lemon_accident`、`straw_resistance_accident`。
+- report 区分 legacy final output 和 generated shadow candidates。
+- 制作人审核区已采用状态码 + 中文问题标签，并保留英文 key + 中文解释。
+- report 不接 runtime，不自动判断文案好坏，不自动接管，不自动改文案。
+- 本轮未改变玩家最终 feedback。
+- 未改 runtime、data、generated data、content_sheets、index.html。
+- 未改 final feedback、score、type、accident、feedbackTags 或 golden expected。
+- Shadow check / browser loading check / adapter check / golden 均通过。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.22`。
+- 当前未推进 v0.0.7.23。
+
+### 验证结果
+
+- Review pack 生成通过，重新生成 report 后无 diff。
+- Shadow check / browser loading check / adapter check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.22
 
 本轮实现 feedback shadow review pack 第一版脚本，并按制作人可读性反馈调整 Markdown 输出结构。
