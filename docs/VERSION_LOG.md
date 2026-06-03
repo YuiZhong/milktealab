@@ -1,5 +1,51 @@
 # 版本记录
 
+## v0.0.7.18
+
+本轮补强 generated feedback JS module browser loading 结构保护。
+
+### 本轮新增 / 更新
+
+- 新增 `scripts/content/checkGeneratedFeedbackBrowserLoad.js`
+  - 使用 Node `vm` 模拟 browser-like global 环境。
+  - 以普通 browser script 方式加载 `data/generated/feedbackTexts.generated.js`。
+  - 检查 `window` / `self` / `globalThis` 上的 `MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS` 全局对象。
+  - 检查 `textsById` / `textsByTag` / `textsByScene` / enabled index / `metadata` 等顶层结构。
+  - 检查 `feedback_classic_001` 可通过 stable `textId` 读取，中文文案可读。
+  - 确认加载过程不依赖 `require` / `module` / `process` / `fetch` / `document`。
+  - 确认 generated data module 不创建 `feedbackEngine` 或 adapter global。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.18 已完成 generated feedback JS module browser loading 结构保护。
+  - 记录当前仍未接 `feedbackEngine`，不影响玩家最终 feedback。
+
+### 阶段边界
+
+- 本轮只补强 browser/global loading 检查。
+- 本轮未修改 `index.html`；页面版本号仍是 `v0.0.7.17`。
+- generated JS module 仍未接 `feedbackEngine`。
+- 本轮不改变玩家最终 feedback。
+- 本轮不改评分、事故、饮品类型、`result.type` 或 golden expected。
+- 本轮不改 `feedbackEngine` / adapter / generated data / `content_sheets` / `data/feedbackTexts.js`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/validateFeedbackSheet.js` 通过。
+- `node --check scripts/content/buildFeedbackData.js` 通过。
+- `node --check scripts/content/validateGeneratedFeedbackData.js` 通过。
+- `node --check scripts/content/checkGeneratedFeedbackDataModule.js` 通过。
+- `node --check scripts/content/checkGeneratedFeedbackBrowserLoad.js` 通过。
+- Feedback sheet validator：Errors 0，Warnings 12；warnings 为人工审核提醒。
+- JSON build 通过。
+- JS module build 通过。
+- Generated JSON validator：Errors 0，Warnings 0。
+- Generated JS module check 通过。
+- Generated browser load check 通过。
+- Adapter check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+- 本轮未修改 `index.html` 或 runtime 加载顺序，因此未强制执行 UI smoke。
+
 ## docs: sync v0.0.7.17 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
