@@ -1,5 +1,32 @@
 # 版本记录
 
+## docs: sync v0.0.6.8 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.8-candidate`。
+  - 记录 candidate 指向 `4f211124836d40a28a68ed7cb441efd378719550`。
+  - 记录 `v0.0.6.8-candidate` 已冻结并推送。
+  - 记录 v0.0.6.8 已新增 `flavorSummary` 只读地基。
+  - 记录当前未推进 v0.0.6.9。
+
+### 阶段边界
+
+- `result.flavorSummary` 已暴露。
+- `flavorSummary` 读取 `ingredientFlavorProfiles` 数据地基。
+- 未靠中文 displayName 或 UI category 推断 flavor。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 未做 relation matrix / candidate / severity / `scoreMultiplier`。
+- 未创建正式 tag `v0.0.6.8`。
+- 未推进 v0.0.6.9。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.8
 
 本轮新增 `flavorSummary` 只读地基。
