@@ -1,5 +1,41 @@
 # 版本记录
 
+## docs: sync v0.0.7.26 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.26-candidate`。
+  - 记录 candidate 指向 `cd47d0b5c63f75a28ae2adea43ecff7822be7ade`。
+  - 记录 `v0.0.7.26-candidate` 已冻结并推送。
+  - 记录当前未推进 v0.0.7.27。
+
+### 阶段边界
+
+- `v0.0.7.26-candidate` 已冻结并推送。
+- candidate 指向 `cd47d0b5c63f75a28ae2adea43ecff7822be7ade`。
+- v0.0.7.26 已新增 candidate severity sample CSV / JSON。
+- CSV 为 UTF-8 with BOM；JSON 合法。
+- 所有样例行均为 `enabled=FALSE` 草案。
+- 未填写真实阈值或真实 `scoreMultiplier`。
+- 未按原料拆 `accidentTypeId`，未把 severity 写进 `accidentTypeId`，未使用 sampleId 作为 `ruleId` / 机制主键。
+- 已对易误导样例行做结构去歧义：dairy 行 `ruleId` 指向 texture 方向，`aroma_pressure` / `bubble_conflict` 不再作为 candidate severity sample 的 `feedbackTag`。
+- 本轮未新增 validator / build / generated runtime data。
+- 未改 runtime、data、generated data、scripts、reports、`index.html`。
+- 未改玩家最终 score、feedback、accident、type 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.26`。
+- 当前未推进 v0.0.7.27。
+
+### 验证结果
+
+- CSV 编码：UTF-8 with BOM。
+- JSON 合法性：`python3 -m json.tool` 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.26
 
 本轮为 severity / threshold 样例表 CSV / JSON 草案。
