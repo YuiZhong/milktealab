@@ -1,5 +1,31 @@
 # 版本记录
 
+## docs: sync v0.0.6.3 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.3-candidate`。
+  - 记录 candidate 指向 `8ef174b7eff9984ec4a392e05f93f78534c534da`。
+  - 记录 `v0.0.6.3-candidate` 已冻结并推送。
+  - 记录 v0.0.6.3 已完成 `textureSummary` 只读地基。
+  - 记录当前未推进 v0.0.6.4。
+
+### 阶段边界
+
+- `textureSummary` 已暴露为只读中间理解层。
+- 不改运行逻辑。
+- 未改 data / core / scripts / index.html。
+- 未创建正式 tag `v0.0.6.3`。
+- 未推进 v0.0.6.4。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- UI smoke：Codex 浏览器自动化 console 监听受工具限制，无法完整捕获 console；未进行人工 Console 复查。普通试喝路径和事故试喝路径已通过可见 UI smoke，页面无 `undefined` / `[object Object]` 可见异常。
+
 ## v0.0.6.3
 
 本轮新增 `textureSummary` 只读地基，作为 v0.0.6.x 三层属性 / profile / summary 的第二刀 runtime 地基。
