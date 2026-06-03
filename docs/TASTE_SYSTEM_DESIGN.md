@@ -362,11 +362,15 @@ v0.0.6.0 不追求立刻调好味觉数值，也不立刻实现完整 severity /
 
 #### flavorProfile / flavorSummary 数据来源边界
 
-当前仓库还没有独立的 `ingredientFlavorProfiles.js`，也没有专门的 `flavorProfile` / `aromaProfile` / `flavorFamilies` / `identityTags` 数据文件。现有 `ingredients.js` 已提供稳定 `ingredientId`、显示名和 UI category，但 `category: "水果/风味"` 只能辅助 UI 分组，不能作为风味身份主来源；`name` / 中文显示名也不能用来反推系统身份。
+v0.0.6.7 新增 `data/ingredientFlavorProfiles.js`，作为第一版轻量 `flavorProfile` 数据地基。该数据表以 stable `ingredientId` 为主 key，为当前已有原料提供 `flavorFamilies`、`aromaTags`、`identityTags`、饮品 / 甜品适配、料理感风险、争议风险、身份强度、香气压迫感和主导潜力等只读描述。
+
+`flavorProfile` 是后续 `flavorSummary` 的数据来源，不是最终判定层。本轮只新增数据地基，不接入 runtime，不影响评分、事故、饮品类型、feedback 或 `result.type`。中文 displayName 只用于展示和 legacy 可读辅助，不作为 flavor 系统身份，也不能用来反推风味身份。
+
+现有 `ingredients.js` 已提供稳定 `ingredientId`、显示名和 UI category，但 `category: "水果/风味"` 只能辅助 UI 分组，不能作为风味身份主来源；`name` / 中文显示名也不能用来反推系统身份。
 
 现有 `ingredientTasteProfiles.js` 可临时提供少量辅助线索，例如 `aromaImpact`、`weirdness`、`isStrongAroma`、`worksInFreshDrinks` 和少量 tags，但这些字段本质上混合了基础味觉、香气压力、清爽适配和 legacy 风险标记，不足以支撑完整 `flavorSummary`。`ingredientTextureProfiles.js` 主要服务物理质地，不能被当作风味身份来源。`combinationRules.js` 和 `synergyRules.js` 记录的是组合结果、共享组或 legacy 规则线索，不应被反向挖成原料风味真相。
 
-后续若实现 `flavorSummary` runtime，建议先新增轻量 `data/ingredientFlavorProfiles.js`，以稳定 `ingredientId` 为主引用，显示名只用于展示和 legacy fallback。初始 profile 可保持克制，例如：
+后续若实现 `flavorSummary` runtime，应优先读取 `data/ingredientFlavorProfiles.js`，以稳定 `ingredientId` 为主引用，显示名只用于展示和 legacy fallback。当前 profile 保持克制，例如：
 
 ```js
 {
@@ -386,12 +390,14 @@ v0.0.6.0 不追求立刻调好味觉数值，也不立刻实现完整 severity /
   ],
   metadata: {
     sourceLayer: "flavor",
-    schemaVersion: "ingredientFlavorProfile.v0.0.6.x"
+    schemaVersion: "ingredientFlavorProfile.v0.0.6.7",
+    weightsEnabled: false,
+    readonly: true
   }
 }
 ```
 
-`pairHints` 只能作为后续 relation matrix 的轻量提示，不应替代正式关系矩阵，也不应变成具体组合 if 的新容器。下一刀 runtime 的最小落地顺序应优先是：新增 `ingredientFlavorProfiles` 数据地基，再新增只读 `core/flavorSummaryEngine.js`，最后由 `tasteJudge.js` 暴露 `result.flavorSummary`。第一版仍不接管事故、饮品类型、评分、feedback 或 `result.type`；relation matrix、candidate 调度、系统性阈值、severity 和 `scoreMultiplier` 留到后续小步或 v0.0.7.x 调参阶段。
+`pairHints` 只能作为后续 relation matrix 的轻量提示，不应替代正式关系矩阵，也不应变成具体组合 if 的新容器。下一刀 runtime 的最小落地顺序可考虑：新增只读 `core/flavorSummaryEngine.js`，读取 `ingredientFlavorProfiles`，最后由 `tasteJudge.js` 暴露 `result.flavorSummary`。第一版仍不接管事故、饮品类型、评分、feedback 或 `result.type`；relation matrix、candidate 调度、系统性阈值、severity 和 `scoreMultiplier` 留到后续小步或 v0.0.7.x 调参阶段。
 
 代码只负责汇总、查表、计算关系分和调度候选；风味家族关系、强身份压制、饮品适配阈值和反馈标签应放在数据表、规则表或 relation matrix 中。
 

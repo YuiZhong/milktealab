@@ -118,10 +118,13 @@
 - v0.0.6.5 已完成并冻结 candidate：补充 `flavorSummary` 初始 `values` / `tags` / `risks` / `evidence` / `metadata` 建议结构，并强调 flavor 层后续应通过 relation matrix / rules / candidate 进入最终调度。
 - 当前未实现 `flavorSummary` runtime，未新增 `core/flavorSummaryEngine.js`，未改 `tasteJudge.js`、runner 或 golden samples。
 - v0.0.6.6 已完成并冻结 candidate：完成 `flavorProfile` / `flavorSummary` 数据来源轻量评估。
-- 当前仓库仍缺少独立 `flavorProfile` 数据来源；未新增 `data/ingredientFlavorProfiles.js`，现有 `ingredientTasteProfiles` / `ingredientTextureProfiles` / `combinationRules` / `synergyRules` 只能作为辅助线索，不能当作风味身份主来源。
+- v0.0.6.6 当时确认仓库缺少独立 `flavorProfile` 数据来源；现有 `ingredientTasteProfiles` / `ingredientTextureProfiles` / `combinationRules` / `synergyRules` 只能作为辅助线索，不能当作风味身份主来源。
 - `flavorSummary` 后续不应依赖中文原料名、玩家可见 displayName 或 UI category 反推系统身份；应优先读取以 stable `ingredientId` 为主引用的 flavorProfile 数据。
+- v0.0.6.7 已完成 `ingredientFlavorProfiles` 数据地基，本地 commit 后以 `git log -1` 为准。
+- 当前已新增独立 `flavorProfile` 数据来源：`data/ingredientFlavorProfiles.js`。该表覆盖当前所有已有 ingredientId，以 stable `ingredientId` 为主 key，不使用中文 displayName 作为 profile key。
+- 当前仍未实现 `flavorSummary` runtime，未新增 `core/flavorSummaryEngine.js`，未改 `tasteJudge.js`、runner 或 golden samples。
 - golden samples 当前应为 `20/20 passed`。
-- 当前未推进 v0.0.6.7；下一步可考虑 `v0.0.6.7｜ingredientFlavorProfiles` 数据地基，或 `v0.0.6.7｜flavorSummary` 只读地基。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 当前未创建 `v0.0.6.7-candidate`；下一步可考虑 `v0.0.6.7-candidate` 冻结，或 `v0.0.6.8｜flavorSummary` 只读地基。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

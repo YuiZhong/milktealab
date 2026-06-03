@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.6.7
+
+本轮新增 `ingredientFlavorProfiles` 数据地基，不实现 `flavorSummary` runtime。
+
+### 本轮新增 / 更新
+
+- 新增 `data/ingredientFlavorProfiles.js`
+  - 为当前所有已有原料建立第一版轻量 `flavorProfile` 数据。
+  - profile 以 stable `ingredientId` 为主 key，不使用中文 displayName 作为 profile key。
+  - 字段覆盖 `flavorFamilies`、`aromaTags`、`identityTags`、`beverageFit`、`dessertFit`、`savoryRisk`、`noveltyRisk`、`identityStrength`、`aromaPressure`、`dominantPotential`、`pairHints` 和只读 `metadata`。
+  - 提供轻量只读查询 / 校验 helper，但不承载事故、组合、评分或文案判断。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 记录 `ingredientFlavorProfiles` 是后续 `flavorSummary` 的数据来源，不是最终判定。
+  - 明确本轮不接入 runtime，不影响结果。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 flavor 层先建立数据地基，再接只读 summary。
+  - 明确数据负责“风味身份是什么”，代码后续负责“怎么汇总”。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.7 本地实现状态。
+  - 记录当前仍未创建 `v0.0.6.7-candidate`。
+
+### 阶段边界
+
+- 不改 runtime。
+- 不改 runner / golden expected。
+- 不改评分、事故、饮品类型、feedback 或 `result.type`。
+- 不实现 `flavorSummary` runtime。
+- 不新增 `core/flavorSummaryEngine.js`。
+- 不做 relation matrix runtime。
+- 不做 severity / `scoreMultiplier`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.6 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
