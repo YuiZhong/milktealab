@@ -58,10 +58,10 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.7.9-candidate`
-- 最新 candidate commit：`bcb5dd0e72f64660c08bb4121ee06310fc044f42`
-- `v0.0.7.9-candidate` 已冻结并推送，指向 `bcb5dd0e72f64660c08bb4121ee06310fc044f42`；正式 tag `v0.0.7.9` 未创建。
-- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.9-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 candidate：`v0.0.7.10-candidate`
+- 最新 candidate commit：`266e433b2a63c07ed3df34ea2d0e1f68c122244b`
+- `v0.0.7.10-candidate` 已冻结并推送，指向 `266e433b2a63c07ed3df34ea2d0e1f68c122244b`；正式 tag `v0.0.7.10` 未创建。
+- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.10-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -207,11 +207,11 @@
 - 第一版 generated validator 检查 generated JSON 顶层结构、`textsById`、`textsByTag`、`textsByScene`、`metadata`、索引一致性和 stable ID / display text 边界。
 - generated validator 不承载机制判断，不自动修改 JSON / CSV，不自动修文案，不调参数，不接管 `core/feedbackEngine.js`。
 - generated validator 当前通过 `data/generated/feedbackTexts.generated.json`，Errors 0，Warnings 0。
-- 当前未创建 `v0.0.7.10-candidate`。
+- `v0.0.7.10-candidate` 已冻结并推送。
 - 当前未实现 runtime adapter。
 - 当前未推进 v0.0.7.11。
 - 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 v0.0.7.10-candidate 冻结、v0.0.7.11 feedback runtime adapter docs / schema，或继续 feedback 文案评审会 / 样例扩充。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 下一步可考虑 v0.0.7.11 feedback runtime adapter docs / schema、v0.0.7.11 feedback 文案评审会 / 样例扩充，或 v0.0.7.11 severity / threshold 表格化路线设计。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
