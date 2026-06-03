@@ -1,5 +1,33 @@
 # 版本记录
 
+## docs: sync v0.0.6.16 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.16-candidate`。
+  - 记录 candidate 指向 `303b5834821669d4e928acd3321994e607135c15`。
+  - 记录 `v0.0.6.16-candidate` 已冻结并推送。
+  - 记录 v0.0.6.16 已完成 `candidatePriorityShell` golden 结构断言。
+  - 记录当前未推进 v0.0.6.17。
+
+### 阶段边界
+
+- runner 已支持 `candidatePriorityShell` expected。
+- 少量 golden samples 已补 `candidatePriorityShell` 结构 expected。
+- 未改 runtime、core、`index.html` 或 `candidatePriorityShellEngine`。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 未做 priority 接管 / 最终调度 / severity / `scoreMultiplier`。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.6.16`。
+- 未推进 v0.0.6.17。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## v0.0.6.16
 
 本轮新增 `candidatePriorityShell` golden 结构断言能力。
