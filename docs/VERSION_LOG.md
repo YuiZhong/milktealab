@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.6.15
+
+本轮新增 `candidatePriorityShell` 只读地基。
+
+### 本轮新增 / 更新
+
+- 新增 `core/candidatePriorityShellEngine.js`
+  - 提供 `buildCandidatePriorityShell(summaryCandidates)` 入口。
+  - 将既有 `summaryCandidates` 组织为只读候选排队观察结构。
+  - 输出 `orderedCandidates`、`byPriorityBand`、`topCandidates` 和 `metadata`。
+- 更新 `core/tasteJudge.js`
+  - `result.candidatePriorityShell` 已暴露。
+  - `tasteJudge` 只调用 priority shell 构建入口，不接管 priority 细节。
+- 更新 `index.html`
+  - 页面版本号更新为 `v0.0.6.15`。
+  - 在 `core/tasteJudge.js` 之前加载 `core/candidatePriorityShellEngine.js`。
+  - 更新相关 runtime script cache query。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.15 本地实现状态。
+  - 记录当前未创建 `v0.0.6.15-candidate`。
+
+### 阶段边界
+
+- priority shell 是只读中间观察层。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不影响 `audience`、`drinkTypeId`、`accidentTypeId`、`outcomeTypeId` 或 `feedbackTags`。
+- 本轮不做最终调度 / priority 接管 / severity / `scoreMultiplier`。
+- 本轮不改 `summaryCandidateEngine`、summary engines、golden samples 或 runner。
+- 本轮不写具体原料组合 if。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.14 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

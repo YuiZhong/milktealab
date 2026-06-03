@@ -8,6 +8,7 @@ const tasteSummaryEngine = window.MILK_TEA_LAB_TASTE_SUMMARY_ENGINE;
 const textureSummaryEngine = window.MILK_TEA_LAB_TEXTURE_SUMMARY_ENGINE;
 const flavorSummaryEngine = window.MILK_TEA_LAB_FLAVOR_SUMMARY_ENGINE;
 const summaryCandidateEngine = window.MILK_TEA_LAB_SUMMARY_CANDIDATE_ENGINE;
+const candidatePriorityShellEngine = window.MILK_TEA_LAB_CANDIDATE_PRIORITY_SHELL_ENGINE;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -101,9 +102,43 @@ function createEmptySummaryCandidates() {
   };
 }
 
+function createEmptyCandidatePriorityShell() {
+  return {
+    orderedCandidates: [],
+    byPriorityBand: {
+      hard_physical: [],
+      texture_drinkability: [],
+      taste_overload: [],
+      flavor_identity: [],
+      normal_conflict: [],
+      positive_synergy: [],
+      type_classification: [],
+      feedback_hint: []
+    },
+    topCandidates: {
+      accident: null,
+      outcome: null,
+      drinkType: null,
+      feedback: []
+    },
+    metadata: {
+      schemaVersion: "candidatePriorityShell.v0.0.6.15",
+      readonly: true,
+      affectsFinalResult: false,
+      weightsEnabled: false,
+      source: "summaryCandidates"
+    }
+  };
+}
+
 function buildSummaryCandidates(tasteSummary, textureSummary, flavorSummary) {
   if (!summaryCandidateEngine?.buildSummaryCandidates) return createEmptySummaryCandidates();
   return summaryCandidateEngine.buildSummaryCandidates({ tasteSummary, textureSummary, flavorSummary });
+}
+
+function buildCandidatePriorityShell(summaryCandidates) {
+  if (!candidatePriorityShellEngine?.buildCandidatePriorityShell) return createEmptyCandidatePriorityShell();
+  return candidatePriorityShellEngine.buildCandidatePriorityShell(summaryCandidates);
 }
 
 function evaluateCup(cup) {
@@ -114,6 +149,7 @@ function evaluateCup(cup) {
   const textureSummary = textureSummaryEngine?.buildTextureSummary(context) || null;
   const flavorSummary = flavorSummaryEngine?.buildFlavorSummary(context) || null;
   const summaryCandidates = buildSummaryCandidates(tasteSummary, textureSummary, flavorSummary);
+  const candidatePriorityShell = buildCandidatePriorityShell(summaryCandidates);
 
   const attr = ingredientAnalyzer.analyzeBaseAttributes(context);
   const score = scoreEngine.createScoreState(54);
@@ -257,7 +293,8 @@ function evaluateCup(cup) {
     tasteSummary,
     textureSummary,
     flavorSummary,
-    summaryCandidates
+    summaryCandidates,
+    candidatePriorityShell
   };
   if (primaryAccident?.accidentTypeId) {
     result.accidentTypeId = primaryAccident.accidentTypeId;
