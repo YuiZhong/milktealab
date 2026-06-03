@@ -1,5 +1,42 @@
 # 版本记录
 
+## v0.0.7.7
+
+本轮落地用户在 Google Sheets 中人工修订后的 `feedback_texts` 样例内容。
+
+### 本轮新增 / 更新
+
+- 更新 `content_sheets/examples/feedback_texts.sample.csv`
+  - 使用用户从 Google Sheets 导出的 CSV：`/Users/yui/工作文件/奶茶实验室/文案表/样例内容制作人修订0603 - feedback_texts.sample.csv`。
+  - 按项目稳定字段顺序写回。
+  - 保存为 UTF-8 with BOM。
+  - 保留用户修订文案，不做 Codex 润色。
+- 更新 `content_sheets/examples/feedback_texts.sample.json`
+  - 从同一份用户修订 CSV 同步生成。
+  - 保持 UTF-8、格式化缩进和中文可读。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.7 已落地用户人工修订后的 feedback_texts 样例内容。
+  - 记录当前仍未接 runtime，仍未实现 build script / generated data。
+
+### 阶段边界
+
+- 本轮是内容样例更新，不接 runtime。
+- 本轮不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+- 本轮不改评分、事故、饮品类型、feedback runtime、`result.type` 或 golden expected。
+- 本轮不改 validator，不新增 build script，不新增 generated data。
+- CSV 保持 UTF-8 with BOM。
+- JSON 样例同步更新且合法。
+- validator 通过 sample CSV，Errors 0；Warnings 12，均为人工审核提醒。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- CSV 编码：`has_utf8_bom: True`。
+- JSON 合法性：`python3 -m json.tool content_sheets/examples/feedback_texts.sample.json` 通过。
+- Validator：`node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0，Warnings 12。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.7.6 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
