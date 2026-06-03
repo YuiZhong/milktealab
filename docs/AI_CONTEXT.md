@@ -61,17 +61,20 @@
 - 最新 candidate：`v0.0.7.15-candidate`
 - 最新 candidate commit：`18baed4f4375594db69c8d841249f1b4fce423dd`
 - `v0.0.7.15-candidate` 已冻结并推送，指向 `18baed4f4375594db69c8d841249f1b4fce423dd`；正式 tag `v0.0.7.15` 未创建。
-- 最新 main：本轮 docs 状态同步 commit 是 `v0.0.7.15-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 main：v0.0.7.16 本地实现 commit 后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
 - v0.0.7.15 已完成 generated feedback data runtime loading docs / schema。
 - v0.0.7.15 已比较 JSON fetch / JS data module / Node-only 三种方案，推荐方向是 generated JS data module，更贴合当前同步 script 架构。
 - v0.0.7.15 已明确 runtime 不读 CSV / Google Sheets / 人类编辑源。
-- 当前未实现 runtime loading。
-- 当前未改 feedbackEngine / adapter / generated data。
-- 当前未推进 v0.0.7.16。
-- 下一步可考虑：`v0.0.7.16｜generated feedback JS data module docs / build design`，或 `v0.0.7.16｜build script 输出 JS data module`，或继续 feedback 文案评审会 / 样例扩充。
+- v0.0.7.16 已完成 generated feedback JS data module build 输出，本地 commit 后以 `git log -1` 为准。
+- `scripts/content/buildFeedbackData.js` 已支持根据 `--out` 后缀输出 `.json` 或 `.js`；JSON 输出保持兼容，JS 输出 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`。
+- 新增 `data/generated/feedbackTexts.generated.js`，作为 browser runtime 未来加载源；当前仍未让 `index.html` 加载 generated JS。
+- 新增 `scripts/content/checkGeneratedFeedbackDataModule.js`，用于校验 generated JS 全局对象、只读边界、中文可读性、metadata 和 generated JSON 对齐关系。
+- 当前仍未实现 feedbackEngine 接入，仍未改变玩家最终 feedback。
+- 当前未创建 `v0.0.7.16-candidate`。
+- 下一步可考虑：`v0.0.7.16-candidate` 冻结，或 `v0.0.7.17｜generated feedback JS module 加载 docs / smoke 设计`，或 `v0.0.7.17｜index.html 只加载 generated feedback JS module，不接 feedbackEngine`，或继续 feedback 文案评审会 / 样例扩充。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。
@@ -239,11 +242,13 @@
 - `v0.0.7.14-candidate` 已冻结并推送。
 - 当前未推进 v0.0.7.15。
 - v0.0.7.15 已完成 generated feedback data runtime loading docs / schema，本地 commit 后以 `git log -1` 为准。
-- 当前未实现 runtime loading。
-- 当前未改 `feedbackEngine` / adapter / generated data。
-- 当前未创建 `v0.0.7.15-candidate`。
+- `v0.0.7.15-candidate` 已冻结并推送。
+- v0.0.7.16 已完成 generated feedback JS data module build 输出，本地 commit 后以 `git log -1` 为准。
+- 当前仍未让 `index.html` 加载 generated JS。
+- 当前仍未实现 `feedbackEngine` 接入。
+- 当前未创建 `v0.0.7.16-candidate`。
 - 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 `v0.0.7.15-candidate` 冻结、`v0.0.7.16｜generated feedback JS data module docs / build design`、`v0.0.7.16｜build script 输出 JS data module`，或继续 feedback 文案评审会 / 样例扩充。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 下一步可考虑 `v0.0.7.16-candidate` 冻结、`v0.0.7.17｜generated feedback JS module 加载 docs / smoke 设计`、`v0.0.7.17｜index.html 只加载 generated feedback JS module，不接 feedbackEngine`，或继续 feedback 文案评审会 / 样例扩充。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

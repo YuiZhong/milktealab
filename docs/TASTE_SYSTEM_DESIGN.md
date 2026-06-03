@@ -1676,6 +1676,50 @@ v0.0.7.15 只设计 generated feedback data 未来如何进入 browser / runtime
 
 本设计不要求用户改变当前 Google Sheets 字段，也不要求用户额外填新字段。未来如果为了 build / adapter 改变人类表格字段或 Google Sheets 工作台使用方式，应先由用户作为制作人确认。
 
+#### v0.0.7.16 build script 输出 generated JS data module
+
+v0.0.7.16 已让 `scripts/content/buildFeedbackData.js` 支持根据 `--out` 后缀输出两种 generated artifact：
+
+- `.json`：继续输出 `data/generated/feedbackTexts.generated.json`，作为结构校验、adapter check 和内容审计的机器可读正本。
+- `.js`：新增输出 `data/generated/feedbackTexts.generated.js`，作为 browser runtime 未来可通过同步 `<script>` 加载的数据模块。
+
+当前命令：
+
+```bash
+node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json
+node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.js
+```
+
+generated JS data module 的定位：
+
+- 它是 generated JSON 的 browser script 形态，内容来自同一份已通过 validator 的 CSV。
+- 它通过 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS` 暴露一个稳定全局只读对象。
+- 它不使用 ES module `import` / `export`，不依赖 bundler，贴合当前同步 script 架构。
+- 它不读取 CSV / Google Sheets / 人类编辑源。
+- 它不接 `index.html`，不接 `feedbackEngine`，不改变玩家最终 feedback。
+- 它不承载机制判断，不根据 `zhCN`、displayName、某个 `textId`、某个 golden sample 或具体原料组合做逻辑分支。
+
+generated JSON 与 generated JS 的关系：
+
+- 两者由同一个 build 数据对象生成，schemaVersion 当前同步为 `feedbackTexts.generated.v0.0.7.16`。
+- JSON 继续由 `scripts/content/validateGeneratedFeedbackData.js` 校验顶层结构、索引一致性和 stable ID 边界。
+- JS 由 `scripts/content/checkGeneratedFeedbackDataModule.js` 加载到 Node `vm` 中，检查全局对象、只读边界、`textsById` / `textsByTag` / `textsByScene`、sample `textId`、中文可读性、metadata 和 JSON 对齐关系。
+- build 不写动态时间戳；同一 CSV 重复 build 不应产生无意义 diff。
+
+对 Google Sheets / CSV 工作流的影响：
+
+- 本轮不改 CSV 字段，不改用户文案，不要求用户改变 Google Sheets 工作方式。
+- 人类继续编辑 CSV / Sheets；runtime 未来只应读取 generated artifact。
+- 如果未来需要改变字段、文案内容、generated 结构或让 generated data 影响玩家最终 feedback，必须作为单独任务并由用户制作人确认。
+
+本轮仍不做：
+
+- 不让 `index.html` 加载 generated JS。
+- 不实现 runtime loading。
+- 不接 `feedbackEngine` / adapter。
+- 不改 `data/feedbackTexts.js`。
+- 不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+
 代表 schema 示例：
 
 ```text

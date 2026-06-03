@@ -735,6 +735,38 @@ ui/*.js / game.js
 
 后续小步可考虑：先设计 generated JS data module build，再实现 build 输出 JS module，再校验 JSON / JS 结构，再让 `index.html` 只加载 generated module 但不接 `feedbackEngine`，随后才进入 shadow mode、comparison check、制作人审核和 partial / active 接管。
 
+### v0.0.7.16 build script 输出 generated JS data module
+
+v0.0.7.16 已把 v0.0.7.15 推荐的 generated JS data module 路线落到离线 build 层：`scripts/content/buildFeedbackData.js` 现在可根据 `--out` 后缀输出 JSON 或 browser script JS。
+
+当前形态：
+
+```text
+feedback_texts.sample.csv
+↓ validateFeedbackSheet
+↓ buildFeedbackData
+data/generated/feedbackTexts.generated.json
+data/generated/feedbackTexts.generated.js
+```
+
+架构边界：
+
+- generated JS data module 是未来 browser runtime loading 的推荐数据形态。
+- generated JS module 只暴露 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`，不新增多个全局变量。
+- generated JS module 不承载机制判断，不选择最终 feedback，不根据具体中文文案、displayName、`textId`、golden sample 或原料组合做特殊逻辑。
+- build script 只做 CSV 解析、类型转换、stable `textId` 索引、`feedbackTag` / `scene` 分组和稳定 metadata 输出。
+- generated JSON 与 generated JS 来自同一个 build 数据对象；JSON 继续作为结构校验正本，JS 作为未来浏览器加载形态。
+- 本轮不修改 `index.html`，不加载 generated JS，不接 adapter，不接 `feedbackEngine`。
+
+未来 runtime loading 任务需要单独处理：
+
+- `index.html` script 顺序：generated JS 应在 future adapter / shadow mode 入口之前加载。
+- cache query：新增 generated JS 进入页面时必须带版本 query，并与实际输出同步。
+- UI smoke：加载任务应检查 generated JS URL 200、页面版本 freshness、无白屏、普通试喝路径、事故路径和可见异常；console 监听若受工具限制必须如实报告。
+- fallback：generated JS 缺失、加载失败、结构不合法或 adapter unavailable 时必须可报告并走 legacy，不能静默吞错。
+
+本轮不需要 UI smoke，因为 generated JS 尚未被页面加载，也未改变 runtime 行为。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

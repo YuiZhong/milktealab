@@ -5,6 +5,8 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const DEFAULT_OUTPUT = "data/generated/feedbackTexts.generated.json";
+const SCHEMA_VERSION = "feedbackTexts.generated.v0.0.7.16";
+const GENERATED_GLOBAL_NAME = "MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS";
 
 const REQUIRED_HEADERS = [
   "textId",
@@ -25,7 +27,7 @@ const REQUIRED_HEADERS = [
 const OPTIONAL_ID_FIELDS = ["accidentTypeId", "drinkTypeId", "outcomeTypeId", "audienceId"];
 
 function usage() {
-  console.log("Usage: node scripts/content/buildFeedbackData.js <feedback_texts.csv> [--out <output.json>]");
+  console.log("Usage: node scripts/content/buildFeedbackData.js <feedback_texts.csv> [--out <output.json|output.js>]");
 }
 
 function parseArgs(argv) {
@@ -239,7 +241,7 @@ function buildData(sourcePath, validation) {
   const enabledCount = records.filter(record => record.enabled).length;
 
   return {
-    schemaVersion: "feedbackTexts.generated.v0.0.7.9",
+    schemaVersion: SCHEMA_VERSION,
     generatedFrom: path.relative(process.cwd(), path.resolve(sourcePath)),
     textsById,
     textsByTag,
@@ -277,6 +279,49 @@ function writeJson(outPath, data) {
   return resolvedPath;
 }
 
+function writeJsDataModule(outPath, data) {
+  const resolvedPath = path.resolve(outPath);
+  const dataLiteral = JSON.stringify(data, null, 2);
+  const source = `(function(global) {
+  "use strict";
+
+  function deepFreeze(value) {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) {
+      return value;
+    }
+
+    Object.keys(value).forEach(function(key) {
+      deepFreeze(value[key]);
+    });
+
+    return Object.freeze(value);
+  }
+
+  const feedbackTextsGenerated = deepFreeze(${dataLiteral});
+
+  global.${GENERATED_GLOBAL_NAME} = feedbackTextsGenerated;
+})(typeof window !== "undefined" ? window : globalThis);
+`;
+
+  fs.mkdirSync(path.dirname(resolvedPath), { recursive: true });
+  fs.writeFileSync(resolvedPath, source, "utf8");
+  return resolvedPath;
+}
+
+function writeOutput(outPath, data) {
+  const extension = path.extname(outPath).toLowerCase();
+
+  if (extension === ".json") {
+    return writeJson(outPath, data);
+  }
+
+  if (extension === ".js") {
+    return writeJsDataModule(outPath, data);
+  }
+
+  throw new Error(`Unsupported output extension "${extension}". Use .json or .js.`);
+}
+
 function main() {
   let args;
   try {
@@ -311,7 +356,7 @@ function main() {
 
   try {
     const data = buildData(sourcePath, validation);
-    const writtenPath = writeJson(outPath, data);
+    const writtenPath = writeOutput(outPath, data);
     console.log("");
     console.log("Feedback data build");
     console.log(`Source: ${sourcePath}`);

@@ -1,5 +1,64 @@
 # 版本记录
 
+## v0.0.7.16
+
+本轮实现 build script 输出 generated JS data module。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/content/buildFeedbackData.js`
+  - 支持根据 `--out` 后缀输出 `.json` 或 `.js`。
+  - `.json` 继续输出 generated feedback JSON，保持现有 JSON 输出路径和 CLI 用法兼容。
+  - `.js` 输出 browser script data module，暴露 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`。
+  - build 仍依赖 `validateFeedbackSheet`；validator Errors 非 0 时停止，Warnings 可继续但会报告数量。
+- 新增 `data/generated/feedbackTexts.generated.js`
+  - 由 sample CSV 生成，中文文案保持可读。
+  - 不依赖 bundler，不使用 ES module import/export。
+  - 不接 runtime，不自动选择最终 feedback。
+- 新增 `scripts/content/checkGeneratedFeedbackDataModule.js`
+  - 用 Node `vm` 加载 generated JS。
+  - 检查全局对象、只读边界、`textsById` / `textsByTag` / `textsByScene`、sample textId、中文可读性、metadata 和 generated JSON 对齐关系。
+- 更新 `data/generated/feedbackTexts.generated.json`
+  - 由更新后的 build script 重新生成，schemaVersion 同步为 `feedbackTexts.generated.v0.0.7.16`。
+  - 本轮未改 CSV / Google Sheets 字段，未改用户文案。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 generated JSON 与 generated JS 的关系。
+  - 明确 generated JS 是 browser runtime 未来加载源，但当前仍不接 runtime / `feedbackEngine`。
+  - 明确 generated JS 不影响 Google Sheets / CSV 工作流。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 generated JS data module 作为当前推荐 runtime loading 方向。
+  - 明确 generated JS module 不承载机制判断。
+  - 明确未来 `index.html` 加载顺序与 cache query 需要单独任务处理。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.16 已完成 generated feedback JS data module build 输出。
+
+### 阶段边界
+
+- 本轮不改 runtime，不改 `feedbackEngine`，不改 `data/feedbackTexts.js`，不改 `index.html`。
+- 本轮不让 `index.html` 加载 generated JS。
+- 本轮不实现 runtime adapter 接入，不改变玩家最终 feedback。
+- 本轮不改 sample CSV / JSON，不改 Google Sheets 字段，不改用户文案。
+- 本轮不改 golden samples / runner。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/validateFeedbackSheet.js` 通过。
+- `node --check scripts/content/buildFeedbackData.js` 通过。
+- `node --check scripts/content/validateGeneratedFeedbackData.js` 通过。
+- `node --check scripts/content/checkGeneratedFeedbackDataModule.js` 通过。
+- Feedback sheet validator：Errors 0，Warnings 12；warnings 为人工审核提醒。
+- JSON build 通过。
+- JS module build 通过。
+- Generated JSON validator：Errors 0，Warnings 0。
+- Generated JS module check 通过。
+- Generated JSON 合法。
+- Adapter check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- Repeated build 未产生无意义 diff。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.15 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

@@ -1,4 +1,19 @@
-{
+(function(global) {
+  "use strict";
+
+  function deepFreeze(value) {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) {
+      return value;
+    }
+
+    Object.keys(value).forEach(function(key) {
+      deepFreeze(value[key]);
+    });
+
+    return Object.freeze(value);
+  }
+
+  const feedbackTextsGenerated = deepFreeze({
   "schemaVersion": "feedbackTexts.generated.v0.0.7.16",
   "generatedFrom": "content_sheets/examples/feedback_texts.sample.csv",
   "textsById": {
@@ -312,4 +327,7 @@
       "disabled": 1
     }
   }
-}
+});
+
+  global.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS = feedbackTextsGenerated;
+})(typeof window !== "undefined" ? window : globalThis);
