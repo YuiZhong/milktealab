@@ -1,5 +1,48 @@
 # 版本记录
 
+## v0.0.7.17
+
+本轮让 `index.html` 只加载 generated feedback JS data module。
+
+### 本轮新增 / 更新
+
+- 更新 `index.html`
+  - 页面顶部版本号更新为 `v0.0.7.17`。
+  - 新增 `data/generated/feedbackTexts.generated.js?v=00717` script 加载。
+  - generated feedback JS module 进入 browser runtime 环境。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.17 已完成 generated feedback JS module 的 browser loading。
+  - 记录当前仍未接 `feedbackEngine`，不影响玩家最终 feedback。
+
+### 阶段边界
+
+- 本轮只让页面加载 generated feedback JS module。
+- 本轮不加载 `core/feedbackRuntimeAdapter.js`。
+- 本轮不接 `feedbackEngine`，不让 generated 文案影响玩家最终 feedback。
+- 本轮不改 runtime 判定、评分、事故、饮品类型、`result.type` 或 golden expected。
+- 本轮不改 generated JSON / generated JS 内容。
+- 本轮不改 `data/feedbackTexts.js`、`core/feedbackEngine.js`、`core/tasteJudge.js` 或 `core/feedbackRuntimeAdapter.js`。
+- 本轮不改 CSV / JSON 样例，不改 Google Sheets 字段，不改用户文案。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/validateFeedbackSheet.js` 通过。
+- `node --check scripts/content/buildFeedbackData.js` 通过。
+- `node --check scripts/content/validateGeneratedFeedbackData.js` 通过。
+- `node --check scripts/content/checkGeneratedFeedbackDataModule.js` 通过。
+- `node --check core/feedbackRuntimeAdapter.js` 通过。
+- Feedback sheet validator：Errors 0，Warnings 12；warnings 为人工审核提醒。
+- JSON build 通过。
+- JS module build 通过。
+- Generated JSON validator：Errors 0，Warnings 0。
+- Generated JS module check 通过。
+- Adapter check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+- UI smoke：可见 UI smoke 通过；页面 HTTP 200，页面顶部版本号为 `v0.0.7.17`，`data/generated/feedbackTexts.generated.js?v=00717` 返回 HTTP 200，页面资源清单确认 generated JS 作为 script 加载；普通试喝路径和事故路径正常，页面无可见 `undefined` / `[object Object]`。
+- Console / global 检查：Browser 工具未提供完整 console 监听能力，console 监听受工具限制，未完整确认；浏览器 evaluate 隔离环境无法直接读取页面脚本挂载的 global object，已用 script URL 200、页面资源清单和 generated JS module check 作为替代证据。
+
 ## docs: sync v0.0.7.16 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
