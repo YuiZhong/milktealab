@@ -55,6 +55,15 @@
             { sourceLayer: "flavor", sourceType: "ingredient", sourceId: "tea_black" },
             { sourceLayer: "flavor", sourceType: "ingredient", sourceId: "dairy_milk" }
           ]
+        },
+        summaryCandidates: {
+          exists: true,
+          byTypeKeysInclude: ["accident", "outcome", "drinkType", "feedback"],
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          }
         }
       },
       notes: "经典稳定样本，不应被事故规则误伤。"
@@ -206,6 +215,26 @@
           evidenceIncludesAny: [
             { metric: "acidity", sourceLayer: "taste", sourceType: "ingredient", sourceId: "fruit_lemon" }
           ]
+        },
+        summaryCandidates: {
+          exists: true,
+          candidateCountMin: 1,
+          candidateTypeCountMin: {
+            accident: 1
+          },
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          },
+          candidateIncludesAny: [
+            {
+              candidateType: "accident",
+              sourceLayer: "taste",
+              sourceSummary: "tasteSummary",
+              accidentTypeId: "taste_acid_overload"
+            }
+          ]
         }
       },
       notes: "极端酸度样本，不应被清爽组合洗白。"
@@ -272,6 +301,23 @@
           evidenceIncludesAny: [
             { metric: "aromaPressure", sourceLayer: "flavor", sourceType: "ingredient", sourceId: "fruit_durian" },
             { metric: "noveltyRisk", sourceLayer: "flavor", sourceType: "ingredient", sourceId: "fruit_durian" }
+          ]
+        },
+        summaryCandidates: {
+          exists: true,
+          candidateCountMin: 1,
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          },
+          candidateIncludesAny: [
+            {
+              sourceLayer: "flavor",
+              sourceSummary: "flavorSummary",
+              priorityBand: "flavor_identity",
+              severityHint: "medium"
+            }
           ]
         }
       },
@@ -388,6 +434,27 @@
             { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_taro_paste" },
             { metric: "strawResistance", sourceLayer: "texture", sourceType: "ingredient", sourceId: "topping_oreo_crumble" },
             { metric: "strawResistance", sourceLayer: "texture", sourceType: "structure", sourceId: "drinkStructure" }
+          ]
+        },
+        summaryCandidates: {
+          exists: true,
+          candidateCountMin: 1,
+          candidateTypeCountMin: {
+            accident: 1
+          },
+          metadataIncludes: {
+            readonly: true,
+            weightsEnabled: false,
+            affectsFinalResult: false
+          },
+          candidateIncludesAny: [
+            {
+              candidateType: "accident",
+              sourceLayer: "texture",
+              sourceSummary: "textureSummary",
+              accidentTypeId: "texture_straw_resistance",
+              priorityBand: "texture_blocking"
+            }
           ]
         }
       },

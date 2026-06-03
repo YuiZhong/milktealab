@@ -61,7 +61,7 @@
 - 最新 candidate：`v0.0.6.12-candidate`
 - 最新 candidate commit：`d8440f248086ac0f8a5e5ad02b330508f350c78c`
 - `v0.0.6.12-candidate` 已冻结并推送，指向 `d8440f248086ac0f8a5e5ad02b330508f350c78c`；正式 tag `v0.0.6.12` 未创建。
-- 最新 main：本轮 docs commit 是 `v0.0.6.12-candidate` 之后的状态同步 commit，提交后以 `git log -1` 为准。
+- 最新 main：本轮 v0.0.6.13 本地 commit 是 `v0.0.6.12-candidate` 之后的测试安全网 commit，提交后以 `git log -1` 为准。
 - main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
 - main 与 origin/main 应同步，工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
@@ -139,8 +139,11 @@
 - 本轮设计了 candidate 通用结构和 `accident` / `outcome` / `drinkType` / `feedback` candidateType 边界；candidate 仍是只读中间层，不接管最终判定。
 - v0.0.6.12 已完成 `summaryCandidates` 只读地基，且 `v0.0.6.12-candidate` 已冻结并推送。
 - `result.summaryCandidates` 已暴露；candidate 是 summary 到最终 result 的只读中间层，不影响评分、事故、饮品类型、feedback、`result.type`、`audience`、`drinkTypeId`、`accidentTypeId`、`outcomeTypeId` 或 `feedbackTags`。
-- 当前未推进 v0.0.6.13。
-- 下一步可考虑 `v0.0.6.13｜summaryCandidates golden 结构断言`，或 `v0.0.6.13｜candidate priority shell docs / schema`。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- v0.0.6.13 已完成 `summaryCandidates` golden 结构断言，本地 commit 后以 `git log -1` 为准。
+- runner 已支持 `summaryCandidates` expected；少量 golden samples 已增加 `summaryCandidates` expected，用于保护 candidate 容器结构、metadata 和代表候选字段。
+- v0.0.6.13 不锁死具体 `triggerValue` 或 `thresholds` 数值，不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 当前未创建 `v0.0.6.13-candidate`。
+- 下一步可考虑 `v0.0.6.13-candidate` 冻结，或 `v0.0.6.14｜candidate priority shell docs / schema`，或 `v0.0.6.14｜candidate priority shell 只读地基`。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

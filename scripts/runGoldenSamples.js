@@ -37,6 +37,7 @@ const scriptFiles = [
   "core/tasteSummaryEngine.js",
   "core/textureSummaryEngine.js",
   "core/flavorSummaryEngine.js",
+  "core/summaryCandidateEngine.js",
   "core/tasteJudge.js",
   "data/goldenSamples.js"
 ];
@@ -145,6 +146,10 @@ function getFlavorSummary(result) {
   return result?.flavorSummary || null;
 }
 
+function getSummaryCandidates(result) {
+  return result?.summaryCandidates || null;
+}
+
 function formatIds(ids) {
   return `[${ids.join(", ")}]`;
 }
@@ -230,6 +235,32 @@ function checkEvidenceIncludesAny(actualEvidence, expectedCandidates, failures, 
   if (!expectedCandidates?.length) return;
   const matched = expectedCandidates.some(expectedEvidence =>
     actualEvidence.some(evidence => evidenceMatches(evidence, expectedEvidence))
+  );
+  if (!matched) {
+    failures.push(`expected ${label} to include one of ${JSON.stringify(expectedCandidates)}`);
+  }
+}
+
+function candidateMatches(actualCandidate, expectedCandidate) {
+  return Object.entries(expectedCandidate).every(([key, expectedValue]) => {
+    const actualValue = actualCandidate?.[key];
+
+    if (Array.isArray(expectedValue)) {
+      return Array.isArray(actualValue) && expectedValue.every(item => actualValue.includes(item));
+    }
+
+    if (isPlainObject(expectedValue)) {
+      return isPlainObject(actualValue) && candidateMatches(actualValue, expectedValue);
+    }
+
+    return actualValue === expectedValue;
+  });
+}
+
+function checkCandidateIncludesAny(actualCandidates, expectedCandidates, failures, label = "summaryCandidates.candidates") {
+  if (!expectedCandidates?.length) return;
+  const matched = expectedCandidates.some(expectedCandidate =>
+    actualCandidates.some(candidate => candidateMatches(candidate, expectedCandidate))
   );
   if (!matched) {
     failures.push(`expected ${label} to include one of ${JSON.stringify(expectedCandidates)}`);
@@ -336,6 +367,53 @@ function checkFlavorSummaryExpectation(result, expectation, failures) {
   checkEvidenceIncludesAny(Array.isArray(summary.evidence) ? summary.evidence : [], expectation.evidenceIncludesAny, failures, "flavorSummary.evidence");
 }
 
+function checkSummaryCandidatesStructure(summaryCandidates, failures) {
+  if (!Array.isArray(summaryCandidates?.candidates)) failures.push("summaryCandidates.candidates should be an array");
+  if (!isPlainObject(summaryCandidates?.byType)) failures.push("summaryCandidates.byType should be an object");
+  if (!isPlainObject(summaryCandidates?.metadata)) {
+    failures.push("summaryCandidates.metadata should be an object");
+    return;
+  }
+  if (summaryCandidates.metadata.readonly !== true) failures.push("summaryCandidates.metadata.readonly should be true");
+  if (summaryCandidates.metadata.weightsEnabled !== false) failures.push("summaryCandidates.metadata.weightsEnabled should be false");
+  if (summaryCandidates.metadata.affectsFinalResult !== false) failures.push("summaryCandidates.metadata.affectsFinalResult should be false");
+}
+
+function checkSummaryCandidatesExpectation(result, expectation, failures) {
+  if (!expectation) return;
+
+  const summaryCandidates = getSummaryCandidates(result);
+  if (expectation.exists === true && !summaryCandidates) {
+    failures.push("summaryCandidates should exist");
+    return;
+  }
+  if (!summaryCandidates) return;
+
+  if (expectation.exists === true) checkSummaryCandidatesStructure(summaryCandidates, failures);
+
+  const candidates = Array.isArray(summaryCandidates.candidates) ? summaryCandidates.candidates : [];
+  const byType = isPlainObject(summaryCandidates.byType) ? summaryCandidates.byType : {};
+  const byTypeKeys = Object.keys(byType);
+
+  checkArrayIncludes("summaryCandidates.byType keys", byTypeKeys, expectation.byTypeKeysInclude, failures);
+  checkMetadataIncludes(summaryCandidates.metadata, expectation.metadataIncludes, failures, "summaryCandidates.metadata");
+
+  if (typeof expectation.candidateCountMin === "number" && candidates.length < expectation.candidateCountMin) {
+    failures.push(`summaryCandidates.candidates length ${candidates.length} is below ${expectation.candidateCountMin}`);
+  }
+
+  if (expectation.candidateTypeCountMin) {
+    Object.entries(expectation.candidateTypeCountMin).forEach(([candidateType, minCount]) => {
+      const actualCount = Array.isArray(byType[candidateType]) ? byType[candidateType].length : 0;
+      if (actualCount < minCount) {
+        failures.push(`summaryCandidates.byType.${candidateType} length ${actualCount} is below ${minCount}`);
+      }
+    });
+  }
+
+  checkCandidateIncludesAny(candidates, expectation.candidateIncludesAny, failures);
+}
+
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
   if (item?.name) return { ...item };
 
@@ -401,6 +479,7 @@ function checkSample(sample, result) {
   checkTasteSummaryExpectation(result, expectations.tasteSummary, failures);
   checkTextureSummaryExpectation(result, expectations.textureSummary, failures);
   checkFlavorSummaryExpectation(result, expectations.flavorSummary, failures);
+  checkSummaryCandidatesExpectation(result, expectations.summaryCandidates, failures);
 
   if (typeof expectations.scoreMin === "number" && score < expectations.scoreMin) {
     failures.push(`score ${score} is below ${expectations.scoreMin}`);

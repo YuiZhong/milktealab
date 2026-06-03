@@ -1,5 +1,37 @@
 # 版本记录
 
+## v0.0.6.13
+
+本轮新增 `summaryCandidates` golden 结构断言能力。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/runGoldenSamples.js`
+  - 加载 `core/summaryCandidateEngine.js`，让 golden runner 覆盖真实 `summaryCandidates` engine 路径。
+  - 新增 `summaryCandidates` 结构断言。
+  - 支持检查 `summaryCandidates.candidates`、`byType`、`metadata`。
+  - 支持 `candidateCountMin`、`candidateTypeCountMin` 和局部字段匹配的 `candidateIncludesAny`。
+- 更新 `data/goldenSamples.js`
+  - 少量代表样本增加 `summaryCandidates` expected。
+  - 覆盖经典容器结构、taste 酸度事故候选、texture 吸管阻力候选和 flavor 强身份候选。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.13 本地实现状态。
+  - 记录当前未创建 `v0.0.6.13-candidate`。
+
+### 阶段边界
+
+- 本轮只保护 candidate 结构，不改 runtime。
+- 未改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
+- 未改玩家可见文案 expected。
+- 未做 priority 接管 / severity / `scoreMultiplier`。
+- 未锁死具体 `triggerValue` 或 `thresholds` 数值。
+- 未新增 golden sample。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.12 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
