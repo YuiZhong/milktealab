@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.7.11
+
+本轮为 feedback runtime adapter docs / schema。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 设计未来 feedback runtime adapter 的职责边界、API 草案、filters 边界、fallback 策略和渐进接入路线。
+  - 明确 adapter 只返回只读文案候选，不直接决定评分、事故、饮品类型、`result.type` 或最终 feedback。
+  - 明确 adapter 只读取 generated data，不读取 CSV / Google Sheets，不承担内容管线校验职责。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 validate / build / generated data / generated validator / adapter / feedbackEngine 的边界。
+  - 明确 adapter 是 runtime 读取层，不是机制判断层，不承载具体内容 if。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.11 已完成 feedback runtime adapter docs / schema。
+
+### 阶段边界
+
+- 本轮只做 docs / schema 设计，不实现 runtime adapter。
+- 本轮不改 runtime，不改 `core/feedbackEngine.js`，不改 `data/feedbackTexts.js`。
+- 本轮不改 scripts，不改 generated data，不改 `content_sheets` CSV / JSON 样例。
+- 本轮不改 golden samples / runner。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.10 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

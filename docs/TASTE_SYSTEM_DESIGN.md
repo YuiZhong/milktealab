@@ -1339,6 +1339,92 @@ future runtime adapter
 
 `validateGeneratedFeedbackData` 不自动修改 JSON，不自动修改 CSV，不自动修文案，不调参数，不接管 `feedbackEngine`。它只保护 generated data 的结构和索引，为后续 runtime adapter 阶段降低风险。
 
+#### v0.0.7.11 feedback runtime adapter docs / schema
+
+v0.0.7.11 只设计未来 feedback runtime adapter 的文档和 schema 边界，不实现 adapter，不修改 `core/feedbackEngine.js`，不修改 `data/feedbackTexts.js`，也不修改 `data/generated/feedbackTexts.generated.json`。
+
+未来 adapter 的目标是让 runtime 可以安全读取 generated feedback data，同时保持旧 `data/feedbackTexts.js` / `feedbackEngine` 兼容。它应是只读读取层和候选提供层，不是机制判断层，也不能一次性接管最终反馈选择。
+
+未来 adapter 可以负责：
+
+- 加载 `data/generated/feedbackTexts.generated.json`。
+- 按 `textId` 查询单条文案。
+- 按 `feedbackTag` 查询文案池。
+- 按 `scene` 查询文案池。
+- 基于通用 filters 返回 enabled 文案候选。
+- 默认过滤 `enabled === true` 的文案；disabled 文案保留在 generated data 中供制作人审阅，但默认不进入 runtime 选择池。
+- 在 generated data 缺失、不可用或校验失败时，保留旧文案系统 fallback。
+- 输出只读文案候选，不直接决定最终评分、事故、饮品类型、`result.type` 或最终 feedback。
+
+未来 adapter 不应负责：
+
+- 调分、判事故、判饮品类型、修改 `result.type` 或修改 golden expected。
+- 自动选择“最合适”的最终文案。
+- 根据 `zhCN`、中文片段、displayName 或显示文案内容做机制判断。
+- 为某个具体 `textId`、某条中文文案、某个具体文案池或某个 golden sample 写硬编码。
+- 自动修文案、自动改表格内容、自动调参数。
+
+轻量 API 草案：
+
+```js
+getFeedbackTextById(textId)
+getFeedbackTextsByTag(feedbackTag, options)
+getFeedbackTextsByScene(scene, options)
+getEnabledFeedbackTexts(filters)
+```
+
+可选 filters 草案：
+
+```js
+{
+  scene,
+  feedbackTag,
+  accidentTypeId,
+  drinkTypeId,
+  outcomeTypeId,
+  minScore,
+  maxScore,
+  tone
+}
+```
+
+filters 应只使用 stable ID / enum / 通用数值区间。`zhCN` 不应作为 filter 主键，`notes` 也不应参与 runtime 选择。adapter 返回的是候选集合，最终排序、抽取和拼接仍应由未来明确接入的 feedback 流程决定。
+
+fallback 边界：
+
+- generated data 缺失时，旧 `data/feedbackTexts.js` / `feedbackEngine` 仍可工作。
+- generated data 校验失败时，未来 adapter 不应静默使用坏数据。
+- adapter 应提供明确错误 / fallback 报告，便于 Codex 和用户知道当前使用的是 generated data 还是 legacy 文案池。
+- generated data 有问题时不应导致整个味觉引擎崩溃，但也不能把坏数据悄悄当好数据用。
+
+与 validate / build 的关系：
+
+- adapter 只读取 generated data。
+- generated data 必须来自通过 `validateFeedbackSheet`、`buildFeedbackData`、`validateGeneratedFeedbackData` 的流程。
+- adapter 不重新解析 CSV，不读取 Google Sheets，不修复 generated data。
+- adapter 不承担内容管线校验职责；校验失败应回到 validator / build / generated validator 阶段处理。
+
+反 if 边界：
+
+- 不允许 `if (textId === "feedback_straw_disaster_002")` 这类内容特例。
+- 不允许 `if (zhCN.includes("榴莲"))` 这类文案判断。
+- 不允许 `if (displayName === "榴莲")` 这类显示文案主键回潮。
+- 不允许为单个 golden sample 或具体文案池写散落 if。
+- 允许通用字段过滤、通用 enabled 过滤、通用 score range 判断、通用 stable ID 过滤、通用 fallback 和通用结构检查。
+
+未来渐进接入路线只作为“可考虑”，不是已决定版本清单：
+
+1. feedback runtime adapter docs / schema。
+2. adapter 只读实现。
+3. adapter 读取 generated data，但不接 `feedbackEngine`。
+4. adapter golden / structure check。
+5. `feedbackEngine` 增加旁路读取 generated data 的能力。
+6. 小范围样本对比：旧文案系统 vs generated 文案池。
+7. 人类制作人审核文案体验。
+8. 再决定是否逐步接管部分 `feedbackTag`。
+
+本设计不要求用户改变当前 Google Sheets / CSV 字段，也不改变文案工作台使用方式。未来如果 adapter 设计要改变人类表格字段、制作人填写方式或文案工作台流程，必须先由用户作为制作人确认。
+
 允许的通用逻辑：
 
 - 按 `textId` 建索引。

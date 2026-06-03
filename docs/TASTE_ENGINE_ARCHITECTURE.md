@@ -561,6 +561,45 @@ generated data validator 不承载机制判断：
 
 它的职责是保护 build 输出结构，让后续 runtime adapter 阶段能在更清楚的边界上推进。
 
+### v0.0.7.11 feedback runtime adapter docs / schema
+
+v0.0.7.11 只补充 feedback runtime adapter 的 docs / schema 边界，不实现 adapter，不修改 runtime，不修改 `core/feedbackEngine.js`，不修改 `data/feedbackTexts.js`，不修改 generated data。
+
+adapter 在未来链路中的位置应是 runtime 读取层：
+
+```text
+Google Sheets / CSV
+↓ validateFeedbackSheet
+generated feedback data
+↓ validateGeneratedFeedbackData
+feedback runtime adapter
+↓
+feedbackEngine
+```
+
+adapter 不是机制判断层。它不判事故、不判饮品类型、不调分、不改 `result.type`，也不直接决定最终 feedback。它只把通过内容管线生成并校验过的文案数据，以只读候选池形式提供给未来 feedback 流程。
+
+边界要求：
+
+- adapter 只读取 generated data，不读取 CSV，不读取 Google Sheets。
+- generated data 必须来自 validate / build / generated validation 流程。
+- adapter 不修复 generated data，不自动修改文案，不自动调参数。
+- adapter 默认只返回 enabled 文案候选；disabled 文案可留作制作人审阅，不进入默认 runtime 选择池。
+- generated data 缺失或不可用时，应 fallback 到旧 `data/feedbackTexts.js` / `feedbackEngine` 文案池。
+- generated data 校验失败时，不应静默当作好数据使用；需要明确错误 / fallback 报告。
+- fallback 不应让味觉引擎整体崩溃，但也不能掩盖坏数据。
+
+adapter 不承载内容 if：
+
+- 不为具体 `textId` 写特殊判断。
+- 不根据 `zhCN`、中文片段、displayName 或 notes 做机制判断。
+- 不为某个 golden sample、某个具体原料组合或某个文案池写散落 if。
+- 允许的 if 仅限通用字段过滤、通用 enabled 过滤、通用 stable ID / enum 过滤、通用 score range 判断、通用 fallback 和通用结构检查。
+
+未来 API 可以保持轻量，例如 `getFeedbackTextById(textId)`、`getFeedbackTextsByTag(feedbackTag, options)`、`getFeedbackTextsByScene(scene, options)` 和 `getEnabledFeedbackTexts(filters)`。filters 应只使用 stable ID、enum 和通用数值区间，例如 `scene`、`feedbackTag`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId`、`minScore`、`maxScore`、`tone`；`zhCN` 不是 filter 主键。
+
+接入必须小步、可回滚：先做只读 adapter，再做 adapter 结构检查，再考虑让 `feedbackEngine` 旁路读取 generated data，最后通过小范围样本对比和人类制作人审核决定是否接管部分 `feedbackTag`。不要在 adapter 第一版里一次性替换旧反馈系统。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。
