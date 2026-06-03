@@ -173,9 +173,11 @@
 - v0.0.7.1 已完成表格化内容管线 docs / schema，且 `v0.0.7.1-candidate` 已冻结并推送。
 - 当前未实现 CSV / Excel / JSON 导入，未新增 CSV / Excel / JSON 文件、generated data、导入脚本、build script 或 runtime。
 - v0.0.7.1 只设计未来 CSV / Excel / Google Sheets / JSON 工作流边界、stable ID 主键原则、校验层和代表 schema；不改 data、runner、golden expected 或 runtime。
-- 当前未推进 v0.0.7.2。
+- v0.0.7.2 已完成 feedback 文案表格化 schema docs，本地 commit 后以 `git log -1` 为准。
+- v0.0.7.2 只细化未来 `feedback_texts` 表格字段、校验规则、现有 `feedbackEngine` / `feedbackTexts` 边界和后续小步路线；当前未实现表格化内容管线，未新增 CSV / JSON / generated data / validate script / build script，未改 runtime、data、runner 或 golden expected。
+- 当前未创建 `v0.0.7.2-candidate`。
 - 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 v0.0.7.2 feedback 文案表格化 schema、v0.0.7.2 severity / threshold 调参计划拆分，或 v0.0.7.x 第一轮调参评审会。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
+- 下一步可考虑 v0.0.7.2-candidate 冻结、v0.0.7.3 feedback_texts 样例表格 / JSON 草案、v0.0.7.3 validate feedback sheet 脚本设计，或 v0.0.7.x 第一轮反馈文案评审会。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
 - v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
 - v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
 - v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。

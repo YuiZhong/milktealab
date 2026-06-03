@@ -830,6 +830,84 @@ data/generated/
 
 这些只是未来规划，v0.0.7.1 不创建这些目录或文件。
 
+#### v0.0.7.2 feedback 文案表格化 schema
+
+v0.0.7.2 只细化 feedback 文案表格 schema。目标是让试喝反馈文案未来可以通过 CSV / Excel / Google Sheets / JSON 工作流编辑和审阅，而不是长期直接编辑 `data/feedbackTexts.js`。本轮不实现导入，不新增表格文件，不新增 generated data，不新增 validate / build script，不改 runtime，不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`，不改 golden expected。
+
+feedback 文案表格的核心原则：
+
+- `textId` 是稳定文案 ID，服务审计、去重、禁用、迁移和未来 localization 映射。
+- `feedbackTag` 是机制选择反馈的主引用，连接现有 `feedbackTags`、未来 candidate / summary 输出和文案池。
+- `zhCN` 是中文显示文案，不是机制主键；未来可扩展 `enUS`、`jaJP` 或 localization key。
+- `scene`、`tone`、分数区间和 result ID 过滤只是选择条件或编辑辅助，不应替代 stable ID。
+- `notes` 是制作人备注，不参与 runtime 判断。
+
+未来第一版 `feedback_texts` 表可以采用类似字段：
+
+```text
+textId,feedbackTag,scene,zhCN,tone,minScore,maxScore,accidentTypeId,drinkTypeId,outcomeTypeId,audienceId,testerId,enabled,notes
+```
+
+字段说明：
+
+- `textId`：稳定文案 ID。建议可读字符串，例如 `fb_classic_001`、`fb_straw_disaster_002`。同一表内不可重复。
+- `feedbackTag`：结构化反馈标签，例如 `classic`、`straw_disaster`、`acid_accident`、`normal_good`。不能为空。
+- `scene`：文案场景，例如 `normal`、`accident`、`followup`、`fallback`、`special`。用于区分普通好喝反馈、事故反馈、追评 / follow-up、兜底反馈和特殊反馈。
+- `zhCN`：中文显示文案。只负责展示和审美，不作为机制主键。
+- `tone`：语气标签，例如 `sharp_cute`、`cute`、`premium`、`explain`、`dramatic`、`gentle`。可用于未来试喝员或客群语气筛选。
+- `minScore` / `maxScore`：可选分数区间。为空表示不按分数过滤；填写时必须在 0-100 之间，且 `minScore <= maxScore`。
+- `accidentTypeId`：可选事故类型过滤，例如 `taste_acid_overload`、`texture_straw_resistance`、`dairy_fat_overload`。为空表示不限事故类型。
+- `drinkTypeId`：可选普通饮品类型过滤，例如 `classic_milk_tea`、`fresh_fruit_tea`。为空表示不限饮品类型。
+- `outcomeTypeId`：可选兜底结果过滤，例如 `taste_conflict`、`experimental_special`。为空表示不限兜底结果。
+- `audienceId`：未来客群扩展字段。当前可为空；不提前实现顾客系统。
+- `testerId`：未来试喝员口吻扩展字段。当前可为空；不提前实现试喝员系统。
+- `enabled`：是否启用。建议枚举为 `true` / `false`，或表格层用 `1` / `0` 后由 validate 规范化。
+- `notes`：制作人备注、语气说明或迁移说明。不参与机制判断，不进入玩家可见 UI。
+
+示例行只用于说明 schema，不代表本轮创建表格文件：
+
+```text
+textId,feedbackTag,scene,zhCN,tone,minScore,maxScore,accidentTypeId,drinkTypeId,outcomeTypeId,audienceId,testerId,enabled,notes
+fb_classic_001,classic,normal,红茶和牛奶配合得很稳，是不会出错的经典款。,explain,60,90,,classic_milk_tea,,,,true,经典奶茶稳定反馈
+fb_straw_001,straw_disaster,accident,吸管刚插进去就提交了辞职信。,dramatic,0,35,texture_straw_resistance,,,,,true,吸管阻力事故主反馈
+fb_thick_followup_001,thick_followup,followup,第一口很幸福，第三口开始需要勇气。,sharp_cute,50,85,,,,,,true,厚重但未必事故的追评
+```
+
+未来 validate 规则可考虑：
+
+- `textId` 必填且不重复。
+- `feedbackTag` 必填，并且属于已定义 tag 或可由后续 tag registry 识别。
+- `scene` 必填且枚举合法，例如 `normal`、`accident`、`followup`、`fallback`、`special`。
+- `enabled` 必填且枚举合法。
+- `zhCN` 启用时不能为空；禁用时可为空但应有 `notes` 说明。
+- `minScore` / `maxScore` 为空或为数字；填写时必须在 0-100 之间，且 `minScore <= maxScore`。
+- `accidentTypeId` / `drinkTypeId` / `outcomeTypeId` 若填写，必须是已知 stable ID。
+- 禁止把 `zhCN`、中文文案片段、显示名或 UI category 当机制主键。
+- 可选检查：同一 `feedbackTag` 至少有若干条 `enabled=true` 文案，避免某个 tag 触发后没有可用文案。
+- 可选检查：事故类 `feedbackTag` 应有 `scene=accident`，或填写对应 `accidentTypeId` / `notes` 说明。
+- 可选检查：同一 `textId` 的多语言行或未来 localization key 必须一一对应，避免翻译漏项。
+
+与现有系统的边界：
+
+- 现有 `data/feedbackTexts.js` 保持不变，仍是当前 runtime 文案池。
+- 现有 `core/feedbackEngine.js` 保持不变，仍按 `feedbackTags` 和现有 fallback 选择文案。
+- 本轮不迁移现有文案，不新增 `feedback_texts.csv`、JSON、generated JS 或 build script。
+- 本轮不改 UI，不改 golden expected，不改评分、事故、饮品类型、feedback 或 `result.type`。
+- 未来迁移时应保留旧文案池兼容，先做旁路 generated data 或 adapter，再逐步切换 runtime，不一次性重写反馈系统。
+- 现有 golden samples 中的 `feedbackTagIncludes` 是结构化回归保护；`feedbackIncludesAny` 是玩家可见文案回归保护。未来表格化后两者仍可并存，但新增机制判断应优先依赖 stable ID / tag。
+
+后续小步路线可考虑：
+
+1. v0.0.7.2：完成 feedback 文案表格化 schema docs。
+2. v0.0.7.3：创建样例 `feedback_texts` CSV / JSON，但不接 runtime。
+3. v0.0.7.3 或后续：设计 / 实现 validate feedback sheet 脚本。
+4. 后续：从表格生成 `feedbackTexts.generated.js` 或 JSON，并审计生成结果。
+5. 后续：让 runtime 通过 adapter 读取 generated data，同时保留旧文案池 fallback。
+6. 后续：用 golden samples 回归保护反馈 tag、事故路径、普通好喝路径和代表文案。
+7. 后续：在 feedback 文案管线稳定后，再扩大到 severity / threshold 表格。
+
+以上只是可考虑路线，不代表已经决定，也不代表本轮已经创建任何表格、脚本或 runtime 入口。
+
 代表 schema 示例：
 
 ```text

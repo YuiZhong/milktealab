@@ -348,6 +348,24 @@ v0.0.7.x 初期优先级建议：
 
 v0.0.7.1 只设计管线边界、未来目录、校验原则和代表 schema，不新增 CSV / Excel / JSON 文件，不新增 generated data，不新增 build script，不改 runtime，不改 data，不调参数，也不改 golden expected。
 
+### v0.0.7.2 feedback 文案表格化 schema
+
+v0.0.7.2 进一步把 feedback 文案从总内容管线中单独拆出来设计。feedback 文案属于内容层和表达层，不应承担机制主键。玩家最终看到的中文句子、未来英文 / 日文句子、毒舌语气、制作人备注或试喝员口吻都可以调整；系统选择反馈时应优先读取稳定的 `feedbackTag`、`textId`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId` 等结构化字段。
+
+现有 `data/feedbackTexts.js` 仍是 runtime 文案池，`core/feedbackEngine.js` 仍按 `feedbackTags` 选择文案。本轮只设计未来表格 schema，不迁移现有文案，不新增 CSV / JSON / generated data，不新增 validate / build script，不改 runtime、data、runner 或 golden expected。
+
+未来 `feedback_texts` 表的主路径应是：
+
+```text
+feedbackTag / textId / stable result IDs -> generated feedback data -> feedbackEngine adapter -> UI feedback text
+```
+
+其中 `zhCN` 或其他语言列只是显示内容，不是机制主键。禁止通过中文文案全文、中文片段或显示名来决定系统身份；旧 `feedbackIncludesAny` golden 文案片段可以继续作为展示回归保护，但不应成为新机制的判断主路径。
+
+未来校验层必须在生成 runtime 数据前拦截明显错误，例如重复 `textId`、空 `feedbackTag`、非法 `scene`、非法 `enabled`、越界分数、未知 `accidentTypeId` / `drinkTypeId` / `outcomeTypeId`，以及启用状态下空文案。表格化管线也不能绕过 golden samples；凡是生成结果可能影响反馈选择、反馈文案、评分、事故、类型或 expected，都应在构建后运行 golden samples，并明确说明 expected 是否有意识调整。
+
+后续真正落地时应先保持旧文案池兼容：可以考虑先生成并审计一份旁路数据，或在 `feedbackEngine` 外围增加 adapter，再逐步让 runtime 读取 generated data。不要一次性重写反馈系统，也不要为了表格化而改变现有评分、事故、饮品类型、`result.type` 或 golden expected。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

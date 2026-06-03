@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.7.2
+
+本轮为 feedback 文案表格化 schema docs。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充未来 `feedback_texts` 表格 schema。
+  - 设计 `textId`、`feedbackTag`、`scene`、`zhCN`、`tone`、`minScore`、`maxScore`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId`、`audienceId`、`testerId`、`enabled`、`notes` 等字段边界。
+  - 补充 future validate 规则：`textId` 去重、`feedbackTag` 必填、`scene` / `enabled` 枚举、分数范围、stable ID 校验、启用文案不可为空、禁止把中文文案当机制主键。
+  - 记录与现有 `data/feedbackTexts.js` / `core/feedbackEngine.js` 的兼容边界和后续小步路线。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 明确 feedback 文案属于内容层，不应承担机制主键。
+  - 明确 stable `feedbackTag` / `textId` / `accidentTypeId` / `drinkTypeId` / `outcomeTypeId` 是 future 表格化主路径。
+  - 明确表格化管线必须经过校验和 golden 回归，不应绕过测试。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.2 已完成 feedback 文案表格化 schema docs。
+  - 记录当前未实现表格化内容管线，未新增 CSV / JSON / generated data / validate script / build script。
+  - 记录当前未创建 `v0.0.7.2-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / schema。
+- 本轮不新增 CSV / Excel / JSON 文件。
+- 本轮不新增 generated data，不新增 validate script，不新增 build script。
+- 本轮不实现导入，不改 runtime，不改 data，不改 runner，不改 golden expected。
+- 本轮不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type`。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.7.1 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
