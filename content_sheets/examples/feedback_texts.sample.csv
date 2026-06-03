@@ -1,11 +1,11 @@
 ﻿textId,feedbackTag,scene,zhCN,tone,minScore,maxScore,accidentTypeId,drinkTypeId,outcomeTypeId,audienceId,enabled,notes
-feedback_classic_001,classic,normal,红茶和牛奶配合得很稳，是不会出错的经典款。,classic,60,90,,classic_milk_tea,,,true,经典奶茶稳定反馈样例
-feedback_premium_001,premium,normal,这杯有点高级，像突然知道自己要卖给谁的饮料。,premium,65,95,,premium_thick_milk_tea,,,true,高级厚乳路线样例
-feedback_acid_accident_001,acid_accident,accident,这杯不是提神，是给味蕾安排突击考试。,warning,0,35,taste_acid_overload,,,,true,酸度事故代表样例
-feedback_greasy_overload_001,greasy_overload,accident,奶脂感已经不是香，是压迫。,warning,0,35,dairy_fat_overload,,,,true,奶脂过载代表样例
-feedback_straw_disaster_001,straw_disaster,accident,吸管刚插进去就提交了辞职信。,teasing,0,35,texture_straw_resistance,,,,true,吸管阻力事故样例
-feedback_durian_001,durian,normal,它不算翻车，更像一杯明确知道自己会被争议的奶昔。,teasing,45,85,,,,,true,榴莲强身份但不必然事故
-feedback_normal_good_001,normal_good,fallback,配方思路清楚，像一杯知道自己要去哪里的饮料。,classic,60,100,,,,,true,普通好喝兜底样例
-feedback_thick_followup_001,thick_followup,followup,第一口很幸福，第三口开始需要勇气。,cute,50,85,,,,,true,厚重饮品追评样例
-feedback_bubble_conflict_001,bubble_conflict,followup,气泡想往上冲，厚重感想往下坐，场面很热闹。,teasing,20,70,,,taste_conflict,,true,口感冲突追评样例
-feedback_disabled_idea_001,weird,normal,,teasing,,,,,,false,禁用样例用于验证 enabled 和空文案规则
+feedback_classic_001,classic,normal,红茶和牛奶配合得很稳，是不会出错的经典款。,classic,60,90,,classic_milk_tea,,,TRUE,经典奶茶稳定反馈样例
+feedback_premium_001,premium,normal,这杯有点高级，像突然知道自己要卖给谁的饮料。,premium,65,95,,premium_thick_milk_tea,,,TRUE,高级厚乳路线样例
+feedback_acid_accident_001,acid_accident,accident,这杯不是提神，是给味蕾安排突击考试。,warning,0,35,taste_acid_overload,,,,TRUE,酸度事故代表样例
+feedback_greasy_overload_001,greasy_overload,accident,奶脂感已经不是香，是压迫。,warning,0,35,dairy_fat_overload,,,,TRUE,奶脂过载代表样例
+feedback_straw_disaster_001,straw_disaster,accident,吸管刚插进去就提交了辞职信。,teasing,0,35,texture_straw_resistance,,,,TRUE,吸管阻力事故样例
+feedback_durian_001,durian,normal,它不算翻车，更像一杯明确知道自己会被争议的奶昔。,teasing,45,85,,,,,TRUE,榴莲强身份但不必然事故
+feedback_normal_good_001,normal_good,fallback,配方思路清楚，像一杯知道自己要去哪里的饮料。,classic,60,100,,,,,TRUE,普通好喝兜底样例
+feedback_thick_followup_001,thick_followup,followup,第一口很幸福，第三口开始需要勇气。,cute,50,85,,,,,TRUE,厚重饮品追评样例
+feedback_bubble_conflict_001,bubble_conflict,followup,气泡想往上冲，厚重感想往下坐，场面很热闹。,teasing,20,70,,,taste_conflict,,TRUE,口感冲突追评样例
+feedback_disabled_idea_001,weird,normal,,teasing,,,,,,,FALSE,禁用样例用于验证 enabled 和空文案规则
