@@ -1,5 +1,46 @@
 # 版本记录
 
+## docs: sync v0.0.7.18 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.18-candidate`。
+  - 记录 candidate 指向 `a9c17811854ee37be540627705bd8ca9b54b55b6`。
+  - 记录 `v0.0.7.18-candidate` 已冻结并推送。
+  - 记录 v0.0.7.18 已补强 generated feedback JS module browser loading 结构保护。
+  - 记录当前未推进 v0.0.7.19。
+
+### 阶段边界
+
+- `v0.0.7.18-candidate` 已冻结并推送。
+- candidate 指向 `a9c17811854ee37be540627705bd8ca9b54b55b6`。
+- v0.0.7.18 已补强 generated feedback JS module browser loading 结构保护。
+- browser-like loading check 通过，`MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS` 可读。
+- generated JS module 仍未接 `feedbackEngine`。
+- 不改变玩家最终 feedback。
+- 未改 `index.html`。
+- 未改 `feedbackEngine` / adapter / generated data / `content_sheets` / `data/feedbackTexts.js`。
+- validate / build / generated validator / module check / adapter check / golden 均通过。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.18`。
+- 当前未推进 v0.0.7.19。
+
+### 验证结果
+
+- `node --check scripts/content/checkGeneratedFeedbackBrowserLoad.js` 通过。
+- Generated browser load check 通过，`MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS` 可读。
+- Feedback sheet validator：Errors 0，Warnings 12；warnings 为人工审核提醒。
+- JSON build 通过。
+- JS module build 通过。
+- Generated JSON validator：Errors 0，Warnings 0。
+- Generated JS module check 通过。
+- Adapter check 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.18
 
 本轮补强 generated feedback JS module browser loading 结构保护。
