@@ -1,5 +1,42 @@
 # 版本记录
 
+## v0.0.7.13
+
+本轮强化 feedback runtime adapter 结构保护。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/content/checkFeedbackRuntimeAdapter.js`
+  - 扩展 adapter check 覆盖 metadata、stable `textId` 查询、`feedbackTag` / `scene` 查询、`includeDisabled`、通用 filters、只读返回对象、源 generated data 不被污染和 invalid data unavailable 状态。
+  - 明确检查 `zhCN` / 中文文案不能作为 adapter 查询主键。
+  - 明确 invalid data 不会偷偷 fallback 到 legacy 文案。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 记录 v0.0.7.13 adapter 结构保护覆盖范围。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 adapter check 是接入 `feedbackEngine` 前的结构安全网。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.13 已完成 feedback runtime adapter 结构保护。
+
+### 阶段边界
+
+- 本轮不修改 `core/feedbackRuntimeAdapter.js`。
+- 本轮不接 `core/feedbackEngine.js`，不修改 `data/feedbackTexts.js`。
+- 本轮不改 generated feedback JSON，不改 `content_sheets`。
+- 本轮不改 runtime、UI、`index.html`。
+- 本轮不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check core/feedbackRuntimeAdapter.js` 通过。
+- `node --check scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- Adapter check：`node scripts/content/checkFeedbackRuntimeAdapter.js` 通过。
+- Feedback sheet validator：`node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0，Warnings 12，warnings 均为制作人审核提醒。
+- Build：`node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json` 通过，且未造成 generated JSON 无意义 diff。
+- Generated validator：`node scripts/content/validateGeneratedFeedbackData.js data/generated/feedbackTexts.generated.json` 通过，Errors 0，Warnings 0。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.12 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

@@ -1501,6 +1501,23 @@ node scripts/content/checkFeedbackRuntimeAdapter.js
 
 该脚本读取 `data/generated/feedbackTexts.generated.json`，验证 adapter 可创建、按 `textId` / `feedbackTag` / `scene` 查询、默认排除 disabled 文案、`includeDisabled` 可审阅 disabled 文案、不存在 textId 返回 `null`、查询不依赖 `zhCN`，并确认 invalid data 会产生不可用 adapter。
 
+#### v0.0.7.13 feedback runtime adapter 结构保护
+
+v0.0.7.13 不改 adapter 本体，只强化 `scripts/content/checkFeedbackRuntimeAdapter.js`，让未来接入前的安全网更具体。本轮仍不接 `feedbackEngine`，不改 `data/feedbackTexts.js`，不改 generated data，也不改变玩家最终 feedback。
+
+本轮检查覆盖：
+
+- generated metadata：确认 `readonly`、`sourceType: "generated"`、`stableIdRequired` 等方向没有丢失。
+- stable ID 查询：确认 `getTextById("feedback_classic_001")` 可返回候选，缺失 ID 返回 `null`，中文 `zhCN` 不能作为查询 key。
+- tag 查询：确认 `straw_disaster` 可返回 enabled 候选，中文文案不能作为 `feedbackTag` 查询 key。
+- scene 查询：确认 `accident` / `followup` 只返回对应 scene 的 enabled 候选。
+- disabled 审阅：确认默认查询排除 disabled 文案，`includeDisabled: true` 才能看到 disabled 文案。
+- filter 边界：确认 `score`、`scene`、`feedbackTag`、`tone`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId` 和 score range 都是通用过滤，不是内容 if。
+- 只读边界：尝试修改返回候选，确认不会污染后续查询或源 generated data。
+- invalid data 边界：确认无效数据会让 adapter unavailable，查询为空或 `null`，不会偷偷使用 legacy 文案。
+
+这些检查保护的是“adapter 如何安全提供候选”，不是“哪杯饮品应该选哪句反馈”。最终 feedback 选择、机制判断、fallback 到 legacy 文案系统、接入 `feedbackEngine` 都仍留到后续单独任务。
+
 允许的通用逻辑：
 
 - 按 `textId` 建索引。

@@ -625,6 +625,21 @@ v0.0.7.12 已新增 `core/feedbackRuntimeAdapter.js`，作为 generated feedback
 
 未来接入 `feedbackEngine` 必须继续小步、可回滚：先保护 adapter 结构，再做旁路读取 docs / schema，再进行小范围样本对比和制作人体验审核，最后再决定是否逐步接管部分 `feedbackTag`。
 
+### v0.0.7.13 feedback runtime adapter 结构保护
+
+v0.0.7.13 强化 `scripts/content/checkFeedbackRuntimeAdapter.js`，用于在接入 `feedbackEngine` 前保护 adapter 的结构边界。本轮不修改 `core/feedbackRuntimeAdapter.js`，不修改 `core/feedbackEngine.js`，不修改 `data/feedbackTexts.js`，不修改 generated feedback JSON，也不接 runtime。
+
+结构保护重点：
+
+- metadata 必须保留 generated data 的只读方向，包括 `readonly`、`sourceType: "generated"` 和 `stableIdRequired`。
+- `getTextById` 只接受 stable `textId`，不存在时返回 `null`，不能按 `zhCN` / 中文文案查询。
+- `getTextsByTag` / `getTextsByScene` 默认只返回 enabled 候选；`includeDisabled: true` 只用于审阅 disabled 文案。
+- `getEnabledTexts(filters)` 只做通用字段过滤，包括 `scene`、`feedbackTag`、`tone`、`accidentTypeId`、`drinkTypeId`、`outcomeTypeId` 和通用 score range。
+- adapter 返回的候选不应成为 generated data 的可写入口；检查脚本会尝试修改返回对象，并确认后续查询和源数据不被污染。
+- invalid generated data 会创建不可用 adapter，且不会偷偷 fallback 到 legacy 文案。
+
+该检查脚本仍不是机制判断层：它不判事故、不调分、不选最终 feedback、不为具体 golden sample 或中文文案写例外。它只保护 adapter 在未来接入前保持只读、stable ID、通用过滤和清晰 unavailable 状态。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。
