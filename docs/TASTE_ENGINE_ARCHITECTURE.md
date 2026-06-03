@@ -366,6 +366,48 @@ feedbackTag / textId / stable result IDs -> generated feedback data -> feedbackE
 
 后续真正落地时应先保持旧文案池兼容：可以考虑先生成并审计一份旁路数据，或在 `feedbackEngine` 外围增加 adapter，再逐步让 runtime 读取 generated data。不要一次性重写反馈系统，也不要为了表格化而改变现有评分、事故、饮品类型、`result.type` 或 golden expected。
 
+### v0.0.7.3 调参阶段反 if guardrail
+
+v0.0.7.x 虽然进入调参阶段，但 if 地狱风险没有消失，只是从“搭系统地基”转移到“调参数、调标签、调阈值、调 severity、调 `scoreMultiplier`、调 feedback 文案和调 golden expected”的日常工作里。越是想快速让单个样本变顺，越容易把内容判断重新塞回 engine。
+
+v0.0.7.x 的高风险区域包括：
+
+- feedback 选择逻辑，尤其是在 `feedbackEngine` 里继续堆文案选择 if。
+- severity / `scoreMultiplier` 规则，尤其是把单个原料或单个事故样本写成特殊扣分分支。
+- threshold 判断，尤其是为某个具体原料组合写散落 if。
+- candidate 接管旧判定，尤其是把 `summaryCandidates` / priority shell 变成新的具体内容判断容器。
+- 表格导入校验，尤其是在 validator 里写具体样本例外。
+- golden expected 更新，尤其是为了让测试通过而临时改 expected 或降低结构边界。
+- 为某个中文文案、`displayName`、feedback 文案片段或 UI category 写机制判断。
+
+v0.0.7.x 后续调参应优先通过 CSV / JSON / 表格、rule table、schema、validator、generated data 和有意识的 golden expected 更新来处理内容变化。engine 继续只负责汇总、调度、通用区间判断、通用排序、通用 fallback 和结构输出；不要把“判什么”的内容写死进 engine。
+
+明确禁止或强烈警戒：
+
+- 为某个 golden sample 写硬编码。
+- 为某个中文文案写机制判断。
+- 为某个具体原料组合写散落 if。
+- 在 `feedbackEngine` 里继续堆文案选择 if。
+- 在 severity / threshold 中写死单个原料特例。
+- 绕过表格化内容管线，直接改 generated data。
+- 把 `displayName`、`zhCN` 或 feedback 文案当系统主键。
+- 为了快速通过测试而降低 schema、ID、summary、candidate 或 priority shell 的结构边界。
+- 在 validator 中写具体样本例外。
+
+允许存在的 if 是通用逻辑，而不是具体内容：
+
+- 通用区间判断，例如 `min <= value <= max`。
+- 通用枚举校验，例如 `scene` / `enabled` / `candidateType` 是否在已知集合中。
+- 缺字段、缺 ID、旧数据兼容和 legacy fallback。
+- 通用 priority / severity 排序逻辑。
+- 通用 validator 规则。
+- 通用 golden assertion helper。
+- 通用 schema 兼容逻辑。
+
+这些通用 if 只能负责“怎么判”，不能偷偷塞入具体原料、具体组合、具体中文文案、具体样本 ID 或具体审美判断。人类制作人负责主观体验、文案风格和判定合理性的最终审核；Codex 可以提出依据、风险和候选方案，但不应为了让一次测试变绿而硬编码审美判断。
+
+每次 v0.0.7.x 实现任务完成后，Codex 必须在报告中自查：是否新增内容 if；是否锁死具体数值；是否为了某个 golden sample 临时硬编码；是否绕过表格化内容管线；是否让 `displayName` / 中文文案成为主键；是否误改 runtime；是否改 golden expected 以及原因；是否影响评分、事故、饮品类型、feedback 或 `result.type`；是否需要用户作为制作人审核体验、文案或判定合理性。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

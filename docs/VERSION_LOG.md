@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.3
+
+本轮为 v0.0.7.x 调参阶段反 if guardrail。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 v0.0.7.x 调参阶段仍有 if 地狱风险。
+  - 明确 feedback 选择、severity / `scoreMultiplier`、threshold、candidate 接管、表格导入校验和 golden expected 更新都可能重新引入内容 if。
+  - 明确调参数 / 调标签 / 调 threshold / 调 severity 应优先通过 rule table / schema / 表格 / generated data 解决。
+  - 明确 engine 继续只负责汇总、调度和通用判断，不允许为单个样本或具体文案写临时内容 if。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 v0.0.7.x 反馈文案、severity、threshold、golden expected 调整流程中的反 if 原则。
+  - 明确人类制作人审核主观体验、文案审美和判定合理性，Codex 不应自行硬编码审美判断。
+  - 明确表格化内容管线是降低内容 if 风险的主要工具，但不能绕过校验和 golden 回归。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.3 已完成调参阶段反 if guardrail。
+  - 记录 v0.0.7.x 后续实现任务必须自查是否新增内容 if、是否锁死数值、是否绕过表格化管线、是否把显示文案当主键。
+  - 记录当前未创建 `v0.0.7.3-candidate`。
+
+### 阶段边界
+
+- 本轮只做 docs / guardrail。
+- 本轮不改 runtime，不改 data，不改 runner，不改 golden samples。
+- 本轮不新增 CSV / JSON / generated data / validate script / build script。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.7.2 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
