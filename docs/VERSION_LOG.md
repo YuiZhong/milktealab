@@ -1,5 +1,50 @@
 # 版本记录
 
+## v0.0.7.10
+
+本轮实现 generated feedback data 结构校验脚本。
+
+### 本轮新增 / 更新
+
+- 新增 `scripts/content/validateGeneratedFeedbackData.js`
+  - 支持 `node scripts/content/validateGeneratedFeedbackData.js data/generated/feedbackTexts.generated.json`。
+  - 校验 generated JSON 顶层结构、`textsById`、`textsByTag`、`textsByScene` 和 `metadata`。
+  - 检查 `textsByTag` / `textsByScene` 索引一致性。
+  - 检查 `textId` / `feedbackTag` / index key 的 stable ID 边界。
+  - 不自动修改 JSON，不自动修改 CSV，不自动修文案，不调参数。
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 记录 generated data validator 第一版已实现。
+  - 记录 validate → build → generated validate → future runtime adapter 的离线链路。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 记录 generated data validator 是内容管线安全层。
+  - 记录它不承载机制判断，用于保护 build 输出结构。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.7.10 已完成 generated feedback data 结构校验脚本。
+
+### 阶段边界
+
+- 本轮不改 runtime，不改 `core/feedbackEngine.js`，不改 `data/feedbackTexts.js`。
+- 本轮不改 `content_sheets` 源 CSV / JSON 样例。
+- 本轮不改 build script。
+- 本轮不改 golden samples / runner。
+- 本轮不调参数，不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- generated data 当前仍不接 runtime。
+- Validate / build / generated validation / golden 均通过。
+- Golden samples 20/20 passed。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/validateFeedbackSheet.js` 通过。
+- `node --check scripts/content/buildFeedbackData.js` 通过。
+- `node --check scripts/content/validateGeneratedFeedbackData.js` 通过。
+- `node scripts/content/validateFeedbackSheet.js content_sheets/examples/feedback_texts.sample.csv` 通过，Errors 0，Warnings 12。
+- `node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json` 通过。
+- `node scripts/content/validateGeneratedFeedbackData.js data/generated/feedbackTexts.generated.json` 通过，Errors 0，Warnings 0。
+- `python3 -m json.tool data/generated/feedbackTexts.generated.json` 通过。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.9 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

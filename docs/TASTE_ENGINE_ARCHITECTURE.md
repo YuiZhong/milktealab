@@ -537,6 +537,30 @@ build 已依赖 validator：
 
 第一版 build 只做通用格式转换和索引生成，例如 score 转 number / `null`、optional stable ID 空值转 `null`、`enabled` 转 boolean、metadata 写入和分组索引。它不根据具体 `zhCN`、具体 `textId`、具体 golden sample、具体原料组合或 displayName 写机制判断；也不自动改 `tone`、score、`scene` 或用户文案。
 
+### v0.0.7.10 generated feedback data 结构校验
+
+v0.0.7.10 已新增 `scripts/content/validateGeneratedFeedbackData.js`，作为 build 输出之后、runtime adapter 之前的内容管线安全层。它检查 generated feedback data 是否结构稳定、索引一致、主键仍使用 stable ID，并确认当前 generated data 仍未接 runtime。
+
+第一版校验重点：
+
+- 顶层 JSON 结构和 `schemaVersion` / `generatedFrom`。
+- `textsById`、`textsByTag`、`textsByScene` 和 `metadata` 的基础类型。
+- `metadata.readonly === true`、`metadata.sourceType === "generated"`、`metadata.stableIdRequired === true`。
+- 当前如存在 `metadata.affectsRuntime`，必须为 `false`。
+- `textsById` key 与 `item.textId` 一致。
+- `enabled`、score、`zhCN`、`feedbackTag`、`scene` 等基础字段类型正确。
+- `textsByTag` / `textsByScene` 不指向不存在的 `textId`，每条 text 都出现在对应索引中。
+- `textId` / `feedbackTag` / index key 不使用中文显示文案。
+
+generated data validator 不承载机制判断：
+
+- 不根据具体 `zhCN` / displayName 决定逻辑。
+- 不为某个 `textId`、golden sample 或具体原料组合写例外。
+- 不自动修改 JSON、CSV 或文案。
+- 不调参数，不接管 `feedbackEngine`。
+
+它的职责是保护 build 输出结构，让后续 runtime adapter 阶段能在更清楚的边界上推进。
+
 ## 2. 稳定 ingredientId 原则
 
 `ingredientId` 是系统内部稳定主键，应该长期作为规则、profile、组合、事故、golden samples 和未来存档的主引用。

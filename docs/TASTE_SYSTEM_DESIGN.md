@@ -1307,6 +1307,38 @@ build 前置规则已经落地：
 
 当前 generated data 仍是旁路样例，不接 UI / runtime。未来 runtime adapter 必须作为单独任务设计和实现，并继续保留 `zhCN` / `notes` 不作为机制主键的边界。
 
+#### v0.0.7.10 generated feedback data 结构校验
+
+v0.0.7.10 已实现第一版 `scripts/content/validateGeneratedFeedbackData.js`，用于校验 `data/generated/feedbackTexts.generated.json` 的结构稳定性。它是 build 输出后的安全检查，不接 runtime，不替代 `validateFeedbackSheet`，也不让 `core/feedbackEngine.js` 读取 generated data。
+
+当前命令：
+
+```bash
+node scripts/content/validateGeneratedFeedbackData.js data/generated/feedbackTexts.generated.json
+```
+
+第一版校验范围：
+
+- 顶层结构：JSON 合法、顶层 object、`schemaVersion`、`generatedFrom`、`textsById`、`textsByTag`、`textsByScene`、`metadata`。
+- metadata：`readonly === true`、`sourceType === "generated"`、`stableIdRequired === true`，当前 `affectsRuntime` 如存在应为 `false`。
+- `textsById`：key 与 `item.textId` 一致，`textId` / `feedbackTag` / `scene` 存在，`zhCN` 字段存在，`enabled` 是 boolean，`minScore` / `maxScore` 是 number 或 `null`，启用文案 `zhCN` 不为空。
+- indexes：`textsByTag` / `textsByScene` 不指向不存在的 `textId`，且每条 text 都出现在对应的 tag / scene 分组。
+- stable ID 边界：`textId` / `feedbackTag` / index key 不应使用中文显示文案；`zhCN` 只是显示文案，不参与主键判断；`notes` 只是制作人备注，不参与机制判断。
+
+如果 future generated data 增加新索引，校验器应优先按通用 index 一致性扩展，不应为某个具体 `textId`、某条中文文案、某个 golden sample 或具体审美判断写例外。
+
+当前 validate / build / generated validate 链路：
+
+```text
+feedback_texts.sample.csv
+↓ validateFeedbackSheet
+feedbackTexts.generated.json
+↓ validateGeneratedFeedbackData
+future runtime adapter
+```
+
+`validateGeneratedFeedbackData` 不自动修改 JSON，不自动修改 CSV，不自动修文案，不调参数，不接管 `feedbackEngine`。它只保护 generated data 的结构和索引，为后续 runtime adapter 阶段降低风险。
+
 允许的通用逻辑：
 
 - 按 `textId` 建索引。
