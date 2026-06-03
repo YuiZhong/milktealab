@@ -1,5 +1,38 @@
 # 版本记录
 
+## bugfix: extract tasteSummaryEngine
+
+本轮为 v0.0.6.1 冻结前 bugfix，不创建 tag。
+
+### 本轮新增 / 更新
+
+- 新增 `core/tasteSummaryEngine.js`
+  - 承载 `tasteSummary` 构建逻辑。
+  - 保持 `values` / `tags` / `risks` / `evidence` / `metadata` 输出结构不变。
+  - 保持 evidence 中 `sourceId` / `ratio` / `contribution` / `metric` / `sourceLayer` / `sourceType` 字段兼容。
+- 更新 `core/tasteJudge.js`
+  - 移除 `tasteSummary` 构建细节。
+  - `tasteJudge.js` 回到调度层，只调用 `tasteSummary` 构建入口并暴露 `result.tasteSummary`。
+- 更新 `index.html`
+  - 在 `core/tasteJudge.js` 之前加载 `core/tasteSummaryEngine.js`。
+  - 页面版本号仍为 v0.0.6.1。
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 v0.0.6.1 main 已追加 `tasteSummaryEngine` 拆分 bugfix commit。
+  - 记录 `v0.0.6.1-candidate` 仍未创建。
+
+### 阶段边界
+
+- 不改 `tasteSummary` 输出结构。
+- 不改评分、事故、饮品类型、feedback、`result.type` 或 golden expected。
+- 不做 `textureSummary` / `flavorSummary`。
+- 不做 severity / `scoreMultiplier`。
+- 本轮不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- UI smoke：页面版本、普通试喝、事故路径、`result.tasteSummary` 和 console 状态通过。
+
 ## v0.0.6.1
 
 本轮新增 `tasteSummary` 只读地基，作为 v0.0.6.x 三层属性 / profile / summary 的第一刀 runtime 地基。
