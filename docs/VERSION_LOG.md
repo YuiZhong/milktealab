@@ -1,5 +1,25 @@
 # 版本记录
 
+## docs: sync v0.0.6.2 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.6.2-candidate`。
+  - 记录 candidate 指向 `787bd02defb70d0bbcd557ae96c1475188e5973c`。
+  - 记录 `v0.0.6.2-candidate` 已冻结并推送。
+  - 记录 v0.0.6.2 已完成 `tasteSummary` golden 结构断言。
+  - 记录当前未推进 v0.0.6.3。
+
+### 阶段边界
+
+- runner 已支持 `tasteSummary` expected。
+- 少量 golden samples 已补 `tasteSummary` 结构 expected。
+- Golden samples 当前为 20/20 passed。
+- 未创建正式 tag `v0.0.6.2`。
+
 ## v0.0.6.2
 
 本轮新增 `tasteSummary` golden 结构断言，保护 v0.0.6.1 已暴露的只读 `result.tasteSummary`。
