@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.6.5
+
+本轮为 `flavorSummary` docs / schema 复核，不实现 runtime。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/TASTE_SYSTEM_DESIGN.md`
+  - 补充 `flavorSummary` 初始 `values` / `tags` / `risks` / `evidence` / `metadata` 建议结构。
+  - 明确 `flavorSummary` 是中间理解层，不是最终判定层。
+  - 明确初版 runtime 可以先只读输出，不接管最终结果。
+  - 补充 flavor 层后续应通过 relation matrix / rules / candidate 进入最终调度。
+- 更新 `docs/TASTE_ENGINE_ARCHITECTURE.md`
+  - 补充 flavor 层反 if 地狱边界。
+  - 明确代码负责汇总和调度，数据负责风味关系、强身份、饮品适配和阈值。
+  - 明确 v0.0.6.x 先稳定 summary / candidate 结构，v0.0.7.x 再集中调参。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 v0.0.6.5 本地实现状态。
+  - 记录当前未创建 `v0.0.6.5-candidate`。
+
+### 阶段边界
+
+- 不改 runtime。
+- 不改 data / runner / golden expected。
+- 不改评分、事故、饮品类型、feedback 或 `result.type`。
+- 不做 `flavorSummary` runtime。
+- 不做 flavor relation matrix runtime。
+- 不做 severity / `scoreMultiplier`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+
 ## docs: sync v0.0.6.4 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

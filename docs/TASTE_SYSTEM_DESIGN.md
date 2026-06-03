@@ -310,7 +310,57 @@ v0.0.6.0 不追求立刻调好味觉数值，也不立刻实现完整 severity /
 - `dominantFlavor`
 - `supportingFlavors`
 
+其中 `primaryFlavorIds`、`flavorFamilies`、`dominantFlavor` 和 `supportingFlavors` 更偏身份索引，`flavorIntensity`、`aromaPressure`、`beverageFit`、`dessertFit`、`savoryRisk`、`noveltyRisk`、`identityConflictRisk` 更偏数值指标。第一版 runtime 不必一次实现全部字段，也不应把这些字段锁成永久全集；字段可以随 profile 和 golden 安全网逐步增删。
+
+`flavorSummary.tags` 可表达风味家族、主导风味、强身份材料、饮品适配度、料理感 / 蔬菜感 / 甜品感、争议风味压力和风味身份冲突方向。例如：
+
+- `fruit_family`
+- `tea_aroma`
+- `dessert_family`
+- `dominant:durian`
+- `strong_identity`
+- `controversial_aroma`
+- `beverage_friendly`
+- `culinary_signal`
+- `vegetable_signal`
+
+`flavorSummary.risks` 可表达候选风险信号，例如：
+
+- `aroma_pressure_risk`
+- `savory_leak_risk`
+- `novelty_pressure_risk`
+- `identity_conflict_risk`
+- `low_beverage_fit_risk`
+
 `flavorSummary` 用来区分“酸甜相近但风味身份不同”的原料，例如橙子 vs 西红柿。榴莲、咖啡、茶香、甜品感、蔬菜感、料理感、热带水果等都属于 flavor identity 问题。flavor 层最容易形成 if 地狱，后续应走 `flavorProfile` -> `flavorSummary` -> relation rules / matrix，而不是在 analyzer 里继续写标签组合 if。
+
+`flavorSummary` 仍然是中间理解层，不是最终判定层。它不直接决定事故、饮品类型、评分或反馈；初版 runtime 可以先只读输出 `flavorSummary`，不接管最终结果。后续要判断“榴莲 + 咖啡”“茶香 + 蔬菜感”“甜品粉体 + 水果酸”等关系时，应由 relation matrix、规则表或 candidate 层读取 `flavorSummary` 后再进入最终调度。
+
+`flavorSummary.evidence` 应优先记录每个风味指标来自哪里，例如：
+
+```js
+{
+  metric: "aromaPressure",
+  sourceLayer: "flavor",
+  sourceType: "ingredient",
+  sourceId: "fruit_durian",
+  ratio: 30,
+  contribution: 18
+}
+```
+
+`flavorSummary.metadata` 至少应预留：
+
+```js
+{
+  schemaVersion: "flavorSummary.v0.0.6.x",
+  sourceLayer: "flavor",
+  weightsEnabled: false,
+  readonly: true
+}
+```
+
+代码只负责汇总、查表、计算关系分和调度候选；风味家族关系、强身份压制、饮品适配阈值和反馈标签应放在数据表、规则表或 relation matrix 中。
 
 ### 4.5 evidence 是 v0.0.6.x 的关键
 

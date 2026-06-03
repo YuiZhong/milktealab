@@ -452,6 +452,10 @@ severityLevel / scoreMultiplier / feedbackTags
 - 用规则表判断 conflictPressure 和 severity。
 - analyzer 只负责遍历规则和计算命中，不写具体风味组合判断。
 
+v0.0.6.x 的 flavor 工作应先准备 `flavorProfile` / `flavorSummary` / candidate 的结构，而不是急着把所有风味搭配写进代码。代码负责汇总和调度；数据负责风味家族关系、强身份材料、饮品适配、料理感 / 甜品感 / 蔬菜感阈值、风险标签和反馈标签。v0.0.6.x 可以先让 summary 和 candidate 形状稳定，v0.0.7.x 再集中调权重、阈值、severity 和 `scoreMultiplier`。
+
+`flavorSummary` 第一版如果进入 runtime，应保持只读输出，不直接接管事故、饮品类型、评分或 feedback。最终判断应通过 relation matrix / rule table / candidate 层进入 `tasteJudge` 的调度，而不是把 `if 榴莲 + 咖啡`、`if 某 flavor tag + 某 flavor tag` 之类内容判断写进 analyzer。
+
 不是：
 
 ```text
