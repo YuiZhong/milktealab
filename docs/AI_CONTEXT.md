@@ -36,13 +36,16 @@
 3. `docs/VERSION_LOG.md`
    - 版本记录。
    - 用于确认最近完成了哪些 candidate、当前版本状态、哪些变化已经冻结。
-4. `docs/V0_0_7_MECHANISM_TODO.md`
+4. `docs/STABLE_ID_NAMING_GUARDRAIL.md`
+   - 长期 stable ID / 命名 / 审查流程正本。
+   - 涉及 ID、tag、ruleId、sampleId、candidateId、triggerMetric、priorityBand、severityLevel、registry、validator、generated data 的任务，开工前应读取。
+5. `docs/V0_0_7_MECHANISM_TODO.md`
    - v0.0.7.x 机制 / ID / 内容管线债务正本。
    - 涉及 v0.0.7.x 机制、ID、severity、threshold、validator、generated data、partial / active 接管的任务，开工前应读取。
-5. `data/goldenSamples.js`
+6. `data/goldenSamples.js`
    - 当前 golden samples 安全网。
    - 用于理解现有回归样本、ID 等价样本和关键味觉结果基线。
-6. 必要时再读取相关代码入口：
+7. 必要时再读取相关代码入口：
    - `data/ingredients.js`
    - `core/ingredientRegistry.js`
    - `core/tasteContext.js`
@@ -149,8 +152,14 @@
 - 后续 v0.0.7.x 机制相关任务开工前应读取 `docs/V0_0_7_MECHANISM_TODO.md`。
 - 当前未修复债务，只整理 TODO / gate。
 - 当前未改 runtime / data / scripts / golden。
-- 当前未推进 v0.0.7.29。
-- 下一步可考虑：`v0.0.7.29｜validate candidate severity sheet 脚本设计`，或 `v0.0.7.x｜AI 生成 ID 与机制命名审计`，或继续 feedback 文案评审会 / 样例扩充。
+- v0.0.7.29 已新增 `docs/STABLE_ID_NAMING_GUARDRAIL.md`，作为长期 stable ID / 命名 / 审查流程正本。
+- 后续任何阶段涉及 ID / tag / ruleId / sampleId / candidateId / triggerMetric / priorityBand / severityLevel / registry / validator / generated data 的任务，都应读取 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
+- v0.0.7.29 同步更新 `docs/V0_0_7_MECHANISM_TODO.md`，让 v0.0.7.x 阶段 TODO 引用长期正本。
+- 当前未执行实际 ID 审计。
+- 当前未新增 registry / validator。
+- 当前未改变 runtime / data / scripts / golden。
+- 当前未创建 `v0.0.7.29-candidate`。
+- 下一步可考虑：`v0.0.7.29-candidate` 冻结，或 AI 生成 ID 与机制命名 inventory，或 known stable ID source of truth / registry / enum / schema 设计。
 - v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
 - v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
 - v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。

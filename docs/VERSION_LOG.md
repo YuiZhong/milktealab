@@ -1,5 +1,45 @@
 # 版本记录
 
+## v0.0.7.29
+
+本轮新增长期 stable ID / naming guardrail 文档。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/STABLE_ID_NAMING_GUARDRAIL.md`
+  - 定义长期稳定 ID / 命名 / 审查流程正本。
+  - 适用于当前 v0.0.7.x 以及后续 v0.0.8.x、v0.0.9.x 和未来任何涉及 ID / tag / rule / schema / validator / generated data / runtime 接管的任务。
+  - 明确 AI / Codex 批量生成的 ID 不能因为“看起来像 stable ID”就默认正确，英文 ID 不等于好设计。
+  - 定义 ID 层级、草案 ID / sample sheet guardrail、新增 ID / tag 长期流程、ID 审计流程、风险分级、审计输出格式和 source-of-truth 前置条件。
+  - 明确 validator 不得通过 substring / suffix / string pattern 推断合法 ID 集合；若没有 known stable ID source，应先设计 registry / enum / schema。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 明确 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 是长期 ID / 命名 / 审查流程正本。
+  - v0.0.7.x 阶段 TODO 只引用长期正本，不复制完整流程。
+  - 在 gate 表中补充 AI 生成 ID 与机制命名审计、新增 stable ID / feedbackTag / ruleId 进入表格前、validate candidate severity sheet 实现前的长期 guardrail gate。
+- 更新 `AGENTS.md`
+  - 加入 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 作为涉及 ID / tag / ruleId / sampleId / candidateId / triggerMetric / priorityBand / severityLevel / registry / validator / generated data 任务的必读文档。
+- 更新 `docs/AI_CONTEXT.md`
+  - 将 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 加入新对话启动提醒。
+  - 记录 v0.0.7.29 已新增长期 stable ID / naming guardrail。
+
+### 阶段边界
+
+- 本轮只做 docs / permanent ID naming guardrail。
+- 不执行实际 ID 审计。
+- 不重命名任何 ID。
+- 不新增 registry / enum / schema 文件。
+- 不实现 validator。
+- 不新增表格 / JSON / generated data。
+- 不修复 P1 / P2。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports、`index.html`。
+- 不改玩家最终 score、feedback、accident、type 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.28 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。

@@ -8,6 +8,8 @@
 
 本文件不表示这些债务已经解决。后续任务不能把这里的 TODO 当成已完成事实，也不能为了“清债”顺手改 runtime、ID、generated data、golden expected 或文案。
 
+`docs/STABLE_ID_NAMING_GUARDRAIL.md` 是长期稳定 ID / 命名 / 审查流程正本，适用于 v0.0.7.x 以及后续所有阶段。本文档只记录 v0.0.7.x 阶段债务、gate 和 TODO；涉及 ID 审计、validator、generated severity data、partial / active takeover 或新增 stable ID / tag / ruleId 的任务，必须引用长期正本，不在本文档复制完整流程。
+
 ## 1. 当前总体结论
 
 四轮人工 / AI 审计覆盖：
@@ -33,7 +35,9 @@
 
 | Gate | 之前必须完成 |
 |---|---|
-| validate candidate severity sheet 实现前 | known stable ID source of truth / registry / enum / schema 设计 |
+| AI 生成 ID 与机制命名审计开工前 | 已读取 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 并遵守其审计流程 |
+| 新增 stable ID / feedbackTag / ruleId 进入表格前 | 分层确认、语义审查、source-of-truth 确认 |
+| validate candidate severity sheet 实现前 | 已明确 known stable ID source of truth；若无，应先设计 registry / enum / schema |
 | severity generated data build 前 | candidate severity sheet validator |
 | severity shadow 输出前 | generated severity validator / structure check |
 | severity partial takeover 前 | ID 命名审计、golden shadow expected、制作人 review |
@@ -48,7 +52,7 @@
 - 当前状态：v0.0.7.27 已建立 guardrail，但尚未做全量审计。
 - 为什么重要：ID 一旦进入 docs、sample sheet、generated data、golden 或 runtime，会被后续 AI 当成事实来源。
 - 必须在什么时候前解决：正式调参前；`candidate_severity_rules` 进入 generated data 前；severity / threshold partial takeover 前；v0.0.7.x 机制部分 final 收口前。
-- 建议路线：先列出 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 以及 profile / tag / generated sample 中的 draft ID，再检查层级是否混用。
+- 建议路线：按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 的长期审计流程，先列出 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 以及 profile / tag / generated sample 中的 draft ID，再检查层级是否混用。
 - 禁止误处理：不要顺手重命名已有 ID；不要把疑似问题直接改成新事实；需要迁移时单独开任务并保护 runtime、golden、docs 和 generated 引用。
 
 重点检查：
@@ -67,7 +71,7 @@
 - 当前状态：v0.0.7.27 已明确 validator 前置条件，但尚未新增 registry / enum / schema。
 - 为什么重要：validator 是防错层，不能自己变成新的字符串 if 地狱。
 - 必须在什么时候前解决：validate candidate severity sheet 正式实现前；任何 generated severity data build 前。
-- 建议路线：先决定 known stable ID 来源，可选来源包括现有 data / rules 中已登记的 stable ID、统一 ID registry、generated schema、明确 enum / allowed values。
+- 建议路线：先按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 决定 known stable ID 来源，可选来源包括现有 data / rules 中已登记的 stable ID、统一 ID registry、generated schema、明确 enum / allowed values。
 - 禁止误处理：不能写 `inferFromStringPatterns()` 之类从字符串模式反推 known ID 集合；字符串后缀 / substring 只能做 lint / warning。
 
 ### P1-3｜candidate severity sheet validator
@@ -195,13 +199,14 @@ Git candidate = 项目开发版本
 可考虑按以下顺序推进：
 
 1. 冻结本 TODO / audit debt 文档 candidate。
-2. 设计 known stable ID source of truth / registry / enum / schema。
-3. 设计并实现 validate candidate severity sheet。
-4. 建立 generated severity data validator / structure check。
-5. 做 AI 生成 ID 与机制命名审计。
-6. 做 feedbackTag registry / 文案池扩充 / review pack 审核。
-7. 形成 `accidentAnalyzer` legacy 迁移路线和 `drinkStructureAnalyzer` 去中文 Set 计划。
-8. 再考虑 severity shadow / partial takeover。
+2. 读取并遵守 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
+3. 设计 known stable ID source of truth / registry / enum / schema。
+4. 设计并实现 validate candidate severity sheet。
+5. 建立 generated severity data validator / structure check。
+6. 做 AI 生成 ID 与机制命名审计。
+7. 做 feedbackTag registry / 文案池扩充 / review pack 审核。
+8. 形成 `accidentAnalyzer` legacy 迁移路线和 `drinkStructureAnalyzer` 去中文 Set 计划。
+9. 再考虑 severity shadow / partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
@@ -210,6 +215,7 @@ Git candidate = 项目开发版本
 v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 
 - 是否已读取本文件。
+- 是否已读取 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
 - 本任务是否会触碰 P1 gate。
 - 若要实现 validator，是否已有 known stable ID source of truth。
 - 若要 build generated severity data，是否已有 candidate severity sheet validator。
@@ -217,4 +223,3 @@ v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 - 是否会重命名已有 ID；如果会，是否已有迁移计划。
 - 是否会把 sampleId、displayName、`zhCN`、旧 tag 或 ID 字符串前缀当机制事实。
 - 是否会改变玩家最终 score、feedback、accident、type 或 golden expected；如果会，是否有产品理由和 golden 更新计划。
-
