@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.48-candidate`
-- 最新确认 candidate commit：`541acbd3e5707c9f6477b707147e747064572016`
-- `v0.0.7.48-candidate` 已创建并推送成功，指向 `541acbd3e5707c9f6477b707147e747064572016`。
-- main 已 push；工作区应干净。
+- 最新确认 candidate：`v0.0.7.49-candidate`
+- 最新确认 candidate commit：`8aee7f400f70e50a6de09987b12269f28cd44613`
+- `v0.0.7.49-candidate` 已创建并推送成功，指向 `8aee7f400f70e50a6de09987b12269f28cd44613`。
+- main / origin/main 已同步到 `8aee7f400f70e50a6de09987b12269f28cd44613`；工作区应干净。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.48` 未创建。
-- 当前未创建 `v0.0.7.49-candidate`。
+- 正式 tag `v0.0.7.49` 未创建。
+- 当前未推进 `v0.0.7.50`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -92,17 +92,21 @@
 
 - v0.0.7.44 已完成 accidentAnalyzer legacy accident migration decision split。
 - v0.0.7.45 已完成 texture content-specific accident migration target plan。
-- 已确认 future target：
-  - `texture_taro_overload` -> `texture_low_drinkability`
-  - `texture_oreo_overload` -> `texture_low_drinkability`
-  - `texture_topping_overload` -> `texture_solid_overload`
+- 已完成 texture content-specific staged migration 三步：
+
+```text
+texture_taro_overload    -> texture_low_drinkability
+texture_oreo_overload    -> texture_low_drinkability
+texture_topping_overload -> texture_solid_overload
+```
+
 - v0.0.7.46 已完成 `texture_taro_overload` -> `texture_low_drinkability` actual migration。
 - v0.0.7.47 已完成 `texture_oreo_overload` -> `texture_low_drinkability` actual migration。
 - v0.0.7.48 已补充 mechanism ID restraint / display boundary guardrail：机制 ID 应少而稳，不应为单个组合、recipe、golden sample、文案梗、制作人备注或 review pack item 单独创建；玩家展示 `type` / feedback copy 差异不能反向拆分机制 ID。
 - v0.0.7.49 已完成 `texture_topping_overload` -> `texture_solid_overload` actual migration；具体小料名和“吸管体能测试”解释保留在 note / feedback copy，不写进事故 ID。
 - collector / source 文案中若仍引用已迁出的 `texture_taro_overload` / `texture_oreo_overload`，后续 cleanup 前应按 historical / pre-v0.0.7.46 / pre-v0.0.7.47 legacy reference 语气处理，避免误读为 current active runtime ID。
 - collector / source 文案中若仍引用已迁出的 `texture_topping_overload`，后续 cleanup 前应按 historical / pre-v0.0.7.49 legacy reference 语气处理，避免误读为 current active runtime ID。
-- P1-4 仍未解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
+- P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
   - `texture_sediment_overload`
@@ -113,8 +117,8 @@
 
 ### 当前下一步
 
-- 当前下一步可考虑：ChatGPT 二次审查 v0.0.7.49 diff，或冻结 `v0.0.7.49-candidate`，或继续 accidentTypeId source-of-truth / registry / schema 设计。
-- 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / legacy inventory 与三份 migration report，做状态恢复和 P1 TODO 复盘，再决定 `v0.0.7.50`。
+- 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。
 - 不要因为玩家展示不同就拆出新 mechanism ID。

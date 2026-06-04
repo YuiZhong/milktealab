@@ -1,5 +1,23 @@
 # 版本记录
 
+## docs: sync AI_CONTEXT after v0.0.7.49 candidate
+
+本轮只同步 `docs/AI_CONTEXT.md` 当前状态到 `v0.0.7.49-candidate`。
+
+- 最新 candidate：`v0.0.7.49-candidate`
+- candidate commit：`8aee7f400f70e50a6de09987b12269f28cd44613`
+- main / origin/main 已同步到该 commit。
+- golden samples 当前为 `23/23 passed`。
+- 正式 tag `v0.0.7.49` 未创建。
+- 当前未推进 `v0.0.7.50`。
+- 三步 texture content-specific staged migration 已完成：
+  - `texture_taro_overload` -> `texture_low_drinkability`
+  - `texture_oreo_overload` -> `texture_low_drinkability`
+  - `texture_topping_overload` -> `texture_solid_overload`
+- P1-4 broader accidentAnalyzer migration route 仍未解决；source-of-truth / registry / schema / validator / generated severity / shadow / partial takeover 仍未完成。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、golden expected 或 reports。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.49
 
 本轮执行 `texture_topping_overload` -> `texture_solid_overload` actual migration，小步只迁 topping overload loop。
