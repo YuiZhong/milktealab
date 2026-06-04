@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.7.33
+
+本轮新增 feedbackTag registry / candidate tag mapping design。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`
+  - 设计 runtime feedbackTag、generated feedbackTag、summary candidate / risk tag、rule tag、sample draft tag 与 future reviewed feedbackTag 的分层边界。
+  - 覆盖 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty`、`bubble_conflict`、`acid_accident`、`greasy_overload`、`straw_disaster` 等重点 tag 的当前观察层级和风险。
+  - 明确 candidate / risk tag 不能自动成为 runtime feedbackTag；rule tag 不能自动成为 feedbackTag；sample draft tag 不能进入 registry / generated / runtime。
+  - 明确 `bubble_conflict` 不能泛化到 generic flavor identity conflict，`aroma_pressure` 当前不能作为 runtime 文案池 feedbackTag 使用。
+  - 设计 future feedbackTag registry / schema / mapping check / producer review report 的文件形态，但本轮不创建。
+- 更新 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`
+  - 承接 v0.0.7.33 feedbackTag mapping design。
+  - 明确 feedbackTag source-of-truth 不能只从 collector observed values 或同名字符串推导。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 P1-5 / P1-7 连接到 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`。
+  - 明确该设计只是 mapping guardrail，不表示 P1 已解决。
+
+### 阶段边界
+
+- 本轮只做 docs / mapping design。
+- 不新增 feedbackTag registry / schema / enum。
+- 不实现 validator。
+- 不新增 generated data。
+- 不修改 feedbackTexts / generated feedback / content_sheets / reports。
+- 不改 runtime、data、scripts、golden expected。
+- 不把任何 candidate / risk / sample-only tag 注册为 runtime feedbackTag。
+- 不推进 generated feedback partial / active takeover。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.32
 
 本轮新增 stable ID source collector / registry design proof。

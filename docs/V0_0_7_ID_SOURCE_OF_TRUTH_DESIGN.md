@@ -188,7 +188,7 @@
 来自 `docs/V0_0_7_ID_INVENTORY.md` 的当前结论应这样进入 source-of-truth 设计：
 
 - `aroma_pressure` / `identity_conflict` / `low_beverage_fit` / `savory_identity` / `texture_sediment` / `novelty` 当前不能自动当 runtime `feedbackTag`。它们属于 candidate / risk tag 或 generated sample tag，需要 feedbackTag registry / mapping review。
-- `bubble_conflict` 是 stable `feedbackTag`，但语义偏气泡 + 厚重 / 口感冲突追评，不能泛化到 flavor identity conflict。
+- `bubble_conflict` 当前可观察为 runtime `feedbackTag`，但尚未完成 future reviewed / stable 语义审计；它语义偏气泡 + 厚重 / 口感冲突追评，不能泛化到 flavor identity conflict。后续若被 severity / threshold / generated partial takeover 引用，必须先经过 feedbackTag mapping review / producer review。
 - `dairy_fat_overload` 当前 keep，但需要 notes 固定其在 candidate severity sample 中的 `sourceLayer=texture`、`sourceSummary=textureSummary`、`triggerMetric=fatLoad` 语义。
 - `flavor_durian_overload`、`texture_taro_overload`、`texture_oreo_overload`、`texture_topping_overload`、`industrial_creamer_overload`、`taste_strong_flavor_overload` 等 legacy / ingredient-specific ID 需要 migration candidate 或 mechanism review，不应现在重命名。
 - candidate severity draft ruleIds 不能进入 stable registry。
@@ -233,7 +233,29 @@ collector 输出边界：
 
 后续如果继续推进，应先进行人工 review / registry design / validator design，再决定哪些 observed values 可以进入明确 source-of-truth。collector 只能提示 drift，例如 runtime 出现新 observed ID 或 future registry 中的 ID 无引用；它不做裁决，也不自动同步。
 
-## 9. 本轮不做的事
+## 9. v0.0.7.33 feedbackTag mapping design
+
+v0.0.7.33 新增 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`，用于拆清 feedbackTag registry / candidate tag mapping 边界。
+
+该设计承接本文件的 source-of-truth 原则：
+
+- `feedbackTag` 的 future source-of-truth 不能只来自 collector observed values。
+- 同一个 tag 字符串出现在 runtime pool、generated sample、summary candidate、rule 或 disabled draft row 中，不代表它们是同一层系统身份。
+- candidate / risk tag 不能自动成为 runtime feedbackTag。
+- rule tag 不能自动成为 feedbackTag。
+- sample draft tag 不能进入 registry、generated data 或 runtime。
+- generated feedbackTag 不能自动 active 接管 runtime。
+- old runtime feedbackTag 进入新 severity / threshold / generated partial 路线前，仍需要语义 notes / mapping review / 制作人审核。
+
+特别保留以下边界：
+
+- `aroma_pressure` 当前不是 runtime 文案池 feedbackTag；如需未来使用，必须先走 feedbackTag source-of-truth / mapping review。
+- `bubble_conflict` 当前可观察为 runtime feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评，不应泛化到 generic flavor identity conflict。
+- `acid_accident`、`greasy_overload`、`straw_disaster` 等 same-string cross-layer tag 必须逐层确认，不能靠字符串相同合并。
+
+该设计不是 registry，不是 schema，不是 enum，不是 validator，也不是 generated data。本轮不提升任何 tag 状态，也不把 P1-5 / P1-7 写成已解决。
+
+## 10. 本轮不做的事
 
 - 不新增实际 registry / enum / schema 文件。
 - 不实现 validator。

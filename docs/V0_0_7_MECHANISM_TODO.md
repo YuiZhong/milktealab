@@ -41,6 +41,7 @@
 | severity generated data build 前 | candidate severity sheet validator |
 | severity shadow 输出前 | generated severity validator / structure check |
 | severity partial takeover 前 | ID 命名审计、golden shadow expected、制作人 review |
+| severity / threshold 表引用 `feedbackTag` 前 | 已读取 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`，并确认引用的是 reviewed feedbackTag source-of-truth，不是 candidate / risk tag |
 | generated feedback partial takeover 前 | feedbackTag registry / 文案池扩充 / review pack 审核 |
 | v0.0.7.x 机制 final 收口前 | AI 生成 ID 与机制命名审计、accidentAnalyzer 迁移路线、drinkStructureAnalyzer 去中文 Set 计划 |
 
@@ -105,10 +106,10 @@
 ### P1-5｜summaryCandidateEngine candidate tag / feedbackTags registry 边界
 
 - 风险：readonly candidate / 风险语义可能被误当 runtime feedbackTag。
-- 当前状态：`core/summaryCandidateEngine.js` 中存在 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty` 等 candidate / feedbackTags。
+- 当前状态：`core/summaryCandidateEngine.js` 中存在 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty` 等 candidate / feedbackTags。v0.0.7.33 已新增 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md` 记录 mapping 边界，但尚未新增 registry / validator，也未解决该 P1。
 - 为什么重要：这些 tag 当前服务 readonly candidate / 风险语义，不应自动等同于 runtime 文案池 tag。
 - 必须在什么时候前处理：任何 validator / generated data 消费这些 tag 前；generated feedback partial / active 接管前；severity / threshold 使用 `feedbackTag` 字段前。
-- 建议路线：建立 candidate tag 与 runtime feedbackTag 的 registry / mapping 边界，明确哪些只是风险语义，哪些已进入文案池。
+- 建议路线：以 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md` 为边界，后续再做 feedbackTag source-of-truth / mapping review / registry 设计，明确哪些只是风险语义，哪些可以经过 review 进入文案池。
 - 禁止误处理：不要把 `aroma_pressure` 这类风险名直接写入 runtime `feedbackTag` 字段。
 
 ### P1-6｜drinkStructureAnalyzer 中文显示名 Set 残留
@@ -123,10 +124,10 @@
 ### P1-7｜feedbackTag 语义边界与文案池扩容
 
 - 风险：旧 feedbackTag 语义可能误导新机制，薄文案池也会影响 generated feedback active 接管。
-- 当前状态：`bubble_conflict` 是稳定 feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评；`aroma_pressure` 当前不是 runtime 文案池 feedbackTag；多个 generated feedback tags 只有 1 条文案。
+- 当前状态：`bubble_conflict` 是当前可观察的 runtime feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评；`aroma_pressure` 当前不是 runtime 文案池 feedbackTag；多个 generated feedback tags 只有 1 条文案。v0.0.7.33 已把这些边界写入 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`，但尚未完成 registry / 文案池扩容 / active 接管前 review。
 - 为什么重要：feedback partial / active 接管前，文案池和 tag 语义必须经过制作人 review。
 - 必须在什么时候前处理：generated feedback partial / active 接管前；`feedbackTag` 被 severity / threshold 表引用前。
-- 建议路线：先用 review pack 做制作人审核，再决定扩写、拆分或弃用哪些 tag。
+- 建议路线：先用 mapping design 和 review pack 做制作人审核，再决定扩写、拆分、保留 candidate-only 或弃用哪些 tag。
 - 禁止误处理：不要把 `bubble_conflict` 泛化到 flavor identity conflict；不要把 `aroma_pressure` 当已注册 runtime 文案池 tag。
 
 ### P1-8｜v0.0.7.x 机制部分 final 审计
