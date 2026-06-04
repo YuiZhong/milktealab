@@ -1,5 +1,16 @@
 # 版本记录
 
+## docs: sync AI_CONTEXT after v0.0.7.45
+
+本轮只同步 `docs/AI_CONTEXT.md` 的当前状态快照。
+
+- 当前最新 candidate 更新为 `v0.0.7.45-candidate`。
+- 补充 v0.0.7.30-v0.0.7.45 的压缩接续摘要。
+- 明确下一步是 `v0.0.7.46｜texture_taro_overload -> texture_low_drinkability actual migration`。
+- 本轮不改 runtime、data、scripts、content_sheets、generated data 或 golden expected。
+- 本轮不推进 v0.0.7.46。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.45
 
 本轮新增 texture content-specific accident migration target plan。

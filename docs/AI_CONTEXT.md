@@ -64,286 +64,62 @@
 
 【可删】截至当前文档：
 
-- 最新 candidate：`v0.0.7.29-candidate`
-- 最新 candidate commit：`5b7e759ca19589744a3699a74376d8ac0236a7ab`
-- `v0.0.7.29-candidate` 已冻结并推送，指向 `5b7e759ca19589744a3699a74376d8ac0236a7ab`；正式 tag `v0.0.7.29` 未创建。
-- 最新 main：本轮 docs 状态同步 commit 提交后以 `git log -1` 为准。
-- main 在 candidate 后另有 AGENTS UI smoke guardrail commit：`86123d62fea02fe05e8f5970927fbdc8077506e1`。该 commit 是工作守则更新，不属于 `v0.0.6.12-candidate` 实现内容。
-- main 与 origin/main 应同步，工作区应干净。
+- 最新确认 candidate：`v0.0.7.45-candidate`
+- 最新确认 candidate commit：`aa4deb6f20877a7ba2db6cb56ee11cb1ba43fdb3`
+- `v0.0.7.45-candidate` 已创建并推送成功，指向 `aa4deb6f20877a7ba2db6cb56ee11cb1ba43fdb3`。
+- main 已 push；工作区应干净。
 - golden samples 当前应为 `20/20 passed`。
-- v0.0.7.15 已完成 generated feedback data runtime loading docs / schema。
-- v0.0.7.15 已比较 JSON fetch / JS data module / Node-only 三种方案，推荐方向是 generated JS data module，更贴合当前同步 script 架构。
-- v0.0.7.15 已明确 runtime 不读 CSV / Google Sheets / 人类编辑源。
-- v0.0.7.16 已完成 generated feedback JS data module build 输出。
-- `scripts/content/buildFeedbackData.js` 已支持根据 `--out` 后缀输出 `.json` 或 `.js`；JSON 输出保持兼容，JS 输出 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`。
-- 新增 `data/generated/feedbackTexts.generated.js`，作为 browser runtime 未来加载源。
-- 新增 `scripts/content/checkGeneratedFeedbackDataModule.js`，用于校验 generated JS 全局对象、只读边界、中文可读性、metadata 和 generated JSON 对齐关系。
-- v0.0.7.17 已完成 generated feedback JS module 的 browser loading。
-- `index.html` 已加载 `data/generated/feedbackTexts.generated.js?v=00717`。
-- generated JS module script URL 200，页面资源清单确认作为 script 加载。
-- Browser evaluate 隔离环境无法直接读取 `window.MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`，global 直读未完整确认；这是工具限制，已如实记录。
-- 可见 UI smoke 通过：普通试喝和事故路径正常，页面无可见 `undefined` / `[object Object]`。
-- console 监听受工具限制，未完整确认。
-- v0.0.7.18 已完成 generated feedback JS module browser loading 结构保护。
-- 新增 `scripts/content/checkGeneratedFeedbackBrowserLoad.js`，用 Node `vm` 模拟 browser-like global 环境，确认 generated JS module 可挂载 `MILK_TEA_LAB_GENERATED_FEEDBACK_TEXTS`，且不依赖 CSV / Google Sheets / `feedbackEngine`。
-- browser-like loading check 通过，generated global object 可读。
-- v0.0.7.19 已完成 feedbackEngine shadow mode 只读实现。
-- `core/feedbackEngine.js` 已新增 generated feedback shadow 构建能力；`result.generatedFeedbackShadow` 只用于观察 / debug。
-- shadow mode 当前不影响玩家最终 feedback，不替换 `result.feedback`，不改变 `feedbackTags`。
-- 当前未做 partial / active 接管。
-- v0.0.7.20 已完成 `generatedFeedbackShadow` golden 结构断言。
-- golden runner 已支持 `generatedFeedbackShadow` expected，少量代表样本已补充 shadow expected。
-- shadow mode 当前仍不影响玩家最终 feedback。
-- 当前未做 partial / active 接管。
-- v0.0.7.21 已完成 feedback shadow 评审包 / 对比输出设计。
-- v0.0.7.22 已实现 feedback shadow review pack 第一版脚本，本地 commit 后以 `git log -1` 为准。
-- 新增 `scripts/content/buildFeedbackShadowReviewPack.js`，用于输出制作人可读的 legacy final output vs generated shadow candidates 对比报告。
-- 新增 `reports/feedbackShadowReview.sample.md`，覆盖 `classic_milk_tea`、`extreme_lemon_accident`、`straw_resistance_accident` 三个代表样本。
-- 用户已反馈第一版 report 信息太多、字段不够友好；当前已调整为制作人速读版 + 机器详情两层结构。
-- report 前半部分优先展示旧反馈、新候选文案、场景匹配和制作人审核区；metadata、resultIds、matchReason、fallbackReason、affectsFinalFeedback、scoreChanged / typeChanged / feedbackTagsChanged 等机器字段降级到“机器详情（一般不用制作人细看）”。
-- 制作人审核区当前使用数字状态码：1 keep / 2 revise / 3 reject / 4 pending；常见问题标签使用中文自然语言；英文 key 保留并补中文解释，例如 `reviewStatus（审核状态）`、`preferredTextId（偏好文案ID）`、`issueTags（问题标签）`、`suggestedRewrite（建议改写）`、`producerComment（制作人备注）`。
-- `tooAI` / `tooHarsh` / `notFunny` / `wrongTrigger` 等程序化独立字段不再作为制作人主填写项，已合并为 `issueTags`。
-- review pack 只是制作人评审材料，不是 runtime data，不自动接管 generated feedback，不自动改文案，不自动改 golden expected。
-- v0.0.7.25 已完成 severity / threshold 样例表 schema。
-- v0.0.7.25 已补充 validator 边界：future `accidentTypeId` 合法性应依赖 known stable ID registry / enum / schema，不应只靠 `includes` / `endsWith` 这类字符串后缀或 substring 猜测。
-- 当前未改变玩家最终 feedback。
-- 当前仍未做 partial / active 接管。
-- v0.0.7.23 已完成 feedback 多候选评审包压力测试，且 `v0.0.7.23-candidate` 已冻结并推送。
-- 少量扩充 `content_sheets/examples/feedback_texts.sample.csv` / `.json` 的 sample feedback candidates，并重新生成 `data/generated/feedbackTexts.generated.json` / `.js` 与 `reports/feedbackShadowReview.sample.md`。
-- `scripts/content/checkFeedbackRuntimeAdapter.js` 已从固定数量断言调整为结构 / 至少覆盖 / stable ID 断言，避免后续内容扩充时因候选数量变化误判失败。
-- review pack 当前采用“制作人审核区集中在前，机器详情集中放附录”的两段式结构，避免制作人反复跳过机器字段。
-- review pack 当前将制作人审核字段放在每条候选文案下方；整组层面单独提供 `needsNewText`、`preferredTextId` 和整体 `producerComment`。
-- `reviewStatus` 填写提示当前使用选项在前、数字在后的格式，例如 keep 保留=1、revise 修改=2、reject 不要=3、pending 待定=4。
-- 当前 report 需要用户查看多候选情况下是否好用，重点确认多条候选显示是否清楚、制作人审核区是否好填、状态码 + 中文问题标签是否够用、机器详情是否不碍眼。
-- 当前未改变玩家最终 feedback。
-- 当前仍未做 partial / active 接管。
-- v0.0.7.24 已完成 severity / threshold 表格化路线设计，本地 commit 后以 `git log -1` 为准。
-- 本轮只做 docs / schema / route design；当前仍未实现 severity sheet、threshold sheet、validator、build script、generated data、runtime takeover 或 active scoring 接管。
-- 当前未改变玩家最终 feedback，未改变 final score、accident、drinkType、feedbackTags、`result.type` 或 golden expected。
-- `v0.0.7.24-candidate` 已冻结并推送。
-- v0.0.7.25 已完成 severity / threshold 样例表 schema。
-- 当前未创建 severity sheet / threshold sheet / validator / build script / generated data。
-- 当前未实现 runtime 接管。
-- 当前未改变玩家最终 score / feedback / accident / `result.type`。
-- 当前未改 golden expected。
-- `v0.0.7.25-candidate` 已冻结并推送。
-- v0.0.7.26 已新增 severity / threshold 样例表 CSV / JSON 草案，本地 commit 后以 `git log -1` 为准。
-- 新增 `content_sheets/examples/candidate_severity_rules.sample.csv` 和 `.json`，当前只是人类编辑源草案，不接 runtime，不生成 `data/generated`。
-- v0.0.7.26 样例表已做结构去歧义小修：奶脂行 `ruleId` 使用 texture 方向；`aroma_pressure` / `bubble_conflict` 不再填入 candidate severity sample 的 `feedbackTag` 字段，只在 notes 中说明后续需随 registry / schema 确认。
-- 当前未实现 severity validator / build / generated data。
-- 当前未实现 runtime 接管。
-- 当前未改变玩家最终 score / feedback / accident / `result.type`。
-- 当前未改 golden expected。
-- Golden samples 当前应为 20/20 passed。
-- `v0.0.7.26-candidate` 已冻结并推送。
-- v0.0.7.27 已完成 AI 生成 ID / 机制命名 guardrail，本地 commit 后以 `git log -1` 为准。
-- 当前未重命名现有 ID。
-- 当前未做全量 ID 审计。
-- 当前未新增 registry / validator。
-- 当前未改变玩家最终 score / feedback / accident / `result.type`。
-- 当前未改 golden expected。
-- `v0.0.7.27-candidate` 已冻结并推送。
-- v0.0.7.27 已明确 AI / Codex 生成 ID 不能因为“看起来像 stable ID”就默认正确；英文 ID 不等于好设计。
-- v0.0.7.27 已明确 `sampleId`、`accidentTypeId`、`ruleId`、`candidateId`、`feedbackTag`、`severityLevel`、`sourceLayer` / `sourceSummary` / `triggerMetric` 等层级边界。
-- v0.0.7.27 已明确不能仅根据 ID 字符串前缀推断 `sourceLayer`；历史 ID 名称不能覆盖 `sourceLayer` / `sourceSummary` / `triggerMetric`。
-- v0.0.7.27 已明确 future validator 合法性应以 known stable ID registry / enum / schema 为准，字符串后缀 / substring 检查只能作为 warning / lint hint。
-- v0.0.7.27 已明确 future validator 实现前必须先明确 known stable ID registry / enum / schema 等 source of truth；如果没有稳定 ID 来源，应先设计 registry / enum / schema，不能用字符串后缀 / substring 猜合法性。
-- v0.0.7.28 已新增 `docs/V0_0_7_MECHANISM_TODO.md`，作为 v0.0.7.x 机制 / ID / 内容管线债务正本。
-- 后续 v0.0.7.x 机制相关任务开工前应读取 `docs/V0_0_7_MECHANISM_TODO.md`。
-- 当前未修复债务，只整理 TODO / gate。
-- 当前未改 runtime / data / scripts / golden。
-- v0.0.7.29 已新增 `docs/STABLE_ID_NAMING_GUARDRAIL.md`，作为长期 stable ID / 命名 / 审查流程正本。
-- 后续任何阶段涉及 ID / tag / ruleId / sampleId / candidateId / triggerMetric / priorityBand / severityLevel / registry / validator / generated data 的任务，都应读取 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
-- v0.0.7.29 同步更新 `docs/V0_0_7_MECHANISM_TODO.md`，让 v0.0.7.x 阶段 TODO 引用长期正本。
-- 当前未执行实际 ID 审计。
-- 当前未新增 registry / validator。
-- 当前未改变 runtime / data / scripts / golden。
-- 当前未推进 v0.0.7.30。
-- 下一步可考虑：`v0.0.7.30｜AI 生成 ID 与机制命名 inventory`，或 `v0.0.7.30｜known stable ID source of truth / registry / enum / schema 设计`，或继续 feedback 文案评审 / 样例扩充。
-- v0.0.5.10-v0.0.5.39 已完成 ingredientId / stable ID 收口主线的一系列小步：ingredientId / registry / context 双轨 / profile ref 查询 / ruleRefHelper / accidentRuleEngine / golden samples ID 输入 / proportionSegmentRuleEngine / combinationAnalyzer / ingredientGroupHelper / drinkType rules ref 入口 / 保存结构双轨 / ID 等价 golden samples 补强 / ingredientGroups refs 主定义迁移 / accidentRules 小批 refs 迁移 / accidentTypeId 双轨地基 / golden runner accidentTypeId 断言 / drinkTypeId 双轨地基 / golden runner drinkTypeId 断言 / audienceIds 双轨地基 / golden runner audience ID 断言 / proportionSegmentRules refs 小批迁移 / combinationRules refs 小批迁移 / drinkTypeRules refs 小批迁移 / texture accident 去显示文案判断小修 / feedbackEngine 去 notes.includes 小修 / 保存 result 历史快照边界小修 / outcomeTypeId 兜底地基 / analyzer 本地显示名查询小修 / golden runner feedbackTag 断言 / 柠檬牛奶冲突 special case ID/ref 主路径小修 / inferAudience 植脂奶与榴莲 ID/ref 主路径小修。
-- v0.0.5.40 final 全量深审未发现进入 v0.0.6.x 前必须处理的 P0；v0.0.5.x 可基本认为已完成“现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基”阶段。
-- v0.0.5.x 已完成的主要地基包括：`ingredientId`、规则 refs、`accidentTypeId`、`drinkTypeId`、`audienceIds`、`outcomeTypeId`、`feedbackTags`、golden runner ID 断言、save/result 历史快照边界、runtime cache-busting 工作流。
-- 剩余 P1 遗留项不阻塞进入 v0.0.6.x：profile 表仍以 canonical name 作为表 key；`outcomeTypeId` fallback 未来应由 summary / outcome 规则接管；feedback `notes.includes` 仅作为 legacy fallback；分类计数 / category label 可由 v0.0.6.x categoryId / group summary 接管。
-- v0.0.5.20 新增保存结构标准化入口；新保存配方写 ingredientId + name + ratio，旧 name-only / alias / ID-only 存档载入时通过 registry 即时补齐。本轮不做复杂 localStorage migration，不批量改写旧数据，不等同于正式存档系统。
-- v0.0.5.21 新增 5 个 ID 等价 golden samples：清爽水果茶、气泡奶油冲突、奶脂过载、吸管阻力和高榴莲猎奇事故。旧 name samples 保持不变，不批量迁移，不改评分、事故、反馈、类型判断、rules 或保存结构。
-- v0.0.5.22 将 `data/synergyRules.js` 的 `ingredientGroups` 主定义从旧中文 name arrays 迁移为 stable ingredientId / refs；旧中文 name arrays 保留兼容导出，不改 analyzer 调用方式、评分、事故、反馈、类型判断、保存结构或 golden samples expected。
-- v0.0.5.23 将 `data/accidentRules.js` 中柠檬 / 榴莲事故规则新增 `ingredientId` 字段，保留旧中文 `ingredient` 字段兼容；不改阈值、score、cap、tags、notes、type 或 golden samples expected。
-- v0.0.5.24 为事故结果新增 `accidentTypeId` + `type` / displayName 双轨地基；旧中文 `type` 保留为 displayName / legacy 字段，`tasteJudge` 在主事故路径暴露 `result.accidentTypeId`，`accidentRuleEngine` / `structureAccidentRuleEngine` 只透传 `accidentTypeId`，不承载业务判断。本轮不做 drinkTypeId，不改 golden expected，不做 golden runner accidentTypeId 断言。
-- v0.0.5.25 让 `scripts/runGoldenSamples.js` 支持 `accidentTypeIdIncludes` / `accidentTypeIdIncludesAny` / `forbiddenAccidentTypeIdIncludes`，并给少量已有关键事故 golden samples 补充 `accidentTypeId` expected；旧中文 `typeIncludes` / `forbiddenTypeIncludes` 保留，不改 core、不改评分、不改事故触发、不改反馈文案或 `result.type`。
-- v0.0.5.26 为普通饮品类型新增 `drinkTypeId` + `type` / displayName 双轨地基；普通饮品类型 result 暴露 `drinkTypeId`，旧中文 `type` 保留；`inferType` 保持旧返回值兼容，`inferTypeResult` 提供 `{ type, drinkTypeId }` 结构化返回能力；事故路径继续使用 `accidentTypeId`，没有被 `drinkTypeId` 洗白。本轮不改 golden samples，不做 golden runner `drinkTypeId` 断言。
-- v0.0.5.27 让 `scripts/runGoldenSamples.js` 支持 `drinkTypeIdIncludes` / `drinkTypeIdIncludesAny` / `forbiddenDrinkTypeIdIncludes`，并给少量已有普通饮品 golden samples 补充 `drinkTypeId` expected；旧中文 `typeIncludes` / `typeIncludesAny` / `forbiddenTypeIncludes` 保留，既有 `accidentTypeId` 断言保留。本轮不改 core、不改评分、不改事故触发、不改反馈文案、不改 `result.type`、不改 `drinkTypeId` 生成逻辑、不改 golden score expected。
-- v0.0.5.28 为现有 audience 结果新增 stable `audienceIds`，并保留旧中文 `audience` 数组作为 UI 展示 / legacy 字段；`inferAudience` 保持旧返回值兼容，`inferAudienceResult` 提供 `{ audience, audienceIds }` 结构化返回能力，`result` 新增 `audienceIds`。本轮不做 `customerTypeIds`、正式顾客系统或经营系统，不改评分、反馈文案、饮品类型、事故判断或 golden expected。
-- v0.0.5.29 让 `scripts/runGoldenSamples.js` 支持 `audienceIdIncludes` / `audienceIdIncludesAny` / `forbiddenAudienceIdIncludes`，并给少量已有稳定 golden samples 补充 `audienceIds` expected；旧中文 type 断言、既有 `accidentTypeId` 断言、既有 `drinkTypeId` 断言和反馈文案断言保留。本轮不改 core、不改 UI、不改保存结构、不改评分、反馈文案、饮品类型、事故判断或 golden score expected。
-- v0.0.5.30 将 `data/proportionSegmentRules.js` 中现有柠檬 / 榴莲比例段规则补充 `ingredientId` / `ingredientIds` 双轨；旧中文 `ingredient` / `names` 保留兼容和可读性。本轮不改 core、不改阈值、score、add、notes、tags、反馈文案或 golden expected。
-- v0.0.5.31 将 `data/combinationRules.js` 中现有 good / bad 具体原料组合规则补充 `ingredientIds` 双轨；旧中文 `names` 保留兼容和可读性。本轮不改组合语义、不改 score、add、note、规则顺序或 golden expected；`multiIngredientRules.teaMix` 基于 category，本轮不迁。
-- v0.0.5.32 将 `data/drinkTypeRules.js` 中现有中文原料条件补充 `ingredientId` / `anyIngredientIds` / `allIngredientIds` 双轨；旧中文 `ingredient` / `anyIngredient` / `allIngredients` 保留兼容和可读性。本轮不改 core、不改规则顺序、type、drinkTypeId、判断条件或 golden expected。
-- v0.0.5.33 修正 `core/accidentAnalyzer.js` 中 texture accident 去重 / 判断主路径，优先使用 `accidentTypeId` / `tags`；中文 `type` / `note` 仅保留 legacy fallback。本轮不改事故触发条件、评分、cap、add、note、type、accidentTypeId、tags、反馈文案或 golden expected。
-- v0.0.5.34 修正 `core/feedbackEngine.js` 中通过中文 note 片段选择反馈标签的主路径；反馈选择优先使用结构化 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback。`tasteJudge` 汇总并传递 `feedbackTags`，result 暴露 `feedbackTags`。本轮不改评分、事故、饮品类型、反馈文案风格或 golden expected。
-- v0.0.5.35 完成保存 result / 历史快照边界小修；旧保存 result / 损坏 result 缺 `feedback` / `audience` / `attr` 时渲染安全降级。明确保存的中文 `type` / `audience` / `feedback` 是历史展示快照，未来统计、图鉴、顾客偏好和经营报表应依赖 `accidentTypeId` / `drinkTypeId` / `audienceIds` / `feedbackTags` 等结构化 ID；玩家未来自定义饮品名 `customName` / `title` 只作为显示名，不作为 `recipeId` / `drinkTypeId` / `recipeFamilyId` / `recipeVersionId`。本轮不做正式存档系统、不改保存交互、不做 localStorage migration、不改 golden expected。
-- v0.0.5.35 main 追加 cache-busting bugfix：刷新 `index.html` 中 `data/feedbackTexts.js`、`core/feedbackEngine.js`、`core/tasteJudge.js`、`ui/render.js` 的 runtime script query string，修复旧缓存 `feedbackEngine` 缺少 `getFeedbackTags` 导致点击试喝时报错的问题。本轮不改业务逻辑、不改 core / data / scripts / ui / storage 文件、不改页面版本号。
-- v0.0.5.35-candidate UI smoke 已确认普通试喝、保存、载入、事故路径正常，console 无业务 JS error。
-- v0.0.5.36 已完成 `outcomeTypeId` 兜底地基，且 `v0.0.5.36-candidate` 已冻结并推送；当最终 `result.type` 既没有 `accidentTypeId`、也没有 `drinkTypeId` 时，补充稳定 `outcomeTypeId`；当前覆盖 `口感冲突` / `口感事故` / `奶脂过载` / `猎奇实验品` / `工业奶茶` / `实验特调` 等显示文案兜底结果。本轮不改事故触发、饮品类型判断、评分、反馈文案或 golden score expected。
-- v0.0.5.36 让 golden runner 支持 `outcomeTypeIdIncludes` / `outcomeTypeIdIncludesAny` / `forbiddenOutcomeTypeIdIncludes`，并给 `bubble_cream_conflict` / `bubble_cream_conflict_id_equivalence` 补充 `outcomeTypeIdIncludes: ["taste_conflict"]`；旧中文 `typeIncludesAny` 保留为显示回归保护。
-- v0.0.5.37 已完成 analyzer 本地显示名比例查询改为 ID/ref 主路径，且 `v0.0.5.37-candidate` 已冻结并推送；`core/accidentAnalyzer.js` / `core/proportionAnalyzer.js` / `core/drinkTypeAnalyzer.js` 中的低风险本地比例查询优先使用 ingredientId / ref / group helper，中文 name 仍保留展示或 legacy fallback。本轮不改评分、阈值、事故触发、饮品类型、反馈文案或 golden expected，不做三层 summary。
-- v0.0.5.38 已完成 golden runner 支持 feedbackTag 断言；`scripts/runGoldenSamples.js` 支持 `feedbackTagIncludes` / `feedbackTagIncludesAny` / `forbiddenFeedbackTagIncludes`，少量稳定 golden samples 已补 feedbackTag expected，旧 `feedbackIncludesAny` 文案回归断言保留。本轮不改 core、feedback 文案、评分、事故、饮品类型或 golden score expected。
-- v0.0.5.39 已完成柠檬牛奶冲突 special case 与 `inferAudience` 显示名判断尾巴小修，且 `v0.0.5.39-candidate` 已冻结并推送。
-- 柠檬牛奶冲突 special case 已优先使用 `ingredientIds` / refs 判断 `fruit_lemon` + `dairy_milk`，中文 `rule.names` 仅保留 legacy fallback。
-- v0.0.5.39 同步完成 `inferAudience` 中植脂奶 / 榴莲判断的 ID/ref 主路径小修；`inferAudience` / `inferAudienceResult` 保持旧返回值兼容，可选接收 context，优先通过 `dairy_non_dairy_creamer` / `fruit_durian` 判断，中文 names 仅保留 legacy fallback。本轮不做 `customerTypeIds`、正式顾客系统或经营系统，不改 audience / audienceIds 输出。
-- docs 已补充长期原则：玩家可见显示文案不应作为长期系统主键；现有系统中已参与判断 / 测试 / 保存 / 展示的显示文本应逐步 ID 化，未来新增系统应从第一天使用 stable ID + displayName / text。中文只是当前最常见的显示文案例子，不是唯一风险来源。
-- docs 已补充路线重定义：v0.0.5.x 是现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基阶段；v0.0.6.x 是三层属性 / profile / summary 地基阶段；v0.0.7.x 是 severity / 数值调优 / golden samples 扩容阶段。
-- docs 已补充经营层原则：自由实验室阶段不硬限制原料数量；未来经营阶段可通过出杯时间、制作复杂度、员工负担、成本、备料压力、顾客等待和高峰期吞吐风险等软成本限制过度复杂配方。这属于 operation / production / economy 层，不应作为当前味觉层硬惩罚。
-- v0.0.5.31 已完成 `combinationRules` refs 小批迁移，17 条 good / bad 具体组合已补 `ingredientIds`，旧中文 `names` 仍保留，`multiIngredientRules.teaMix` 未迁移。
-- v0.0.5.32 已完成 `drinkTypeRules` refs 小批迁移，`drinkTypeRules` 已补 `ingredientId` / `anyIngredientIds` / `allIngredientIds`，旧中文 `ingredient` / `anyIngredient` / `allIngredients` 仍保留。
-- v0.0.5.33 已完成 texture accident 去中文判断小修，texture accident 判断主路径优先使用 `accidentTypeId` / `tags`，中文 `type` / `note` 仅保留 legacy fallback。
-- v0.0.5.34 已完成 feedbackEngine 去 notes.includes 小修，feedbackEngine 主路径优先使用 `tags` / `feedbackTags`，中文 `notes.includes` 仅保留 legacy fallback，`tasteJudge` 已汇总并传递 `feedbackTags`，result 已暴露 `feedbackTags`。
-- v0.0.5.35 已完成保存 result / 历史快照边界小修，旧 result 缺字段时渲染安全兜底，保存 result 中文字段明确为历史展示快照，未来机制依赖结构化 ID。
-- v0.0.5.35 main 已追加 runtime script cache version bugfix，修复旧 `feedbackEngine` 缓存导致 `getFeedbackTags is not a function` 的前端 runtime 错误。
-- 当前未创建正式 tag `v0.0.5.40`，未创建正式 tag `v0.0.6.0`。
-- v0.0.6.0 已完成 docs-only 三层属性 / profile / summary schema 设计；本轮不实现运行逻辑，不改 data / core / scripts / index.html。
-- `AGENTS.md` 已同步 v0.0.6.x 工作守则：当前阶段是三层属性 / profile / summary 地基，profile / summary 是中间理解层，不是最终判定；完整 severity / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
-- v0.0.6.1 已完成 `tasteSummary` 只读地基。
-- `core/tasteSummaryEngine.js` 已独立承载 `tasteSummary` 构建逻辑，`core/tasteJudge.js` 只调用 summary 构建入口，保持调度层职责。
-- `result.tasteSummary` 已暴露，结构为 `values` / `tags` / `risks` / `evidence` / `metadata`，但不接管评分、事故、饮品类型、feedback 或 `result.type`。
-- v0.0.6.2 已完成本地实现：`scripts/runGoldenSamples.js` 新增 `tasteSummary` 结构断言能力，少量 golden samples 增加 `tasteSummary` expected，用于保护 v0.0.6.1 暴露的只读 summary 结构。
-- v0.0.6.2 只保护 summary 结构，不锁死具体 values 数值，不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
-- v0.0.6.3 已完成并冻结 candidate：新增 `core/textureSummaryEngine.js`，`result.textureSummary` 已暴露，结构为 `values` / `tags` / `risks` / `evidence` / `metadata`。
-- `textureSummary` 汇总现有 `textureProfile` effects 与 `drinkStructure` 结构指标，仅作为只读中间理解层，不接管评分、事故、饮品类型、feedback 或 `result.type`。
-- v0.0.6.3 candidate 冻结验收说明：Codex 浏览器自动化 console 监听受工具限制，无法完整捕获 console；未进行人工 Console 复查。普通试喝路径和事故试喝路径已通过可见 UI smoke，页面无 `undefined` / `[object Object]` 可见异常。
-- v0.0.6.4 已完成并冻结 candidate：`scripts/runGoldenSamples.js` 新增 `textureSummary` 结构断言能力，少量 golden samples 增加 `textureSummary` expected，用于保护 v0.0.6.3 暴露的只读 summary 结构。
-- v0.0.6.4 只保护 summary 结构，不锁死具体 values 数值，不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
-- v0.0.6.5 已完成并冻结 candidate：补充 `flavorSummary` 初始 `values` / `tags` / `risks` / `evidence` / `metadata` 建议结构，并强调 flavor 层后续应通过 relation matrix / rules / candidate 进入最终调度。
-- v0.0.6.5 当时未实现 `flavorSummary` runtime，未新增 `core/flavorSummaryEngine.js`，未改 `tasteJudge.js`、runner 或 golden samples。
-- v0.0.6.6 已完成并冻结 candidate：完成 `flavorProfile` / `flavorSummary` 数据来源轻量评估。
-- v0.0.6.6 当时确认仓库缺少独立 `flavorProfile` 数据来源；现有 `ingredientTasteProfiles` / `ingredientTextureProfiles` / `combinationRules` / `synergyRules` 只能作为辅助线索，不能当作风味身份主来源。
-- `flavorSummary` 后续不应依赖中文原料名、玩家可见 displayName 或 UI category 反推系统身份；应优先读取以 stable `ingredientId` 为主引用的 flavorProfile 数据。
-- v0.0.6.7 已完成并冻结 candidate：完成 `ingredientFlavorProfiles` 数据地基。
-- 当前已新增独立 `flavorProfile` 数据来源：`data/ingredientFlavorProfiles.js`。该表覆盖当前所有已有 ingredientId，以 stable `ingredientId` 为主 key，不使用中文 displayName 作为 profile key。
-- v0.0.6.7 当时仍未实现 `flavorSummary` runtime，未新增 `core/flavorSummaryEngine.js`，未改 `tasteJudge.js`、runner 或 golden samples。
-- v0.0.6.8 已完成并冻结 candidate：完成 `flavorSummary` 只读地基。
-- `core/flavorSummaryEngine.js` 已新增，读取 `ingredientFlavorProfiles` 并输出 `values` / `tags` / `risks` / `evidence` / `metadata` 结构。
-- `result.flavorSummary` 已暴露，但不影响评分、事故、饮品类型、feedback 或 `result.type`。
-- `tasteSummary`、`textureSummary`、`flavorSummary` 均已进入 result，且都不影响最终判定。
-- v0.0.6.9 已完成并冻结 candidate：完成 `flavorSummary` golden 结构断言。
-- runner 已支持 `flavorSummary` expected；少量 golden samples 已增加 `flavorSummary` expected，用于保护 `values` / `tags` / `risks` / `evidence` / `metadata` 结构。
-- v0.0.6.9 不锁死具体 values 数值，不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
-- `tasteSummary`、`textureSummary`、`flavorSummary` 均已进入 result，且均已有 golden 结构保护。
-- golden samples 当前应为 `20/20 passed`。
-- v0.0.6.10 已完成三层 summary 中段复盘，且 `v0.0.6.10-candidate` 已冻结并推送。
-- 本轮复盘确认：`tasteSummary`、`textureSummary`、`flavorSummary` 都是只读中间理解层，已经进入 result，且均有 golden 结构保护；它们仍不接管评分、事故、饮品类型、feedback 或 `result.type`。
-- v0.0.6.11 已完成 summary -> candidate docs / schema，且 `v0.0.6.11-candidate` 已冻结并推送。
-- 本轮设计了 candidate 通用结构和 `accident` / `outcome` / `drinkType` / `feedback` candidateType 边界；candidate 仍是只读中间层，不接管最终判定。
-- v0.0.6.12 已完成 `summaryCandidates` 只读地基，且 `v0.0.6.12-candidate` 已冻结并推送。
-- `result.summaryCandidates` 已暴露；candidate 是 summary 到最终 result 的只读中间层，不影响评分、事故、饮品类型、feedback、`result.type`、`audience`、`drinkTypeId`、`accidentTypeId`、`outcomeTypeId` 或 `feedbackTags`。
-- v0.0.6.13 已完成 `summaryCandidates` golden 结构断言，且 `v0.0.6.13-candidate` 已冻结并推送。
-- runner 已支持 `summaryCandidates` expected；少量 golden samples 已增加 `summaryCandidates` expected，用于保护 candidate 容器结构、metadata 和代表候选字段。
-- v0.0.6.13 不锁死具体 `triggerValue` 或 `thresholds` 数值，不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
-- 三层 summary 与 `summaryCandidates` 均已进入 result，且均已有 golden 结构保护。
-- v0.0.6.14 已完成 candidate priority shell docs / schema，本地 commit 后以 `git log -1` 为准。
-- candidate priority shell 被定义为 `summaryCandidates` 到最终 result 之间的只读中间观察层；当前未实现 priority shell runtime，未新增 priority engine，未接管评分、事故、饮品类型、feedback 或 `result.type`。
-- `priorityBand` 只表达粗粒度候选分组，不等于最终 severity；`severityHint` 只是提示，不是 `severityLevel`、扣分档或 `scoreMultiplier`。
-- 具体参数、阈值、severity、`scoreMultiplier`、候选排序策略和 golden expected 调整仍留到 v0.0.7.x 或明确调参任务。
-- v0.0.6.14 已完成 candidate priority shell docs / schema，且 `v0.0.6.14-candidate` 已冻结并推送。
-- 当前仍未实现 priority shell runtime，仍未新增 priority engine。
-- v0.0.6.15 已完成 `candidatePriorityShell` 只读地基，本地 commit 后以 `git log -1` 为准。
-- `result.candidatePriorityShell` 已暴露；priority shell 是 `summaryCandidates` 到未来最终调度之间的只读中间观察层，不影响评分、事故、饮品类型、feedback、`result.type`、`audience`、`drinkTypeId`、`accidentTypeId`、`outcomeTypeId` 或 `feedbackTags`。
-- v0.0.6.15 不做最终调度 / priority 接管 / severity / `scoreMultiplier`，不改 golden expected。
-- v0.0.6.15 已完成 `candidatePriorityShell` 只读地基，且 `v0.0.6.15-candidate` 已冻结并推送。
-- `candidatePriorityShell` 已进入 result，但不影响最终判定。
-- v0.0.6.16 已完成 `candidatePriorityShell` golden 结构断言，本地 commit 后以 `git log -1` 为准。
-- runner 已支持 `candidatePriorityShell` expected；少量 golden samples 已增加 `candidatePriorityShell` expected，用于保护 priority shell 容器结构、metadata、priority band 和代表候选字段。
-- v0.0.6.16 只新增测试安全网，不改 runtime、core、`index.html` 或 `candidatePriorityShellEngine`，不改评分、事故、饮品类型、feedback、`result.type` 或 golden score expected。
-- v0.0.6.16 不做最终调度 / priority 接管 / severity / `scoreMultiplier`，不锁死具体排序数值、severity 数值或 `scoreMultiplier`。
-- v0.0.6.16 已完成 `candidatePriorityShell` golden 结构断言，且 `v0.0.6.16-candidate` 已冻结并推送。
-- 三层 summary、`summaryCandidates`、`candidatePriorityShell` 均已进入 result，且均已有 golden 结构保护。
-- 本轮复盘确认：三层 summary、`summaryCandidates`、`candidatePriorityShell` 均已进入 `result`，且均已有 golden 结构保护。
-- 当前仍未让新系统接管最终判定；评分、事故、饮品类型、feedback、`result.type` 和 golden score expected 仍由现有主链路保护。
-- v0.0.6.17 已完成 v0.0.6.x 后半段收口复盘，且 `v0.0.6.17-candidate` 已冻结并推送。
-- v0.0.6.18 已完成 v0.0.6.x final 收口审计，且 `v0.0.6.18-candidate` 已冻结并推送。
-- final 审计结论：P0：无。可以进入 v0.0.6.x final candidate 冻结流程。
-- final 审计结论：P1：无。进入 v0.0.7.x 前不需要再补系统地基。
-- P2 是可留到 v0.0.7.x 或更后的方向，包括更丰富 golden 覆盖、flavor relation matrix / candidate relation matrix、表格化内容管线、更多 candidate 类型（例如 `audience` / `operation` / `customerPreference`）、更细的 profile / tag / metadata 扩展、多语言 / 内容管理管线，以及更完整的调参、内容管理和数据审计。
-- v0.0.6.x 系统地基已完成 final 收口审计；v0.0.7.x 规划开始。
-- v0.0.7.x 主要目标是参数、标签、阈值、severity、`scoreMultiplier`、golden expected 有意识调整和表格化内容管线。
-- v0.0.7.0 已完成 v0.0.7.x 调参路线与表格化内容管线边界设计，且 `v0.0.7.0-candidate` 已冻结并推送。
-- v0.0.7.1 已完成表格化内容管线 docs / schema，且 `v0.0.7.1-candidate` 已冻结并推送。
-- 当前仍未实现 runtime 导入 / runtime adapter；CSV / JSON 样例、validator、build script 和 generated data 已按 v0.0.7.4-v0.0.7.9 小步建立。
-- v0.0.7.1 只设计未来 CSV / Excel / Google Sheets / JSON 工作流边界、stable ID 主键原则、校验层和代表 schema；不改 data、runner、golden expected 或 runtime。
-- v0.0.7.2 已完成 feedback 文案表格化 schema docs，且 `v0.0.7.2-candidate` 已冻结并推送。
-- v0.0.7.2 只细化未来 `feedback_texts` 表格字段、校验规则、现有 `feedbackEngine` / `feedbackTexts` 边界和后续小步路线；当前未实现表格化内容管线，未新增 CSV / JSON / generated data / validate script / build script，未改 runtime、data、runner 或 golden expected。
-- v0.0.7.3 已完成调参阶段反 if guardrail，且 `v0.0.7.3-candidate` 已冻结并推送。
-- v0.0.7.x 后续实现任务必须自查是否新增内容 if、是否锁死具体数值、是否为了某个 golden sample 临时硬编码、是否绕过表格化内容管线、是否让 `displayName` / 中文文案成为主键，以及是否影响评分、事故、饮品类型、feedback 或 `result.type`。
-- v0.0.7.4 已新增 feedback_texts 样例表格 / JSON 草案，且 `v0.0.7.4-candidate` 已冻结并推送。
-- `content_sheets/examples/feedback_texts.sample.csv` 与 `content_sheets/examples/feedback_texts.sample.json` 是非 runtime 样例，不替代 `data/feedbackTexts.js`。
-- `content_sheets/examples/feedback_texts.sample.csv` 为 UTF-8 with BOM；用户已从文件夹直接打开当前 repo CSV，确认中文正常、列正确分开、表格可读。Excel 最近文件缓存不作为验收依据。
-- v0.0.7.5 已完成 validate feedback sheet 脚本设计，且 `v0.0.7.5-candidate` 已冻结并推送。
-- v0.0.7.6 已完成 validate feedback sheet 第一版脚本，本地 commit 后以 `git log -1` 为准。
-- `scripts/content/validateFeedbackSheet.js` 当前可校验 `content_sheets/examples/feedback_texts.sample.csv` 或命令行显式传入的 CSV 文件。
-- 第一版 validator 检查 UTF-8 with BOM、CSV parser 可读性、完整表头、列数错位、未闭合引号、必填字段、`textId` 唯一性、启用行 `zhCN`、`scene` / `tone` / `enabled` 枚举、score 范围和 optional stable ID 基础格式。
-- validator 是内容管线安全层，不承载机制判断；不根据 `zhCN` / 中文片段 / `displayName` / golden sample / 具体原料组合写例外，不自动修改 CSV，不自动改文案，不调参数。
-- validator 已通过 sample CSV，Errors 0；warnings 为人工审核提醒。
-- v0.0.7.7 已落地用户人工修订后的 `feedback_texts` 样例内容，本地 commit 后以 `git log -1` 为准。
-- 本轮使用用户从 Google Sheets 导出的 CSV：`/Users/yui/工作文件/奶茶实验室/文案表/样例内容制作人修订0603 - feedback_texts.sample.csv`。
-- `content_sheets/examples/feedback_texts.sample.csv` 已按项目稳定字段顺序写回并保持 UTF-8 with BOM；`content_sheets/examples/feedback_texts.sample.json` 已从同一份 CSV 同步更新并保持中文可读。
-- v0.0.7.7 是内容样例更新，不接 runtime，不改 `data/feedbackTexts.js`，不改 `core/feedbackEngine.js`，不改评分、事故、饮品类型、feedback runtime、`result.type` 或 golden expected。
-- `v0.0.7.7-candidate` 已冻结并推送。
-- v0.0.7.8 已完成 feedback sheet build script 设计，本地 commit 后以 `git log -1` 为准。
-- build 设计边界：未来 `buildFeedbackData` 只读取已通过 `validateFeedbackSheet` 的 feedback sheet，把人类编辑源转换成 runtime 可读 generated data；它不承载机制判断、不自动改文案、不调参数、不接管 `feedbackEngine`。
-- generated feedback data 设计方向是以 stable `textId` 建索引，并按 `feedbackTag` / `scene` 生成分组；`zhCN` 仍是显示文案，不是主键；`notes` 仍是制作人备注，不参与 runtime 选择。
-- `v0.0.7.8-candidate` 已冻结并推送。
-- v0.0.7.9 已实现 feedback sheet build script 第一版，本地 commit 后以 `git log -1` 为准。
-- 新增 `scripts/content/buildFeedbackData.js`，当前命令为 `node scripts/content/buildFeedbackData.js content_sheets/examples/feedback_texts.sample.csv --out data/generated/feedbackTexts.generated.json`。
-- 新增 `data/generated/feedbackTexts.generated.json`，由 sample CSV 生成，以 stable `textId` 建 `textsById`，并按 `feedbackTag` / `scene` 生成分组。
-- build 依赖 `scripts/content/validateFeedbackSheet.js`：validator Errors 非 0 时停止；Warnings 可继续但必须报告数量。
-- generated JSON 当前把 score 空值转为 `null`，把 optional stable ID 空值转为 `null`，把 `enabled` 转为 boolean。
-- generated data 当前仍是旁路输出，不接 runtime，不替代 `data/feedbackTexts.js`，不接管 `core/feedbackEngine.js`。
-- `v0.0.7.9-candidate` 已冻结并推送。
-- v0.0.7.10 已完成 generated feedback data 结构校验脚本，本地 commit 后以 `git log -1` 为准。
-- 新增 `scripts/content/validateGeneratedFeedbackData.js`，当前命令为 `node scripts/content/validateGeneratedFeedbackData.js data/generated/feedbackTexts.generated.json`。
-- 第一版 generated validator 检查 generated JSON 顶层结构、`textsById`、`textsByTag`、`textsByScene`、`metadata`、索引一致性和 stable ID / display text 边界。
-- generated validator 不承载机制判断，不自动修改 JSON / CSV，不自动修文案，不调参数，不接管 `core/feedbackEngine.js`。
-- generated validator 当前通过 `data/generated/feedbackTexts.generated.json`，Errors 0，Warnings 0。
-- `v0.0.7.10-candidate` 已冻结并推送。
-- v0.0.7.11 已完成 feedback runtime adapter docs / schema，本地 commit 后以 `git log -1` 为准。
-- adapter 设计边界：未来只读取 generated data，不读取 CSV / Google Sheets；只提供只读文案候选，不承载机制判断，不直接决定评分、事故、饮品类型、`result.type` 或最终 feedback。
-- adapter API 草案包括按 `textId`、`feedbackTag`、`scene` 和通用 filters 查询；filters 应使用 stable ID / enum / 通用数值区间，`zhCN` / notes / displayName 不作为 filter 主键。
-- fallback 策略：generated data 缺失或不可用时旧 `data/feedbackTexts.js` / `feedbackEngine` 仍可工作；generated data 校验失败时不应静默使用坏数据，应明确错误 / fallback 报告。
-- `v0.0.7.11-candidate` 已冻结并推送。
-- v0.0.7.12 已完成 feedback runtime adapter 只读实现，本地 commit 后以 `git log -1` 为准。
-- 新增 `core/feedbackRuntimeAdapter.js`，提供 `createFeedbackRuntimeAdapter(generatedFeedbackData)`，并支持按 `textId` / `feedbackTag` / `scene` 查询、通用 enabled / stable ID / score range 过滤和 metadata 查询。
-- 新增 `scripts/content/checkFeedbackRuntimeAdapter.js`，用于验证 adapter 查询能力和 invalid data 不可用状态。
-- adapter 当前只接收 generated feedback data object，不读取 CSV / Google Sheets / `content_sheets`，不自己跑 validate / build，不修复 generated data。
-- adapter 当前不接 `core/feedbackEngine.js`，不影响玩家最终 feedback，不修改 `result.feedback` / `feedbackTags` / score / accident / drinkType / `result.type`。
-- `v0.0.7.12-candidate` 已冻结并推送。
-- 当前仍未实现 `feedbackEngine` 接入。
-- 当前未改 generated feedback data。
-- v0.0.7.13 已完成 feedback runtime adapter 结构保护，本地 commit 后以 `git log -1` 为准。
-- 本轮强化 `scripts/content/checkFeedbackRuntimeAdapter.js`，覆盖 metadata、stable ID 查询、tag / scene 查询、`includeDisabled`、通用 filters、只读返回对象、源 generated data 不被污染和 invalid data unavailable 状态。
-- v0.0.7.13 不改 adapter 本体，不接 `feedbackEngine`，不改 generated feedback data，不改变玩家最终 feedback。
-- `v0.0.7.13-candidate` 已冻结并推送。
-- 当前未推进 v0.0.7.14。
-- v0.0.7.14 已完成 feedbackEngine 旁路读取 generated data docs / schema，本地 commit 后以 `git log -1` 为准。
-- 当前未实现 runtime 接入。
-- 当前未改变玩家最终 feedback。
-- `v0.0.7.14-candidate` 已冻结并推送。
-- 当前未推进 v0.0.7.15。
-- v0.0.7.15 已完成 generated feedback data runtime loading docs / schema，本地 commit 后以 `git log -1` 为准。
-- `v0.0.7.15-candidate` 已冻结并推送。
-- v0.0.7.16 已完成 generated feedback JS data module build 输出，本地 commit 后以 `git log -1` 为准。
-- 当前仍未让 `index.html` 加载 generated JS。
-- 当前仍未实现 `feedbackEngine` 接入。
-- 当前未创建 `v0.0.7.16-candidate`。
-- 路径标准化尚未处理；当前真实工作仓库路径为 `/Users/yui/Documents/vibecoding/奶茶实验室`，路径体检 / 标准化可后续作为单独 housekeeping 任务处理，不属于 `v0.0.6.18-candidate`。
-- 下一步可考虑 `v0.0.7.16-candidate` 冻结、`v0.0.7.17｜generated feedback JS module 加载 docs / smoke 设计`、`v0.0.7.17｜index.html 只加载 generated feedback JS module，不接 feedbackEngine`，或继续 feedback 文案评审会 / 样例扩充。不要把下一步写成已经决定，不要为了“干净”批量迁移全部规则表，也不要为未来尚不存在系统提前造空架子。
-- v0.0.6.x 术语边界：后续优先使用“三层属性 / 三层 profile / 三层 summary”，不要简单写“三层判定”，避免误解为只有 taste / texture / flavor 三层优先级。三层属性负责描述饮品的中间理解层，profile / summary 不是最终判定；事故优先级、severity、score、反馈、经营成本等属于基于 summary 的后续判定层。
-- v0.0.6.x 初期应优先定义 schema 与 summary，`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重都应允许后续增删，不要写死在 analyzer if 中。
-- v0.0.6.x 不需要立刻实现完整权重系统，但 profile / summary / rule / candidate 的 schema 不应堵死未来 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等扩展；完整 `severity` / `scoreMultiplier` / 大规模调参留到 v0.0.7.x。
-- 不只原料有属性：组合规则、事故规则、反馈规则、结果候选也应逐步拥有结构化 metadata，例如 `sourceLayer`、`triggerMetric`、`threshold`、`feedbackTags`、`outcomeTypeId`、`priorityBand`、`severityHint`。数据负责“判什么”，代码负责“怎么汇总 / 调度”。
-- v0.0.6.0 schema 正本记录在 `docs/TASTE_SYSTEM_DESIGN.md`：三层 summary 通用结构为 `{ values, tags, risks, evidence, metadata }`；`tasteSummary` 负责基础味觉，`textureSummary` 负责物理质地和可饮用性，`flavorSummary` 负责风味身份 / 香气身份。
-- v0.0.6.0 明确 `evidence` 是后续 debug、调参、反馈解释和事故候选生成的关键；第一版不必全量实现 evidence，但 schema 必须预留。
-- v0.0.6.0 明确 candidate 是 summary 到最终 result 的桥；accident / outcome / drinkType / feedback candidate 后续应逐步带 `sourceLayer`、`triggerMetric`、`thresholds`、`evidence`、`priorityBand`、`severityHint` 和 `feedbackTags`。
-- v0.0.6.0 不做完整三层 summary runtime，不重写 analyzer，不做完整 severity / `scoreMultiplier`，不做大规模调参，不做完整 flavor relation matrix，不做经营 / 顾客 / 图鉴 / 成就 / 正式存档系统。
+- `git diff --check` 已通过。
+- 正式 tag `v0.0.7.45` 未创建。
+- 当前未推进 `v0.0.7.46`。
 
----
+### v0.0.7.30-v0.0.7.32 压缩摘要
+
+- 已完成 ID / naming inventory、known stable ID source-of-truth design、stable ID source collector proof。
+- 这些产物仍不是 registry、enum、validator 或 runtime source-of-truth。
+- collector / inventory 只能作为 review / source-of-truth 设计证据，不能把 observed / draft / candidate / sample-only ID 自动升级为 stable ID。
+
+### v0.0.7.33-v0.0.7.43 压缩摘要
+
+- 已完成 feedbackTag mapping design、mechanism review pack gate、review pack proof、drinkStructure displayName inventory、AI-generated ID / tag naming review pack、decision split，以及 `taste_conflict` -> `flavor_identity_conflict` 的实际迁移和后续边界 notes。
+- 当前 `flavor_identity_conflict` 是 outcomeTypeId。
+- `identity_conflict` 仍是 candidate / risk tag，不是 feedbackTag，也不是 outcomeTypeId。
+- `bubble_conflict` 仍是窄语义 runtime observed feedbackTag，语义偏气泡 + 厚重 / 口感冲突追评，不泛化为 generic flavor identity conflict。
+- P1-1 / P1-5 / P1-7 仍未完全解决。
+- source-of-truth / registry / validator 仍未创建。
+
+### v0.0.7.44-v0.0.7.45 压缩摘要
+
+- v0.0.7.44 已完成 accidentAnalyzer legacy accident migration decision split。
+- v0.0.7.45 已完成 texture content-specific accident migration target plan。
+- 已确认 future target：
+  - `texture_taro_overload` -> `texture_low_drinkability`
+  - `texture_oreo_overload` -> `texture_low_drinkability`
+  - `texture_topping_overload` -> `texture_solid_overload`
+- v0.0.7.45 只是 plan / impact audit，不实际迁移 runtime。
+- P1-4 仍未解决。
+- 不新增：
+  - `texture_paste_overload`
+  - `texture_sediment_overload`
+  - `texture_topping_specific_overload`
+  - 任何按原料拆分的 texture accidentTypeId
+- 芋泥 / 奥利奥 / 小料个性应保留在 evidence / notes / feedback copy，不写进 future accidentTypeId。
+- 推荐 staged order：
+  1. 先迁 `texture_taro_overload`
+  2. 再迁 `texture_oreo_overload`
+  3. 最后迁 `texture_topping_overload`
+
+### 当前下一步
+
+- 当前下一步只考虑：`v0.0.7.46｜texture_taro_overload -> texture_low_drinkability actual migration`。
+- 不要回头做 v0.0.7.45。
+- 不要一刀迁三个。
+- 不要迁 Oreo。
+- 不要迁 topping。
+- 不要开 registry。
+- 不要开 validator。
+- 不要做 generated severity build。
+- 不要做 partial / active takeover。
 
 ## 1. 项目定位
 
