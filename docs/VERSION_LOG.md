@@ -1,5 +1,36 @@
 # 版本记录
 
+## v0.0.7.39
+
+本轮新增正式 AI-generated ID / tag naming review pack。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md`
+  - 基于 v0.0.7.38 proof 结构，整理正式 AI / Codex ID / tag / rule / sample / candidate / source 字段命名复审材料。
+  - 覆盖 accidentTypeId、outcomeTypeId、drinkTypeId、feedbackTag / candidate tag / risk tag、textId、sampleId、ruleId / draftId、candidateId、priorityBand、severityHint、severityLevel、sourceLayer / sourceSummary / triggerMetric、profile / structure / displayName dependency。
+  - 人类审核区在前，机器详情在后；包含 Executive Summary、Human Review Zone、ChatGPT Technical Review Zone、Decision Summary、Machine Appendix、Gate Impact 和 What This Report Does NOT Do。
+  - 明确该 report 不是 registry、enum、schema、validator input、generated data 或 runtime source-of-truth。
+  - 明确不批准任何 ID / tag / rule，不允许任何条目进入 runtime / generated data / validator / registry / partial takeover / active takeover。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.39 已形成正式 naming review pack。
+  - 明确 P1-1 仍未解决，仍待用户 / ChatGPT decision、migration plan、source-of-truth / registry design。
+
+### 阶段边界
+
+- 本轮只做 review pack / docs。
+- 不新增 registry / enum / schema / validator。
+- 不新增 generated data。
+- 不改 runtime、data、generated data、content_sheets 或 golden expected。
+- 不重命名任何 ID / tag / rule。
+- 不改变玩家最终 score、feedback、accident、drinkType 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.38
 
 本轮新增 AI-generated ID / tag naming review pack proof。
