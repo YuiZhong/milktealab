@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.7.40
+
+本轮新增 AI-generated ID / tag naming decision split 与 `taste_conflict` 迁移影响审计。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md`
+  - 基于 v0.0.7.39 正式 naming review pack，记录制作人 / ChatGPT decision split。
+  - 将 14 个 review item 拆成已给方向判断、仍需制作人 review、可先处理 notes / source-of-truth、需要 migration plan、暂时 do_not_promote 等类别。
+  - 记录特殊机制保留与泛化迁移边界：榴莲 / 植脂奶可作为未来特殊高记忆点机制，芋泥 / 奥利奥 / 小料过载不应长期按原料拆 `accidentTypeId`。
+  - 记录 `dairy_fat_overload` 的 legacy observed ID 边界：玩家语义可理解为奶脂过载 / 油腻负担，底层优先按 texture / mouthfeel / fatLoad / greasy pressure 理解。
+  - 记录 candidate / risk tag 与 runtime feedbackTag 边界：`aroma_pressure`、`identity_conflict` 等不能直接进入玩家文案选择，`bubble_conflict` 不得泛化为 generic flavor identity conflict。
+  - 只读审计 `taste_conflict` -> `flavor_identity_conflict` 迁移影响面，覆盖 runtime、golden、generated data、content_sheets、adapter check、docs 和 reports 引用。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.40 已形成 decision split / migration impact audit。
+  - 明确 `taste_conflict` -> `flavor_identity_conflict` 是倾向迁移，不是已迁移。
+  - 明确后续若实际迁移，必须单独开任务并同时保护 runtime、golden、generated data、content_sheets、checks、docs 和 reports 引用。
+  - 继续明确 P1-1 / P1-5 / P1-7 仍未完全解决，validator 顺序不能提前。
+
+### 阶段边界
+
+- 本轮只做 docs / report / audit。
+- 不实际迁移 `taste_conflict`。
+- 不新增 registry / enum / schema / validator。
+- 不新增 generated data。
+- 不改 runtime、data、content_sheets 或 golden expected。
+- 不批准任何 ID / tag / rule 进入 registry / validator / generated data / runtime。
+- 不改变玩家最终 score、feedback、accident、drinkType 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.39
 
 本轮新增正式 AI-generated ID / tag naming review pack。
