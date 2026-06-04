@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.46
+
+本轮执行 `texture_taro_overload` -> `texture_low_drinkability` actual migration，小步只迁芋泥分支。
+
+### 本轮新增 / 更新
+
+- 更新 `core/accidentAnalyzer.js`
+  - 将 taro paste ratio > 50 分支输出从 `texture_taro_overload` 改为 `texture_low_drinkability`。
+  - 从 active texture accident set 中移除 `texture_taro_overload`。
+  - 保留原触发条件 `taro > 50`。
+  - 保持原 `score`、`cap`、`type`、`add`、`note` 不变。
+  - 芋泥“糊 / 墙面 / 水泥感”仍保留在玩家可见 note / feedback copy 方向，不写进 accidentTypeId。
+- 更新 `data/goldenSamples.js`
+  - 新增 `taro_low_drinkability_migration`，专门保护 taro branch 输出 `texture_low_drinkability`。
+  - 保留 `solid_taro_low_liquid` 的吸管阻力优先级保护，不把该样本误用为 taro branch 主事故断言。
+  - 不降低既有 score / type / feedback 断言强度。
+- 更新 `index.html`
+  - 页面版本更新到 `v0.0.7.46`。
+  - 更新 `core/accidentAnalyzer.js` cache-busting query。
+- 新增 `reports/textureTaroMigration.v0.0.7.46.md`
+  - 记录 before / after ID、保持不变项、golden sample 变化、未迁 Oreo / topping 的原因，以及旧 ID 的 historical 定位。
+
+### 阶段边界
+
+- 本轮只迁 `texture_taro_overload`。
+- 本轮不迁 `texture_oreo_overload` / `texture_topping_overload`。
+- 本轮不新增 `texture_paste_overload`、`texture_sediment_overload`、`texture_topping_specific_overload` 或任何按原料拆分的 texture accidentTypeId。
+- 本轮不开 registry / enum / schema / validator。
+- 本轮不做 generated severity build / partial takeover / active takeover。
+- 本轮不改 generated feedback data 或 content sheets。
+- P1-4 仍未完全解决，Oreo / topping 仍是 legacy runtime facts。
+- golden samples 21/21 passed。
+- 本轮不 push、不 tag。
+
 ## docs: sync AI_CONTEXT after v0.0.7.45
 
 本轮只同步 `docs/AI_CONTEXT.md` 的当前状态快照。

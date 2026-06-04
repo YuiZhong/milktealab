@@ -6,7 +6,6 @@ const { evaluateAccidentRules } = window.MILK_TEA_LAB_ACCIDENT_RULE_ENGINE;
 const { evaluateStructureAccidentRules } = window.MILK_TEA_LAB_STRUCTURE_ACCIDENT_RULE_ENGINE;
 
 const textureAccidentTypeIds = new Set([
-  "texture_taro_overload",
   "texture_oreo_overload",
   "texture_topping_overload",
   "texture_straw_resistance",
@@ -121,7 +120,7 @@ function detectAccidents(context) {
 
   if (taro > 50) {
     accidents.push({
-      accidentTypeId: "texture_taro_overload",
+      accidentTypeId: "texture_low_drinkability",
       type: "实验特调",
       cap: 52,
       score: -24,

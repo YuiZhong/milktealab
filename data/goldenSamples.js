@@ -702,6 +702,22 @@
         feedbackIncludesAny: ["半固体", "吸管", "物理", "装修", "水泥", "芋泥"]
       },
       notes: "高芋泥低液体支撑样本，应保持低可饮用性方向。"
+    },
+    {
+      id: "taro_low_drinkability_migration",
+      name: "芋泥低可饮用性迁移",
+      cup: [
+        { name: "芋泥", ratio: 55 },
+        { name: "红茶", ratio: 45 }
+      ],
+      expectations: {
+        typeIncludesAny: ["实验特调"],
+        accidentTypeIdIncludes: ["texture_low_drinkability"],
+        scoreMin: 0,
+        scoreMax: 40,
+        feedbackIncludesAny: ["芋泥", "稠度", "不太愿意流动", "吸管"]
+      },
+      notes: "保护 v0.0.7.46 taro actual migration：芋泥证据保留在 note / feedback copy，事故 ID 使用通用低可饮用性。"
     }
   ];
 
