@@ -48,6 +48,7 @@
 | mechanism review pack generator 实现前 | 已用 `reports/mechanismReviewPack.sample.md` 或等价样例 proof 验证 item 结构、provenance、decision summary 和 machine appendix 可审查 |
 | structure / operation / production 规则 active 依赖 `drinkStructureAnalyzer` 前 | 已读取 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，并完成 metadata source-of-truth、shadow compare、review pack 和 staged migration plan |
 | collector / source-of-truth cleanup 或 registry design 前 | historical / pre-version legacy ID 语气已清理，避免把已迁出的 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 误读为 current active runtime ID、registry current ID 或 generated severity input |
+| source-of-truth / registry / schema design 后、validator 实现前 | 已确认 observed ≠ approved；collector output 只作为 drift check / evidence，不是 allowed values generator |
 | v0.0.7.x 机制 final 收口前 | AI 生成 ID 与机制命名审计、accidentAnalyzer 迁移路线、drinkStructureAnalyzer 去中文 Set 计划 |
 
 ## 4. P1 TODO
@@ -74,10 +75,10 @@
 ### P1-2｜known stable ID source of truth / registry / enum / schema
 
 - 风险：future validator 如果没有明确 ID 来源，容易退回 substring / suffix 猜合法性。
-- 当前状态：v0.0.7.27 已明确 validator 前置条件，但尚未新增 registry / enum / schema。
+- 当前状态：v0.0.7.27 已明确 validator 前置条件；v0.0.7.51 已更新 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`，明确 observed ≠ approved、collector output ≠ registry、historical legacy reference ≠ current allowed value，并设计 future registry / schema 形态；但尚未新增 registry / enum / schema，也未实现 validator。
 - 为什么重要：validator 是防错层，不能自己变成新的字符串 if 地狱。
 - 必须在什么时候前解决：validate candidate severity sheet 正式实现前；任何 generated severity data build 前。
-- 建议路线：先按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 决定 known stable ID 来源，可选来源包括现有 data / rules 中已登记的 stable ID、统一 ID registry、generated schema、明确 enum / allowed values。
+- 建议路线：先按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 和 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md` 决定 known stable ID 来源；collector 只能提供 observed evidence / drift check，不能直接生成 allowed values。可选来源包括现有 data / rules 中经 review 的 stable ID、统一 ID registry、generated schema、明确 enum / allowed values。
 - 禁止误处理：不能写 `inferFromStringPatterns()` 之类从字符串模式反推 known ID 集合；字符串后缀 / substring 只能做 lint / warning。
 
 ### P1-3｜candidate severity sheet validator
@@ -245,11 +246,12 @@ Git candidate = 项目开发版本
 20. v0.0.7.49 已完成 staged order 的第三步：`texture_topping_overload` -> `texture_solid_overload` actual migration；保留原 score / cap / type / add / note，并新增 `topping_solid_overload_migration` golden sample 保护 topping branch 新事故 ID。旧 `texture_topping_overload` 只保留为 historical / pre-v0.0.7.49 legacy note。该迁移不表示 P1-4 已解决。
 21. 做 feedbackTag source-of-truth / registry / schema 设计，明确 runtime observed、generated / shadow、candidate / risk、rule tag、sample draft tag 的分层来源。
 22. v0.0.7.50 已清理 collector / source 文案中已迁出旧 ID 的 current-active 语气：`texture_taro_overload` 只能作为 historical / pre-v0.0.7.46 legacy reference，`texture_oreo_overload` 只能作为 historical / pre-v0.0.7.47 legacy reference，`texture_topping_overload` 只能作为 historical / pre-v0.0.7.49 legacy reference；该 cleanup 不创建 registry / schema / validator，也不表示 P1-4 已解决。
-23. 做 accidentTypeId source-of-truth / registry / schema 设计，明确 legacy observed、rule-table observed、structure-rule observed、summary-candidate observed、sample draft、historical legacy reference 和 migration candidate 的分层来源。
-24. 继续 accidentAnalyzer broader migration review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
-25. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-26. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-27. 最后再考虑 severity generated data build、shadow、partial takeover。
+23. v0.0.7.51 已更新 source-of-truth / registry / schema design docs，明确 observed ≠ approved、collector output ≠ registry、runtime observed / golden / generated / sample draft / review pack / historical reference 的分层来源，并把已迁出的三项 texture old IDs 固定为 historical / pre-version legacy reference。该 design 不创建 registry / schema / validator，也不批准任何 ID。
+24. 后续可继续做 reviewed registry shape proposal，把 collector observed evidence、legacy inventory、feedbackTag mapping design 和 review pack decision split 汇总为人工可审的 registry / schema 候选。
+25. 继续 accidentAnalyzer broader migration review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
+26. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+27. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+28. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
@@ -265,6 +267,7 @@ v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 - 若任务会把 Codex 生成内容送入 registry / validator / generated data / runtime / golden，是否已读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md` 并准备 review pack gate。
 - 若任务会批量生成 mechanism review pack，是否已参考 `reports/mechanismReviewPack.sample.md` 的 sample proof，并确认不会把 proof 当 approval / registry / validator input。
 - 若要实现 validator，是否已有 known stable ID source of truth。
+- 是否把 collector observed row、runtime observed ID、golden expected、generated data observation、sample sheet draft 或 review pack item 误当 approved stable ID；如果会，应停止并回到 source-of-truth review。
 - 若要 build generated severity data，是否已有 candidate severity sheet validator。
 - 若要进入 shadow / partial / active，是否已有 generated validator、golden shadow expected 和制作人 review。
 - 是否会重命名已有 ID；如果会，是否已有迁移计划。

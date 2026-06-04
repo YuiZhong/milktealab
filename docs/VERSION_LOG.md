@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.51
+
+本轮执行 source-of-truth / registry / schema design docs，只设计边界，不落地实现。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`
+  - 增加 v0.0.7.51 source-of-truth / registry / schema design update。
+  - 明确 observed ≠ approved。
+  - 明确 runtime observed、golden expected、generated data observation、sample sheet draft、review pack item、collector observed row 都不是 approved stable source。
+  - 明确 collector output 只能作为 observed evidence / drift check，不是 registry、validator input 或 allowed values generator。
+  - 明确已迁出的 `texture_taro_overload`、`texture_oreo_overload`、`texture_topping_overload` 只能作为 historical / pre-version legacy reference，不是 current active runtime ID、current registry ID、generated severity input 或 validator allowed current ID。
+  - 明确 `flavor_durian_overload`、`dairy_fat_overload`、`industrial_creamer_overload`、`taste_strong_flavor_overload`、`texture_straw_resistance` 是 runtime / mechanism review candidate 语境，不是 definite migration target 或 final registry entry。
+  - 明确 feedbackTag / candidate tag 边界，尤其 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty` 不能自动成为 runtime feedbackTag / registry feedbackTag。
+  - 设计 future registry file shape 和 future validator read order，但不创建任何文件。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 v0.0.7.51 source-of-truth design 接入 P1-2 和后续路线。
+  - 继续明确 registry / schema / validator 尚未创建。
+- 更新 `docs/AI_CONTEXT.md`
+  - 只加入极短接续摘要，不写长流水账。
+
+### 阶段边界
+
+- 本轮只做 docs / design。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不生成 stable ID registry。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不新增 accidentTypeId、outcomeTypeId、feedbackTag、ruleId。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- P1-2 仍未完全解决；source-of-truth design 已更新，但 registry / schema / validator 尚未落地。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.50
 
 本轮执行 collector historical wording cleanup，只清理 collector / source 文案入口，不做 source-of-truth design。

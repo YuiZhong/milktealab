@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.49-candidate`
-- 最新确认 candidate commit：`8aee7f400f70e50a6de09987b12269f28cd44613`
-- `v0.0.7.49-candidate` 已创建并推送成功，指向 `8aee7f400f70e50a6de09987b12269f28cd44613`。
-- main / origin/main 已同步到 `8aee7f400f70e50a6de09987b12269f28cd44613`；工作区应干净。
+- 最新确认 candidate：`v0.0.7.50-candidate`
+- 最新确认 candidate commit：`8b477b8b59c0565adcba3ba19a66d9d25e814b1d`
+- `v0.0.7.50-candidate` 已创建并推送成功，指向 `8b477b8b59c0565adcba3ba19a66d9d25e814b1d`。
+- main / origin/main 已同步到 `8b477b8b59c0565adcba3ba19a66d9d25e814b1d`；工作区应干净。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.49` 未创建。
-- 当前未推进 `v0.0.7.50`。
+- 正式 tag `v0.0.7.50` 未创建。
+- 当前未创建 `v0.0.7.51-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -107,6 +107,7 @@ texture_topping_overload -> texture_solid_overload
 - collector / source 文案中若仍引用已迁出的 `texture_taro_overload` / `texture_oreo_overload`，后续 cleanup 前应按 historical / pre-v0.0.7.46 / pre-v0.0.7.47 legacy reference 语气处理，避免误读为 current active runtime ID。
 - collector / source 文案中若仍引用已迁出的 `texture_topping_overload`，后续 cleanup 前应按 historical / pre-v0.0.7.49 legacy reference 语气处理，避免误读为 current active runtime ID。
 - v0.0.7.50 已清理 collector / source 文案入口：`texture_taro_overload`、`texture_oreo_overload`、`texture_topping_overload` 只应作为 historical / pre-version legacy reference，不是 current active runtime ID、current registry ID 或 generated severity input。
+- v0.0.7.51 已更新 source-of-truth / registry / schema design docs：observed ≠ approved，collector output ≠ registry / allowed values generator，runtime_review_candidate 不是 definite migration target；本轮不创建 registry / schema / validator。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -118,7 +119,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / legacy inventory 与三份 migration report，做状态恢复和 P1 TODO 复盘，再决定 v0.0.7.50 后续是否需要 candidate 冻结或进入下一刀。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / legacy inventory 与三份 migration report，做状态恢复和 P1 TODO 复盘，再决定 v0.0.7.51 后续是否需要 candidate 冻结或进入下一刀。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。
