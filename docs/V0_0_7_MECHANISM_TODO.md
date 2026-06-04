@@ -47,7 +47,7 @@
 | registry / validator / generated data 接收 Codex 生成机制内容前 | 已读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`，并完成 human / ChatGPT 可审查 review pack gate |
 | mechanism review pack generator 实现前 | 已用 `reports/mechanismReviewPack.sample.md` 或等价样例 proof 验证 item 结构、provenance、decision summary 和 machine appendix 可审查 |
 | structure / operation / production 规则 active 依赖 `drinkStructureAnalyzer` 前 | 已读取 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，并完成 metadata source-of-truth、shadow compare、review pack 和 staged migration plan |
-| collector / source-of-truth cleanup 或 registry design 前 | historical / pre-version legacy ID 语气已清理，避免把已迁出的旧 ID 误读为 current active runtime ID |
+| collector / source-of-truth cleanup 或 registry design 前 | historical / pre-version legacy ID 语气已清理，避免把已迁出的 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 误读为 current active runtime ID、registry current ID 或 generated severity input |
 | v0.0.7.x 机制 final 收口前 | AI 生成 ID 与机制命名审计、accidentAnalyzer 迁移路线、drinkStructureAnalyzer 去中文 Set 计划 |
 
 ## 4. P1 TODO
@@ -204,7 +204,7 @@ Git candidate = 项目开发版本
 
 ## 6. 不应立即处理 / 不应乱改的内容
 
-- 不要现在重命名 `dairy_fat_overload`、`flavor_durian_overload`、`texture_taro_overload`、`texture_oreo_overload` 等已有 ID。
+- 不要现在重命名 `dairy_fat_overload`、`flavor_durian_overload`，也不要把 historical `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 重新包装成 current ID。
 - 这些 ID 可能已经被 runtime、golden、docs 或 generated data 引用，应进入后续 ID 审计，而不是顺手改名。
 - 不要现在大改 `core/accidentAnalyzer.js`。
 - 不要把 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 当作迁移许可；它只是 inventory，不是 runtime 改造方案。
@@ -215,7 +215,7 @@ Git candidate = 项目开发版本
 - 不要现在 active 接管 severity / threshold。
 - 不要现在扩 generated feedback active 接管范围。
 - 不要因为玩家展示 `type` 不同、feedback 文案不同、某条 golden sample 或 review pack item 很具体，就反向创建新的 mechanism ID。
-- 不要把已迁出的 `texture_taro_overload` / `texture_oreo_overload` 在 collector / source-of-truth 文案中继续写成 current active runtime ID；后续 cleanup 前应改为 historical / migration history / legacy reference 语气。
+- 不要把已迁出的 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 在 collector / source-of-truth 文案中继续写成 current active runtime ID、current migration candidate、registry stable current ID 或 generated severity input；这些旧 ID 只能以 historical / pre-version legacy reference 语气出现。
 - 不要为了清理 docs 而删除历史上下文正本。
 - 不要把 P1 / P2 写成已解决。
 
@@ -244,11 +244,12 @@ Git candidate = 项目开发版本
 19. v0.0.7.48 已补充机制 ID 节制原则、机制 ID 与玩家展示分层边界，以及 collector / source 旧 ID historical cleanup 待办。该 guardrail 不迁 topping，不新增 ID，不新增 registry / validator，也不表示 P1-4 已解决。
 20. v0.0.7.49 已完成 staged order 的第三步：`texture_topping_overload` -> `texture_solid_overload` actual migration；保留原 score / cap / type / add / note，并新增 `topping_solid_overload_migration` golden sample 保护 topping branch 新事故 ID。旧 `texture_topping_overload` 只保留为 historical / pre-v0.0.7.49 legacy note。该迁移不表示 P1-4 已解决。
 21. 做 feedbackTag source-of-truth / registry / schema 设计，明确 runtime observed、generated / shadow、candidate / risk、rule tag、sample draft tag 的分层来源。
-22. 做 accidentTypeId source-of-truth / registry / schema 设计，明确 legacy observed、rule-table observed、structure-rule observed、summary-candidate observed、sample draft 和 migration candidate 的分层来源；清理 collector / source 文案中已迁出旧 ID 的 current-active 语气。
-23. 继续 accidentAnalyzer broader migration review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
-24. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-25. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-26. 最后再考虑 severity generated data build、shadow、partial takeover。
+22. v0.0.7.50 已清理 collector / source 文案中已迁出旧 ID 的 current-active 语气：`texture_taro_overload` 只能作为 historical / pre-v0.0.7.46 legacy reference，`texture_oreo_overload` 只能作为 historical / pre-v0.0.7.47 legacy reference，`texture_topping_overload` 只能作为 historical / pre-v0.0.7.49 legacy reference；该 cleanup 不创建 registry / schema / validator，也不表示 P1-4 已解决。
+23. 做 accidentTypeId source-of-truth / registry / schema 设计，明确 legacy observed、rule-table observed、structure-rule observed、summary-candidate observed、sample draft、historical legacy reference 和 migration candidate 的分层来源。
+24. 继续 accidentAnalyzer broader migration review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
+25. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+26. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+27. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
@@ -270,5 +271,5 @@ v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 - 是否会把 sampleId、displayName、`zhCN`、旧 tag 或 ID 字符串前缀当机制事实。
 - 是否会为单个组合、recipe、golden sample、文案梗、制作人备注或 review pack item 创建新的机制 ID；如果会，应停止并复查。
 - 是否会因玩家展示 `type` 或 feedback copy 不同而反向拆分 `accidentTypeId` / `outcomeTypeId`；如果会，应把具体性放回 evidence / rule / sample / copy / notes。
-- 是否会引用 `texture_taro_overload` / `texture_oreo_overload`；如果会，应确认其语境是 historical / pre-v0.0.7.46 / pre-v0.0.7.47 legacy reference，而不是 current active runtime ID。
+- 是否会引用 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload`；如果会，应确认其语境是 historical / pre-v0.0.7.46 / pre-v0.0.7.47 / pre-v0.0.7.49 legacy reference，而不是 current active runtime ID、registry current ID 或 generated severity input。
 - 是否会改变玩家最终 score、feedback、accident、type 或 golden expected；如果会，是否有产品理由和 golden 更新计划。

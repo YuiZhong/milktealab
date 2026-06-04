@@ -106,6 +106,7 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.49 已完成 `texture_topping_overload` -> `texture_solid_overload` actual migration；具体小料名和“吸管体能测试”解释保留在 note / feedback copy，不写进事故 ID。
 - collector / source 文案中若仍引用已迁出的 `texture_taro_overload` / `texture_oreo_overload`，后续 cleanup 前应按 historical / pre-v0.0.7.46 / pre-v0.0.7.47 legacy reference 语气处理，避免误读为 current active runtime ID。
 - collector / source 文案中若仍引用已迁出的 `texture_topping_overload`，后续 cleanup 前应按 historical / pre-v0.0.7.49 legacy reference 语气处理，避免误读为 current active runtime ID。
+- v0.0.7.50 已清理 collector / source 文案入口：`texture_taro_overload`、`texture_oreo_overload`、`texture_topping_overload` 只应作为 historical / pre-version legacy reference，不是 current active runtime ID、current registry ID 或 generated severity input。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -117,7 +118,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / legacy inventory 与三份 migration report，做状态恢复和 P1 TODO 复盘，再决定 `v0.0.7.50`。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / legacy inventory 与三份 migration report，做状态恢复和 P1 TODO 复盘，再决定 v0.0.7.50 后续是否需要 candidate 冻结或进入下一刀。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。

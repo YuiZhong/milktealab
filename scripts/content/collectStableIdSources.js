@@ -29,7 +29,7 @@ const SUGGESTED_STATUSES = new Set([
   "sample_only",
   "draft_only",
   "generated_only",
-  "migration_candidate",
+  "runtime_review_candidate",
   "needs_note",
   "needs_review"
 ]);
@@ -43,16 +43,19 @@ const HIGH_RISK_CANDIDATE_TAGS = new Set([
   "novelty"
 ]);
 
-const MIGRATION_CANDIDATES = new Set([
+const RUNTIME_REVIEW_CANDIDATES = new Set([
   "dairy_fat_overload",
   "flavor_durian_overload",
   "industrial_creamer_overload",
-  "texture_taro_overload",
-  "texture_oreo_overload",
-  "texture_topping_overload",
   "taste_strong_flavor_overload",
   "texture_straw_resistance"
 ]);
+
+const HISTORICAL_TEXTURE_ACCIDENT_ID_NOTES = [
+  "`texture_taro_overload` is a historical / pre-v0.0.7.46 legacy reference after migration to `texture_low_drinkability`.",
+  "`texture_oreo_overload` is a historical / pre-v0.0.7.47 legacy reference after migration to `texture_low_drinkability`.",
+  "`texture_topping_overload` is a historical / pre-v0.0.7.49 legacy reference after migration to `texture_solid_overload`."
+];
 
 const args = process.argv.slice(2);
 const outIndex = args.indexOf("--out");
@@ -278,11 +281,11 @@ function addArrayPropertyObservations(observedSources, text, sourceFile, sourceK
 }
 
 function runtimeIdStatus(value) {
-  if (MIGRATION_CANDIDATES.has(value)) {
+  if (RUNTIME_REVIEW_CANDIDATES.has(value)) {
     return {
-      suggestedStatus: "migration_candidate",
+      suggestedStatus: "runtime_review_candidate",
       requiresReview: true,
-      notes: "Observed in current runtime/golden sources, but naming may need future review before wider severity takeover."
+      notes: "Observed in current runtime/golden-like sources; requires sourceLayer / triggerMetric / producer / mechanism review before wider severity takeover. Not a definite migration target and not a final registry entry."
     };
   }
   return {
@@ -700,7 +703,8 @@ function renderReport(observedSources) {
     "- `aroma_pressure`, `identity_conflict`, `low_beverage_fit`, `savory_identity`, `texture_sediment`, and `novelty` are observed candidate / risk tags. They must not be automatically treated as runtime feedbackTag.",
     "- `bubble_conflict` is observed as a feedbackTag, but it must not be generalized to flavor identity conflict without review.",
     "- `dairy_fat_overload` should be kept as observed, but any severity sample use needs notes that sourceLayer / sourceSummary / triggerMetric control its current meaning.",
-    "- `flavor_durian_overload`, `texture_taro_overload`, `texture_oreo_overload`, `texture_topping_overload`, `industrial_creamer_overload`, and similar legacy or ingredient-specific IDs should not be renamed in place. Treat them as migration candidates or mechanism review items.",
+    "- `flavor_durian_overload`, `industrial_creamer_overload`, and similar current legacy or ingredient-specific IDs should not be renamed in place. Treat them as mechanism review items until a reviewed migration plan exists.",
+    ...HISTORICAL_TEXTURE_ACCIDENT_ID_NOTES.map(note => `- ${note} These IDs are not current active runtime IDs and must not enter current registry, validator, generated severity input, or runtime takeover decisions from this collector.`),
     "- Candidate severity draft ruleIds remain sample sheet draft identities and must not enter any registry by collection alone.",
     "- Golden sampleId values are test identities only and must not become mechanism rule keys.",
     "",

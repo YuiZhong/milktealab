@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.50
+
+本轮执行 collector historical wording cleanup，只清理 collector / source 文案入口，不做 source-of-truth design。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/content/collectStableIdSources.js`
+  - 将 `texture_taro_overload`、`texture_oreo_overload`、`texture_topping_overload` 从 current migration candidate 语气中移出。
+  - 明确三者只应作为 historical / pre-version legacy reference。
+  - 明确三者不是 current active runtime ID，不应进入 current registry、validator、generated severity input 或 runtime takeover decision。
+- 更新 `reports/stableIdSourceCollector.sample.md`
+  - 重新生成 collector sample report，使 High-risk boundary reminders 与脚本一致。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 collector / source 文案入口清理已完成。
+  - 继续明确 P1-4 broader accidentAnalyzer migration route 仍未解决。
+- 更新 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`
+  - 补充 v0.0.7.50 cleanup 关系说明。
+- 新增 `reports/sourceCollectorHistoricalCleanup.v0.0.7.50.md`
+  - 记录搜索范围、修改文件、旧 ID historical 定位和本轮不解决事项。
+- 更新 `docs/AI_CONTEXT.md`
+  - 只加入极短接续摘要，不写长流水账。
+
+### 阶段边界
+
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不新增 accidentTypeId、outcomeTypeId、feedbackTag、ruleId。
+- 本轮不改 runtime、data、generated data、content sheets、index.html 或 golden expected。
+- P1-4 仍未完全解决。
+- golden samples 23/23 passed。
+- 本轮不 push、不 tag。
+
 ## docs: sync AI_CONTEXT after v0.0.7.49 candidate
 
 本轮只同步 `docs/AI_CONTEXT.md` 当前状态到 `v0.0.7.49-candidate`。

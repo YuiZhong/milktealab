@@ -30,7 +30,7 @@ Docs prose is intentionally not scanned as a fact source.
 
 | observed layer | observed value count | source file count | observation count | requires review count |
 | --- | --- | --- | --- | --- |
-| accidentTypeId | 6 | 9 | 27 | 16 |
+| accidentTypeId | 6 | 9 | 29 | 16 |
 | candidateId | 13 | 1 | 13 | 13 |
 | candidateTag | 9 | 2 | 10 | 10 |
 | candidateType | 3 | 3 | 9 | 9 |
@@ -42,7 +42,7 @@ Docs prose is intentionally not scanned as a fact source.
 | profileTag | 7 | 1 | 10 | 10 |
 | riskTag | 6 | 1 | 6 | 6 |
 | ruleId | 5 | 2 | 10 | 0 |
-| sampleId | 20 | 1 | 20 | 0 |
+| sampleId | 23 | 1 | 23 | 0 |
 | severityHint | 3 | 3 | 7 | 4 |
 | sourceLayer | 3 | 3 | 9 | 6 |
 | sourceSummary | 3 | 3 | 9 | 6 |
@@ -59,7 +59,7 @@ Docs prose is intentionally not scanned as a fact source.
 | dairy_fat_overload | accidentTypeId | content_sheets/examples/feedback_texts.sample.json | content sheet sample | accidentTypeId | registry_candidate_requires_review | yes | Feedback sample source reference; useful evidence, not a registry decision. |
 | dairy_fat_overload | accidentTypeId | data/generated/feedbackTexts.generated.json | generated data | textsById.accidentTypeId | generated_only | yes | Observed in generated feedback data; generated observation is not a registry decision. |
 | dairy_fat_overload | accidentTypeId | data/goldenSamples.js | golden samples | accidentTypeIdIncludes[] | registry_candidate_requires_review | no | Observed golden expected value; candidate evidence only. |
-| flavor_durian_overload | accidentTypeId | data/accidentRules.js | runtime data | accidentTypeId | migration_candidate | yes | Observed in current runtime/golden sources, but naming may need future review before wider severity takeover. |
+| flavor_durian_overload | accidentTypeId | data/accidentRules.js | runtime data | accidentTypeId | runtime_review_candidate | yes | Observed in current runtime/golden-like sources; requires sourceLayer / triggerMetric / producer / mechanism review before wider severity takeover. Not a definite migration target and not a final registry entry. |
 | flavor_durian_overload | accidentTypeId | data/goldenSamples.js | golden samples | accidentTypeIdIncludes[] | registry_candidate_requires_review | no | Observed golden expected value; candidate evidence only. |
 | taste_acid_overload | accidentTypeId | content_sheets/examples/candidate_severity_rules.sample.csv | sample sheet draft | accidentTypeId | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
 | taste_acid_overload | accidentTypeId | content_sheets/examples/candidate_severity_rules.sample.json | sample sheet draft | accidentTypeId | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
@@ -70,8 +70,10 @@ Docs prose is intentionally not scanned as a fact source.
 | taste_acid_overload | accidentTypeId | data/generated/feedbackTexts.generated.json | generated data | textsById.accidentTypeId | generated_only | yes | Observed in generated feedback data; generated observation is not a registry decision. |
 | taste_acid_overload | accidentTypeId | data/goldenSamples.js | golden samples | accidentTypeIdIncludes[] | registry_candidate_requires_review | no | Observed golden expected value; candidate evidence only. |
 | texture_low_drinkability | accidentTypeId | core/summaryCandidateEngine.js | summary candidate | accidentTypeId | registry_candidate_requires_review | no | Observed candidate reference. |
+| texture_low_drinkability | accidentTypeId | data/goldenSamples.js | golden samples | accidentTypeIdIncludes[] | registry_candidate_requires_review | no | Observed golden expected value; candidate evidence only. |
 | texture_low_drinkability | accidentTypeId | data/structureAccidentRules.js | runtime data | accidentTypeId | observed_runtime_source | no | Observed in current runtime-like source; this is evidence, not a final registry entry. |
 | texture_solid_overload | accidentTypeId | core/summaryCandidateEngine.js | summary candidate | accidentTypeId | registry_candidate_requires_review | no | Observed candidate reference. |
+| texture_solid_overload | accidentTypeId | data/goldenSamples.js | golden samples | accidentTypeIdIncludes[] | registry_candidate_requires_review | no | Observed golden expected value; candidate evidence only. |
 | texture_solid_overload | accidentTypeId | data/structureAccidentRules.js | runtime data | accidentTypeId | observed_runtime_source | no | Observed in current runtime-like source; this is evidence, not a final registry entry. |
 | texture_straw_resistance | accidentTypeId | content_sheets/examples/candidate_severity_rules.sample.csv | sample sheet draft | accidentTypeId | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
 | texture_straw_resistance | accidentTypeId | content_sheets/examples/candidate_severity_rules.sample.json | sample sheet draft | accidentTypeId | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
@@ -246,14 +248,13 @@ Docs prose is intentionally not scanned as a fact source.
 | topping_pudding | ingredientId | data/ingredients.js | runtime data | ingredientMeta.id | observed_runtime_source | no | Observed in ingredient metadata. |
 | topping_taro_ball | ingredientId | data/ingredients.js | runtime data | ingredientMeta.id | observed_runtime_source | no | Observed in ingredient metadata. |
 | topping_taro_paste | ingredientId | data/ingredients.js | runtime data | ingredientMeta.id | observed_runtime_source | no | Observed in ingredient metadata. |
+| flavor_identity_conflict | outcomeTypeId | content_sheets/examples/candidate_severity_rules.sample.csv | sample sheet draft | outcomeTypeId | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
+| flavor_identity_conflict | outcomeTypeId | content_sheets/examples/candidate_severity_rules.sample.json | sample sheet draft | outcomeTypeId | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
+| flavor_identity_conflict | outcomeTypeId | content_sheets/examples/feedback_texts.sample.csv | content sheet sample | outcomeTypeId | registry_candidate_requires_review | yes | Feedback sample source reference; useful evidence, not a registry decision. |
+| flavor_identity_conflict | outcomeTypeId | content_sheets/examples/feedback_texts.sample.json | content sheet sample | outcomeTypeId | registry_candidate_requires_review | yes | Feedback sample source reference; useful evidence, not a registry decision. |
+| flavor_identity_conflict | outcomeTypeId | data/generated/feedbackTexts.generated.json | generated data | textsById.outcomeTypeId | generated_only | yes | Observed in generated feedback data; generated observation is not a registry decision. |
+| flavor_identity_conflict | outcomeTypeId | data/goldenSamples.js | golden samples | outcomeTypeIdIncludes[] | registry_candidate_requires_review | no | Observed golden expected value; candidate evidence only. |
 | novelty_experiment | outcomeTypeId | core/summaryCandidateEngine.js | summary candidate | outcomeTypeId | registry_candidate_requires_review | no | Observed candidate reference. |
-| flavor_identity_conflict | outcomeTypeId | current v0.0.7.41 migration note | runtime / golden / generated / sheets | outcomeTypeId | registry_candidate_requires_review | no | Current outcomeTypeId after v0.0.7.41 migration; this sample report still preserves pre-migration `taste_conflict` rows below as historical observations, not current source-of-truth. |
-| taste_conflict | legacy outcomeTypeId | content_sheets/examples/candidate_severity_rules.sample.csv | pre-v0.0.7.41 sample sheet draft | outcomeTypeId | historical_only | yes | Pre-migration observation in this sample report; current effective outcomeTypeId is `flavor_identity_conflict`. |
-| taste_conflict | legacy outcomeTypeId | content_sheets/examples/candidate_severity_rules.sample.json | pre-v0.0.7.41 sample sheet draft | outcomeTypeId | historical_only | yes | Pre-migration observation in this sample report; current effective outcomeTypeId is `flavor_identity_conflict`. |
-| taste_conflict | legacy outcomeTypeId | content_sheets/examples/feedback_texts.sample.csv | pre-v0.0.7.41 content sheet sample | outcomeTypeId | historical_only | yes | Pre-migration feedback sample observation; current effective outcomeTypeId is `flavor_identity_conflict`. |
-| taste_conflict | legacy outcomeTypeId | content_sheets/examples/feedback_texts.sample.json | pre-v0.0.7.41 content sheet sample | outcomeTypeId | historical_only | yes | Pre-migration feedback sample observation; current effective outcomeTypeId is `flavor_identity_conflict`. |
-| taste_conflict | legacy outcomeTypeId | data/generated/feedbackTexts.generated.json | pre-v0.0.7.41 generated data | textsById.outcomeTypeId | historical_only | yes | Pre-migration generated observation; current effective outcomeTypeId is `flavor_identity_conflict`. |
-| taste_conflict | legacy outcomeTypeId | data/goldenSamples.js | pre-v0.0.7.41 golden samples | outcomeTypeIdIncludes[] | historical_only | no | Pre-migration golden expected observation; current expected value is `flavor_identity_conflict`. |
 | feedback_hint | priorityBand | core/candidatePriorityShellEngine.js | priority shell | priorityBandOrder[] | observed_runtime_source | no | Observed priority shell ordering value. |
 | feedback_hint | priorityBand | data/goldenSamples.js | golden samples | priorityBandIncludes[] | registry_candidate_requires_review | no | Observed golden expected value; candidate evidence only. |
 | flavor_fit | priorityBand | core/candidatePriorityShellEngine.js | priority shell | priorityBandAliases key | registry_candidate_requires_review | yes | Observed alias value; should be explicit if used by validator. |
@@ -326,11 +327,14 @@ Docs prose is intentionally not scanned as a fact source.
 | high_durian_oddity_accident_id_equivalence | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | high_lemon_acid_accident | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | industrial_milk_tea | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
+| oreo_low_drinkability_migration | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | oreo_overload_texture_accident | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | premium_oolong_milk | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | solid_taro_low_liquid | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | straw_resistance_accident | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | straw_resistance_accident_id_equivalence | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
+| taro_low_drinkability_migration | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
+| topping_solid_overload_migration | sampleId | data/goldenSamples.js | golden samples | sample id | sample_only | no | Golden sample identity; must not enter mechanism rule keys. |
 | high | severityHint | content_sheets/examples/candidate_severity_rules.sample.csv | sample sheet draft | severityHint | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
 | high | severityHint | content_sheets/examples/candidate_severity_rules.sample.json | sample sheet draft | severityHint | draft_only | yes | Observed in disabled sample sheet draft; not a registry source. |
 | high | severityHint | core/summaryCandidateEngine.js | summary candidate | severityHint | registry_candidate_requires_review | no | Observed candidate hint, not final severity. |
@@ -433,7 +437,10 @@ Docs prose is intentionally not scanned as a fact source.
 - `aroma_pressure`, `identity_conflict`, `low_beverage_fit`, `savory_identity`, `texture_sediment`, and `novelty` are observed candidate / risk tags. They must not be automatically treated as runtime feedbackTag.
 - `bubble_conflict` is observed as a feedbackTag, but it must not be generalized to flavor identity conflict without review.
 - `dairy_fat_overload` should be kept as observed, but any severity sample use needs notes that sourceLayer / sourceSummary / triggerMetric control its current meaning.
-- `flavor_durian_overload`, `texture_taro_overload`, `texture_oreo_overload`, `texture_topping_overload`, `industrial_creamer_overload`, and similar legacy or ingredient-specific IDs should not be renamed in place. Treat them as migration candidates or mechanism review items.
+- `flavor_durian_overload`, `industrial_creamer_overload`, and similar current legacy or ingredient-specific IDs should not be renamed in place. Treat them as mechanism review items until a reviewed migration plan exists.
+- `texture_taro_overload` is a historical / pre-v0.0.7.46 legacy reference after migration to `texture_low_drinkability`. These IDs are not current active runtime IDs and must not enter current registry, validator, generated severity input, or runtime takeover decisions from this collector.
+- `texture_oreo_overload` is a historical / pre-v0.0.7.47 legacy reference after migration to `texture_low_drinkability`. These IDs are not current active runtime IDs and must not enter current registry, validator, generated severity input, or runtime takeover decisions from this collector.
+- `texture_topping_overload` is a historical / pre-v0.0.7.49 legacy reference after migration to `texture_solid_overload`. These IDs are not current active runtime IDs and must not enter current registry, validator, generated severity input, or runtime takeover decisions from this collector.
 - Candidate severity draft ruleIds remain sample sheet draft identities and must not enter any registry by collection alone.
 - Golden sampleId values are test identities only and must not become mechanism rule keys.
 
