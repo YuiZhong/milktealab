@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.7.44
+
+本轮新增 accidentAnalyzer legacy accident migration decision split report。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md`
+  - 基于 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`，拆分 legacy accidentAnalyzer / accident rules / structure rules 中的事故迁移方向。
+  - 将 `flavor_durian_overload` / `industrial_creamer_overload` 记录为特殊机制候选，但仍需 source notes、制作人 review 和 future source-of-truth 设计。
+  - 将 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 记录为未来 generalized texture / structure migration candidate，不按原料继续扩散 accidentTypeId。
+  - 将 `dairy_fat_overload` 记录为保留 legacy observed ID，但底层解释应钉为 texture / mouthfeel / `fatLoad` / greasy pressure。
+  - 将 `taste_strong_flavor_overload` 记录为 split review item，不能因 `taste_` 前缀直接归 taste layer，也不能直接映射到 `aroma_pressure` feedbackTag。
+  - 将 `taste_acid_overload`、`texture_low_drinkability`、`texture_solid_overload` 记录为 data-driven but needs notes。
+  - 将 legacy texture dedupe fallback 记录为 compatibility-only，不作为未来扩展方向。
+- 更新 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`
+  - 记录 v0.0.7.44 report 与 legacy inventory 的关系。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 v0.0.7.44 report 纳入 P1-4 与后续建议路线。
+  - 继续明确 P1-4 未解决，后续仍需 producer review、source-of-truth / registry design、shadow / golden review 和 staged migration plan。
+
+### 阶段边界
+
+- 本轮只做 docs / report / migration decision split。
+- 不改 runtime、data、scripts、content_sheets、generated data、reports 既有文件或 golden expected。
+- 不新增 registry / enum / schema / validator。
+- 不迁移任何 `accidentTypeId`。
+- 不批准任何 `accidentTypeId` 进入 registry、validator、generated data、partial takeover、active takeover 或 runtime。
+- 不改变玩家最终 score、accident、feedback、drinkType 或 `result.type`。
+- P1-4 仍未解决。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.43
 
 本轮新增 feedbackTag mapping decision split / source-of-truth precheck report。

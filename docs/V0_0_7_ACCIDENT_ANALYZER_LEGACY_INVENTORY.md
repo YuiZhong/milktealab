@@ -16,6 +16,25 @@
 - 不实现 validator。
 - 不把 P1-4 标记为已解决。
 
+## 0.1 v0.0.7.44 decision split 关系
+
+v0.0.7.44 新增 `reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md`，用于把本 inventory 中的 legacy accident 分成可审查的迁移类别。
+
+该 report 只做 docs / report / migration decision split：
+
+- 不迁移 runtime。
+- 不改变 score、accident、feedback、feedbackTags、drinkType、`result.type` 或 golden expected。
+- 不新增 registry / enum / schema / validator。
+- 不表示 P1-4 已解决。
+
+当前分流摘要：
+
+- `flavor_durian_overload` / `industrial_creamer_overload`：可作为特殊高记忆点机制候选，但仍需 source notes、制作人 review 和 future source-of-truth 设计。
+- `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload`：倾向未来迁向 generalized texture / structure 机制，避免长期按原料拆 `accidentTypeId`。
+- `dairy_fat_overload`：保留 legacy observed ID，但 source notes 应钉为 texture / mouthfeel / `fatLoad` / greasy pressure，不是 pure taste，也不是 straw / physical blockage。
+- `taste_strong_flavor_overload`：需要 split review，不能只因 `taste_` 前缀就判为 taste layer，也不能直接映射到 `aroma_pressure` feedbackTag。
+- `texture_straw_resistance` / `texture_low_drinkability` / `texture_solid_overload`：属于 texture / structure 方向，但仍要区分 legacy if threshold、summary candidate 和 data-driven structure rule 的边界。
+
 ## 1. Current Accident Flow Map
 
 当前玩家最终事故仍由 legacy runtime 链路决定：
@@ -67,7 +86,8 @@ This section is a proposal for future planning only. It does not mark any item m
 | category | items | recommended handling |
 |---|---|---|
 | Keep legacy for now | all current final-impact accidentAnalyzer branches | Do not change runtime while severity / threshold source-of-truth is still being designed. |
-| Data-driven rule already exists | `taste_acid_overload`, `flavor_durian_overload`, `texture_low_drinkability`, `texture_solid_overload` | Keep current rule engines; audit naming and source fields before generated severity data. |
+| Special mechanism candidate | `flavor_durian_overload` | Keep current rule-table path; treat durian as a possible special high-memory mechanism candidate, not as a pattern for one accident type per ingredient. |
+| Data-driven rule already exists | `taste_acid_overload`, `texture_low_drinkability`, `texture_solid_overload` | Keep current rule engines; audit naming and source fields before generated severity data. |
 | Candidate severity table candidates | `taste_acid_overload`, `dairy_fat_overload`, `texture_straw_resistance`, structure texture accidents | Use explicit `sourceLayer`, `sourceSummary`, `triggerMetric`, and known stable ID source; do not infer by string prefix. |
 | Needs producer / mechanism review | `industrial_creamer_overload`, `taste_strong_flavor_overload`, ingredient-specific texture overloads | Review subjective labels, player-facing type, and whether evidence belongs in notes rather than accidentTypeId. |
 | Migration candidate, not immediate rename | `flavor_durian_overload`, `texture_taro_overload`, `texture_oreo_overload`, `texture_topping_overload` | Keep now; if future rename is needed, plan compatibility, generated data updates, and golden expected changes deliberately. |

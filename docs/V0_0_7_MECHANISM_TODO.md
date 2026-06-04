@@ -91,11 +91,11 @@
 ### P1-4｜accidentAnalyzer legacy 内容判断迁移路线
 
 - 风险：`core/accidentAnalyzer.js` 仍是旧事故判断集中区，后续若继续堆具体 if，会拖慢数据化迁移。
-- 当前状态：当前不建议大改；v0.0.7.34 已新增 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 作为只读 mapping / inventory，但迁移路线尚未完成，P1-4 未解决。
+- 当前状态：当前不建议大改；v0.0.7.34 已新增 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 作为只读 mapping / inventory；v0.0.7.44 已新增 `reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md`，把 legacy accidents 分成 special candidate、generalize later、source notes、split review、data-driven notes 和 compatibility-only。迁移路线仍未完成，P1-4 未解决。
 - 为什么重要：severity / threshold active 接管前，应明确哪些 legacy 判断保留，哪些迁入 summary / candidate / severity table。
 - 必须在什么时候前解决：severity / threshold active 接管前；v0.0.7.x 机制收口前。
-- 建议路线：以 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 为输入，先确认 current final impact、sourceLayer candidate、possible triggerMetric、naming risk 和 golden 引用，再决定哪些保留 legacy、哪些迁移，不做一次性大重构。
-- 禁止误处理：不要现在大改 `accidentAnalyzer.js`；不要为了清债直接改评分、事故、feedback 或 golden expected。
+- 建议路线：以 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 和 `reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md` 为输入，先完成 producer review、source-of-truth / registry design、shadow / golden review、staged migration plan，并在 validator design 前确认 known accidentTypeId source；再决定哪些保留 legacy、哪些迁移，不做一次性大重构。
+- 禁止误处理：不要现在大改 `accidentAnalyzer.js`；不要为了清债直接改评分、事故、feedback 或 golden expected；不要把 v0.0.7.44 report 当作 registry、validator input、generated data 或 runtime source-of-truth。
 
 已知具体内容判断包括：
 
@@ -223,10 +223,13 @@ Git candidate = 项目开发版本
 11. v0.0.7.42 已补充迁移后的 outcome / candidate tag / feedbackTag 边界 notes：`flavor_identity_conflict` 是当前 outcomeTypeId；`identity_conflict` 仍是 candidate / risk tag；`bubble_conflict` 仍是窄语义 feedbackTag；legacy `taste_conflict` 只作 historical note。该补充不代表 P1-1 / P1-5 / P1-7 已解决。
 12. v0.0.7.43 已新增 `reports/feedbackTagMappingDecisionSplit.v0.0.7.43.md`，作为 feedbackTag mapping review split / source-of-truth precheck；它只拆分制作人 review 和技术 gate，不批准任何 feedbackTag 进入 registry / validator / generated data / runtime，也不表示 P1-5 / P1-7 已解决。
 13. 后续可继续用 v0.0.7.43 report 做制作人 review，先决定 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty` 是否仅保留 candidate/risk 语义，是否需要新玩家文案方向，以及 `bubble_conflict`、`greasy_overload`、`straw_disaster` 是否需要保持窄语义或扩充文案池。
-14. 做 feedbackTag source-of-truth / registry / schema 设计，明确 runtime observed、generated / shadow、candidate / risk、rule tag、sample draft tag 的分层来源。
-15. 在 legacy、drinkStructure、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-16. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-17. 最后再考虑 severity generated data build、shadow、partial takeover。
+14. v0.0.7.44 已新增 `reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md`，把 legacy accidentAnalyzer / accident rules / structure rules 的事故分成 special candidate、generalize later、source notes、split review、data-driven notes 和 compatibility-only；它不迁移 runtime，不让任何 `accidentTypeId` 进入 registry / validator / generated data / runtime，也不表示 P1-4 已解决。
+15. 后续可用 v0.0.7.44 report 做制作人 / ChatGPT review，先确认榴莲 / 植脂奶是否保留特殊机制候选，芋泥 / 奥利奥 / 小料是否未来泛化迁移，`dairy_fat_overload` 的 texture / fatLoad notes，`taste_strong_flavor_overload` 是否拆分，以及结构事故 append / suppression 边界。
+16. 做 feedbackTag source-of-truth / registry / schema 设计，明确 runtime observed、generated / shadow、candidate / risk、rule tag、sample draft tag 的分层来源。
+17. 做 accidentTypeId source-of-truth / registry / schema 设计，明确 legacy observed、rule-table observed、structure-rule observed、summary-candidate observed、sample draft 和 migration candidate 的分层来源。
+18. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+19. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+20. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
