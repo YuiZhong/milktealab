@@ -211,7 +211,29 @@
 
 以上只是可考虑路线，不表示已经决定，也不在本轮推进 v0.0.7.32。
 
-## 8. 本轮不做的事
+## 8. v0.0.7.32 collector proof
+
+v0.0.7.32 新增 `scripts/content/collectStableIdSources.js` 和 `reports/stableIdSourceCollector.sample.md`，作为 stable ID source collector / registry design proof。
+
+collector 定位：
+
+- 只读扫描 current runtime data、generated feedback JSON、golden samples、summary candidate、priority shell 和当前 content sheet sample / draft。
+- 输出 observed source / layer / usage / suggested status / review hint。
+- 可用于 future registry design 的证据收集和 drift check。
+- 不从 docs prose 抽 ID 当事实来源。
+
+collector 输出边界：
+
+- 不是 registry。
+- 不是 allowed values。
+- 不是 validator source-of-truth。
+- 不是 generated data。
+- 观察到某个 ID / tag 不代表它已经定稿、注册或可直接进入 validator。
+- draft / candidate / sample-only / generated-only 只能保持其原状态，不能因 collector 观察到而升级。
+
+后续如果继续推进，应先进行人工 review / registry design / validator design，再决定哪些 observed values 可以进入明确 source-of-truth。collector 只能提示 drift，例如 runtime 出现新 observed ID 或 future registry 中的 ID 无引用；它不做裁决，也不自动同步。
+
+## 9. 本轮不做的事
 
 - 不新增实际 registry / enum / schema 文件。
 - 不实现 validator。

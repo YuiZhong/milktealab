@@ -1,5 +1,43 @@
 # 版本记录
 
+## v0.0.7.32
+
+本轮新增 stable ID source collector / registry design proof。
+
+### 本轮新增 / 更新
+
+- 新增 `scripts/content/collectStableIdSources.js`
+  - 只读扫描当前仓库中可观察到的 ID / tag / enum-like value 来源。
+  - 默认只向 stdout 输出简短 summary。
+  - 传入 `--out reports/stableIdSourceCollector.sample.md` 时生成 Markdown sample report。
+  - 实际扫描范围包括 runtime data、generated feedback JSON、golden samples、summary candidate、priority shell，以及当前 content sheet sample / draft。
+  - 不从 docs prose 抽 ID 当事实来源。
+- 新增 `reports/stableIdSourceCollector.sample.md`
+  - 记录扫描范围、layer summary、observed source table、high-risk boundary reminders 和 future drift check 用法。
+  - 明确 report 是 collector proof，不是 registry，不是 allowed values，不是 validator input，不是 generated data。
+  - 明确 observed ID 不代表已定稿、已注册或可直接用于 validator。
+- 更新 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`
+  - 记录 v0.0.7.32 collector proof 的定位。
+  - 明确 collector 只做 observed source / drift check；下一步仍需要人工 review / registry design / validator design。
+
+### 阶段边界
+
+- 本轮只做 collector proof / sample report / docs。
+- 不新增 registry / enum / schema。
+- 不实现 validator。
+- 不新增 generated data。
+- 不改 runtime、data、content_sheets、golden expected。
+- 不新增 stable ID，不批量生成 ID，不把 draft / candidate / sample-only ID 注册为 stable。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `node --check scripts/content/collectStableIdSources.js` 通过。
+- `node scripts/content/collectStableIdSources.js` 通过，输出 observed source summary。
+- `node scripts/content/collectStableIdSources.js --out reports/stableIdSourceCollector.sample.md` 通过；重复执行无无意义 diff。
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.31
 
 本轮新增 known stable ID source-of-truth / registry / enum / schema 设计文档。
