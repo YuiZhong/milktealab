@@ -17,10 +17,13 @@
 - ID 一旦进入 docs、sample sheet、generated data、golden 或 runtime，就可能被未来 AI 当成事实来源。
 - 所有 AI 生成 / 辅助生成的机制相关 ID，都必须经过层级确认和语义审计。
 - 机制 ID 不应混入原料名、severity 档位、sampleId、displayName、zhCN 或 notes 语义。
+- 机制 ID 还不应为单个组合、单个 recipe、单个 golden sample、单条文案梗、单个制作人备注或单个 review pack item 单独创建。
+- 机制 ID 应表达可复用机制大类；机制 ID 要少而稳，evidence / rule / sample / review pack / feedback copy 可以丰富。
 - 草案 ID 不等于正式 ID。
 - 样例表虽然不接 runtime，也会影响未来 AI 理解，因此 sample sheet 里的稳定字段不能乱填。
 - ID 名称不能覆盖 `sourceLayer` / `sourceSummary` / `triggerMetric`。
 - 如果某个 ID 的层级、来源或语义不清楚，应先停下来标记为 draft / needs review，而不是把它写进 stable 字段。
+- 玩家展示差异不能反向污染机制身份。Player-facing display differences must not back-propagate into mechanism identity。
 
 ## 2. ID 层级分类
 
@@ -36,6 +39,8 @@
 - 不能按每个原料拆分。
 - 不能带 severity 后缀。
 - 不能带 sampleId 语义。
+- 不能为单个组合、单个 recipe、单个 golden sample、单条文案梗、单个制作人备注或单个 review pack item 创建专属事故机制 ID。
+- 具体性应放在 `evidence`、`sourceIngredientIds`、`triggerMetric`、`sourceLayer`、`ruleId`、`sampleId`、feedback copy、review pack 或 notes 中。
 
 错误示例：
 
@@ -44,12 +49,31 @@ accidentTypeId: taste_acid_overload_lemon
 accidentTypeId: taste_acid_overload_hawthorn
 accidentTypeId: taste_acid_overload_high
 accidentTypeId: extreme_lemon_accident
+accidentTypeId: texture_low_drinkability_oreo_milk
+accidentTypeId: taro_black_tea_paste_overload
+accidentTypeId: durian_coffee_aroma_fight
+accidentTypeId: pearl_pudding_eight_treasure_overload
+accidentTypeId: straw_mining_joke
 ```
 
 正确示例：
 
 ```text
 accidentTypeId: taste_acid_overload
+```
+
+正确分层示例：
+
+```text
+accidentTypeId: texture_low_drinkability
+sourceLayer: texture
+triggerMetric: sediment / strawResistance / drinkabilityPenalty
+evidence:
+  - ingredientId: topping_oreo_crumble
+  - tags: powdery, crumbly, sediment
+ruleId: texture_low_drinkability_sediment_high
+sampleId: oreo_low_drinkability_migration
+feedback copy: 奥利奥碎比例太高，喝起来像在用吸管开采甜品矿层
 ```
 
 ### outcomeTypeId
@@ -157,6 +181,39 @@ accidentTypeId: taste_acid_overload_high
 - 人类可读展示和备注。
 - 永远不能作为机制主键。
 - notes 可以解释草案状态，但不能替代结构字段去歧义。
+
+### mechanism ID / player display boundary
+
+- `accidentTypeId` 是内部机制身份。
+- `type` 是玩家前台展示 / 语气分类。
+- `feedback` 是具体解释和个性文案。
+- `evidence` 解释为什么触发该机制。
+- `ruleId` 记录是哪条规则 / 阈值触发。
+- `sampleId` 只用于测试定位。
+
+同一个 `accidentTypeId` 下，玩家可见 `type` 不要求强制统一。
+
+允许：
+
+```text
+texture_low_drinkability + 芋泥证据 -> type: 实验特调 -> 文案保留芋泥墙 / 水泥感
+texture_low_drinkability + 奥利奥粉渣证据 -> type: 口感事故 -> 文案保留甜品矿层 / 吸管开采
+texture_low_drinkability + 极端半固体结构事故 -> type: 口感事故
+```
+
+禁止：
+
+- 因为玩家展示不同，就反向拆出新的 mechanism ID。
+- 因为文案不同，就新建 `texture_taro_wall` / `texture_oreo_mining`。
+- 因为前台 `type` 不同，就新增材料名驱动的专属判定 if。
+- 因为想保留个性，就把 evidence / feedback copy 写成机制主键。
+
+原则：
+
+```text
+可以分开演，但不能分开建身份证。
+Player-facing display differences must not back-propagate into mechanism identity.
+```
 
 ## 3. 草案 ID / sample sheet guardrail
 
@@ -350,8 +407,10 @@ notes: feedbackTag must be confirmed by shadow data / registry before use
 
 - 新增或重命名 `accidentTypeId` / `outcomeTypeId` / `drinkTypeId`。
 - 某个 ID 看起来可能按原料拆机制。
+- 某个 ID 看起来像为单个组合、recipe、golden sample、文案梗、制作人备注或 review pack item 建立了机制身份。
 - 某个 ID 看起来混入 severity 档位。
 - sampleId 可能进入机制规则。
+- 玩家展示 `type`、feedback copy 或 notes 差异可能被反向写进机制 ID。
 - `feedbackTag` 已存在但语义不确定。
 - 草案 ID 可能被写进 stable 字段。
 - validator 需要 known stable ID source，但 source-of-truth 不明确。

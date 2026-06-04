@@ -1,5 +1,32 @@
 # 版本记录
 
+## v0.0.7.48
+
+本轮新增 mechanism ID restraint / display boundary guardrail docs。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/STABLE_ID_NAMING_GUARDRAIL.md`
+  - 补充机制 ID 节制原则：机制 ID 不应为单个组合、recipe、golden sample、文案梗、制作人备注或 review pack item 单独创建。
+  - 明确机制 ID 应表达可复用机制大类，具体性应放在 evidence、sourceIngredientIds、triggerMetric、sourceLayer、ruleId、sampleId、feedback copy、review pack 或 notes。
+  - 补充 mechanism ID / player display boundary：`accidentTypeId` 是内部机制身份，`type` 是玩家展示 / 语气分类，`feedback` 是具体解释和个性文案。
+  - 明确同一个 `accidentTypeId` 下玩家可见 `type` 不要求强制统一；玩家展示差异不能反向污染 mechanism ID。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 v0.0.7.48 guardrail 纳入 P1-4、后续路线和新任务检查清单。
+  - 记录 collector / source 文案里的已迁出旧 ID cleanup 待办：`texture_taro_overload` / `texture_oreo_overload` 后续应以 historical / migration history / legacy reference 语气保留，避免误读为 current active runtime ID。
+- 更新 `docs/AI_CONTEXT.md`
+  - 仅补充短摘要和当前 candidate 状态，不复制完整 guardrail 正文。
+
+### 阶段边界
+
+- 本轮只改 docs。
+- 不改 runtime、data、scripts、generated data、content sheets、golden expected 或 UI。
+- 不迁 `texture_topping_overload`。
+- 不新增 `accidentTypeId` / registry / enum / schema / validator。
+- 不做 generated severity / partial takeover / active takeover。
+- P1-4 仍未完全解决，topping 仍是 current runtime legacy fact。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.47
 
 本轮执行 `texture_oreo_overload` -> `texture_low_drinkability` actual migration，小步只迁 Oreo 分支。

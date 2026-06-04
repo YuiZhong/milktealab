@@ -47,6 +47,7 @@
 | registry / validator / generated data 接收 Codex 生成机制内容前 | 已读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`，并完成 human / ChatGPT 可审查 review pack gate |
 | mechanism review pack generator 实现前 | 已用 `reports/mechanismReviewPack.sample.md` 或等价样例 proof 验证 item 结构、provenance、decision summary 和 machine appendix 可审查 |
 | structure / operation / production 规则 active 依赖 `drinkStructureAnalyzer` 前 | 已读取 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，并完成 metadata source-of-truth、shadow compare、review pack 和 staged migration plan |
+| collector / source-of-truth cleanup 或 registry design 前 | historical / pre-version legacy ID 语气已清理，避免把已迁出的旧 ID 误读为 current active runtime ID |
 | v0.0.7.x 机制 final 收口前 | AI 生成 ID 与机制命名审计、accidentAnalyzer 迁移路线、drinkStructureAnalyzer 去中文 Set 计划 |
 
 ## 4. P1 TODO
@@ -91,7 +92,7 @@
 ### P1-4｜accidentAnalyzer legacy 内容判断迁移路线
 
 - 风险：`core/accidentAnalyzer.js` 仍是旧事故判断集中区，后续若继续堆具体 if，会拖慢数据化迁移。
-- 当前状态：当前不建议大改；v0.0.7.34 已新增 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 作为只读 mapping / inventory；v0.0.7.44 已新增 `reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md`，把 legacy accidents 分成 special candidate、generalize later、source notes、split review、data-driven notes 和 compatibility-only；v0.0.7.45 已新增 `reports/textureContentAccidentMigrationPlan.v0.0.7.45.md`，记录 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 的 future target plan；v0.0.7.46 已完成 `texture_taro_overload` -> `texture_low_drinkability` actual migration；v0.0.7.47 已完成 `texture_oreo_overload` -> `texture_low_drinkability` actual migration。topping 仍未迁，迁移路线仍未完成，P1-4 未解决。
+- 当前状态：当前不建议大改；v0.0.7.34 已新增 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 作为只读 mapping / inventory；v0.0.7.44 已新增 `reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md`，把 legacy accidents 分成 special candidate、generalize later、source notes、split review、data-driven notes 和 compatibility-only；v0.0.7.45 已新增 `reports/textureContentAccidentMigrationPlan.v0.0.7.45.md`，记录 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 的 future target plan；v0.0.7.46 已完成 `texture_taro_overload` -> `texture_low_drinkability` actual migration；v0.0.7.47 已完成 `texture_oreo_overload` -> `texture_low_drinkability` actual migration；v0.0.7.48 已补充机制 ID 节制原则与玩家展示分层边界，防止后续迁移把 recipe、sample、文案梗或 review item 反向写进机制 ID。topping 仍未迁，迁移路线仍未完成，P1-4 未解决。
 - 为什么重要：severity / threshold active 接管前，应明确哪些 legacy 判断保留，哪些迁入 summary / candidate / severity table。
 - 必须在什么时候前解决：severity / threshold active 接管前；v0.0.7.x 机制收口前。
 - 建议路线：以 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`、`reports/accidentAnalyzerMigrationDecisionSplit.v0.0.7.44.md` 和 `reports/textureContentAccidentMigrationPlan.v0.0.7.45.md` 为输入，先完成 producer review、source-of-truth / registry design、shadow / golden review、staged migration plan，并在 validator design 前确认 known accidentTypeId source；再决定哪些保留 legacy、哪些迁移，不做一次性大重构。
@@ -116,6 +117,8 @@ v0.0.7.45-v0.0.7.47 texture content-specific migration 状态：
 - `texture_topping_overload` -> future target `texture_solid_overload`
 
 该阶段不新增 `texture_paste_overload` / `texture_sediment_overload` / `texture_topping_specific_overload`，也不把 ingredient personality 写进 future `accidentTypeId`。芋泥、奥利奥和具体小料个性应保留在 evidence / notes / feedback copy。taro 与 Oreo 已完成最小 runtime migration 与 golden guard；topping 仍需 staged runtime task、golden review、feedback review、generated reference audit 和 docs / reports 更新。
+
+v0.0.7.48 补充长期 guardrail：机制 ID 要少而稳，不应为单个组合、recipe、golden sample、文案梗、制作人备注或 review pack item 创建新的 `accidentTypeId` / `outcomeTypeId` / mechanism ID。玩家展示 `type` 和 feedback copy 可以因 evidence 不同而不同，但不能反向拆出新的 mechanism ID；可以分开演，但不能分开建身份证。
 
 ### P1-5｜summaryCandidateEngine candidate tag / feedbackTags registry 边界
 
@@ -211,6 +214,8 @@ Git candidate = 项目开发版本
 - 不要为了清理 displayName 依赖而绕过 metadata source-of-truth、shadow compare、mechanism review pack 和 golden 回归。
 - 不要现在 active 接管 severity / threshold。
 - 不要现在扩 generated feedback active 接管范围。
+- 不要因为玩家展示 `type` 不同、feedback 文案不同、某条 golden sample 或 review pack item 很具体，就反向创建新的 mechanism ID。
+- 不要把已迁出的 `texture_taro_overload` / `texture_oreo_overload` 在 collector / source-of-truth 文案中继续写成 current active runtime ID；后续 cleanup 前应改为 historical / migration history / legacy reference 语气。
 - 不要为了清理 docs 而删除历史上下文正本。
 - 不要把 P1 / P2 写成已解决。
 
@@ -236,12 +241,13 @@ Git candidate = 项目开发版本
 16. v0.0.7.45 已新增 `reports/textureContentAccidentMigrationPlan.v0.0.7.45.md`，记录 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 的 future target plan：taro / Oreo 倾向 `texture_low_drinkability`，topping 倾向 `texture_solid_overload`；它不迁移 runtime，不新增 `accidentTypeId`，不表示 P1-4 已解决。
 17. v0.0.7.46 已完成 staged order 的第一步：`texture_taro_overload` -> `texture_low_drinkability` actual migration；保留原 score / cap / type / add / note，并新增 `taro_low_drinkability_migration` golden sample 保护 taro branch 新事故 ID。旧 `texture_taro_overload` 只保留为 historical / pre-v0.0.7.46 legacy note。该迁移不表示 P1-4 已解决。
 18. v0.0.7.47 已完成 staged order 的第二步：`texture_oreo_overload` -> `texture_low_drinkability` actual migration；保留原 score / cap / type / add / note，并新增 `oreo_low_drinkability_migration` golden sample 保护 Oreo branch 新事故 ID。旧 `texture_oreo_overload` 只保留为 historical / pre-v0.0.7.47 legacy note。该迁移不表示 P1-4 已解决。
-19. 后续如继续实际迁移，可考虑 staged order 的最后一步：迁 `texture_topping_overload`。必须保护 runtime、golden、feedback、generated data、docs / reports references，不应 one-shot 剩余项，除非引用面很小且 golden / 制作人 review 已清楚。
-20. 做 feedbackTag source-of-truth / registry / schema 设计，明确 runtime observed、generated / shadow、candidate / risk、rule tag、sample draft tag 的分层来源。
-21. 做 accidentTypeId source-of-truth / registry / schema 设计，明确 legacy observed、rule-table observed、structure-rule observed、summary-candidate observed、sample draft 和 migration candidate 的分层来源。
-22. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-23. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-24. 最后再考虑 severity generated data build、shadow、partial takeover。
+19. v0.0.7.48 已补充机制 ID 节制原则、机制 ID 与玩家展示分层边界，以及 collector / source 旧 ID historical cleanup 待办。该 guardrail 不迁 topping，不新增 ID，不新增 registry / validator，也不表示 P1-4 已解决。
+20. 后续如继续实际迁移，可考虑 staged order 的最后一步：迁 `texture_topping_overload`。必须保护 runtime、golden、feedback、generated data、docs / reports references，不应 one-shot 剩余项，除非引用面很小且 golden / 制作人 review 已清楚。
+21. 做 feedbackTag source-of-truth / registry / schema 设计，明确 runtime observed、generated / shadow、candidate / risk、rule tag、sample draft tag 的分层来源。
+22. 做 accidentTypeId source-of-truth / registry / schema 设计，明确 legacy observed、rule-table observed、structure-rule observed、summary-candidate observed、sample draft 和 migration candidate 的分层来源；清理 collector / source 文案中已迁出旧 ID 的 current-active 语气。
+23. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+24. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+25. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
@@ -261,4 +267,7 @@ v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 - 若要进入 shadow / partial / active，是否已有 generated validator、golden shadow expected 和制作人 review。
 - 是否会重命名已有 ID；如果会，是否已有迁移计划。
 - 是否会把 sampleId、displayName、`zhCN`、旧 tag 或 ID 字符串前缀当机制事实。
+- 是否会为单个组合、recipe、golden sample、文案梗、制作人备注或 review pack item 创建新的机制 ID；如果会，应停止并复查。
+- 是否会因玩家展示 `type` 或 feedback copy 不同而反向拆分 `accidentTypeId` / `outcomeTypeId`；如果会，应把具体性放回 evidence / rule / sample / copy / notes。
+- 是否会引用 `texture_taro_overload` / `texture_oreo_overload`；如果会，应确认其语境是 historical / pre-v0.0.7.46 / pre-v0.0.7.47 legacy reference，而不是 current active runtime ID。
 - 是否会改变玩家最终 score、feedback、accident、type 或 golden expected；如果会，是否有产品理由和 golden 更新计划。

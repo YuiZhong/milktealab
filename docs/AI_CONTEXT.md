@@ -65,13 +65,14 @@
 【可删】截至当前文档：
 
 - 最新确认 candidate：`v0.0.7.45-candidate`
-- 最新确认 candidate commit：`aa4deb6f20877a7ba2db6cb56ee11cb1ba43fdb3`
-- `v0.0.7.45-candidate` 已创建并推送成功，指向 `aa4deb6f20877a7ba2db6cb56ee11cb1ba43fdb3`。
+- 最新确认 candidate：`v0.0.7.47-candidate`
+- 最新确认 candidate commit：`a53396942bf9f358562fe476252bb9f0057431d8`
+- `v0.0.7.47-candidate` 已创建并推送成功，指向 `a53396942bf9f358562fe476252bb9f0057431d8`。
 - main 已 push；工作区应干净。
-- golden samples 当前应为 `20/20 passed`。
+- golden samples 当前应为 `22/22 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.45` 未创建。
-- 当前未推进 `v0.0.7.46`。
+- 正式 tag `v0.0.7.47` 未创建。
+- 当前未创建 `v0.0.7.48-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -88,7 +89,7 @@
 - P1-1 / P1-5 / P1-7 仍未完全解决。
 - source-of-truth / registry / validator 仍未创建。
 
-### v0.0.7.44-v0.0.7.45 压缩摘要
+### v0.0.7.44-v0.0.7.48 压缩摘要
 
 - v0.0.7.44 已完成 accidentAnalyzer legacy accident migration decision split。
 - v0.0.7.45 已完成 texture content-specific accident migration target plan。
@@ -96,7 +97,10 @@
   - `texture_taro_overload` -> `texture_low_drinkability`
   - `texture_oreo_overload` -> `texture_low_drinkability`
   - `texture_topping_overload` -> `texture_solid_overload`
-- v0.0.7.45 只是 plan / impact audit，不实际迁移 runtime。
+- v0.0.7.46 已完成 `texture_taro_overload` -> `texture_low_drinkability` actual migration。
+- v0.0.7.47 已完成 `texture_oreo_overload` -> `texture_low_drinkability` actual migration。
+- v0.0.7.48 已补充 mechanism ID restraint / display boundary guardrail：机制 ID 应少而稳，不应为单个组合、recipe、golden sample、文案梗、制作人备注或 review pack item 单独创建；玩家展示 `type` / feedback copy 差异不能反向拆分机制 ID。
+- collector / source 文案中若仍引用已迁出的 `texture_taro_overload` / `texture_oreo_overload`，后续 cleanup 前应按 historical / pre-v0.0.7.46 / pre-v0.0.7.47 legacy reference 语气处理，避免误读为 current active runtime ID。
 - P1-4 仍未解决。
 - 不新增：
   - `texture_paste_overload`
@@ -104,18 +108,15 @@
   - `texture_topping_specific_overload`
   - 任何按原料拆分的 texture accidentTypeId
 - 芋泥 / 奥利奥 / 小料个性应保留在 evidence / notes / feedback copy，不写进 future accidentTypeId。
-- 推荐 staged order：
-  1. 先迁 `texture_taro_overload`
-  2. 再迁 `texture_oreo_overload`
-  3. 最后迁 `texture_topping_overload`
+- staged order 中 taro / Oreo 已完成，topping 仍未迁。
 
 ### 当前下一步
 
-- 当前下一步只考虑：`v0.0.7.46｜texture_taro_overload -> texture_low_drinkability actual migration`。
-- 不要回头做 v0.0.7.45。
-- 不要一刀迁三个。
-- 不要迁 Oreo。
-- 不要迁 topping。
+- 当前下一步可考虑：冻结 `v0.0.7.48-candidate`，或在单独任务中继续 `texture_topping_overload` -> `texture_solid_overload` actual migration。
+- 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47。
+- 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
+- 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。
+- 不要因为玩家展示不同就拆出新 mechanism ID。
 - 不要开 registry。
 - 不要开 validator。
 - 不要做 generated severity build。
