@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.42
+
+本轮补充 v0.0.7.41 迁移后的 outcome / candidate tag / feedbackTag 边界说明。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/V0_0_7_ID_INVENTORY.md`
+  - 记录 `flavor_identity_conflict` 是当前 `outcomeTypeId`，由 v0.0.7.41 从 legacy `taste_conflict` 迁移而来。
+  - 记录 `identity_conflict` 仍是 candidate / risk tag，不是 runtime feedbackTag，也不是 outcomeTypeId。
+  - 记录 `bubble_conflict` 仍是窄语义 runtime observed feedbackTag，语义偏气泡 + 厚重 / 口感冲突追评，不泛化为 flavor identity conflict。
+  - 记录 legacy `taste_conflict` 只应作为 pre-v0.0.7.41 / historical outcomeTypeId 出现。
+- 更新 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`
+  - 补充 future outcome source-of-truth 应以 `flavor_identity_conflict` 为当前值，legacy `taste_conflict` 只能作为历史 note。
+  - 明确 validator 不能因为字符串相似性把 `flavor_identity_conflict`、`identity_conflict`、`bubble_conflict` 或 legacy `taste_conflict` 混成同一层 ID。
+- 更新 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`
+  - 补充 `flavor_identity_conflict` 不是 feedbackTag，`identity_conflict` 不是 feedbackTag，`bubble_conflict` 不能自动成为该 outcome 的默认文案标签。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.42 已完成 post-migration boundary notes。
+  - 继续明确 P1-1 / P1-5 / P1-7 仍未完全解决。
+
+### 阶段边界
+
+- 本轮只做 docs / guardrail notes。
+- 不新增 registry / enum / schema / validator。
+- 不改 runtime、data、content_sheets、generated feedback data、reports、scripts 或 golden expected。
+- 不改变玩家最终 score、feedback、accident、drinkType 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.41
 
 本轮执行 `taste_conflict` -> `flavor_identity_conflict` one-shot migration。

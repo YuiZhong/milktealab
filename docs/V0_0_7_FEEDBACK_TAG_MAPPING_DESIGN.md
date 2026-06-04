@@ -31,6 +31,8 @@
 特别注意：
 
 - `aroma_pressure` 当前更像 flavor / summary candidate 风险语义，不是 runtime 文案池 feedbackTag。
+- `identity_conflict` 当前是 flavor identity candidate / risk tag，不是 runtime 文案池 feedbackTag，也不能因为字符串接近 `flavor_identity_conflict` 就被当成 outcomeTypeId。
+- `flavor_identity_conflict` 当前是 outcomeTypeId，不是 feedbackTag。
 - `bubble_conflict` 当前是可观察的 runtime feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评，不应泛化为 generic flavor identity conflict。
 - `acid_accident`、`greasy_overload`、`straw_disaster` 等字符串出现在多个层级时，后续必须保持 layer 边界，不能因为字符串相同就合并语义。
 
@@ -113,6 +115,12 @@ sample draft tag 只用于说明未来可能的表格形态，不应进入 regis
 
 默认不自动映射。
 
+当前明确禁止：
+
+- 不允许 `identity_conflict` -> `bubble_conflict` 自动映射。
+- 不允许 `flavor_identity_conflict` -> `bubble_conflict` 自动映射。
+- 不允许把 `flavor_identity_conflict` 当 feedbackTag 使用；它是 outcomeTypeId。
+
 如果未来要把 candidate / risk tag 变成玩家文案 tag，必须先确认：
 
 - 它是否已有对应 runtime feedbackTag。
@@ -156,6 +164,14 @@ rule tag 若要进入 feedbackTag 字段，必须通过 explicit mapping row 或
 
 禁止仅凭字符串相同进行合并、泛化或引用。
 
+### v0.0.7.41 迁移后的 flavor identity conflict 文案边界
+
+- `flavor_identity_conflict` 是当前 outcomeTypeId，不是 feedbackTag。
+- `identity_conflict` 是 candidate / risk tag，不是 feedbackTag，不能直接进入玩家文案选择。
+- `bubble_conflict` 是 runtime observed feedbackTag，但只保留气泡 + 厚重 / 口感冲突追评语义。
+- `bubble_conflict` 不是 `flavor_identity_conflict` 的唯一或默认玩家文案标签。
+- 如果未来需要 generic flavor identity conflict 的玩家文案，应另走 feedbackTag mapping review / producer review，并扩充文案池；不应复用旧 tag 凑数。
+
 ## 5. Future Registry / Schema / Script 形态
 
 以下只是未来文件形态建议，本轮不创建。
@@ -194,6 +210,8 @@ rule tag 若要进入 feedbackTag 字段，必须通过 explicit mapping row 或
 
 - candidate / risk tag 没有直接混入 runtime feedbackTag。
 - `bubble_conflict` 没有被泛化为 flavor identity conflict。
+- `flavor_identity_conflict` 没有被当成 feedbackTag。
+- `identity_conflict` 没有被当成 runtime feedbackTag。
 - sample draft tag 没有进入 generated / runtime。
 - same-string cross-layer tag 都有明确边界。
 

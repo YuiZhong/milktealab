@@ -54,7 +54,7 @@
 ### P1-1｜AI 生成 ID 与机制命名审计
 
 - 风险：AI / Codex 生成或沿用的 ID 可能看起来稳定，却混用了机制、样本、文案、severity 或 source 层级。
-- 当前状态：v0.0.7.27 已建立 guardrail；v0.0.7.38 已新增 `reports/aiGeneratedIdTagReviewPack.sample.md` 作为 AI-generated ID / tag naming review pack proof；v0.0.7.39 已新增 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md` 作为正式 naming review pack；v0.0.7.40 已新增 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md`，记录制作人 / ChatGPT decision split 和 `taste_conflict` -> `flavor_identity_conflict` 迁移影响审计；v0.0.7.41 已执行该 one-shot migration，使当前 outcomeTypeId 改为 `flavor_identity_conflict`，legacy `taste_conflict` 仅保留为迁移前历史记录。当前仍待 source-of-truth / registry design 和后续 review 任务，P1-1 仍未解决。
+- 当前状态：v0.0.7.27 已建立 guardrail；v0.0.7.38 已新增 `reports/aiGeneratedIdTagReviewPack.sample.md` 作为 AI-generated ID / tag naming review pack proof；v0.0.7.39 已新增 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md` 作为正式 naming review pack；v0.0.7.40 已新增 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md`，记录制作人 / ChatGPT decision split 和 `taste_conflict` -> `flavor_identity_conflict` 迁移影响审计；v0.0.7.41 已执行该 one-shot migration，使当前 outcomeTypeId 改为 `flavor_identity_conflict`，legacy `taste_conflict` 仅保留为迁移前历史记录；v0.0.7.42 已补充 post-migration outcome / candidate tag / feedbackTag 边界 notes。当前仍待 source-of-truth / registry design 和后续 review 任务，P1-1 仍未解决。
 - 为什么重要：ID 一旦进入 docs、sample sheet、generated data、golden 或 runtime，会被后续 AI 当成事实来源。
 - 必须在什么时候前解决：正式调参前；`candidate_severity_rules` 进入 generated data 前；severity / threshold partial takeover 前；v0.0.7.x 机制部分 final 收口前。
 - 建议路线：按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 的长期审计流程，先列出 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 以及 profile / tag / generated sample 中的 draft ID，再检查层级是否混用；可用 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md` 作为正式 review pack 审查材料，并用 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md` 追踪已记录的制作人方向、技术下一步和迁移影响面。v0.0.7.41 已完成 `taste_conflict` -> `flavor_identity_conflict` one-shot migration，但这只解决一个 outcome ID 迁移点，不等于完成 P1-1；后续仍需 source-of-truth / registry design、ID inventory review 和 gate 审查。
@@ -112,7 +112,7 @@
 ### P1-5｜summaryCandidateEngine candidate tag / feedbackTags registry 边界
 
 - 风险：readonly candidate / 风险语义可能被误当 runtime feedbackTag。
-- 当前状态：`core/summaryCandidateEngine.js` 中存在 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty` 等 candidate / feedbackTags。v0.0.7.33 已新增 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md` 记录 mapping 边界；v0.0.7.40 再次确认 candidate / risk tag 不能自动成为 runtime feedbackTag。但尚未新增 registry / validator，也未解决该 P1。
+- 当前状态：`core/summaryCandidateEngine.js` 中存在 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty` 等 candidate / feedbackTags。v0.0.7.33 已新增 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md` 记录 mapping 边界；v0.0.7.40 再次确认 candidate / risk tag 不能自动成为 runtime feedbackTag；v0.0.7.42 明确 `identity_conflict` 仍是 candidate / risk tag，不是 runtime feedbackTag，也不能因字符串接近 `flavor_identity_conflict` 就被当成 outcomeTypeId。但尚未新增 registry / validator，也未解决该 P1。
 - 为什么重要：这些 tag 当前服务 readonly candidate / 风险语义，不应自动等同于 runtime 文案池 tag。
 - 必须在什么时候前处理：任何 validator / generated data 消费这些 tag 前；generated feedback partial / active 接管前；severity / threshold 使用 `feedbackTag` 字段前。
 - 建议路线：以 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md` 为边界，后续再做 feedbackTag source-of-truth / mapping review / registry 设计，明确哪些只是风险语义，哪些可以经过 review 进入文案池。
@@ -130,7 +130,7 @@
 ### P1-7｜feedbackTag 语义边界与文案池扩容
 
 - 风险：旧 feedbackTag 语义可能误导新机制，薄文案池也会影响 generated feedback active 接管。
-- 当前状态：`bubble_conflict` 是当前可观察的 runtime feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评；`aroma_pressure` 当前不是 runtime 文案池 feedbackTag；多个 generated feedback tags 只有 1 条文案。v0.0.7.33 已把这些边界写入 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`；v0.0.7.40 再次确认 `bubble_conflict` 不得泛化为 generic flavor identity conflict，`aroma_pressure` / `identity_conflict` 等只能作为 future copy direction candidate，不能直接进入玩家文案选择。但尚未完成 registry / 文案池扩容 / active 接管前 review。
+- 当前状态：`bubble_conflict` 是当前可观察的 runtime feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评；`aroma_pressure` 当前不是 runtime 文案池 feedbackTag；多个 generated feedback tags 只有 1 条文案。v0.0.7.33 已把这些边界写入 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`；v0.0.7.40 再次确认 `bubble_conflict` 不得泛化为 generic flavor identity conflict，`aroma_pressure` / `identity_conflict` 等只能作为 future copy direction candidate，不能直接进入玩家文案选择；v0.0.7.42 再次固定 `bubble_conflict` 不是 `flavor_identity_conflict` 的唯一或默认文案标签。但尚未完成 registry / 文案池扩容 / active 接管前 review。
 - 为什么重要：feedback partial / active 接管前，文案池和 tag 语义必须经过制作人 review。
 - 必须在什么时候前处理：generated feedback partial / active 接管前；`feedbackTag` 被 severity / threshold 表引用前。
 - 建议路线：先用 mapping design 和 review pack 做制作人审核，再决定扩写、拆分、保留 candidate-only 或弃用哪些 tag。
@@ -220,10 +220,11 @@ Git candidate = 项目开发版本
 8. v0.0.7.39 已新增 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md`，作为正式 AI-generated ID / tag naming review pack；它仍不是批准结论，不是 registry / validator input / generated data / runtime source-of-truth，也不表示 P1-1 已解决。
 9. v0.0.7.40 已新增 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md`，记录制作人 / ChatGPT decision split，并只读审计 `taste_conflict` -> `flavor_identity_conflict` 的迁移影响面；该 report 不执行迁移，不批准任何 ID / tag / rule 进入 registry / validator / generated data / runtime，也不表示 P1-1 已解决。
 10. v0.0.7.41 已将 legacy `taste_conflict` 受控迁移为当前 `flavor_identity_conflict` outcomeTypeId，并同步 runtime mapping、golden expected、content sheets、generated feedback data、adapter check 和当前事实 docs / reports；该迁移不新增 registry / validator，不改变 `identity_conflict` candidate / risk tag 或 `bubble_conflict` feedbackTag 语义，也不表示 P1-1 / P1-5 / P1-7 已解决。
-11. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
-12. 在 legacy、drinkStructure、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-13. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-14. 最后再考虑 severity generated data build、shadow、partial takeover。
+11. v0.0.7.42 已补充迁移后的 outcome / candidate tag / feedbackTag 边界 notes：`flavor_identity_conflict` 是当前 outcomeTypeId；`identity_conflict` 仍是 candidate / risk tag；`bubble_conflict` 仍是窄语义 feedbackTag；legacy `taste_conflict` 只作 historical note。该补充不代表 P1-1 / P1-5 / P1-7 已解决。
+12. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
+13. 在 legacy、drinkStructure、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+14. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+15. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 

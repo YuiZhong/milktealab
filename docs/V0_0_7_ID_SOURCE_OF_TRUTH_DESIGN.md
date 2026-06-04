@@ -141,7 +141,7 @@
 
 - known `ingredientId`：来自 reviewed ingredient registry，初期可由 `data/ingredients.js` 的 `ingredientMeta` 生成 registry candidate。
 - known `accidentTypeId`：来自 reviewed accident registry。初期候选可来自 `data/accidentRules.js`、`data/structureAccidentRules.js`、`core/accidentAnalyzer.js`、golden expected 和 inventory，但必须人工 review 后进入 allowed values。
-- known `outcomeTypeId`：来自 reviewed outcome registry。v0.0.7.41 后当前 flavor identity conflict outcome candidate 应以 `flavor_identity_conflict` 为准；legacy `taste_conflict` 只保留为迁移前历史 ID，不应作为当前 allowed value 来源。`novelty_experiment` 仍需 review。
+- known `outcomeTypeId`：来自 reviewed outcome registry。v0.0.7.41 后当前 flavor identity conflict outcome 应以 `flavor_identity_conflict` 为准；legacy `taste_conflict` 只保留为迁移前历史 ID，不应作为当前 allowed value 来源。`identity_conflict` 是 candidate / risk tag，不属于 outcomeTypeId source；`bubble_conflict` 是窄语义 feedbackTag，也不属于 outcomeTypeId source。`novelty_experiment` 仍需 review。
 - known `drinkTypeId`：来自 reviewed drink type registry。初期候选可来自 `data/drinkTypeRules.js`、`core/drinkTypeAnalyzer.js`、golden 和 generated feedback。
 - known `feedbackTag`：来自 feedbackTag registry / mapping。runtime pool、generated reviewed tags、candidate-only tags 必须分层，不可混用。
 - known `sourceLayer`：来自 enum，例如 `taste` / `texture` / `flavor`。
@@ -182,6 +182,7 @@
 - 不能写 `inferFromStringPatterns()` 生成 known ID 集合。
 - 不能从 docs prose 抽 ID 当 allowed values。
 - 不能为某个 golden sample、中文文案、单个原料或单条 draft row 写例外。
+- 不能因为字符串相似或含义相近，把 `flavor_identity_conflict`、`identity_conflict`、`bubble_conflict` 和 legacy `taste_conflict` 推断成同一层 ID：当前 `flavor_identity_conflict` 是 outcomeTypeId；`identity_conflict` 是 candidate / risk tag；`bubble_conflict` 是窄语义 feedbackTag；`taste_conflict` 是 legacy / pre-v0.0.7.41 historical outcomeTypeId。
 
 ## 6. 对 v0.0.7.30 inventory 的承接
 
@@ -255,7 +256,18 @@ v0.0.7.33 新增 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`，用于拆清 fee
 
 该设计不是 registry，不是 schema，不是 enum，不是 validator，也不是 generated data。本轮不提升任何 tag 状态，也不把 P1-5 / P1-7 写成已解决。
 
-## 10. 本轮不做的事
+## 10. v0.0.7.42 post-migration outcome / tag boundary notes
+
+v0.0.7.41 已完成 legacy `taste_conflict` -> current `flavor_identity_conflict` one-shot migration；本节只补 source-of-truth 边界，不创建实际 registry / enum / schema。
+
+- future known outcomeTypeId source 应记录当前值 `flavor_identity_conflict`，而不是 legacy `taste_conflict`。
+- `taste_conflict` 可以保留为 legacy / pre-v0.0.7.41 historical note，但不应作为 current outcome source。
+- `flavor_identity_conflict` 表达 outcome 层的风味身份不协调；推荐解释链路是 `sourceLayer=flavor`、`sourceSummary=flavorSummary`、`triggerMetric=identityConflictRisk`。
+- `identity_conflict` 只是 related candidate / risk tag，不是 outcomeTypeId，也不是 runtime feedbackTag。
+- `bubble_conflict` 是 runtime observed feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评，不属于 outcomeTypeId source。
+- future validator / registry / generated data / runtime 不能用字符串相似性推断这些 ID / tag 的层级关系。
+
+## 11. 本轮不做的事
 
 - 不新增实际 registry / enum / schema 文件。
 - 不实现 validator。
