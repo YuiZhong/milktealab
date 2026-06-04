@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.43
+
+本轮新增 feedbackTag mapping decision split / source-of-truth precheck report。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/feedbackTagMappingDecisionSplit.v0.0.7.43.md`
+  - 拆分 runtime-observed feedbackTag、generated / shadow feedbackTag、candidate / risk tag、rule-side semantics 和 sample draft tag。
+  - 为制作人提供 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty`、`bubble_conflict`、`greasy_overload`、`straw_disaster` 等 review item。
+  - 明确 `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty`、`sweet_overload`、`bitterness_overload`、`texture_heavy`、`low_drinkability` 仍是 candidate / risk / rule-side 语义，不是 runtime feedbackTag。
+  - 明确 `bubble_conflict` 保持气泡 + 厚重 / 口感冲突追评的窄语义，不泛化为 generic flavor identity conflict。
+  - Decision Split Table 中 `canEnterRegistry` / `canEnterValidator` / `canEnterGeneratedData` / `canAffectRuntime` 均为硬否定 `no`。
+- 更新 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`
+  - 记录 v0.0.7.43 report 与既有 mapping design 的关系。
+  - 继续明确 future feedbackTag registry / source-of-truth 是后续单独任务。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 v0.0.7.43 report 纳入 P1-5 / P1-7 和后续路线。
+  - 继续明确 P1-5 / P1-7 未解决，不能提前推进 validator / generated / partial takeover。
+
+### 阶段边界
+
+- 本轮只做 docs / report / mapping precheck。
+- 不新增 registry / enum / schema / validator。
+- 不新增 generated data。
+- 不改 runtime、data、content_sheets、generated feedback data、scripts、reports 既有文件或 golden expected。
+- 不批准任何 feedbackTag 进入 registry、validator、generated data、partial takeover、active takeover 或 runtime。
+- 不改变玩家最终 score、feedback、accident、drinkType 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.42
 
 本轮补充 v0.0.7.41 迁移后的 outcome / candidate tag / feedbackTag 边界说明。

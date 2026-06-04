@@ -258,6 +258,22 @@ v0.0.7.32 collector proof 只证明可以收集 stable ID source evidence。
 - feedbackTag source of truth / registry / schema 设计
 - feedbackTag mapping review pack
 - feedback 文案池扩容和制作人 review
+
+## 10. v0.0.7.43 feedbackTag mapping decision split
+
+v0.0.7.43 新增 `reports/feedbackTagMappingDecisionSplit.v0.0.7.43.md`，作为 feedbackTag mapping review split / source-of-truth precheck。
+
+本轮结论保持本文边界：
+
+- 该 report 不是 registry、enum、schema、validator input、generated data 或 runtime source-of-truth。
+- 该 report 不批准任何 feedbackTag 进入 registry、validator、generated data、partial takeover、active takeover 或 runtime。
+- `aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty`、`sweet_overload`、`bitterness_overload`、`texture_heavy`、`low_drinkability` 仍是 candidate / risk / rule-side 语义，不是 runtime feedbackTag。
+- `identity_conflict` 仍是 candidate / risk tag，不是 feedbackTag，也不是 outcomeTypeId。
+- `flavor_identity_conflict` 仍是当前 outcomeTypeId，不是 feedbackTag。
+- `bubble_conflict` 仍保留气泡 + 厚重 / 口感冲突追评的窄语义，不泛化为 generic flavor identity conflict。
+- future feedbackTag registry / source-of-truth 是后续单独任务；本轮不新增 registry / validator / generated data。
+
+P1-5 / P1-7 仍未解决。
 - validator 对 `feedbackTag` 字段的 reviewed source 检查
 - generated feedback partial / active 接管前 audit
 
