@@ -1,5 +1,34 @@
 # 版本记录
 
+## v0.0.7.30
+
+本轮新增 v0.0.7.x ID / naming inventory 与 source map 审计报告。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/V0_0_7_ID_INVENTORY.md`
+  - 记录 v0.0.7.x 当前观察到的 ID / tag / rule / sample 来源、使用层级、状态、风险、建议和 gate。
+  - 覆盖 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 以及 profile / tag / generated sample 中的 draft / 疑似 stable ID。
+  - 明确该文件不是 registry、enum 或 validator，不表示所有列出的 ID 都已经 stable。
+  - 记录 `dairy_fat_overload`、`flavor_durian_overload`、legacy texture accidents、`bubble_conflict`、`aroma_pressure`、summary candidate tags、candidate severity draft ruleIds 等重点对象的当前身份和风险。
+  - 明确 validate candidate severity sheet 和 severity generated data build 当前仍被 known stable ID source-of-truth / validator gate 阻塞。
+
+### 阶段边界
+
+- 本轮只做 docs / inventory / audit report。
+- 不执行整改，不重命名任何已有 ID。
+- 不新增 registry / enum / schema。
+- 不实现 validator。
+- 不新增 generated data。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports、`index.html`。
+- 不改玩家最终 score、feedback、accident、type 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `git diff --check` 通过。
+- 本轮未改 runtime / data / scripts / golden，未跑 golden。
+
 ## docs: sync v0.0.7.29 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
