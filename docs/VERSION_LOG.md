@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.35
+
+本轮新增 mechanism / generated output review pack gate design。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`
+  - 设计 Codex 生成机制内容 / generated output 进入 registry、validator、generated data、runtime、partial takeover 前的审查出口。
+  - 明确 review pack 结构为 Human Review Zone、ChatGPT Technical Review Zone、Decision Summary、Machine Appendix。
+  - 设计制作人审核字段、技术审查字段、provenance / traceability 字段、decision 字段、machine appendix 字段、gate rules、itemType 草案和 reviewStatus / issue tag 草案。
+  - 明确没有 provenance / traceability 的条目不得进入 source-of-truth。
+  - 明确 candidate severity sheet validator 不能早于 review pack gate。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 mechanism / generated output review pack gate 加入 v0.0.7.x gate 和后续路线。
+  - 继续明确 P1 未解决，validator 仍在后面，不应提前把未审清的 Codex 生成内容合法化。
+
+### 阶段边界
+
+- 本轮只做 docs / gate design。
+- 不新增 review pack generator script。
+- 不生成 sample review pack report。
+- 不新增 registry / schema / enum。
+- 不实现 validator。
+- 不新增 generated data。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports、golden expected。
+- 不批准任何 ID / tag / rule。
+- 不改变玩家最终 score、feedback、accident、type 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.34
 
 本轮新增 accidentAnalyzer legacy mapping inventory。
