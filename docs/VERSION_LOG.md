@@ -1,5 +1,37 @@
 # 版本记录
 
+## docs: sync v0.0.7.28 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.28-candidate`。
+  - 记录 candidate 指向 `b94294097a5a3dfe2f5faa5e199fbd3927e82478`。
+  - 记录 `v0.0.7.28-candidate` 已冻结并推送。
+  - 记录当前未推进 v0.0.7.29。
+
+### 阶段边界
+
+- `v0.0.7.28-candidate` 已冻结并推送。
+- candidate 指向 `b94294097a5a3dfe2f5faa5e199fbd3927e82478`。
+- v0.0.7.28 已新增 `docs/V0_0_7_MECHANISM_TODO.md`。
+- 该文档汇总四轮项目审计结果，记录 v0.0.7.x 机制 / ID / 内容管线债务。
+- 已列出 P1 / P2 TODO、解决 gate、阻塞门槛和不应立即乱改的内容。
+- 已加入 v0.0.7.x 机制相关任务开工必读列表。
+- 本轮未修复债务。
+- 未改 runtime、data、generated data、content_sheets、scripts、reports、`index.html`。
+- 未改玩家最终 score、feedback、accident、type 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.28`。
+- 当前未推进 v0.0.7.29。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.28
 
 本轮新增 v0.0.7.x mechanism TODO / audit debt doc。
