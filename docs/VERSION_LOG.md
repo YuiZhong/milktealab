@@ -1,5 +1,37 @@
 # 版本记录
 
+## v0.0.7.28
+
+本轮新增 v0.0.7.x mechanism TODO / audit debt doc。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 汇总用户 / ChatGPT 四轮项目审计结果。
+  - 记录 P0 / P1 / P2 定义，当前 P0 暂无。
+  - 记录 P1 / P2 TODO、解决时机、阻塞门槛和推荐路线。
+  - 明确这些债务尚未解决，本轮只建立追踪正本。
+- 更新 `AGENTS.md`
+  - 将 `docs/V0_0_7_MECHANISM_TODO.md` 加入 v0.0.7.x 机制 / ID / severity / threshold / 内容管线债务任务的开工必读列表。
+- 更新 `docs/AI_CONTEXT.md`
+  - 将 `docs/V0_0_7_MECHANISM_TODO.md` 加入新对话启动提醒。
+  - 记录 v0.0.7.28 已新增 mechanism TODO / audit debt doc。
+  - 记录当前未修复债务，只整理 TODO / gate。
+
+### 阶段边界
+
+- 本轮只做 docs / audit debt 整理。
+- 不修复 P1 / P2。
+- 不改 ID。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports、`index.html` 或 README。
+- 不改玩家最终 score、feedback、accident、type 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## docs: sync v0.0.7.27 candidate status
 
 本轮只更新 docs 状态，不改运行逻辑。
