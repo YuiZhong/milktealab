@@ -6,7 +6,6 @@ const { evaluateAccidentRules } = window.MILK_TEA_LAB_ACCIDENT_RULE_ENGINE;
 const { evaluateStructureAccidentRules } = window.MILK_TEA_LAB_STRUCTURE_ACCIDENT_RULE_ENGINE;
 
 const textureAccidentTypeIds = new Set([
-  "texture_topping_overload",
   "texture_straw_resistance",
   "texture_low_drinkability",
   "texture_solid_overload"
@@ -146,7 +145,7 @@ function detectAccidents(context) {
     const ratio = ratioOfRuleRef(context, ref);
     if (ratio > 45) {
       accidents.push({
-        accidentTypeId: "texture_topping_overload",
+        accidentTypeId: "texture_solid_overload",
         type: "实验特调",
         cap: ratio > 65 ? 38 : 55,
         score: ratio > 65 ? -34 : -18,

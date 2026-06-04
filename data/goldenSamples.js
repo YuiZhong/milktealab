@@ -734,6 +734,22 @@
         feedbackIncludesAny: ["芋泥", "稠度", "不太愿意流动", "吸管"]
       },
       notes: "保护 v0.0.7.46 taro actual migration：芋泥证据保留在 note / feedback copy，事故 ID 使用通用低可饮用性。"
+    },
+    {
+      id: "topping_solid_overload_migration",
+      name: "小料固体过载迁移",
+      cup: [
+        { name: "珍珠", ratio: 50 },
+        { name: "红茶", ratio: 50 }
+      ],
+      expectations: {
+        typeIncludesAny: ["实验特调"],
+        accidentTypeIdIncludes: ["texture_solid_overload"],
+        scoreMin: 0,
+        scoreMax: 40,
+        feedbackIncludesAny: ["珍珠", "小料", "吸管", "体能测试", "比例太高"]
+      },
+      notes: "保护 v0.0.7.49 topping actual migration：具体小料名和吸管体能测试解释保留在 note / feedback copy，事故 ID 使用通用固体过载。"
     }
   ];
 

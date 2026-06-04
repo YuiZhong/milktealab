@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.49
+
+本轮执行 `texture_topping_overload` -> `texture_solid_overload` actual migration，小步只迁 topping overload loop。
+
+### 本轮新增 / 更新
+
+- 更新 `core/accidentAnalyzer.js`
+  - 将 topping ratio > 45 loop 输出从 `texture_topping_overload` 改为 `texture_solid_overload`。
+  - 从 active texture accident set 中移除 `texture_topping_overload`。
+  - 保留原触发条件 `ratio > 45`。
+  - 保持原 `score`、`cap`、`type`、`add`、`note` 不变。
+  - 珍珠 / 芋圆 / 布丁 / 仙草 / 椰果等具体小料名和“吸管体能测试”解释仍保留在玩家可见 note / feedback copy 方向，不写进 accidentTypeId。
+- 更新 `data/goldenSamples.js`
+  - 新增 `topping_solid_overload_migration`，专门保护 topping branch 输出 `texture_solid_overload`。
+  - 继续保护具体小料名、吸管、体能测试和小料过量方向。
+- 更新 `index.html`
+  - 页面版本更新到 `v0.0.7.49`。
+  - 更新 `core/accidentAnalyzer.js` cache-busting query。
+- 新增 `reports/textureToppingMigration.v0.0.7.49.md`
+  - 记录 before / after ID、保持不变项、golden sample 变化、未新增 topping-specific if / selector，以及旧 ID 的 historical 定位。
+
+### 阶段边界
+
+- 本轮只迁 `texture_topping_overload`。
+- 本轮不回头改 taro / Oreo。
+- 本轮不新增 `texture_topping_specific_overload`、`texture_pearl_overload`、`texture_eight_treasure_overload` 或任何按小料拆分的 texture accidentTypeId。
+- 本轮不新增 topping-specific if / 文案 selector。
+- 本轮不开 registry / enum / schema / validator。
+- 本轮不做 generated severity build / partial takeover / active takeover。
+- 本轮不改 generated feedback data、content sheets 或 scripts。
+- P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 accidentAnalyzer broader migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未解决。
+- golden samples 23/23 passed。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.48
 
 本轮新增 mechanism ID restraint / display boundary guardrail docs。
