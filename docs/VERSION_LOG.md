@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.7.38
+
+本轮新增 AI-generated ID / tag naming review pack proof。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/aiGeneratedIdTagReviewPack.sample.md`
+  - 作为 AI / Codex 生成或沿用的 ID / tag / rule / sample / candidate / source 字段命名复审 proof。
+  - 覆盖 `flavor_durian_overload`、`extreme_lemon_accident`、`aroma_pressure`、`bubble_conflict`、`texture_dairy_fat_load_draft`、`dairy_fat_overload` + `sourceLayer=texture` / `triggerMetric=fatLoad`、`hard_physical`、`baseLiquidNames` / `item.name` 等代表性风险项。
+  - 分成制作人 / ChatGPT 速读区、技术复查区、决策汇总区和机器附录。
+  - 明确 report 不批准任何 ID / tag / rule，不是 registry、enum、schema、validator input、generated data 或 runtime source-of-truth。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.38 已新增 AI-generated ID / tag naming review pack proof。
+  - 明确 P1-1 仍未解决，后续仍需正式 ID / naming 审计、review decision、migration plan 或 source-of-truth 设计。
+
+### 阶段边界
+
+- 本轮只做 report proof / docs。
+- 不执行实际全量 ID 审计。
+- 不重命名任何现有 ID，不新增 stable ID / tag / rule；`AIRP-*` 仅为 review pack 内部 `reviewItemId`。
+- 不新增 registry / enum / schema / validator。
+- 不新增 generated data。
+- 不改 runtime、data、generated data、content_sheets、scripts 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.37
 
 本轮新增 `drinkStructureAnalyzer` displayName Set inventory / migration plan。

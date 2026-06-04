@@ -54,11 +54,11 @@
 ### P1-1｜AI 生成 ID 与机制命名审计
 
 - 风险：AI / Codex 生成或沿用的 ID 可能看起来稳定，却混用了机制、样本、文案、severity 或 source 层级。
-- 当前状态：v0.0.7.27 已建立 guardrail，但尚未做全量审计。
+- 当前状态：v0.0.7.27 已建立 guardrail；v0.0.7.38 已新增 `reports/aiGeneratedIdTagReviewPack.sample.md` 作为 AI-generated ID / tag naming review pack proof；但尚未做全量审计，P1-1 仍未解决。
 - 为什么重要：ID 一旦进入 docs、sample sheet、generated data、golden 或 runtime，会被后续 AI 当成事实来源。
 - 必须在什么时候前解决：正式调参前；`candidate_severity_rules` 进入 generated data 前；severity / threshold partial takeover 前；v0.0.7.x 机制部分 final 收口前。
-- 建议路线：按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 的长期审计流程，先列出 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 以及 profile / tag / generated sample 中的 draft ID，再检查层级是否混用。
-- 禁止误处理：不要顺手重命名已有 ID；不要把疑似问题直接改成新事实；需要迁移时单独开任务并保护 runtime、golden、docs 和 generated 引用。
+- 建议路线：按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 的长期审计流程，先列出 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 以及 profile / tag / generated sample 中的 draft ID，再检查层级是否混用；可参考 `reports/aiGeneratedIdTagReviewPack.sample.md` 的 proof 结构设计正式 review pack，但不能把 proof 当成审计结论。
+- 禁止误处理：不要顺手重命名已有 ID；不要把疑似问题直接改成新事实；不要把 `reports/aiGeneratedIdTagReviewPack.sample.md` 当作 registry、enum、schema、validator input、generated data 或 runtime source-of-truth；需要迁移时单独开任务并保护 runtime、golden、docs 和 generated 引用。
 
 重点检查：
 
@@ -216,11 +216,12 @@ Git candidate = 项目开发版本
 4. v0.0.7.36 已新增 `reports/mechanismReviewPack.sample.md`，作为 mechanism / generated output review pack proof / sample report；它只是结构 proof，不是正式 review 结论，不批准任何 ID / tag / rule，也不表示 P1 已解决。
 5. 后续可考虑根据 sample proof 再设计 review pack generator；在 generator / review pack gate 成熟前，不应让 registry / validator / generated data 接收 Codex 生成机制内容。
 6. v0.0.7.37 已新增 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，记录 `drinkStructureAnalyzer` 中文显示名 Set、profile fallback 和相邻 category / drinkType 显示文案依赖；P1-6 仍未解决，后续还需要 metadata candidate、shadow compare、review pack 和 staged migration。
-7. 做 AI 生成 ID 与机制命名复审，并把复审结果 review pack 化；P1-1 仍未解决。
-8. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
-9. 在 legacy、drinkStructure、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-10. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-11. 最后再考虑 severity generated data build、shadow、partial takeover。
+7. v0.0.7.38 已新增 `reports/aiGeneratedIdTagReviewPack.sample.md`，作为 AI 生成 ID 与机制命名复审的 review pack proof；它只是审查出口样例，不批准任何 ID / tag / rule，也不表示 P1-1 已解决。
+8. 后续可考虑做 AI 生成 ID 与机制命名正式复审，并把复审结果 review pack 化；P1-1 仍未解决。
+9. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
+10. 在 legacy、drinkStructure、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+11. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+12. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
