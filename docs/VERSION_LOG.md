@@ -1,5 +1,34 @@
 # 版本记录
 
+## v0.0.7.31
+
+本轮新增 known stable ID source-of-truth / registry / enum / schema 设计文档。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`
+  - 设计 future validator 应从哪里获取合法 ID 集合。
+  - 按 `ingredientId`、`accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 和 profile / structure / candidate tags 分层说明 source-of-truth 候选来源。
+  - 比较从 existing runtime data / rules 现场收集、显式 registry / enum / schema、混合方案三种路线，并推荐混合方案。
+  - 提出未来可能的 `data/idRegistry.js`、`data/schema/stableIds.schema.json`、collector、registry check 等文件形态，但本轮不创建这些文件。
+  - 设计 future candidate severity sheet validator 如何区分 stable / draft / sample-only / candidate-only / generated-only。
+  - 承接 `docs/V0_0_7_ID_INVENTORY.md` 结论，明确 `aroma_pressure` 等 candidate / risk tag 不能自动成为 runtime `feedbackTag`，`bubble_conflict` 不能泛化，candidate severity draft ruleIds 不能进入 stable registry。
+
+### 阶段边界
+
+- 本轮只做 docs / source-of-truth design。
+- 不新增 registry / enum / schema。
+- 不实现 validator。
+- 不新增 generated data。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports、`index.html`。
+- 不改玩家最终 score、feedback、accident、type 或 golden expected。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- `git diff --check` 通过。
+- 本轮未改 runtime / data / scripts / golden，未跑 golden。
+
 ## v0.0.7.30
 
 本轮新增 v0.0.7.x ID / naming inventory 与 source map 审计报告。
