@@ -43,6 +43,7 @@
 | severity partial takeover 前 | ID 命名审计、golden shadow expected、制作人 review |
 | severity / threshold 表引用 `feedbackTag` 前 | 已读取 `docs/V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md`，并确认引用的是 reviewed feedbackTag source-of-truth，不是 candidate / risk tag |
 | generated feedback partial takeover 前 | feedbackTag registry / 文案池扩充 / review pack 审核 |
+| accidentAnalyzer 迁移路线设计前 | 已读取 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`，并确认迁移不改变 runtime / golden / generated 引用 |
 | v0.0.7.x 机制 final 收口前 | AI 生成 ID 与机制命名审计、accidentAnalyzer 迁移路线、drinkStructureAnalyzer 去中文 Set 计划 |
 
 ## 4. P1 TODO
@@ -87,10 +88,10 @@
 ### P1-4｜accidentAnalyzer legacy 内容判断迁移路线
 
 - 风险：`core/accidentAnalyzer.js` 仍是旧事故判断集中区，后续若继续堆具体 if，会拖慢数据化迁移。
-- 当前状态：当前不建议大改，但需要迁移路线。
+- 当前状态：当前不建议大改；v0.0.7.34 已新增 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 作为只读 mapping / inventory，但迁移路线尚未完成，P1-4 未解决。
 - 为什么重要：severity / threshold active 接管前，应明确哪些 legacy 判断保留，哪些迁入 summary / candidate / severity table。
 - 必须在什么时候前解决：severity / threshold active 接管前；v0.0.7.x 机制收口前。
-- 建议路线：先做只读 mapping / inventory，再决定哪些保留 legacy、哪些迁移，不做一次性大重构。
+- 建议路线：以 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 为输入，先确认 current final impact、sourceLayer candidate、possible triggerMetric、naming risk 和 golden 引用，再决定哪些保留 legacy、哪些迁移，不做一次性大重构。
 - 禁止误处理：不要现在大改 `accidentAnalyzer.js`；不要为了清债直接改评分、事故、feedback 或 golden expected。
 
 已知具体内容判断包括：
@@ -102,6 +103,8 @@
 - `texture_topping_overload`
 - `taste_strong_flavor_overload`
 - `texture_straw_resistance`
+
+补充记录：inventory 也覆盖当前 rule engine / structure rule 相关事故，如 `taste_acid_overload`、`flavor_durian_overload`、`texture_low_drinkability`、`texture_solid_overload`，以及 legacy texture dedupe fallback。该覆盖不代表迁移完成。
 
 ### P1-5｜summaryCandidateEngine candidate tag / feedbackTags registry 边界
 
@@ -190,6 +193,7 @@ Git candidate = 项目开发版本
 - 不要现在重命名 `dairy_fat_overload`、`flavor_durian_overload`、`texture_taro_overload`、`texture_oreo_overload` 等已有 ID。
 - 这些 ID 可能已经被 runtime、golden、docs 或 generated data 引用，应进入后续 ID 审计，而不是顺手改名。
 - 不要现在大改 `core/accidentAnalyzer.js`。
+- 不要把 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 当作迁移许可；它只是 inventory，不是 runtime 改造方案。
 - 不要现在 active 接管 severity / threshold。
 - 不要现在扩 generated feedback active 接管范围。
 - 不要为了清理 docs 而删除历史上下文正本。
@@ -201,13 +205,14 @@ Git candidate = 项目开发版本
 
 1. 冻结本 TODO / audit debt 文档 candidate。
 2. 读取并遵守 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
-3. 设计 known stable ID source of truth / registry / enum / schema。
-4. 设计并实现 validate candidate severity sheet。
-5. 建立 generated severity data validator / structure check。
-6. 做 AI 生成 ID 与机制命名审计。
-7. 做 feedbackTag registry / 文案池扩充 / review pack 审核。
-8. 形成 `accidentAnalyzer` legacy 迁移路线和 `drinkStructureAnalyzer` 去中文 Set 计划。
-9. 再考虑 severity shadow / partial takeover。
+3. 以 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 为输入，设计 mechanism / generated output review pack gate，让 Codex 生成的机制内容先有可审查出口；v0.0.7.34 已完成 inventory，但 P1-4 未解决。
+4. 做 mechanism / generated output review pack proof / sample report，验证制作人和 ChatGPT 是否能看懂并审查 legacy / generated 机制内容。
+5. 做 `drinkStructureAnalyzer` 中文显示名 Set inventory / migration plan，先明确显示文案主键残留，不急着重写 runtime。
+6. 做 AI 生成 ID 与机制命名复审，并把复审结果 review pack 化；P1-1 仍未解决。
+7. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
+8. 在 legacy、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+9. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+10. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
@@ -218,6 +223,7 @@ v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 - 是否已读取本文件。
 - 是否已读取 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
 - 本任务是否会触碰 P1 gate。
+- 若任务涉及 `accidentAnalyzer` / accidentTypeId / severity takeover，是否已读取 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`。
 - 若要实现 validator，是否已有 known stable ID source of truth。
 - 若要 build generated severity data，是否已有 candidate severity sheet validator。
 - 若要进入 shadow / partial / active，是否已有 generated validator、golden shadow expected 和制作人 review。

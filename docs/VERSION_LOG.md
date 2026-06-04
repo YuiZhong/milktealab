@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.7.34
+
+本轮新增 accidentAnalyzer legacy mapping inventory。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`
+  - 只读整理当前 accident flow、legacy accident inventory、ID / mechanism naming risk、migration category proposal、validator / severity sheet implications 和 review pack / human audit implications。
+  - 覆盖 `dairy_fat_overload`、`industrial_creamer_overload`、`texture_taro_overload`、`texture_oreo_overload`、`texture_topping_overload`、`taste_strong_flavor_overload`、`texture_straw_resistance` 等 legacy accidentAnalyzer 分支。
+  - 同步记录 rule engine / structure rule 相关事故，如 `taste_acid_overload`、`flavor_durian_overload`、`texture_low_drinkability`、`texture_solid_overload`，以及 legacy texture dedupe fallback。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 P1-4 连接到 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`。
+  - 明确 inventory 只是只读 mapping / planning input，不代表 P1-4 已解决，也不等于 runtime 迁移许可。
+
+### 阶段边界
+
+- 本轮只做 docs / inventory。
+- 不改 `core/accidentAnalyzer.js`。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports、golden expected。
+- 不新增 registry / enum / schema。
+- 不实现 validator。
+- 不重命名现有 ID。
+- 不改变玩家最终 score、feedback、accident、type 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.33
 
 本轮新增 feedbackTag registry / candidate tag mapping design。
