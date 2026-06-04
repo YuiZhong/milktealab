@@ -620,6 +620,22 @@
       notes: "为后续迁移奥利奥碎过量事故提供回归保护，重点保护 >40 的初始事故档，而不是只保护 >60 的极端档。"
     },
     {
+      id: "oreo_low_drinkability_migration",
+      name: "奥利奥低可饮用性迁移",
+      cup: [
+        { name: "奥利奥碎", ratio: 45 },
+        { name: "红茶", ratio: 55 }
+      ],
+      expectations: {
+        typeIncludes: ["口感事故"],
+        accidentTypeIdIncludes: ["texture_low_drinkability"],
+        scoreMin: 0,
+        scoreMax: 40,
+        feedbackIncludesAny: ["奥利奥", "吸管", "开采", "甜品矿层", "粉渣"]
+      },
+      notes: "保护 v0.0.7.47 Oreo actual migration：奥利奥粉渣 / 吸管开采证据保留在 note / feedback copy，事故 ID 使用通用低可饮用性。"
+    },
+    {
       id: "bubble_cream_conflict",
       name: "气泡奶油冲突",
       cup: [

@@ -65,7 +65,21 @@ v0.0.7.46 已完成 staged order 的第一步：`texture_taro_overload` -> `text
 - 旧 `texture_taro_overload` 只作为 historical / pre-v0.0.7.46 legacy ID 保留在 docs / reports 中。
 - 原触发条件、score、cap、type、add 和玩家可见 note 保持不变。
 - 芋泥“糊 / 水泥感”个性保留在 evidence / notes / feedback copy，不写进 accidentTypeId。
-- `texture_oreo_overload` 与 `texture_topping_overload` 仍是 current runtime legacy facts。
+- At the v0.0.7.46 slice, `texture_oreo_overload` 与 `texture_topping_overload` 仍是 current runtime legacy facts；v0.0.7.47 已更新 Oreo 状态，见下一节。
+- P1-4 仍未完全解决。
+
+## 0.4 v0.0.7.47 Oreo actual migration 关系
+
+v0.0.7.47 已完成 staged order 的第二步：`texture_oreo_overload` -> `texture_low_drinkability` actual migration。
+
+该迁移只处理 Oreo crumble ratio > 40 分支：
+
+- 当前 runtime 不再由 Oreo branch emit `texture_oreo_overload`。
+- Oreo branch 当前 emit `texture_low_drinkability`。
+- 旧 `texture_oreo_overload` 只作为 historical / pre-v0.0.7.47 legacy ID 保留在 docs / reports 中。
+- 原触发条件、score、cap、type、add 和玩家可见 note 保持不变。
+- Oreo “粉渣 / 沉积 / 吸管开采 / 甜品矿层”个性保留在 evidence / notes / feedback copy，不写进 accidentTypeId。
+- `texture_topping_overload` 仍是 current runtime legacy fact。
 - P1-4 仍未完全解决。
 
 ## 1. Current Accident Flow Map
@@ -90,7 +104,7 @@ v0.0.7.46 已完成 staged order 的第一步：`texture_taro_overload` -> `text
 | dairy fat overload branch | `dairy_fat_overload` | `core/accidentAnalyzer.js` | dairy / high-fat dairy / cream / thick milk ratios | group and refs, not one sample | no for matching | `texture` / drinkability, with dairy evidence | `fatLoad` / heavy dairy load / drinkability pressure | yes: score cap, type `奶脂过载`, feedback tags | Needs note: ID starts with dairy, but current sample semantics can be texture / fatLoad direction | keep legacy; do not infer sourceLayer from ID prefix; future severity row should use explicit `sourceLayer` / `triggerMetric` | before severity validator and active takeover |
 | industrial creamer overload branch | `industrial_creamer_overload` | `core/accidentAnalyzer.js` | plant creamer ratio and share of dairy total | yes, non-dairy creamer ref | no for matching | `flavor` / ingredient identity / quality | `industrialCreamerRatio` / identity mismatch | yes: score cap, type `工业奶茶`, feedback tags | Needs review: product/quality label is subjective and producer-facing | keep legacy; review output label and trigger meaning before data-driven takeover | before producer review / partial takeover |
 | taro paste overload branch | current: `texture_low_drinkability`; historical pre-v0.0.7.46: `texture_taro_overload` | `core/accidentAnalyzer.js` | taro paste ratio above 50 | yes, taro paste | no for matching | `texture` | `pasteLoad` / `solidLoad` / `strawResistance` | yes: score cap, type `实验特调`, feedback tags | v0.0.7.46 migrated out of ingredient-specific accidentTypeId | keep current generalized accidentTypeId; keep taro personality in evidence / notes / feedback copy | monitor in staged accidentAnalyzer migration route |
-| Oreo overload branch | `texture_oreo_overload` | `core/accidentAnalyzer.js` | Oreo crumble ratio above 40 | yes, Oreo crumble | no for matching | `texture` | `sedimentRisk` / `solidLoad` / `strawResistance` | yes: score cap, type `口感事故`, feedback tags | Migration candidate: ingredient-specific accidentTypeId | keep legacy; review whether it maps to texture solid / sediment mechanism | before accidentAnalyzer migration route |
+| Oreo overload branch | current: `texture_low_drinkability`; historical pre-v0.0.7.47: `texture_oreo_overload` | `core/accidentAnalyzer.js` | Oreo crumble ratio above 40 | yes, Oreo crumble | no for matching | `texture` | `sedimentRisk` / `solidLoad` / `strawResistance` | yes: score cap, type `口感事故`, feedback tags | v0.0.7.47 migrated out of ingredient-specific accidentTypeId | keep current generalized accidentTypeId; keep Oreo personality in evidence / notes / feedback copy | monitor in staged accidentAnalyzer migration route |
 | topping overload loop | `texture_topping_overload` | `core/accidentAnalyzer.js` | one topping ratio above 45 | yes, multiple topping refs | yes, note interpolates Chinese topping name | `texture` / `structure` | `toppingLoad` / `solidLoad` / `strawResistance` | yes: score cap, type `实验特调`, feedback tags | Needs review: generic output ID but note/display text is ingredient-specific | keep legacy; future generated rule should keep ingredient evidence separate from accidentTypeId | before severity table build |
 | strong flavor overload loop | `taste_strong_flavor_overload` | `core/accidentAnalyzer.js` | matcha / cocoa / coffee ratio above 60 | yes, multiple strong flavor refs | yes, note interpolates Chinese flavor name | `taste` / `flavor` mixed | `flavorIntensity` / `aromaPressure` / identity dominance | yes: score cap, type `实验特调`, feedback tags | Needs review: source layer and metric are ambiguous | keep legacy; do sourceLayer / triggerMetric review before table migration | before severity validator |
 | straw resistance branch | `texture_straw_resistance` | `core/accidentAnalyzer.js` | straw-resistance group, clear liquid, heavy total ratios | group refs | no for matching | `texture` / `structure` | `strawResistance` / `solidLoad` / `drinkability` | yes: score cap, type `口感事故`, feedback tags | OK / Needs note: mature mechanism but still legacy if thresholds | keep as primary texture accident candidate; migrate only after shadow / golden review | before severity partial takeover |
@@ -104,7 +118,7 @@ Current legacy IDs are real runtime facts, but not all of them are good future m
 
 Known risks:
 
-- Some IDs are ingredient-specific, such as `flavor_durian_overload` and `texture_oreo_overload`; `texture_taro_overload` is now historical / pre-v0.0.7.46 after taro migration. Future mechanism tables should not multiply accidentTypeId by every ingredient.
+- Some IDs are ingredient-specific, such as `flavor_durian_overload`; `texture_taro_overload` is now historical / pre-v0.0.7.46 after taro migration, and `texture_oreo_overload` is now historical / pre-v0.0.7.47 after Oreo migration. Future mechanism tables should not multiply accidentTypeId by every ingredient.
 - Some IDs mix source meanings. `dairy_fat_overload` can look like a dairy identity mechanism, but future severity examples may correctly treat it as `textureSummary.fatLoad` / drinkability pressure. ID names must not override `sourceLayer` / `sourceSummary` / `triggerMetric`.
 - Some branches interpolate Chinese display names into notes. Notes are user-facing explanation, not mechanism keys.
 - The legacy dedupe fallback still reads display type and note text to identify texture accidents. This is a compatibility fallback, not a pattern to expand.
@@ -123,7 +137,7 @@ This section is a proposal for future planning only. It does not mark any item m
 | Data-driven rule already exists | `taste_acid_overload`, `texture_low_drinkability`, `texture_solid_overload` | Keep current rule engines; audit naming and source fields before generated severity data. |
 | Candidate severity table candidates | `taste_acid_overload`, `dairy_fat_overload`, `texture_straw_resistance`, structure texture accidents | Use explicit `sourceLayer`, `sourceSummary`, `triggerMetric`, and known stable ID source; do not infer by string prefix. |
 | Needs producer / mechanism review | `industrial_creamer_overload`, `taste_strong_flavor_overload`, ingredient-specific texture overloads | Review subjective labels, player-facing type, and whether evidence belongs in notes rather than accidentTypeId. |
-| Migration candidate, not immediate rename | `flavor_durian_overload`, `texture_oreo_overload`, `texture_topping_overload`; historical `texture_taro_overload` | Keep current runtime IDs now; if future rename is needed, plan compatibility, generated data updates, and golden expected changes deliberately. v0.0.7.46 has already migrated taro to `texture_low_drinkability`; Oreo / topping remain future candidates. |
+| Migration candidate, not immediate rename | `flavor_durian_overload`, `texture_topping_overload`; historical `texture_taro_overload` and `texture_oreo_overload` | Keep current runtime IDs now; if future rename is needed, plan compatibility, generated data updates, and golden expected changes deliberately. v0.0.7.46 has already migrated taro to `texture_low_drinkability`; v0.0.7.47 has migrated Oreo to `texture_low_drinkability`; topping remains a future candidate. |
 | Compatibility cleanup later | legacy texture dedupe fallback | Do not expand; remove only after structured accident tags and tests cover the same safety boundary. |
 
 ## 5. Validator / Severity Sheet Implications

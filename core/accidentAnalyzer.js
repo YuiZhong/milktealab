@@ -6,7 +6,6 @@ const { evaluateAccidentRules } = window.MILK_TEA_LAB_ACCIDENT_RULE_ENGINE;
 const { evaluateStructureAccidentRules } = window.MILK_TEA_LAB_STRUCTURE_ACCIDENT_RULE_ENGINE;
 
 const textureAccidentTypeIds = new Set([
-  "texture_oreo_overload",
   "texture_topping_overload",
   "texture_straw_resistance",
   "texture_low_drinkability",
@@ -134,7 +133,7 @@ function detectAccidents(context) {
 
   if (oreo > 40) {
     accidents.push({
-      accidentTypeId: "texture_oreo_overload",
+      accidentTypeId: "texture_low_drinkability",
       type: "口感事故",
       cap: oreo > 60 ? 32 : 48,
       score: oreo > 60 ? -44 : -24,

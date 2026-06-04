@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.7.47
+
+本轮执行 `texture_oreo_overload` -> `texture_low_drinkability` actual migration，小步只迁 Oreo 分支。
+
+### 本轮新增 / 更新
+
+- 更新 `core/accidentAnalyzer.js`
+  - 将 Oreo crumble ratio > 40 分支输出从 `texture_oreo_overload` 改为 `texture_low_drinkability`。
+  - 从 active texture accident set 中移除 `texture_oreo_overload`。
+  - 保留原触发条件 `oreo > 40`。
+  - 保持原 `score`、`cap`、`type`、`add`、`note` 不变。
+  - Oreo “粉渣 / 沉积 / 吸管开采 / 甜品矿层”个性仍保留在玩家可见 note / feedback copy 方向，不写进 accidentTypeId。
+- 更新 `data/goldenSamples.js`
+  - 新增 `oreo_low_drinkability_migration`，专门保护 Oreo branch 输出 `texture_low_drinkability`。
+  - 保留 `oreo_overload_texture_accident` 的原有宽口感事故保护，不把该样本误用为 Oreo branch 主事故断言。
+  - 继续保护 Oreo 玩家可见解释中 “奥利奥 / 吸管 / 矿层 / 甜品 / 开采” 方向。
+  - 不降低既有 score / type / feedback 断言强度。
+- 更新 `index.html`
+  - 页面版本更新到 `v0.0.7.47`。
+  - 更新 `core/accidentAnalyzer.js` cache-busting query。
+- 新增 `reports/textureOreoMigration.v0.0.7.47.md`
+  - 记录 before / after ID、保持不变项、golden sample 变化、未迁 topping 的原因，以及旧 ID 的 historical 定位。
+
+### 阶段边界
+
+- 本轮只迁 `texture_oreo_overload`。
+- 本轮不迁 `texture_topping_overload`。
+- 本轮不新增 `texture_paste_overload`、`texture_sediment_overload`、`texture_topping_specific_overload` 或任何按原料拆分的 texture accidentTypeId。
+- 本轮不新增 Oreo-specific if / 文案 selector。
+- 本轮不开 registry / enum / schema / validator。
+- 本轮不做 generated severity build / partial takeover / active takeover。
+- 本轮不改 generated feedback data、content sheets 或 scripts。
+- P1-4 仍未完全解决，topping 仍是 legacy runtime fact。
+- golden samples 22/22 passed。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.46
 
 本轮执行 `texture_taro_overload` -> `texture_low_drinkability` actual migration，小步只迁芋泥分支。
