@@ -1,5 +1,41 @@
 # 版本记录
 
+## v0.0.7.45
+
+本轮新增 texture content-specific accident migration target plan。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/textureContentAccidentMigrationPlan.v0.0.7.45.md`
+  - 记录 `texture_taro_overload` future target 为 `texture_low_drinkability`。
+  - 记录 `texture_oreo_overload` future target 为 `texture_low_drinkability`。
+  - 记录 `texture_topping_overload` future target 为 `texture_solid_overload`。
+  - 明确芋泥、奥利奥和具体小料个性应保留在 evidence / notes / feedback copy，不写进 future `accidentTypeId`。
+  - 明确不新增 `texture_paste_overload`、`texture_sediment_overload`、`texture_topping_specific_overload` 或任何按原料拆分的 texture accidentTypeId。
+- 更新 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`
+  - 记录 v0.0.7.45 report 与 legacy inventory 的关系。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 v0.0.7.45 report 纳入 P1-4 与后续建议路线。
+  - 记录推荐 staged order：先 taro，再 Oreo，最后 topping。
+  - 继续明确 P1-4 未解决，后续仍需 actual migration task、golden review、feedback review、generated reference audit 和 docs / reports 更新。
+
+### 阶段边界
+
+- 本轮只做 docs / report / impact audit。
+- 不改 runtime、data、scripts、content_sheets、generated data、reports 既有文件或 golden expected。
+- 不新增 registry / enum / schema / validator。
+- 不新增 generated data。
+- 不迁移任何 `accidentTypeId`。
+- 不批准任何 `accidentTypeId` 进入 registry、validator、generated data、partial takeover、active takeover 或 runtime。
+- 不改变玩家最终 score、accident、feedback、drinkType 或 `result.type`。
+- P1-4 仍未解决。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.44
 
 本轮新增 accidentAnalyzer legacy accident migration decision split report。
