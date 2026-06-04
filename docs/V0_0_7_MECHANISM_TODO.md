@@ -25,6 +25,19 @@
 - P1：存在若干机制 / ID / validator / legacy 迁移债务，必须在对应 gate 前解决，不能带到 v0.0.7.x 机制收口之后。
 - P2：存在 docs / housekeeping / 轻技术债，不阻塞当前机制推进，但应择机整理。
 
+### v0.0.7.52 P1 TODO review
+
+v0.0.7.52 新增 `reports/p1TodoReview.v0.0.7.52.md`，用于复盘 P1-1 到 P1-8 在 v0.0.7.51 source-of-truth / registry / schema design 之后的真实剩余状态。
+
+该 review 明确：
+
+- P1 标题保留不等于所有 P1 都从零未做；多项 P1 已完成 guardrail、inventory、review pack、decision split、source-of-truth design 或局部 migration。
+- 前置审计 / guardrail / report / 局部 migration 完成不等于 final gate solved。
+- P1-1 / P1-2 / P1-3 当前更适合合并成 reviewed registry shape proposal，而不是直接实现 validator。
+- P1-5 / P1-7 可合并规划为 feedbackTag / candidate tag source-of-truth 工作包。
+- P1-6 仍适合作为 drinkStructureAnalyzer displayName staged plan 独立后续阶段。
+- P1-8 final audit 仍应后置，不应现在启动。
+
 ## 2. P0 / P1 / P2 定义
 
 - P0：立即阻塞，必须马上修，否则不能继续开发或冻结 candidate。当前四轮审计结果：P0 暂无。
@@ -247,11 +260,13 @@ Git candidate = 项目开发版本
 21. 做 feedbackTag source-of-truth / registry / schema 设计，明确 runtime observed、generated / shadow、candidate / risk、rule tag、sample draft tag 的分层来源。
 22. v0.0.7.50 已清理 collector / source 文案中已迁出旧 ID 的 current-active 语气：`texture_taro_overload` 只能作为 historical / pre-v0.0.7.46 legacy reference，`texture_oreo_overload` 只能作为 historical / pre-v0.0.7.47 legacy reference，`texture_topping_overload` 只能作为 historical / pre-v0.0.7.49 legacy reference；该 cleanup 不创建 registry / schema / validator，也不表示 P1-4 已解决。
 23. v0.0.7.51 已更新 source-of-truth / registry / schema design docs，明确 observed ≠ approved、collector output ≠ registry、runtime observed / golden / generated / sample draft / review pack / historical reference 的分层来源，并把已迁出的三项 texture old IDs 固定为 historical / pre-version legacy reference。该 design 不创建 registry / schema / validator，也不批准任何 ID。
-24. 后续可继续做 reviewed registry shape proposal，把 collector observed evidence、legacy inventory、feedbackTag mapping design 和 review pack decision split 汇总为人工可审的 registry / schema 候选。
-25. 继续 accidentAnalyzer broader migration review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
-26. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-27. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-28. 最后再考虑 severity generated data build、shadow、partial takeover。
+24. v0.0.7.52 已新增 `reports/p1TodoReview.v0.0.7.52.md`，复盘 P1-1 到 P1-8 的真实剩余状态。结论是：P1 标题保留不等于从零未做，前置工作完成也不等于 final gate solved。
+25. 下一刀可优先考虑 reviewed registry shape proposal，把 collector observed evidence、legacy inventory、feedbackTag mapping design 和 review pack decision split 汇总为人工可审的 registry / schema 候选，但不创建 registry / schema / validator 文件。
+26. 另一个可考虑方向是继续 accidentAnalyzer broader route review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
+27. feedbackTag / candidate tag source-of-truth 可把 P1-5 / P1-7 合并规划；drinkStructureAnalyzer displayName staged plan 则保持独立，不应插队成 runtime rewrite。
+28. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+29. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+30. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 

@@ -1,5 +1,33 @@
 # 版本记录
 
+## v0.0.7.52
+
+本轮执行 P1 TODO post-source-of-truth review，只复盘 v0.0.7.51 后 P1-1 到 P1-8 的真实剩余状态。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/p1TodoReview.v0.0.7.52.md`
+  - 逐项复盘 P1-1 到 P1-8。
+  - 明确 P1 标题保留不等于所有 P1 都从零未做。
+  - 明确前置审计 / guardrail / report / 局部 migration 完成不等于 final gate solved。
+  - 建议把剩余工作合并为 reviewed registry shape proposal、accidentAnalyzer broader route review、feedbackTag / candidate tag source-of-truth、drinkStructureAnalyzer displayName staged plan、validator / generated severity / shadow / partial takeover chain。
+  - 推荐下一刀优先考虑 reviewed registry shape proposal，但不写成已决定。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 增加 v0.0.7.52 P1 review 结果引用。
+  - 继续明确 P1 未完全解决，不复制整份 report。
+- 更新 `docs/AI_CONTEXT.md`
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / review / planning。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.51
 
 本轮执行 source-of-truth / registry / schema design docs，只设计边界，不落地实现。
