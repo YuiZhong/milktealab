@@ -45,6 +45,7 @@
 | generated feedback partial takeover 前 | feedbackTag registry / 文案池扩充 / review pack 审核 |
 | accidentAnalyzer 迁移路线设计前 | 已读取 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`，并确认迁移不改变 runtime / golden / generated 引用 |
 | registry / validator / generated data 接收 Codex 生成机制内容前 | 已读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`，并完成 human / ChatGPT 可审查 review pack gate |
+| mechanism review pack generator 实现前 | 已用 `reports/mechanismReviewPack.sample.md` 或等价样例 proof 验证 item 结构、provenance、decision summary 和 machine appendix 可审查 |
 | v0.0.7.x 机制 final 收口前 | AI 生成 ID 与机制命名审计、accidentAnalyzer 迁移路线、drinkStructureAnalyzer 去中文 Set 计划 |
 
 ## 4. P1 TODO
@@ -207,13 +208,14 @@ Git candidate = 项目开发版本
 1. 冻结本 TODO / audit debt 文档 candidate。
 2. 读取并遵守 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
 3. 以 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 为输入，读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`，让 Codex 生成的机制内容先有可审查出口；v0.0.7.34 已完成 inventory，v0.0.7.35 已完成 review pack gate design，但 P1-4 未解决。
-4. 做 mechanism / generated output review pack proof / sample report，验证制作人和 ChatGPT 是否能看懂并审查 legacy / generated 机制内容；在 proof 通过前，不应让 registry / validator / generated data 接收这些内容。
-5. 做 `drinkStructureAnalyzer` 中文显示名 Set inventory / migration plan，先明确显示文案主键残留，不急着重写 runtime。
-6. 做 AI 生成 ID 与机制命名复审，并把复审结果 review pack 化；P1-1 仍未解决。
-7. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
-8. 在 legacy、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
-9. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
-10. 最后再考虑 severity generated data build、shadow、partial takeover。
+4. v0.0.7.36 已新增 `reports/mechanismReviewPack.sample.md`，作为 mechanism / generated output review pack proof / sample report；它只是结构 proof，不是正式 review 结论，不批准任何 ID / tag / rule，也不表示 P1 已解决。
+5. 后续可考虑根据 sample proof 再设计 review pack generator；在 generator / review pack gate 成熟前，不应让 registry / validator / generated data 接收 Codex 生成机制内容。
+6. 做 `drinkStructureAnalyzer` 中文显示名 Set inventory / migration plan，先明确显示文案主键残留，不急着重写 runtime。
+7. 做 AI 生成 ID 与机制命名复审，并把复审结果 review pack 化；P1-1 仍未解决。
+8. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
+9. 在 legacy、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+10. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
+11. 最后再考虑 severity generated data build、shadow、partial takeover。
 
 以上只是可考虑路线，不代表已经决定。
 
@@ -226,6 +228,7 @@ v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 - 本任务是否会触碰 P1 gate。
 - 若任务涉及 `accidentAnalyzer` / accidentTypeId / severity takeover，是否已读取 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`。
 - 若任务会把 Codex 生成内容送入 registry / validator / generated data / runtime / golden，是否已读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md` 并准备 review pack gate。
+- 若任务会批量生成 mechanism review pack，是否已参考 `reports/mechanismReviewPack.sample.md` 的 sample proof，并确认不会把 proof 当 approval / registry / validator input。
 - 若要实现 validator，是否已有 known stable ID source of truth。
 - 若要 build generated severity data，是否已有 candidate severity sheet validator。
 - 若要进入 shadow / partial / active，是否已有 generated validator、golden shadow expected 和制作人 review。

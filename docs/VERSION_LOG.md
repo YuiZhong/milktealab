@@ -1,5 +1,42 @@
 # 版本记录
 
+## v0.0.7.36
+
+本轮新增 mechanism review pack proof / sample report。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/mechanismReviewPack.sample.md`
+  - 作为 mechanism / generated output review pack 的第一版样例 proof。
+  - 覆盖 legacy accidentAnalyzer item、feedbackTag / candidate tag boundary、candidate severity sample draft row、source collector observed item 和 golden sampleId 风险项。
+  - 将内容分成 Human Review Zone、ChatGPT Technical Review Zone、Decision Summary、Machine Appendix。
+  - 每个 item 都有独立 review block、provenance、technical review 和 decision summary。
+  - 明确 report 本身不是 registry、validator input、generated data、source-of-truth 或 runtime approval。
+- 更新 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`
+  - 记录 v0.0.7.36 sample proof 的定位和边界。
+  - 继续明确 generator script 是后续任务。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 mechanism review pack proof 纳入后续路线。
+  - 明确 P1 未解决，validator 仍不能提前把未审清的 Codex 生成内容合法化。
+
+### 阶段边界
+
+- 本轮只做 sample report / docs。
+- 不实现 generator script。
+- 不生成 JSON review data。
+- 不新增 registry / schema / enum。
+- 不实现 validator。
+- 不新增 generated data。
+- 不改 runtime、data、generated data、content_sheets、scripts、golden expected。
+- 不批准任何 ID / tag / rule。
+- 不改变玩家最终 score、feedback、accident、type 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.35
 
 本轮新增 mechanism / generated output review pack gate design。
