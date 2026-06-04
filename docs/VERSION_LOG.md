@@ -1,5 +1,37 @@
 # 版本记录
 
+## docs: sync v0.0.7.29 candidate status
+
+本轮只更新 docs 状态，不改运行逻辑。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新 candidate 为 `v0.0.7.29-candidate`。
+  - 记录 candidate 指向 `5b7e759ca19589744a3699a74376d8ac0236a7ab`。
+  - 记录 `v0.0.7.29-candidate` 已冻结并推送。
+  - 记录当前未推进 v0.0.7.30。
+
+### 阶段边界
+
+- `v0.0.7.29-candidate` 已冻结并推送。
+- candidate 指向 `5b7e759ca19589744a3699a74376d8ac0236a7ab`。
+- v0.0.7.29 已新增 `docs/STABLE_ID_NAMING_GUARDRAIL.md`，作为长期 stable ID / naming guardrail 正本。
+- 已同步 `docs/V0_0_7_MECHANISM_TODO.md`，让 v0.0.7.x 阶段 TODO 引用长期正本。
+- 已将长期正本加入 `AGENTS.md` / `docs/AI_CONTEXT.md` 必读提醒。
+- 本轮未执行实际 ID 审计。
+- 未新增 registry / validator。
+- 未改 runtime、data、generated data、content_sheets、scripts、reports、`index.html`。
+- 未改玩家最终 score、feedback、accident、type 或 golden expected。
+- Golden samples 20/20 passed。
+- 未创建正式 tag `v0.0.7.29`。
+- 当前未推进 v0.0.7.30。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.29
 
 本轮新增长期 stable ID / naming guardrail 文档。
