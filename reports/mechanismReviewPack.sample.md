@@ -111,7 +111,7 @@ Relationship to existing reports:
 - itemType: `feedback_tag_mapping`
 - proposedMeaningCN: `bubble_conflict` 当前可观察为 runtime feedbackTag，但语义偏气泡 + 厚重 / 口感冲突追评，不应泛化成通用风味身份冲突。
 - playerVisibleImpact: 如果误用，玩家可能在不是气泡冲突的风味身份问题里看到错误反馈。
-- exampleUseCase: `taste_conflict` / flavor identity conflict 草案行不应默认绑定 `bubble_conflict`。
+- exampleUseCase: `flavor_identity_conflict` / legacy `taste_conflict` 草案行不应默认绑定 `bubble_conflict`；v0.0.7.41 后当前 outcomeTypeId 是 `flavor_identity_conflict`。
 - whyItMatters: 这是旧标签语义误导新机制的典型风险。
 - producerQuestion: 这个标签是否只保留在气泡 / 厚重 / 口感冲突方向？是否需要另起一个更泛化的 future tag？
 - reviewStatus:

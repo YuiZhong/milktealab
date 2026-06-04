@@ -100,7 +100,7 @@
     "enabled": "FALSE",
     "candidateType": "outcome",
     "accidentTypeId": "",
-    "outcomeTypeId": "taste_conflict",
+    "outcomeTypeId": "flavor_identity_conflict",
     "drinkTypeId": "",
     "feedbackTag": "",
     "sourceLayer": "flavor",
@@ -117,6 +117,6 @@
     "scoreFloor": "",
     "feedbackIntensity": "",
     "requiresHumanReview": "TRUE",
-    "notes": "草案未启用。风味身份冲突进入 outcome candidate 的示意；taste_conflict 是 outcomeTypeId，不代表 taste layer 事故；本行不绑定 bubble_conflict，因为 bubble_conflict 语义偏气泡 + 厚重 / 口感冲突追评，未来 feedbackTag 需随实际 shadow 数据和 registry 另行确认。"
+    "notes": "草案未启用。风味身份冲突进入 outcome candidate 的示意；flavor_identity_conflict 是 v0.0.7.41 后当前 outcomeTypeId；迁移前历史 ID 仅保留在 docs / reports 旧记录中。本行不绑定 bubble_conflict，因为 bubble_conflict 语义偏气泡 + 厚重 / 口感冲突追评，未来 feedbackTag 需随实际 shadow 数据和 registry 另行确认。"
   }
 ]

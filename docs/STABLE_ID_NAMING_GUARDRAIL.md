@@ -55,7 +55,7 @@ accidentTypeId: taste_acid_overload
 ### outcomeTypeId
 
 - 结果 / outcome 机制大类。
-- 例如 `taste_conflict`。
+- 例如 `flavor_identity_conflict`。legacy `taste_conflict` 是 v0.0.7.41 前的迁移前 ID，不应再作为当前 outcome source-of-truth 使用。
 - 不等于 `sourceLayer=taste`。
 - 如果 outcome 名称看似某一层，应通过 `sourceLayer` / `sourceSummary` / `triggerMetric` 解释真实来源。
 

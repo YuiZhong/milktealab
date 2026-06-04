@@ -219,10 +219,10 @@
     "maxScore": 70,
     "accidentTypeId": "",
     "drinkTypeId": "",
-    "outcomeTypeId": "taste_conflict",
+    "outcomeTypeId": "flavor_identity_conflict",
     "audienceId": "",
     "enabled": true,
-    "notes": "口感冲突追评样例"
+    "notes": "风味身份冲突追评样例；v0.0.7.41 已从 legacy conflict outcomeId 迁移到 flavor_identity_conflict。bubble_conflict 仍只表示气泡 + 厚重 / 口感冲突追评，不泛化为 generic flavor identity conflict。"
   },
   {
     "textId": "feedback_disabled_idea_001",

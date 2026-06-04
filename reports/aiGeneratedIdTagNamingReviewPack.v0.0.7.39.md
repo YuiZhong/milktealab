@@ -24,6 +24,11 @@
 - 不允许任何条目进入 runtime / generated data / validator / registry / partial takeover / active takeover。
 - 不重命名任何已有 ID。
 - 不改变玩家最终 score / feedback / accident / drinkType / result.type / golden expected。
+
+> v0.0.7.41 migration note:
+> This report is a pre-migration review pack. Any `taste_conflict` occurrence in this report is a historical / pre-v0.0.7.41 observation.
+> Current effective flavor identity conflict outcomeTypeId is `flavor_identity_conflict`.
+> This note does not approve any ID / tag / rule and does not turn this report into registry, validator input, generated data, or runtime source-of-truth.
 - P1-1 不能视为已解决；本轮只表示已经形成正式 review pack，仍待用户 / ChatGPT 决策、migration plan 或 source-of-truth 任务。
 
 ## 1. Executive Summary / 速读结论
@@ -106,11 +111,11 @@ reviewStatus 可填：
 - reviewItemId: AIRP39-004
 - title / shortName: 风味冲突和猎奇实验 outcome
 - itemType: outcomeTypeId
-- observedOrProposedValue: `taste_conflict`, `novelty_experiment`
+- observedOrProposedValue: legacy `taste_conflict` / current `flavor_identity_conflict`, `novelty_experiment`
 - proposedMeaningCN: 味道冲突 / 猎奇实验这类结果候选。
-- playerVisibleImpact: `taste_conflict` 已出现在 golden / generated / sample sheet；`novelty_experiment` 当前更偏 candidate-only。
+- playerVisibleImpact: `taste_conflict` 在本 report 生成时曾出现在 golden / generated / sample sheet；v0.0.7.41 后当前有效 outcomeTypeId 是 `flavor_identity_conflict`。`novelty_experiment` 当前更偏 candidate-only。
 - exampleUseCase: 气泡奶油冲突、风味身份冲突、榴莲猎奇风险。
-- whyItMatters: `taste_conflict` 名字里有 taste，但不代表 sourceLayer 必须是 taste；outcome ID 不能被误读成 sourceLayer。
+- whyItMatters: legacy `taste_conflict` 名字里有 taste，但不代表 sourceLayer 必须是 taste；v0.0.7.41 后的 `flavor_identity_conflict` 也不能只靠名字反推 sourceLayer。outcome ID 不能被误读成 sourceLayer。
 - producerQuestion: 这些 outcome 名称是否适合表达玩家看到的结果？是否需要拆分“味道冲突”和“猎奇实验”方向？
 - reviewStatus: needs_more_context
 - producerComment:
@@ -353,7 +358,7 @@ reviewStatus 可填：
 - technicalReviewStatus: needs_note
 - observedLayer: outcomeTypeId
 - intendedLayer: outcome candidate / final outcome.
-- layerCorrectness: `taste_conflict` is observed; `novelty_experiment` is candidate-only until source-of-truth review.
+- layerCorrectness: legacy `taste_conflict` was observed before v0.0.7.41; current effective outcomeTypeId is `flavor_identity_conflict`. `novelty_experiment` is candidate-only until source-of-truth review.
 - sourceOfTruthStatus: mixed observed layers.
 - stableIdRisk: not stable for candidate-only outcome.
 - namingRisk: medium.
@@ -361,7 +366,7 @@ reviewStatus 可填：
 - sampleIdLeakRisk: low.
 - candidateTagLeakRisk: medium for novelty.
 - feedbackTagMappingRisk: medium.
-- sourceLayerTriggerMetricRisk: high because `taste_conflict` must not force sourceLayer=taste.
+- sourceLayerTriggerMetricRisk: high because legacy `taste_conflict` must not force sourceLayer=taste, and current `flavor_identity_conflict` still must be explained through explicit source fields.
 - prioritySeverityMixRisk: low.
 - legacyMigrationRisk: medium.
 - validatorReadiness: not ready.
@@ -702,12 +707,12 @@ reviewStatus 可填：
 ### AIRP39-004
 
 - rawSourceFile: `data/goldenSamples.js`, `core/summaryCandidateEngine.js`, `content_sheets/examples/candidate_severity_rules.sample.*`, `data/generated/feedbackTexts.generated.json`
-- rawLineOrSection: `taste_conflict` expected / generated row; `novelty_experiment` summary candidate.
+- rawLineOrSection: pre-v0.0.7.41 `taste_conflict` expected / generated row; current effective outcomeTypeId is `flavor_identity_conflict`; `novelty_experiment` summary candidate.
 - sourceKind: golden / candidate / generated shadow / sample draft.
 - observedUsage: outcome identity and candidate outcome.
 - currentStatus: mixed observed and candidate-only.
 - suggestedStatus: needs technical review.
-- sourceLayerCandidate: flavor for identity conflict draft; not inferred from `taste_conflict`.
+- sourceLayerCandidate: flavor for identity conflict draft; not inferred from legacy `taste_conflict` or the current `flavor_identity_conflict` ID string alone.
 - sourceSummaryCandidate: flavorSummary / summaryCandidates.
 - triggerMetricCandidate: identityConflictRisk / noveltyRisk.
 - relatedAccidentTypeId:
@@ -716,7 +721,7 @@ reviewStatus 可填：
 - relatedSampleId: `bubble_cream_conflict`
 - relatedGoldenSample: bubble conflict samples.
 - currentRuntimeImpact: current outcome expected exists.
-- currentGeneratedImpact: generated feedback has `taste_conflict` row.
+- currentGeneratedImpact: pre-v0.0.7.41 generated feedback had a `taste_conflict` row; v0.0.7.41 generated feedback uses `flavor_identity_conflict`.
 - currentReviewPackImpact: review only.
 - referencedDocs: feedbackTag mapping design, source-of-truth design.
 - testCoverage: golden outcome expected exists.
@@ -830,7 +835,7 @@ reviewStatus 可填：
 - sourceSummaryCandidate: tasteSummary / textureSummary / flavorSummary.
 - triggerMetricCandidate: acidity / strawResistance / fatLoad / aromaPressure / identityConflictRisk.
 - relatedAccidentTypeId: `taste_acid_overload`, `texture_straw_resistance`, `dairy_fat_overload`
-- relatedOutcomeTypeId: `taste_conflict`
+- relatedOutcomeTypeId: legacy `taste_conflict` / current `flavor_identity_conflict` after v0.0.7.41
 - relatedFeedbackTag: `acid_accident`, `straw_disaster`, `greasy_overload`; blank for risky draft rows.
 - relatedRuleId: listed draft ruleIds.
 - currentRuntimeImpact: no.

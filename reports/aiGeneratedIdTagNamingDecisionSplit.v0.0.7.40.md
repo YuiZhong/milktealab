@@ -11,10 +11,14 @@ This report:
 - Records which review items already have producer direction.
 - Separates producer decisions from technical source-of-truth work.
 - Lists items that still need producer review later.
-- Audits the impact surface for a possible future `taste_conflict` to `flavor_identity_conflict` migration.
+- Audits the impact surface for what was then a possible future `taste_conflict` to `flavor_identity_conflict` migration; after v0.0.7.41, this is historical / pre-migration audit context.
 - Keeps all registry / validator / generated data / runtime gates closed.
 
 This report does not approve any ID / tag / rule for registry, validator, generated data, partial takeover, active takeover, or runtime behavior.
+
+> v0.0.7.41 migration note:
+> This report was written before the one-shot migration. Its `taste_conflict` audit is historical / pre-migration material.
+> Current effective flavor identity conflict outcomeTypeId is `flavor_identity_conflict`; legacy `taste_conflict` should not be read as current source-of-truth.
 
 ## 1. Producer Decisions Recorded
 
@@ -45,15 +49,15 @@ This report does not approve any ID / tag / rule for registry, validator, genera
 - `aroma_pressure` 当前不是 runtime 文案池 feedbackTag。
 - `bubble_conflict` 不得泛化为 generic flavor identity conflict。
 
-### Decision 4｜`taste_conflict` 迁移倾向
+### Decision 4｜legacy `taste_conflict` 迁移倾向
 
-制作人倾向：如果影响面可控，应尽早迁移 `taste_conflict`，因为当前没有真实玩家存档和正式线上玩家，迁移成本最低。
+制作人倾向：如果影响面可控，应尽早迁移 legacy `taste_conflict`，因为当前没有真实玩家存档和正式线上玩家，迁移成本最低。v0.0.7.41 已执行该迁移，当前有效 outcomeTypeId 是 `flavor_identity_conflict`。
 
 技术判断：
 
 - 不允许闭眼全局替换。
 - 本轮只做影响审计，不做实际迁移。
-- 倾向未来迁移目标为 `flavor_identity_conflict`，因为它比 `flavor_conflict` 更明确。
+- 当时倾向未来迁移目标为 `flavor_identity_conflict`，因为它比 `flavor_conflict` 更明确；v0.0.7.41 后该迁移目标已成为当前 outcomeTypeId。
 - `flavor_identity_conflict` 表达风味身份不协调，不是酸甜苦涩等基础味觉不平衡。
 - 推荐未来链路：
   - `sourceLayer`: `flavor`
@@ -61,7 +65,7 @@ This report does not approve any ID / tag / rule for registry, validator, genera
   - `triggerMetric`: `identityConflictRisk`
   - `candidateTag`: `identity_conflict`
   - future `outcomeTypeId`: `flavor_identity_conflict`
-- 旧 `taste_conflict` 在迁移前仍是 legacy observed outcomeTypeId，不代表 `sourceLayer=taste`。
+- 旧 `taste_conflict` 是迁移前 legacy observed outcomeTypeId，不代表 `sourceLayer=taste`；v0.0.7.41 后只应作为历史记录出现。
 
 ### Decision 5｜激进程度边界
 
@@ -84,7 +88,7 @@ Gate wording rule:
 | AIRP39-001 | Keep observed基础事故机制；补 source-of-truth notes | low | Define known ID source notes before validator | none now | no | no | no | no |
 | AIRP39-002 | Split into special keep vs generalized migration candidates | high | Create legacy migration plan; keep durian / creamer as possible special cases | yes for taro / oreo / topping / strong flavor directions | no | no | no | no |
 | AIRP39-003 | Keep `dairy_fat_overload` observed; nail texture / fatLoad meaning | medium | Add notes in future source-of-truth / migration docs | possible notes or later migration plan | no | no | no | no |
-| AIRP39-004 | `taste_conflict` leans migration to `flavor_identity_conflict`; audit first | medium | Design one-shot migration plan with runtime / golden / generated / sheet coverage | yes | no | no | no | no |
+| AIRP39-004 | legacy `taste_conflict` leaned migration to `flavor_identity_conflict`; v0.0.7.41 later performed the one-shot migration | medium | Historical migration impact audit; follow current v0.0.7.41 commit for effective fields | yes | no | no | no | no |
 | AIRP39-005 | Keep observed drinkType IDs; source paths need notes | medium | Map rule-table source vs analyzer special path | possible later source unification | no | no | no | no |
 | AIRP39-006 | feedbackTag layer needs mapping review | high | Producer / ChatGPT feedbackTag mapping review | possible tag split / notes / copy pool work | no | no | no | no |
 | AIRP39-007 | candidate / risk tags remain copy direction candidates only | high | Decide candidate-only vs future feedbackTag through mapping review | no direct migration from this report | no | no | no | no |
@@ -108,45 +112,45 @@ These items still need producer review before any registry / validator / generat
 - AIRP39-010: Whether any disabled candidate severity draft row should survive into future table design.
 - AIRP39-014: Whether displayName / category text migration should be staged through metadata, shadow compare, and mechanism review pack.
 
-## 4. `taste_conflict` → `flavor_identity_conflict` migration impact audit
+## 4. Legacy `taste_conflict` → `flavor_identity_conflict` migration impact audit
 
-This section is a read-only impact audit. It does not rename or migrate anything.
+This section was a read-only impact audit before v0.0.7.41. It did not rename or migrate anything at report creation time. After v0.0.7.41, these `taste_conflict` entries are historical / pre-migration observations.
 
-### 4.1 Current `taste_conflict` references
+### 4.1 Pre-migration `taste_conflict` references
 
 Runtime source:
 
 - `core/tasteJudge.js`
-  - Maps the current display result `口感冲突` to `outcomeTypeId: "taste_conflict"`.
+  - Before v0.0.7.41, mapped the display result `口感冲突` to `outcomeTypeId: "taste_conflict"`.
   - Any real migration would affect final result mapping and must be tested through golden samples.
 
 Golden expected:
 
 - `data/goldenSamples.js`
-  - `bubble_cream_conflict` expects `outcomeTypeIdIncludes: ["taste_conflict"]`.
-  - `bubble_cream_conflict_id_equivalence` expects `outcomeTypeIdIncludes: ["taste_conflict"]`.
+  - Before v0.0.7.41, `bubble_cream_conflict` expected `outcomeTypeIdIncludes: ["taste_conflict"]`.
+  - Before v0.0.7.41, `bubble_cream_conflict_id_equivalence` expected `outcomeTypeIdIncludes: ["taste_conflict"]`.
   - A real migration would require deliberate golden expected updates in the same task.
 
 Generated data:
 
 - `data/generated/feedbackTexts.generated.json`
 - `data/generated/feedbackTexts.generated.js`
-  - Generated feedback text data has an `outcomeTypeId: "taste_conflict"` row.
+  - Before v0.0.7.41, generated feedback text data had an `outcomeTypeId: "taste_conflict"` row.
   - A real migration would require rebuilding or updating generated feedback data, plus generated data checks.
 
 Content sheets / sample sheets:
 
 - `content_sheets/examples/feedback_texts.sample.csv`
 - `content_sheets/examples/feedback_texts.sample.json`
-  - `feedback_bubble_conflict_001` currently uses `outcomeTypeId: "taste_conflict"`.
+  - Before v0.0.7.41, `feedback_bubble_conflict_001` used `outcomeTypeId: "taste_conflict"`.
 - `content_sheets/examples/candidate_severity_rules.sample.csv`
 - `content_sheets/examples/candidate_severity_rules.sample.json`
-  - Disabled draft row `flavor_identity_conflict_outcome_draft` currently points to `outcomeTypeId: "taste_conflict"` while explaining that the source is flavor identity conflict.
+  - Before v0.0.7.41, disabled draft row `flavor_identity_conflict_outcome_draft` pointed to `outcomeTypeId: "taste_conflict"` while explaining that the source is flavor identity conflict.
 
 Script checks:
 
 - `scripts/content/checkFeedbackRuntimeAdapter.js`
-  - Queries enabled outcome texts with `outcomeTypeId: "taste_conflict"`.
+  - Before v0.0.7.41, queried enabled outcome texts with `outcomeTypeId: "taste_conflict"`.
   - A real migration would need check updates in the same task, without weakening adapter structure checks.
 
 Docs / reports:
@@ -165,7 +169,7 @@ Docs / reports:
 
 Docs and reports contain both current observations and guardrails. A migration task must separate historical notes from new source-of-truth wording.
 
-### 4.2 Current `flavor_identity_conflict` references
+### 4.2 Current `flavor_identity_conflict` references after v0.0.7.41
 
 Current observed uses:
 
@@ -182,9 +186,9 @@ Current observed uses:
 
 Important boundary:
 
-- `flavor_identity_conflict` is not currently a final runtime `outcomeTypeId`.
-- It is currently candidate / draft / docs language.
-- Future `outcomeTypeId: "flavor_identity_conflict"` requires a separate migration task.
+- v0.0.7.41 makes `flavor_identity_conflict` the current effective final outcomeTypeId for this flavor identity conflict path.
+- `flavor_identity_conflict_candidate` remains candidate-layer identity; it is not the same as the final outcomeTypeId.
+- This report remains historical and does not itself approve registry / validator / generated data / runtime changes.
 
 ### 4.3 Current `identity_conflict` references
 
@@ -229,7 +233,7 @@ Layer judgment:
 
 ### 4.5 Future migration impact summary
 
-A future `taste_conflict` to `flavor_identity_conflict` migration would likely touch:
+At the time of this report, a future `taste_conflict` to `flavor_identity_conflict` migration was expected to touch:
 
 - Runtime mapping: `core/tasteJudge.js`.
 - Golden expected: `data/goldenSamples.js`.
@@ -237,7 +241,7 @@ A future `taste_conflict` to `flavor_identity_conflict` migration would likely t
 - Human content samples: `content_sheets/examples/feedback_texts.sample.*`.
 - Candidate severity sample draft: `content_sheets/examples/candidate_severity_rules.sample.*`.
 - Adapter checks: `scripts/content/checkFeedbackRuntimeAdapter.js`.
-- Docs and reports that currently document `taste_conflict` as observed legacy outcome.
+- Docs and reports that then documented `taste_conflict` as observed legacy outcome.
 
 Expected impact:
 
@@ -258,11 +262,11 @@ Suitability for v0.0.7.41:
 
 These are options, not decisions:
 
-1. `v0.0.7.41｜taste_conflict migration plan / proof`
+1. Historical option at report time: `v0.0.7.41｜taste_conflict migration plan / proof`
    - Produce a concrete file-by-file migration plan and expected diff shape.
    - Do not change runtime yet.
 
-2. `v0.0.7.41｜taste_conflict -> flavor_identity_conflict one-shot migration`
+2. Historical option at report time: `v0.0.7.41｜taste_conflict -> flavor_identity_conflict one-shot migration`
    - Only if explicitly authorized.
    - Must update runtime mapping, golden expected, generated feedback data, content sheets, adapter checks, docs, and reports in one controlled task.
 
@@ -279,8 +283,8 @@ These are options, not decisions:
 - P1-1 remains open.
 - P1-5 remains open.
 - P1-7 remains open.
-- `taste_conflict` remains legacy observed outcomeTypeId until a separate migration task changes it.
-- `flavor_identity_conflict` remains a future target proposal / candidate / draft phrase in this report.
+- `taste_conflict` is now legacy / pre-v0.0.7.41 historical outcomeTypeId after the v0.0.7.41 migration.
+- `flavor_identity_conflict` is current effective outcomeTypeId after v0.0.7.41, but this historical report is still not registry / validator input.
 - candidate / risk tags remain separate from runtime feedbackTag.
 - No validator may consume candidate / risk tags as accepted feedbackTag values from this report.
 - No generated data build may use this report as accepted values.
@@ -288,8 +292,8 @@ These are options, not decisions:
 
 ## 7. What This Report Does NOT Do
 
-- Does not migrate `taste_conflict`.
-- Does not create `flavor_identity_conflict` as runtime `outcomeTypeId`.
+- Did not migrate `taste_conflict` at the time this report was created; v0.0.7.41 later performed that separate migration.
+- Does not itself create or approve `flavor_identity_conflict`; current runtime status must come from the v0.0.7.41 migration commit, not this report.
 - Does not rename any existing ID / tag / rule.
 - Does not add registry / enum / schema / validator.
 - Does not add generated data.

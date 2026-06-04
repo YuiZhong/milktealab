@@ -131,7 +131,7 @@ function main() {
   const premiumTexts = adapter.getEnabledTexts({ drinkTypeId: "premium_thick_milk_tea" });
   assert(hasTextId(premiumTexts, "feedback_premium_001"), "stable ID filter should match premium text");
 
-  const outcomeTexts = adapter.getEnabledTexts({ outcomeTypeId: "taste_conflict" });
+  const outcomeTexts = adapter.getEnabledTexts({ outcomeTypeId: "flavor_identity_conflict" });
   assert(hasTextId(outcomeTexts, "feedback_bubble_conflict_001"), "outcomeTypeId filter should match conflict text");
 
   const teasingTexts = adapter.getEnabledTexts({ tone: "teasing" });

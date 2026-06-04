@@ -71,7 +71,7 @@ function getAccidentFeedbackTags(accident) {
 }
 
 const outcomeTypeIdByDisplayType = {
-  "口感冲突": "taste_conflict",
+  "口感冲突": "flavor_identity_conflict",
   "口感事故": "texture_accident_outcome",
   "奶脂过载": "dairy_fat_overload",
   "猎奇实验品": "novelty_experiment",

@@ -141,7 +141,7 @@
 
 - known `ingredientId`：来自 reviewed ingredient registry，初期可由 `data/ingredients.js` 的 `ingredientMeta` 生成 registry candidate。
 - known `accidentTypeId`：来自 reviewed accident registry。初期候选可来自 `data/accidentRules.js`、`data/structureAccidentRules.js`、`core/accidentAnalyzer.js`、golden expected 和 inventory，但必须人工 review 后进入 allowed values。
-- known `outcomeTypeId`：来自 reviewed outcome registry。`taste_conflict` 可作为 stable candidate；`novelty_experiment` 仍需 review。
+- known `outcomeTypeId`：来自 reviewed outcome registry。v0.0.7.41 后当前 flavor identity conflict outcome candidate 应以 `flavor_identity_conflict` 为准；legacy `taste_conflict` 只保留为迁移前历史 ID，不应作为当前 allowed value 来源。`novelty_experiment` 仍需 review。
 - known `drinkTypeId`：来自 reviewed drink type registry。初期候选可来自 `data/drinkTypeRules.js`、`core/drinkTypeAnalyzer.js`、golden 和 generated feedback。
 - known `feedbackTag`：来自 feedbackTag registry / mapping。runtime pool、generated reviewed tags、candidate-only tags 必须分层，不可混用。
 - known `sourceLayer`：来自 enum，例如 `taste` / `texture` / `flavor`。

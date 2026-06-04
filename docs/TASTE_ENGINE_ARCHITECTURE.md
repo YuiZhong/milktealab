@@ -1506,7 +1506,7 @@ ID 命名是架构边界的一部分，不只是字符串风格。AI / Codex 批
 
 - `ingredientId` 标识原料，例如 `fruit_lemon`；它不是事故机制。
 - `accidentTypeId` 标识事故机制大类，例如 `taste_acid_overload`；不能按原料拆成 `taste_acid_overload_lemon`，也不能带 severity 后缀如 `taste_acid_overload_high`。
-- `outcomeTypeId` 标识结果 / outcome 机制，例如 `taste_conflict`；名字里有 taste 不代表它一定来自 `tasteSummary`。
+- `outcomeTypeId` 标识结果 / outcome 机制，例如 `flavor_identity_conflict`；legacy `taste_conflict` 是 v0.0.7.41 前的迁移前 ID。名字里有 flavor / taste 不代表它一定来自同名 summary，真实来源必须由 `sourceLayer` / `sourceSummary` / `triggerMetric` 解释。
 - `drinkTypeId` 标识饮品类型，例如 `classic_milk_tea`；不等于玩家自定义饮品名或 recipe ID。
 - `feedbackTag` 只用于文案选择，必须来自已登记 / 已确认的文案池、registry 或 generated data；summary 风险名和旧 tag 不能无审计地塞进新机制。
 - `textId` 只标识单条文案，不能代表机制。

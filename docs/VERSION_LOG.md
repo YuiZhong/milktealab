@@ -1,5 +1,44 @@
 # 版本记录
 
+## v0.0.7.41
+
+本轮执行 `taste_conflict` -> `flavor_identity_conflict` one-shot migration。
+
+### 本轮新增 / 更新
+
+- 更新 `core/tasteJudge.js`
+  - 将“口感冲突”最终 `outcomeTypeId` 从 legacy `taste_conflict` 迁移为 `flavor_identity_conflict`。
+  - 不改玩家可见中文文案，不改 score、accident priority 或 drinkType 逻辑。
+- 更新 `data/goldenSamples.js`
+  - 将相关 golden expected 的 `outcomeTypeIdIncludes` 改为 `flavor_identity_conflict`，未删除样本，未弱化断言。
+- 更新 feedback content sheets 与 generated feedback data
+  - 从 `content_sheets/examples/feedback_texts.sample.csv` / `.json` 更新 source row，再重建 `data/generated/feedbackTexts.generated.json` / `.js`。
+  - `bubble_conflict` 仍只表示气泡 + 厚重 / 口感冲突追评，不泛化为 generic flavor identity conflict。
+- 更新 `content_sheets/examples/candidate_severity_rules.sample.csv` / `.json`
+  - disabled draft `flavor_identity_conflict_outcome_draft` 的 `outcomeTypeId` 改为 `flavor_identity_conflict`。
+  - 样例仍 disabled / draft，不进入 runtime。
+- 更新 `scripts/content/checkFeedbackRuntimeAdapter.js`
+  - adapter check 改查 `flavor_identity_conflict` outcome 文案，未弱化结构断言。
+- 更新当前事实 docs / reports
+  - 将当前 source-of-truth 说明迁移到 `flavor_identity_conflict`。
+  - 保留 v0.0.7.39 / v0.0.7.40 报告中的 `taste_conflict` 历史记录，但明确标注为 legacy / pre-v0.0.7.41 / historical。
+
+### 阶段边界
+
+- 本轮不新增 registry / enum / schema / validator。
+- 不做 partial / active takeover。
+- 不把 `identity_conflict` 变成 runtime feedbackTag。
+- 不把 `bubble_conflict` 泛化为 flavor identity conflict。
+- 不改 score 机制、事故优先级、drinkType 逻辑、sampleId 或 feedbackTag 语义。
+- P1-1 / P1-5 / P1-7 仍未完全解决。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+- feedback adapter / generated data / JSON / JS / CSV BOM 检查通过。
+
 ## v0.0.7.40
 
 本轮新增 AI-generated ID / tag naming decision split 与 `taste_conflict` 迁移影响审计。
