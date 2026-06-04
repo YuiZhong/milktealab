@@ -1,5 +1,36 @@
 # 版本记录
 
+## v0.0.7.53
+
+本轮执行 reviewed stable ID registry shape proposal，只把 source-of-truth 设计转成可审查的 registry shape 报告。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`
+  - 提出未来 registry entry common fields。
+  - 提出 status vocabulary，例如 `approved_stable`、`runtime_observed_requires_review`、`runtime_review_candidate`、`historical_legacy_reference`、`draft_only`、`generated_only`、`candidate_only`。
+  - 按 ID family 拆分未来 registry row shape。
+  - 增加 accidentTypeId proposal slice，区分 current observed generalized IDs、runtime review candidates、historical migrated texture old IDs、structure rule observed IDs、generated / sample / golden observations。
+  - 增加 feedbackTag proposal slice，继续区分 runtime observed feedbackTag、generated feedbackTag、candidate / risk tag、sample draft tag 和 future reviewed feedbackTag。
+  - 说明 future validator 只能读取 reviewed registry / schema；collector output 只能作为 drift warning / evidence。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.53 proposal 已完成。
+  - 继续明确该 report 不创建 registry / schema / validator，不批准任何 ID。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.52-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / proposal。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 ID、feedbackTag、accidentTypeId、outcomeTypeId 或 ruleId。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.52
 
 本轮执行 P1 TODO post-source-of-truth review，只复盘 v0.0.7.51 后 P1-1 到 P1-8 的真实剩余状态。
