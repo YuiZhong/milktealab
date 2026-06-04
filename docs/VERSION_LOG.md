@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.7.37
+
+本轮新增 `drinkStructureAnalyzer` displayName Set inventory / migration plan。
+
+### 本轮新增 / 更新
+
+- 新增 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`
+  - 只读盘点 `core/drinkStructureAnalyzer.js` 中的中文显示名 Set：`baseLiquidNames`、`flavorNames`、`textureNames`、`sweetenerNames`。
+  - 记录 `item.name -> getTasteProfile`、displayName-keyed taste / base profile fallback、`ingredientMeta.category` 中文 category、`data/ingredientTextureProfiles.js` displayName-keyed profiles 等迁移风险。
+  - 补充相邻依赖：`tasteJudge` 的中文 category count、`drinkTypeAnalyzer` 的 primary tea displayName logic、`drinkTypeRules` 的 legacy ingredient text fallback。
+  - 明确当前未发现 `drinkStructureAnalyzer` 直接使用 `zhCN`、regex / substring 中文匹配，且任务中提到的 `data/ingredientPhysicalProfiles.js` 当前不存在；实际 texture profile 来源是 `data/ingredientTextureProfiles.js`。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 将 drinkStructure displayName inventory 接入 P1-6 与 gate。
+  - 明确 v0.0.7.37 只是 inventory / migration plan，P1-6 仍未解决。
+
+### 阶段边界
+
+- 本轮只做 docs / inventory / migration plan。
+- 不改 `core/drinkStructureAnalyzer.js`。
+- 不改 runtime、data、generated data、content_sheets、scripts、reports、golden expected。
+- 不新增 registry / schema / enum。
+- 不实现 validator。
+- 不改变玩家最终 score、feedback、accident、drink type 或 `result.type`。
+- 本轮不 push、不 tag。
+
+### 验证结果
+
+- Golden samples：`node scripts/runGoldenSamples.js` 通过，20/20 passed。
+- `git diff --check` 通过。
+
 ## v0.0.7.36
 
 本轮新增 mechanism review pack proof / sample report。

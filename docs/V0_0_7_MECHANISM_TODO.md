@@ -46,6 +46,7 @@
 | accidentAnalyzer 迁移路线设计前 | 已读取 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`，并确认迁移不改变 runtime / golden / generated 引用 |
 | registry / validator / generated data 接收 Codex 生成机制内容前 | 已读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`，并完成 human / ChatGPT 可审查 review pack gate |
 | mechanism review pack generator 实现前 | 已用 `reports/mechanismReviewPack.sample.md` 或等价样例 proof 验证 item 结构、provenance、decision summary 和 machine appendix 可审查 |
+| structure / operation / production 规则 active 依赖 `drinkStructureAnalyzer` 前 | 已读取 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，并完成 metadata source-of-truth、shadow compare、review pack 和 staged migration plan |
 | v0.0.7.x 机制 final 收口前 | AI 生成 ID 与机制命名审计、accidentAnalyzer 迁移路线、drinkStructureAnalyzer 去中文 Set 计划 |
 
 ## 4. P1 TODO
@@ -120,10 +121,10 @@
 ### P1-6｜drinkStructureAnalyzer 中文显示名 Set 残留
 
 - 风险：`core/drinkStructureAnalyzer.js` 中仍有中文显示名 Set，例如茶类、风味、小料、调味等分类。
-- 当前状态：当前可运行，但与“显示文案不当系统主键”原则不完全一致。
+- 当前状态：当前可运行，但与“显示文案不当系统主键”原则不完全一致。v0.0.7.37 已新增 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，只读整理 displayName Set、`item.name -> getTasteProfile`、displayName-keyed profile fallback 和相邻中文 category / drinkType 依赖；这只是 inventory / migration plan，不代表 P1-6 已解决。
 - 为什么重要：显示名、本地化或 alias 改动可能影响结构分析。
 - 必须在什么时候前处理：正式本地化前；结构 / operation / production 规则 active 依赖 `drinkStructureAnalyzer` 前；v0.0.7.x 机制收口审计中至少形成处理计划。
-- 建议路线：先转为 `ingredientId` / `categoryId` / profile tags，再逐步迁移。
+- 建议路线：以 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md` 为输入，先设计 metadata candidate / source-of-truth，再做 shadow compare、mechanism review pack 和 staged replacement；不要直接把中文 Set 换成新的 if 或未审计 tags。
 - 禁止误处理：不要一次性重写所有结构分析。
 
 ### P1-7｜feedbackTag 语义边界与文案池扩容
@@ -196,6 +197,10 @@ Git candidate = 项目开发版本
 - 这些 ID 可能已经被 runtime、golden、docs 或 generated data 引用，应进入后续 ID 审计，而不是顺手改名。
 - 不要现在大改 `core/accidentAnalyzer.js`。
 - 不要把 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 当作迁移许可；它只是 inventory，不是 runtime 改造方案。
+- 不要把 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md` 当作迁移许可；它只是 inventory / migration plan，不是 runtime 改造方案。
+- 不要现在重写 `core/drinkStructureAnalyzer.js`。
+- 不要直接把中文 Set / displayName dependency 替换成未经 review 的 `categoryId` / profile tag / operation profile。
+- 不要为了清理 displayName 依赖而绕过 metadata source-of-truth、shadow compare、mechanism review pack 和 golden 回归。
 - 不要现在 active 接管 severity / threshold。
 - 不要现在扩 generated feedback active 接管范围。
 - 不要为了清理 docs 而删除历史上下文正本。
@@ -210,10 +215,10 @@ Git candidate = 项目开发版本
 3. 以 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 为输入，读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md`，让 Codex 生成的机制内容先有可审查出口；v0.0.7.34 已完成 inventory，v0.0.7.35 已完成 review pack gate design，但 P1-4 未解决。
 4. v0.0.7.36 已新增 `reports/mechanismReviewPack.sample.md`，作为 mechanism / generated output review pack proof / sample report；它只是结构 proof，不是正式 review 结论，不批准任何 ID / tag / rule，也不表示 P1 已解决。
 5. 后续可考虑根据 sample proof 再设计 review pack generator；在 generator / review pack gate 成熟前，不应让 registry / validator / generated data 接收 Codex 生成机制内容。
-6. 做 `drinkStructureAnalyzer` 中文显示名 Set inventory / migration plan，先明确显示文案主键残留，不急着重写 runtime。
+6. v0.0.7.37 已新增 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，记录 `drinkStructureAnalyzer` 中文显示名 Set、profile fallback 和相邻 category / drinkType 显示文案依赖；P1-6 仍未解决，后续还需要 metadata candidate、shadow compare、review pack 和 staged migration。
 7. 做 AI 生成 ID 与机制命名复审，并把复审结果 review pack 化；P1-1 仍未解决。
 8. 做 feedbackTag registry / review pack draft，先处理 P1-5 / P1-7 的可审查化，再考虑文案池扩容或 partial takeover。
-9. 在 legacy、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
+9. 在 legacy、drinkStructure、ID、feedbackTag、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。
 10. validator design 通过复查后，才考虑实现 validate candidate severity sheet 和 generated severity validator / structure check。
 11. 最后再考虑 severity generated data build、shadow、partial takeover。
 
@@ -227,6 +232,7 @@ v0.0.7.x 机制相关任务开工前，Codex 应先确认：
 - 是否已读取 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
 - 本任务是否会触碰 P1 gate。
 - 若任务涉及 `accidentAnalyzer` / accidentTypeId / severity takeover，是否已读取 `docs/V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md`。
+- 若任务涉及 `drinkStructureAnalyzer` / structure metrics / structure tags / operation 或 production 规则，是否已读取 `docs/V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md`，并确认不把 displayName / 中文 category / notes 当机制 key。
 - 若任务会把 Codex 生成内容送入 registry / validator / generated data / runtime / golden，是否已读取 `docs/V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md` 并准备 review pack gate。
 - 若任务会批量生成 mechanism review pack，是否已参考 `reports/mechanismReviewPack.sample.md` 的 sample proof，并确认不会把 proof 当 approval / registry / validator input。
 - 若要实现 validator，是否已有 known stable ID source of truth。
