@@ -10,6 +10,8 @@
 
 文档层级、冲突裁决和更新归属以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
 
+文档单一职责 / 反 doc 地狱原则以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准；本文只做项目入口规则，不复制各正本长内容。
+
 ## 2. 当前阶段
 
 当前项目处于 P0 docs recovery / pause mode，直到 ChatGPT + 用户确认解除。

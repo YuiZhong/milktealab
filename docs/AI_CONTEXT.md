@@ -10,6 +10,8 @@
 
 > 新阶段开工前必须先创建并登记 active stage TODO。阶段 TODO 只在对应阶段内必读，阶段结束后移出长期必读列表。`docs/DOCS_SOURCE_OF_TRUTH.md` 自身不记录版本流水或当前阶段状态；版本流水仍以 `docs/VERSION_LOG.md` 和 git ref / tag 为准。
 
+> `docs/AI_CONTEXT.md` 只做新对话导航，不承载完整机制正本、版本流水或历史 report 摘要；文档单一职责 / 反 doc 地狱原则以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
+
 ---
 
 ## 0. 当前 P0 Recovery 状态
