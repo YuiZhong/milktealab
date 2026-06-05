@@ -10,6 +10,54 @@
 
 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 是长期稳定 ID / 命名 / 审查流程正本，适用于 v0.0.7.x 以及后续所有阶段。本文档只记录 v0.0.7.x 阶段债务、gate 和 TODO；涉及 ID 审计、validator、generated severity data、partial / active takeover 或新增 stable ID / tag / ruleId 的任务，必须引用长期正本，不在本文档复制完整流程。
 
+`docs/TASTE_DECISION_MODEL.md` 是当前判定模型正本。涉及判定层级、priority vs severity、`priorityBand` / `severityLevel`、`severityHint` / `scoreMultiplier` 或反 if 地狱原则的任务，必须以该文件为准。
+
+## P0. 当前 docs recovery / pause mode
+
+当前项目处于 P0 docs recovery / pause mode。P0 优先于后续 P1 / P2。
+
+### P0-A: Taste decision model source-of-truth missing / stale priority model
+
+旧文档仍残留过时线性优先级：
+
+```text
+极端比例事故 > 稠度/质地事故 > 冲突组合 > 正常好组合 > 普通分类
+```
+
+该说法只能作为 deprecated / historical rough rule，不能继续指导 severity / scoreMultiplier / ID / review pack / generated data。
+
+当前判定模型正本是 `docs/TASTE_DECISION_MODEL.md`，当前正确层级为：
+
+```text
+特殊服务事故 > 质地事故 > 味觉事故 > 风味冲突 > 正常好组合 > 普通分类
+```
+
+必须明确：
+
+- 判定优先级高不等于扣分更多。
+- `priorityBand` 不等于 `severityLevel`。
+- `severityHint` 不等于 `scoreMultiplier`。
+- 所有判定层都不能新增 if 地狱。
+
+### P0-B: AI_CONTEXT source-of-truth pollution / navigation failure
+
+`docs/AI_CONTEXT.md` 必须恢复为新对话导航页，不再承担机制正本、版本流水账或历史 report 汇总职责。
+
+reports / sample / draft / candidate / checklist 只作为历史证据，不自动升级为当前事实。当前机制判定以 `docs/TASTE_DECISION_MODEL.md` 为准；ID / tag / registry 以 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 为准；版本流水以 `docs/VERSION_LOG.md` 和 git ref / tag 为准。
+
+在 P0 解决并经 ChatGPT + 用户确认前：
+
+- 不开 v0.0.8.x。
+- 不生成新 ID / feedbackTag / triggerMetric。
+- 不做 batch content。
+- 不做 generated severity。
+- 不做 shadow / partial / active takeover。
+- 不让 Codex 发明机制概念。
+- 不把 v0.0.7.x 视为安全 closure。
+- 不继续用旧线性优先级指导 severity / scoreMultiplier / ID / review pack。
+
+v0.0.7.81 handoff 中“v0.0.7.x mechanism stage can enter closure mode”的说法应降级为 P0 前的历史状态，不代表当前已经安全收口。当前下一步是 P0 docs recovery review。
+
 ## 1. 当前总体结论
 
 四轮人工 / AI 审计覆盖：
@@ -21,7 +69,7 @@
 
 当前结论：
 
-- P0：暂无。
+- P0：存在。当前先处理 P0-A / P0-B，暂停 v0.0.7.x closure 和 v0.0.8.x 开工。
 - P1：存在若干机制 / ID / validator / legacy 迁移债务，必须在对应 gate 前解决，不能带到 v0.0.7.x 机制收口之后。
 - P2：存在 docs / housekeeping / 轻技术债，不阻塞当前机制推进，但应择机整理。
 
@@ -249,7 +297,7 @@ v0.0.7.81 新增 `reports/v0.0.7MechanismClosureHandoff.v0.0.7.81.md`，只做 v
 当前 checkpoint：
 
 - v0.0.7.x mechanism work is ready for fresh conversation review。
-- v0.0.7.x mechanism stage can enter closure mode。
+- v0.0.7.x mechanism stage 曾被记录为 can enter closure mode，但当前已降级为 P0 docs recovery / pause mode，不能视为安全 closure。
 - current valid artifacts 已列出，包括 `data/stableIdRegistry.js`、`scripts/content/checkStableIdRegistry.js`、v0.0.7.78 / v0.0.7.79 / v0.0.7.80 reports 和关键 docs。
 - deferred batch-content stage remains deferred：batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review packs / import / validation pipeline / shadow tuning datasets / active validator / runtime takeover / generated severity takeover 均不在 v0.0.7.81 展开。
 - next step 是 new conversation / closure review，不是 new content generation。

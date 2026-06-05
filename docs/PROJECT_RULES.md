@@ -10,22 +10,36 @@
 
 ## 2. 当前阶段
 
-当前处于 v0.0.5.x 味觉系统数据化地基阶段，重点是把原料属性、组合关系和味觉分析职责逐步数据化、模块化，避免 `tasteJudge.js` 继续膨胀。
+当前项目处于 P0 docs recovery / pause mode，直到 ChatGPT + 用户确认解除。
 
-当前阶段仍是配方实验室测试版，暂时不做营业系统、员工系统、隐藏配方系统。
+P0 未解除前：
 
-## 3. v0.0.5.x 禁止事项
+- 不开 v0.0.8.x。
+- 不做 batch content。
+- 不生成新 ID / feedbackTag / triggerMetric / ingredient profile。
+- 不做 generated severity。
+- 不做 shadow / partial / active takeover。
+- 不让 Codex 发明机制概念。
+- 不把 v0.0.7.x 视为安全 closure。
 
-- 不新增玩法
-- 不新增原料
-- 不新增隐藏配方
-- 不新增营业系统
-- 不新增顾客系统
-- 不新增员工系统
-- 不改 UI 视觉
-- 不改交互
-- 不为了单个案例写死配方特判
-- 不把温度、冰量、糖度做成完整可玩功能，除非任务明确要求
+历史阶段：
+
+- v0.0.5.x：现有核心系统 ID 化 / 去显示文案主键 / 平台无关数据地基。
+- v0.0.6.x：三层属性 / profile / summary 地基。
+- v0.0.7.x：原计划进入 severity / threshold / scoreMultiplier / 内容管线调参，但当前因判定模型正本与 AI_CONTEXT 污染进入 P0 recovery。
+
+## 3. P0 pause mode 禁止事项
+
+P0 期间不做任何玩法 / 内容 / runtime 扩张；只处理 ChatGPT + 用户明确批准的 P0 recovery 范围。
+
+- 不新增玩法、原料、隐藏配方、营业系统、顾客系统、员工系统。
+- 不改 UI 视觉或交互，除非任务明确要求。
+- 不为了单个案例写死配方特判。
+- 不把温度、冰量、糖度做成完整可玩功能，除非任务明确要求。
+- 不新增 batch content、stable ID、feedbackTag、triggerMetric 或 ingredient profile。
+- 不接入 generated severity、shadow、partial takeover 或 active takeover。
+- 不让 Codex 自行发明机制概念。
+- 不把 v0.0.7.x 写成已经安全 closure。
 
 ## 4. 配方系统长期规则
 
@@ -33,13 +47,27 @@
 
 茶底和乳基分开，“奶茶”不是茶底，而是茶 + 乳基的结果。
 
-味觉审判优先级固定为：
+当前判定模型以 `docs/TASTE_DECISION_MODEL.md` 为准；本文只做入口提醒，不复制完整长设计。
+
+旧线性优先级：
 
 ```text
 极端比例事故 > 质地事故（奶脂过载/吸管阻力） > 冲突组合 > 正常好组合 > 普通分类
 ```
 
-隐藏配方以后走身份识别线，不是免死金牌；极端事故仍然应该优先被识别。
+已废弃为 deprecated / historical rough rule only，不能再作为当前判定模型正本。
+
+当前正确判定层级是：
+
+```text
+特殊服务事故 > 质地事故 > 味觉事故 > 风味冲突 > 正常好组合 > 普通分类
+```
+
+判定优先级不等于扣分严重度；`priorityBand` 不等于 `severityLevel`；`severityHint` 不等于 `scoreMultiplier`。
+
+反 if 地狱是全判定模型原则，不是 flavor 层专属原则。特殊服务事故、质地事故、味觉事故、风味冲突、正常好组合、普通分类，都不能长期写成具体原料组合 if 地狱。
+
+隐藏配方以后走身份识别线，不是免死金牌；事故仍然应该优先被识别，但最终扣分和反馈强度应由 severity / evidence / triggerMetric / thresholds / weights 等后续层决定。
 
 测试期可以显示完整属性条；正式版默认不展示所有后台数值。
 
