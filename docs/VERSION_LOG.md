@@ -1,5 +1,33 @@
 # 版本记录
 
+## v0.0.7.72
+
+本轮只做 docs / boundary report，切到 texture drinkability boundary review。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/textureDrinkabilityBoundaryReview.v0.0.7.72.md`
+  - 记录 `texture_solid_overload` = 八宝粥感 / 小料太多。
+  - 记录 `texture_low_drinkability` = 水泥感 / 粉浆感 / 喝不动。
+  - 记录 `texture_straw_resistance` = 吸管很累，暂作表现 / 指标 / 相邻机制。
+- 更新 `docs/AI_CONTEXT.md`
+  - 只加入极短 texture boundary 摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 texture drinkability boundary line 小节。
+
+### 阶段边界
+
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不把 `texture_low_drinkability` 加入 scaffold。
+- 本轮不把 `texture_straw_resistance` 加入 scaffold。
+- 本轮不改 runtime、data scripts、generated data、content sheets 或 golden expected。
+- 本轮不做 validator。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.71
 
 本轮执行 minimal registry read-only check hardening，只加强 `scripts/content/checkStableIdRegistry.js` 的只读检查能力，并同步极短 docs。
