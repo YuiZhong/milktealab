@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.78-candidate`
-- 最新确认 candidate commit：`be20dbc3010e967d740519d9a5fbea96de0032c4`
-- `v0.0.7.78-candidate` 已创建并推送成功，指向 `be20dbc3010e967d740519d9a5fbea96de0032c4`。
-- main / origin/main 已同步到 `be20dbc3010e967d740519d9a5fbea96de0032c4`。
+- 最新确认 candidate：`v0.0.7.79-candidate`
+- 最新确认 candidate commit：`8d0ed0996ae524df4140e40f355d8c72b8d1772c`
+- `v0.0.7.79-candidate` 已创建并推送成功，指向 `8d0ed0996ae524df4140e40f355d8c72b8d1772c`。
+- main / origin/main 已同步到 `8d0ed0996ae524df4140e40f355d8c72b8d1772c`。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.78` 未创建。
-- 当前未创建 `v0.0.7.79-candidate`。
+- 正式 tag `v0.0.7.79` 未创建。
+- 当前未创建 `v0.0.7.80-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -135,7 +135,8 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.76 为 `texture_low_drinkability` 做 readiness check：readiness 为 `ready_for_next_batch_scaffold_preparation_not_approval`。本轮仍未 approved，未进入 scaffold，不改 registry / check script / runtime / validator；`texture_straw_resistance` final decision 仍 pending；`v0.0.7.76-candidate` 未创建。
 - v0.0.7.77 是 docs-only workflow pivot：后续 ID 审查默认按同层同类批量处理，不再一个 ID 一个完整长流程；特殊高风险 ID 才单独审。本轮不创建 ID、不创建 registry、不改 scaffold、不改 check script、不改 runtime；`v0.0.7.77-candidate` 已冻结。
 - v0.0.7.78 是 scope pivot / batch content deferred report：v0.0.7.x 后半段聚焦 pre-tuning pipeline closure、scaffold / check guardrails 和 shadow-entry checklist；批量 accidentTypeId / feedbackTag / triggerMetric / ingredient profile 生产延后到后续 batch-content stage，当前判断 likely v0.0.8.x or later，但不是已确定发布计划。Codex 不得自行生成机制概念。本轮不改 registry / check script / runtime / generated severity；`v0.0.7.78-candidate` 已冻结。
-- v0.0.7.79 是 closure / pre-shadow pipeline checklist：v0.0.7.x 进入 closure mode，后半段应收 scaffold / read-only check / guardrail / pre-shadow boundaries，不继续批量内容生产。批量 ID / feedbackTag / triggerMetric / ingredient profile generation 仍 deferred 到后续 batch-content stage，likely v0.0.8.x or later，但不是确定发布计划；下一步建议做 docs / guardrail consistency audit。本轮不改 registry / check script / runtime / generated severity；`v0.0.7.79-candidate` 未创建。
+- v0.0.7.79 是 closure / pre-shadow pipeline checklist：v0.0.7.x 进入 closure mode，后半段应收 scaffold / read-only check / guardrail / pre-shadow boundaries，不继续批量内容生产。批量 ID / feedbackTag / triggerMetric / ingredient profile generation 仍 deferred 到后续 batch-content stage，likely v0.0.8.x or later，但不是确定发布计划；下一步建议做 docs / guardrail consistency audit。本轮不改 registry / check script / runtime / generated severity；`v0.0.7.79-candidate` 已冻结。
+- v0.0.7.80 是 docs / guardrail consistency audit：审计 AI_CONTEXT / VERSION_LOG / V0_0_7_MECHANISM_TODO / STABLE_ID_NAMING_GUARDRAIL / ID_SOURCE_OF_TRUTH_DESIGN / v0.0.7.78 route pivot report / v0.0.7.79 closure checklist / scaffold / read-only check。结论是没有 blocking guardrail drift；只修复 `AI_CONTEXT` 中 v0.0.7.79 candidate freeze 后的状态快照漂移。本轮不改 registry / check script / runtime / generated severity；`v0.0.7.80-candidate` 未创建。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -147,7 +148,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `reports/v0.0.7ClosurePreShadowChecklist.v0.0.7.79.md` / `reports/v0.0.7ScopePivotBatchContentDeferred.v0.0.7.78.md` / `data/stableIdRegistry.js` / `scripts/content/checkStableIdRegistry.js`，优先做 `v0.0.7.80｜v0.0.7.x docs / guardrail consistency audit`。不要继续批量内容生产，不要让 Codex 自行生成机制概念，不要跳 active validator。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `reports/v0.0.7DocsGuardrailConsistencyAudit.v0.0.7.80.md` / `reports/v0.0.7ClosurePreShadowChecklist.v0.0.7.79.md` / `reports/v0.0.7ScopePivotBatchContentDeferred.v0.0.7.78.md` / `data/stableIdRegistry.js` / `scripts/content/checkStableIdRegistry.js`，再决定是否做 v0.0.7.x final closure candidate / pre-shadow gate review。不要继续批量内容生产，不要让 Codex 自行生成机制概念，不要跳 active validator。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。

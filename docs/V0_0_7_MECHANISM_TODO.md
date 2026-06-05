@@ -224,6 +224,24 @@ pre-shadow 前必须确认：
 
 本轮不改 registry scaffold / check script，不改 runtime / generated / content sheets / golden，不生成任何新 ID / tag / profile，不批准任何 ID，也不表示 P1 solved。
 
+### v0.0.7.80 docs / guardrail consistency audit
+
+v0.0.7.80 新增 `reports/v0.0.7DocsGuardrailConsistencyAudit.v0.0.7.80.md`，审计 v0.0.7.x closure 相关正本文档是否一致。
+
+审计结论：
+
+- 没有发现 blocking guardrail drift。
+- v0.0.7.x scope 一致：closure / pre-shadow pipeline / guardrail，不是 batch content generation。
+- batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review pack / shadow tuning datasets 均保持 deferred。
+- `data/stableIdRegistry.js` 仍只是 scaffold sample，不是 approved source-of-truth。
+- `scripts/content/checkStableIdRegistry.js` 仍只是 read-only check，不是 active validator。
+- v0.0.8.x 仍只是 likely / deferred / later batch-content stage 语境，不是 fixed release plan。
+- Codex role boundary 一致：Codex 不得自行生成机制概念。
+
+本轮只修复非阻塞状态漂移：`AI_CONTEXT` 当前快照同步到 `v0.0.7.79-candidate` 已冻结。
+
+本轮不改 registry scaffold / check script，不改 runtime / generated / content sheets / golden，不生成任何新 ID / tag / profile，不批准任何 ID，也不表示 P1 solved。
+
 ### v0.0.7.77 batch ID workflow pivot
 
 v0.0.7.77 将 ID 审查默认工作流从“单个 ID 长流程”调整为“同层同类批量处理”。

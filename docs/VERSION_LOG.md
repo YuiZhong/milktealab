@@ -1,5 +1,33 @@
 # 版本记录
 
+## v0.0.7.80
+
+本轮只做 docs / guardrail consistency audit，审计 v0.0.7.x closure 相关正本文档是否一致，确认没有旧说法残留、边界漂移或 deferred 内容被写成当前阶段任务。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/v0.0.7DocsGuardrailConsistencyAudit.v0.0.7.80.md`
+  - 审计 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / v0.0.7.78 route pivot report / v0.0.7.79 closure checklist / scaffold / read-only check。
+  - 确认 v0.0.7.x scope、deferred batch content、scaffold boundary、read-only check boundary、Codex role boundary、v0.0.8.x wording、runtime / generated severity / shadow boundary、source-of-truth wording 无 blocking drift。
+  - 记录 `AI_CONTEXT` 存在非阻塞状态漂移：仍把最新 candidate 写成 `v0.0.7.78-candidate`，并说 `v0.0.7.79-candidate` 未创建。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 `v0.0.7.79-candidate` 已冻结，并加入 v0.0.7.80 audit 短摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 v0.0.7.80 docs / guardrail consistency audit checkpoint。
+
+### 阶段边界
+
+- 本轮不改 code。
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不生成 accidentTypeId / feedbackTag / triggerMetric / ingredient profile。
+- 本轮不创建 schema / validator / allowed values。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.79
 
 本轮只做 docs / report closure checklist，把 v0.0.7.x 后半段正式切入 closure mode，并列出进入 shadow 前必须守住的 pipeline boundary。
