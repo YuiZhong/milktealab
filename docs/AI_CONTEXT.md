@@ -38,6 +38,8 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 
 `reports/v0.0.7SafeClosureDecision.md` 记录：P0-A / P0-B / P0-C 已 resolved，P1 split 已足以进入 safe closure discussion / closure checkpoint preparation；这不代表 P1 solved，也不开放 v0.0.8.x / batch content / generated severity / takeover。
 
+`reports/v0.0.7ClosureCheckpointDiscussion.md` 是当前 closure checkpoint / candidate discussion report。它支持准备 docs-only closure checkpoint discussion，但不创建 candidate / formal tag，也不开放 v0.0.8.x。
+
 下一步应是 docs-only closure checkpoint / candidate discussion，或在 ChatGPT + 用户确认 closure path 后创建下一阶段 active TODO。下一步不是 implementation。
 
 ## 1. 新对话启动必读
@@ -162,3 +164,5 @@ v0.0.7.x 已从 P0 docs recovery 转入 safe closure discussion / closure checkp
 batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review pack / generated severity / generated severity shadow / partial / active takeover / active validator / runtime takeover，仍全部暂停。Existing generated feedback shadow 如存在，仍是 non-final，不影响 final feedback / final result。
 
 下一步应做 docs-only closure checkpoint / candidate discussion，或在 ChatGPT + 用户确认后创建下一阶段 active TODO。剩余 P1 债务应迁移或保留为 staged legacy support，不应在 v0.0.7.x 中继续扩张实现。
+
+当前更具体的下一步候选是：docs-only closure checkpoint commit，或 next-stage active TODO decision，等待用户 + ChatGPT 确认。

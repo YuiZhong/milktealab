@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.7.x closure checkpoint discussion report
+
+本轮新增 `reports/v0.0.7ClosureCheckpointDiscussion.md`，作为 docs-only closure checkpoint / candidate discussion report。
+
+本轮不创建 candidate tag，不创建 formal tag，不改 runtime，不改 data / scripts / generated / golden，不开放 v0.0.8.x，不开放 generated severity / takeover。
+
+该记录只说明可以准备 closure checkpoint / candidate discussion，不表示已经 tag，不表示 P1 solved，也不表示 next-stage implementation 已开放。
+
 ## v0.0.7.x safe closure decision report
 
 本轮新增 `reports/v0.0.7SafeClosureDecision.md`，记录 v0.0.7.x P0 docs rescue / P1 closure split / P1-8 final audit 后的 safe closure discussion / closure checkpoint preparation 结论。
