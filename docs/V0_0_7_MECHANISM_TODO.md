@@ -54,6 +54,38 @@ v0.0.7.68-candidate 已冻结，accidentTypeId 第一批候选线阶段性收口
 - 不要跳 validator。
 - 不要把 v0.0.7.68 scaffold 写成 approved registry / schema / validator。
 
+### v0.0.7.70 accidentTypeId first-batch line closure checkpoint
+
+v0.0.7.70 确认 accidentTypeId 第一批候选线阶段性收口。
+
+已收口范围：
+
+- `taste_acid_overload`
+- `texture_solid_overload`
+
+当前状态：
+
+- 两项已进入 minimal registry scaffold。
+- 两项均为 `reviewed_candidate_not_approved`。
+- 两项均不能进入 validator / generated severity / runtime。
+- `scripts/content/checkStableIdRegistry.js` 仍是只读 check，不是 active validator。
+
+明确不是本轮收口范围：
+
+- `texture_low_drinkability`
+- `texture_straw_resistance`
+- feedbackTag / candidateTag
+- drinkStructure
+- broader accidentAnalyzer route
+- generated severity
+- shadow / partial / active takeover
+
+后续原则：
+
+- 不再为 `taste_acid_overload` / `texture_solid_overload` 新增 review pack / sample pack / proposal pack。
+- 下一步先开会选择下一条主线。
+- P1-1 / P1-2 / P1-3 / P1-4 仍未完全 solved；本轮只是第一批 accidentTypeId 子线阶段性收口。
+
 ### v0.0.7.52 P1 TODO review
 
 v0.0.7.52 新增 `reports/p1TodoReview.v0.0.7.52.md`，用于复盘 P1-1 到 P1-8 在 v0.0.7.51 source-of-truth / registry / schema design 之后的真实剩余状态。

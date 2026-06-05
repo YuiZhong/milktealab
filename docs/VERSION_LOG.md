@@ -1,5 +1,40 @@
 # 版本记录
 
+## v0.0.7.70
+
+本轮只做 docs-only closure checkpoint，确认 accidentTypeId 第一批候选线阶段性收口，并把后续工作转为“先选择下一条主线”。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 v0.0.7.70 是 docs-only closure checkpoint。
+  - 记录 accidentTypeId 第一批候选线阶段性收口。
+  - 记录 `taste_acid_overload` / `texture_solid_overload` 已进入 scaffold，但仍为 `reviewed_candidate_not_approved`。
+  - 记录两项 `canEnterValidator` / `canEnterGeneratedSeverity` / `canAffectRuntime` 仍为 `false`。
+  - 记录当前未创建 `v0.0.7.70-candidate`。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 first-batch line closure checkpoint。
+  - 明确后续不再为 `taste_acid_overload` / `texture_solid_overload` 新增 review pack / sample pack / proposal pack。
+  - 明确 `texture_low_drinkability`、`texture_straw_resistance`、feedbackTag / candidateTag、drinkStructure、broader accidentAnalyzer route、generated severity、shadow / partial / active takeover 仍排队。
+
+### 阶段边界
+
+- 本轮只同步 docs。
+- 本轮不改 runtime、data、scripts、generated data、content sheets 或 golden expected。
+- 本轮不改 registry scaffold 或 check script。
+- 本轮不新增 report。
+- 本轮不创建 registry / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
+### 后续原则
+
+- `taste_acid_overload` / `texture_solid_overload` 第一批候选子线阶段性收口。
+- 不要继续给这两个 ID 套 review pack / sample pack / proposal pack。
+- 下一步先开会选择下一条主线。
+
 ## v0.0.7.69
 
 本轮是 post-v0.0.7.68 docs-only checkpoint sync，只把 `v0.0.7.68-candidate` 冻结后的真实状态同步进关键 docs，并记录 accidentTypeId 第一批候选线已经阶段性收口。
