@@ -73,6 +73,8 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 - `core/summaryCandidateEngine.js`
 - `core/candidatePriorityShellEngine.js`
 
+长期批量内容生产流程：ChatGPT 先根据用户设定生成自然语言 scenario / concept candidates，用户审核后形成 approved concept list；Codex 只负责把 approved concepts 按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 结构化为 draft ID / rules / sheets / registry candidates，并运行 validator / tests。Codex 不得自行发明机制概念或追加未审核 ID。
+
 ## 2. 当前机制正本
 
 当前完整判定层级、priority vs severity 边界和所有判定层反 if 地狱原则，以 `docs/TASTE_DECISION_MODEL.md` 为准。

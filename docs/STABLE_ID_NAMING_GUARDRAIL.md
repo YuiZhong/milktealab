@@ -46,7 +46,97 @@ Stable ID batch generation must be paired with the source / profile / evidence /
 
 Codex must not generate stable ID concepts without a producer / ChatGPT-approved concept list. Ordinary IDs can be handled in batches, but batch generation belongs to a batch-content phase, not the default v0.0.7.x scope, unless the user explicitly reopens that scope.
 
-## 1.3 v0.0.7.x Closure / Pre-Shadow Boundary
+## 1.3 Batch Content Authoring Workflow
+
+This workflow is the long-term authoring guardrail for content expansion. It applies to stable IDs, `accidentTypeId`, `feedbackTag`, `triggerMetric`, `ruleId`, ingredient profile, flavor relation, customer preference, event / seasonal content, generated data, and any future content batch.
+
+### 1.3.1 Scenario first, ID later
+
+Content authoring starts from natural-language scenario / concept candidates, not from IDs.
+
+ID is a structured implementation result. ID is not the creative starting point.
+
+Natural-language concept candidates may include:
+
+- scenario;
+- accident description;
+- player experience description;
+- trigger context;
+- flavor relation;
+- texture relation;
+- feedback direction;
+- evidence / blockedEvidence;
+- severity intuition;
+- whether the item should become a mechanism, feedback copy, sample, rule, or notes only.
+
+### 1.3.2 ChatGPT + user review first
+
+The authoring sequence is:
+
+1. The user sets the theme, scope, and constraints.
+   - Examples: hot drink service accidents, thick-straw fit, summer fruit acidity, flavor identity conflict, seasonal ingredients.
+2. ChatGPT generates a batch of natural-language concept candidates.
+3. The user reviews as producer:
+   - keep;
+   - delete;
+   - merge;
+   - rename;
+   - rewrite;
+   - lower priority;
+   - mark as feedback-only;
+   - mark as evidence-only;
+   - mark as not mechanism.
+4. The reviewed set becomes an approved concept list.
+5. An approved concept list is still not an approved stable ID. It only authorizes Codex to start structured conversion.
+
+### 1.3.3 Codex role boundary
+
+Codex may only:
+
+- read the approved concept list;
+- convert approved concepts into draft ID / rule row / sheet row / registry candidate / validator candidate using existing guardrails;
+- preserve traceability so every ID, rule, or row can be traced back to an approved concept;
+- run validators, check scripts, and tests;
+- report boundary risks.
+
+Codex must not:
+
+- invent new concepts;
+- expand unreviewed accidents;
+- add a batch of similar-looking IDs;
+- turn natural-language scenarios directly into approved stable IDs;
+- connect candidates to runtime, generated severity, or final feedback;
+- invent mechanisms to fill table blanks;
+- treat examples, notes, or review pack items as approved source-of-truth.
+
+### 1.3.4 Gate boundary
+
+- Approved concept list is not approved stable ID.
+- Draft ID is not registry entry.
+- Registry candidate is not approved source-of-truth.
+- Generated data is not runtime takeover.
+- Shadow is not final result.
+- Before validator / review / producer confirmation passes, no content may affect final score, final feedback, final accident, drinkType, or golden expected.
+
+### 1.3.5 Why this workflow exists
+
+There are two opposite risks:
+
+1. One full long workflow per ordinary ID is too slow for batch expansion.
+2. Codex freely batch-generating IDs or content creates many plausible-looking but semantically dangerous mechanism pollutants.
+
+The long-term goal is:
+
+```text
+ChatGPT + user handle concept generation and producer judgment.
+Codex handles structuring, validation, import, testing, and reporting.
+```
+
+### 1.3.6 Future applicability
+
+This workflow is not only for v0.0.8.x. Future batch additions of ingredients, accidents, feedbackTags, triggerMetrics, flavor relations, customer preferences, seasonal content, and operation events should follow this process.
+
+## 1.4 v0.0.7.x Closure / Pre-Shadow Boundary
 
 v0.0.7.x closure mode should not add new batch ID generation unless the user explicitly reopens that scope. Batch stable ID generation belongs to a later batch-content workflow paired with profile / source / evidence validation, not to the v0.0.7.x pre-shadow checklist itself.
 

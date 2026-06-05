@@ -1,5 +1,11 @@
 # 版本记录
 
+## Batch Content Authoring Workflow guardrail
+
+本轮在 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 新增长期 Batch Content Authoring Workflow guardrail，并在 `AGENTS.md` / `docs/AI_CONTEXT.md` 加短提醒。
+
+这是 docs-only guardrail 小补丁，不生成新 ID，不生成新 content，不改 runtime，不改 generated data，不开放 v0.0.8.x，不创建 candidate tag / formal tag。
+
 ## v0.0.7.x closure audit P1 split report
 
 本轮新增 `reports/v0.0.7ClosureAuditP1Split.md`，记录 v0.0.7.x closure audit mode 下 P1-1..P1-8 的分流结果。
