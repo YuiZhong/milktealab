@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.62
+
+本轮执行 minimal accidentTypeId registry candidate gate design，只定义两个 first-batch accidentTypeId candidate 进入 future registry candidate 前的最小 gate。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/accidentTypeIdRegistryCandidateGate.v0.0.7.62.md`
+  - 只评估 `taste_acid_overload` 和 `texture_solid_overload`。
+  - 定义 Minimal Gate Checklist：机制可复用、sourceLayer / sourceSummary / triggerMetric notes、evidence allowed / blocked、boundary notes、hard no gates。
+  - 将两项 gate result 记录为 `passes_minimal_candidate_gate_with_notes`。
+  - 明确 `texture_low_drinkability` 是 explicit non-pass / boundary context，本轮不处理。
+  - 明确 historical texture old IDs 不回流 current registry / validator / generated severity / runtime。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.62 gate design 已完成。
+  - 继续明确 P1-1 / P1-2 / P1-3 / P1-4 未解决，gate design 不是 approval / registry / schema / validator / allowed values。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.61-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / gate design。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 accidentTypeId，也不把任何 ID 写成 `approved_stable`。
+- 本轮不让任何 accidentTypeId 进入 validator、generated severity 或 runtime。
+- 本轮不处理 `texture_low_drinkability`，除了 explicit non-pass / boundary 语境。
+- 本轮不处理 feedbackTag / drinkStructure / durian / dairy / strong flavor / straw resistance final decision。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.61
 
 本轮执行 accidentTypeId first-batch candidate notes record，把 v0.0.7.60 的 source notes 收束为后续 registry candidate gate 可审查的 candidate notes record。
