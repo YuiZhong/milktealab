@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.59-candidate`
-- 最新确认 candidate commit：`416c6d66c209b50f8292aa59c43feaf7ad5d5033`
-- `v0.0.7.59-candidate` 已创建并推送成功，指向 `416c6d66c209b50f8292aa59c43feaf7ad5d5033`。
-- main / origin/main 已在 v0.0.7.59 candidate 冻结时同步到 `416c6d66c209b50f8292aa59c43feaf7ad5d5033`。
+- 最新确认 candidate：`v0.0.7.60-candidate`
+- 最新确认 candidate commit：`b12e2899236ac2735ae31fad9edbecf4c7fd48db`
+- `v0.0.7.60-candidate` 已创建并推送成功，指向 `b12e2899236ac2735ae31fad9edbecf4c7fd48db`。
+- main / origin/main 已在 v0.0.7.60 candidate 冻结时同步到 `b12e2899236ac2735ae31fad9edbecf4c7fd48db`。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.59` 未创建。
-- 当前未创建 `v0.0.7.60-candidate`。
+- 正式 tag `v0.0.7.60` 未创建。
+- 当前未创建 `v0.0.7.61-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -116,7 +116,8 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.57 已新增 `reports/accidentTypeIdLikelyStableNotesReview.v0.0.7.57.md`，只对 `taste_acid_overload`、`texture_low_drinkability`、`texture_solid_overload` 三个 likely-stable accidentTypeId 候选做 source notes / boundary notes / decision-prep；它不是 registry / schema / validator / allowed values，不批准任何 accidentTypeId。
 - v0.0.7.58 已新增 `reports/accidentTypeIdFirstBatchDecisionDraft.v0.0.7.58.md`，只围绕上述三个事故 ID 整理第一批 future registry candidate 的人工决策草案；`taste_acid_overload` / `texture_solid_overload` 推荐为 `candidate_for_future_registry_after_notes`，`texture_low_drinkability` 推荐为 `needs_boundary_notes_before_candidate`。该 draft 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values。
 - v0.0.7.59 已新增 `reports/accidentTypeIdFirstBatchDecisionRecord.v0.0.7.59.md`，把 v0.0.7.58 草案收束为人类可读 decision record；`taste_acid_overload` / `texture_solid_overload` 记录为 `first_batch_candidate_pending_source_notes`，`texture_low_drinkability` 记录为 `boundary_notes_required_before_first_batch_candidate`。该 record 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values。
-- v0.0.7.60 已新增 `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md`，只给 `taste_acid_overload` 和 `texture_solid_overload` 补 sourceLayer / sourceSummary / triggerMetric / evidence boundary notes；`texture_low_drinkability` 只在 boundary / Not This Round 语境出现。该 report 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values，也不表示 v0.0.7.60-candidate 已冻结。
+- v0.0.7.60 已新增 `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md`，只给 `taste_acid_overload` 和 `texture_solid_overload` 补 sourceLayer / sourceSummary / triggerMetric / evidence boundary notes；`texture_low_drinkability` 只在 boundary / Not This Round 语境出现。该 report 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values；当前 candidate 冻结状态以上方快照为准。
+- v0.0.7.61 已新增 `reports/accidentTypeIdFirstBatchCandidateNotesRecord.v0.0.7.61.md`，把 `taste_acid_overload` 和 `texture_solid_overload` 收束为 `candidateRecordStatus=candidate_notes_recorded_not_approved` 的 candidate notes record。该 record 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values，也不表示 v0.0.7.61-candidate 已冻结。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -128,7 +129,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md` / `reports/accidentTypeIdLikelyStableNotesReview.v0.0.7.57.md` / `reports/accidentTypeIdFirstBatchDecisionDraft.v0.0.7.58.md` / `reports/accidentTypeIdFirstBatchDecisionRecord.v0.0.7.59.md` / `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md`，再决定 v0.0.7.60 是否冻结或下一刀是否进入 first-batch accidentTypeId registry candidate notes record。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md` / `reports/accidentTypeIdLikelyStableNotesReview.v0.0.7.57.md` / `reports/accidentTypeIdFirstBatchDecisionDraft.v0.0.7.58.md` / `reports/accidentTypeIdFirstBatchDecisionRecord.v0.0.7.59.md` / `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md` / `reports/accidentTypeIdFirstBatchCandidateNotesRecord.v0.0.7.61.md`，再决定 v0.0.7.61 是否冻结或下一刀是否进入 minimal accidentTypeId registry candidate gate design。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。
