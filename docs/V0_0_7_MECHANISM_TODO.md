@@ -4,7 +4,7 @@
 >
 > 本文件是 v0.0.7.x 阶段专属材料，用于记录该阶段的 TODO、inventory、design draft、gate、audit debt 或迁移证据。
 >
-> 当前 P0 recovery / v0.0.7.x 机制债务处理语境下，本文件仍是 active stage TODO；但它不是长期正本，阶段结束后必须移出长期必读。
+> 当前 v0.0.7.x closure audit mode 下，本文件仍是 active stage TODO；但它不是长期正本，阶段结束后必须移出长期必读。
 >
 > 它不替代 `docs/DOCS_SOURCE_OF_TRUTH.md`、`docs/TASTE_DECISION_MODEL.md`、`docs/STABLE_ID_NAMING_GUARDRAIL.md`、`docs/TASTE_SYSTEM_DESIGN.md` 或 `docs/TASTE_ENGINE_ARCHITECTURE.md`。
 >
@@ -18,9 +18,9 @@
 
 本文档是 v0.0.7.x 阶段专属 TODO / 债务 / gate。
 
-本文件当前是 v0.0.7.x / P0 recovery 语境下的 active stage TODO；v0.0.7.x 完结后必须移出长期必读列表。
+本文件当前是 v0.0.7.x closure audit mode 下的 active stage TODO；v0.0.7.x 完结后必须移出长期必读列表。
 
-它不是长期正本。当前仍处于 P0 recovery / v0.0.7.x 机制债务处理语境时，它可以作为阶段内必读；v0.0.7.x 完结后应移出长期必读列表。
+它不是长期正本。当前处于 v0.0.7.x closure audit mode 时，它可以作为阶段内必读；v0.0.7.x 完结后应移出长期必读列表。
 
 阶段结束时，应把仍然长期有效的原则沉淀进 L1 正本，把仍有效的未完成债务迁移到下一阶段 TODO，然后原阶段 TODO 降级为历史文件。文档层级、冲突裁决和更新归属以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
 
@@ -32,13 +32,17 @@
 
 `docs/TASTE_DECISION_MODEL.md` 是当前判定模型正本。涉及判定层级、priority vs severity、`priorityBand` / `severityLevel`、`severityHint` / `scoreMultiplier` 或反 if 地狱原则的任务，必须以该文件为准。
 
-## P0. 当前 docs recovery / pause mode
+## P0. Docs recovery status
 
-当前项目处于 P0 docs recovery / pause mode。P0 优先于后续 P1 / P2。
+P0 docs recovery / pause mode 已结束。当前项目处于 v0.0.7.x closure audit mode。
 
-### P0-A: Taste decision model source-of-truth missing / stale priority model
+P0-A / P0-B / P0-C 已解决，但这不代表 v0.0.7.x 已安全 closure，也不代表 P1 solved。v0.0.8.x 尚未开放。
 
-旧文档仍残留过时线性优先级：
+### P0-A: resolved
+
+Taste decision model source-of-truth missing / stale priority model 已通过 `docs/TASTE_DECISION_MODEL.md` 修复。
+
+旧文档中的过时线性优先级：
 
 ```text
 极端比例事故 > 稠度/质地事故 > 冲突组合 > 正常好组合 > 普通分类
@@ -59,32 +63,42 @@
 - `severityHint` 不等于 `scoreMultiplier`。
 - 所有判定层都不能新增 if 地狱。
 
-### P0-B: AI_CONTEXT source-of-truth pollution / navigation failure
+### P0-B: resolved
 
-`docs/AI_CONTEXT.md` 必须恢复为新对话导航页，不再承担机制正本、版本流水账或历史 report 汇总职责。
+AI_CONTEXT source-of-truth pollution / navigation failure 已通过导航页瘦身和正本指向修复。`docs/AI_CONTEXT.md` 只作为新对话导航页，不再承担机制正本、版本流水账或历史 report 汇总职责。
 
 reports / sample / draft / candidate / checklist 只作为历史证据，不自动升级为当前事实。当前机制判定以 `docs/TASTE_DECISION_MODEL.md` 为准；ID / tag / registry 以 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 为准；版本流水以 `docs/VERSION_LOG.md` 和 git ref / tag 为准。
 
-在 P0 解决并经 ChatGPT + 用户确认前：
+### P0-C: resolved
 
-- 不开 v0.0.8.x。
-- 不生成新 ID / feedbackTag / triggerMetric。
+Docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOURCE_OF_TRUTH.md`、`docs/DOCS_INVENTORY.md`、反 doc 地狱原则、support docs role header 和 V0_0_7 stage-bound header 修复。
+
+`AGENTS.md` / `docs/AI_CONTEXT.md` / `docs/PROJECT_RULES.md` / 本文件只做短索引，不复制长规则。reports / TODO / VERSION_LOG 不得当机制正本。
+
+## Closure audit mode
+
+当前 closure audit 目标：
+
+1. 确认 P1-8 final audit 如何执行。
+2. 对 P1-1 / P1-2 / P1-3 / P1-4 / P1-5 / P1-6 / P1-7 做分流：
+   - v0.0.7.x 收口前必须给结论；
+   - 迁移到下一阶段 TODO；
+   - 保留为 legacy / historical support；
+   - 明确不应现在处理。
+3. 明确哪些债务不得伪装成 solved。
+4. 明确哪些后续 implementation 必须等下一阶段 active stage TODO。
+5. 准备 v0.0.7.x closure audit report，但本轮不生成 report。
+
+当前限制：
+
+- v0.0.7.x 尚未安全 closure。
+- v0.0.8.x 尚未开放。
+- P1 不等于 solved。
+- 不生成新 ID / feedbackTag / triggerMetric / ingredient profile。
 - 不做 batch content。
 - 不做 generated severity。
 - 不做 shadow / partial / active takeover。
 - 不让 Codex 发明机制概念。
-- 不把 v0.0.7.x 视为安全 closure。
-- 不继续用旧线性优先级指导 severity / scoreMultiplier / ID / review pack。
-
-v0.0.7.81 handoff 中“v0.0.7.x mechanism stage can enter closure mode”的说法应降级为 P0 前的历史状态，不代表当前已经安全收口。当前下一步是 P0 docs recovery review。
-
-### P0-C: Docs source-of-truth hierarchy failure
-
-当前风险：文档太多、正本层级不清、版本流水散落多个文件、阶段 TODO 和 reports 容易污染长期必读列表。
-
-当前处理：新增 `docs/DOCS_SOURCE_OF_TRUTH.md` 作为文档层级、冲突裁决和更新归属正本；`AGENTS.md` / `docs/AI_CONTEXT.md` / `docs/PROJECT_RULES.md` / 本文件只做短索引，不复制长规则。
-
-在 P0-C 解决并经 ChatGPT + 用户确认前，不应继续扩展新阶段，不应把 reports / TODO / VERSION_LOG 当机制正本。
 
 ## 1. 当前总体结论
 
@@ -97,7 +111,7 @@ v0.0.7.81 handoff 中“v0.0.7.x mechanism stage can enter closure mode”的说
 
 当前结论：
 
-- P0：存在。当前先处理 P0-A / P0-B / P0-C，暂停 v0.0.7.x closure 和 v0.0.8.x 开工。
+- P0：P0-A / P0-B / P0-C 已解决，项目从 P0 docs recovery / pause mode 转入 v0.0.7.x closure audit mode。
 - P1：存在若干机制 / ID / validator / legacy 迁移债务，必须在对应 gate 前解决，不能带到 v0.0.7.x 机制收口之后。
 - P2：存在 docs / housekeeping / 轻技术债，不阻塞当前机制推进，但应择机整理。
 
@@ -325,7 +339,7 @@ v0.0.7.81 新增 `reports/v0.0.7MechanismClosureHandoff.v0.0.7.81.md`，只做 v
 当前 checkpoint：
 
 - v0.0.7.x mechanism work is ready for fresh conversation review。
-- v0.0.7.x mechanism stage 曾被记录为 can enter closure mode，但当前已降级为 P0 docs recovery / pause mode，不能视为安全 closure。
+- v0.0.7.x mechanism stage 曾被记录为 can enter closure mode，后续 P0 docs recovery 已修复文档正本问题；当前已转入 closure audit mode，但仍不能视为安全 closure。
 - current valid artifacts 已列出，包括 `data/stableIdRegistry.js`、`scripts/content/checkStableIdRegistry.js`、v0.0.7.78 / v0.0.7.79 / v0.0.7.80 reports 和关键 docs。
 - deferred batch-content stage remains deferred：batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review packs / import / validation pipeline / shadow tuning datasets / active validator / runtime takeover / generated severity takeover 均不在 v0.0.7.81 展开。
 - next step 是 new conversation / closure review，不是 new content generation。
@@ -658,7 +672,7 @@ canAffectRuntime = false
 
 ## 2. P0 / P1 / P2 定义
 
-- P0：立即阻塞，必须马上修，否则不能继续开发或冻结 candidate。当前状态：P0 存在，优先处理 P0-A / P0-B / P0-C docs recovery；旧“四轮审计 P0 暂无”已降级为 P0 recovery 前的历史状态。
+- P0：立即阻塞，必须马上修，否则不能继续开发或冻结 candidate。当前状态：P0-A / P0-B / P0-C 已解决，旧“四轮审计 P0 暂无”已降级为 P0 recovery 前的历史状态；当前进入 v0.0.7.x closure audit mode。
 - P1：当前 runtime 不一定已坏，但若不在指定门槛前处理，后续会造成机制混乱、ID 扩散、validator 错误、generated data 污染或 partial / active 接管风险。P1 必须在对应 gate 前解决。
 - P2：不阻塞当前机制推进，但建议在合适时机整理，避免长期文档污染、开发体验变差或小技术债累积。
 
