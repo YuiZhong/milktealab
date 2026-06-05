@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.60
+
+本轮执行 accidentTypeId first-batch source notes sync，只给两个 first-batch candidate 补 source notes / triggerMetric notes / evidence boundary。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md`
+  - 只处理 `taste_acid_overload` 和 `texture_solid_overload`。
+  - 为 `taste_acid_overload` 补充 `sourceLayer=taste`、`sourceSummary=tasteSummary`、`triggerMetricDraft=acidity / acidLoad / future acidPressure` 以及 acidic ingredient evidence 边界。
+  - 为 `texture_solid_overload` 补充 `sourceLayer=texture`、`sourceSummary=textureSummary / structure texture summary`、`triggerMetricDraft=solidLoad / textureRatio / liquidSupport / lowLiquidSupport` 以及 topping / solid-load evidence 边界。
+  - 明确 `texture_low_drinkability` 只在 boundary / Not This Round 语境出现，本轮不处理。
+  - 明确 historical `texture_topping_overload` 只作为 pre-v0.0.7.49 legacy reference，不回流 current registry / validator / generated severity input。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.60 source notes sync 已完成。
+  - 继续明确 P1-1 / P1-2 / P1-3 / P1-4 未解决，source notes 不是 registry / schema / validator / allowed values。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.59-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / source notes sync。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 accidentTypeId，也不把任何 ID 写成 `approved_stable`。
+- 本轮不让任何 accidentTypeId 进入 validator、generated severity 或 runtime。
+- 本轮不处理 `texture_low_drinkability`，除了 boundary / Not This Round 语境。
+- 本轮不处理 feedbackTag / drinkStructure / durian / dairy / strong flavor / straw resistance final decision。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.59
 
 本轮执行 accidentTypeId first-batch decision record，把 v0.0.7.58 的 producer / ChatGPT decision draft 收束为更明确的人类可读决策记录。
