@@ -1,5 +1,37 @@
 # 版本记录
 
+## v0.0.7.79
+
+本轮只做 docs / report closure checklist，把 v0.0.7.x 后半段正式切入 closure mode，并列出进入 shadow 前必须守住的 pipeline boundary。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/v0.0.7ClosurePreShadowChecklist.v0.0.7.79.md`
+  - 明确 v0.0.7.x closure mode 聚焦 scaffold / read-only check / guardrail / pre-shadow entry gates。
+  - 明确 v0.0.7.x 不继续批量内容生产。
+  - 明确 batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review pack 延后到后续 batch-content stage，likely v0.0.8.x or later，但不是已确定发布计划。
+  - 明确 Codex 不得自行生成机制概念。
+  - 明确现有 `data/stableIdRegistry.js` / `scripts/content/checkStableIdRegistry.js` 仍有效，但不是 approved source-of-truth / active validator / runtime source。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 `v0.0.7.78-candidate` 已冻结，并加入 v0.0.7.79 closure / pre-shadow checklist 短摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 v0.0.7.x closure checklist / pre-shadow pipeline checklist checkpoint。
+- 更新 `docs/STABLE_ID_NAMING_GUARDRAIL.md`
+  - 增加 v0.0.7.x closure / pre-shadow boundary note。
+
+### 阶段边界
+
+- 本轮不改 code。
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不生成 accidentTypeId / feedbackTag / triggerMetric / ingredient profile。
+- 本轮不创建 schema / validator / allowed values。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.78
 
 本轮只做 docs / report route pivot，把 v0.0.7.x 后半段从“继续批量内容生产”纠偏为“收好数值调整前链路、guardrail、scaffold / read-only check 样板和 pre-shadow checklist”。

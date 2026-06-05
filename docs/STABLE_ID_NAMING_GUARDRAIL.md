@@ -46,6 +46,10 @@ Stable ID batch generation must be paired with the source / profile / evidence /
 
 Codex must not generate stable ID concepts without a producer / ChatGPT-approved concept list. Ordinary IDs can be handled in batches, but batch generation belongs to a batch-content phase, not the default v0.0.7.x scope, unless the user explicitly reopens that scope.
 
+## 1.3 v0.0.7.x Closure / Pre-Shadow Boundary
+
+v0.0.7.x closure mode should not add new batch ID generation unless the user explicitly reopens that scope. Batch stable ID generation belongs to a later batch-content workflow paired with profile / source / evidence validation, not to the v0.0.7.x pre-shadow checklist itself.
+
 ## 2. ID 层级分类
 
 ### ingredientId
