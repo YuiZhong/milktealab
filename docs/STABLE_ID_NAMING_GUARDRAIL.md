@@ -40,6 +40,12 @@ Single-ID review is reserved for high-risk special mechanisms, especially when a
 
 Batch examples in docs are not approvals. They are not registry entries, scaffold entries, allowed values, validator input, generated severity input, or runtime source-of-truth until they pass producer / ChatGPT review and the relevant check script gate.
 
+## 1.2 Batch Content Phase Boundary
+
+Stable ID batch generation must be paired with the source / profile / evidence / validation pipeline that can actually review it.
+
+Codex must not generate stable ID concepts without a producer / ChatGPT-approved concept list. Ordinary IDs can be handled in batches, but batch generation belongs to a batch-content phase, not the default v0.0.7.x scope, unless the user explicitly reopens that scope.
+
 ## 2. ID 层级分类
 
 ### ingredientId

@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.76-candidate`
-- 最新确认 candidate commit：`eb8ba75b6e485ccdb052f7d0a31d655bc4ecd7a3`
-- `v0.0.7.76-candidate` 已创建并推送成功，指向 `eb8ba75b6e485ccdb052f7d0a31d655bc4ecd7a3`。
-- main / origin/main 已同步到 `eb8ba75b6e485ccdb052f7d0a31d655bc4ecd7a3`。
+- 最新确认 candidate：`v0.0.7.77-candidate`
+- 最新确认 candidate commit：`4128ea7ae3b31b6d97ae9378ec96a9818ec68d2f`
+- `v0.0.7.77-candidate` 已创建并推送成功，指向 `4128ea7ae3b31b6d97ae9378ec96a9818ec68d2f`。
+- main / origin/main 已同步到 `4128ea7ae3b31b6d97ae9378ec96a9818ec68d2f`。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.76` 未创建。
-- 当前未创建 `v0.0.7.77-candidate`。
+- 正式 tag `v0.0.7.77` 未创建。
+- 当前未创建 `v0.0.7.78-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -133,7 +133,8 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.74 为 `texture_low_drinkability` 补 source notes：sourceLayer draft 为 `texture`，triggerMetric candidates 包括 `drinkabilityPenalty` / `flowBreakdown` / `pasteLoad` / `sedimentLoad` / `powderSlurryLoad`。本轮未 approved，未进入 scaffold，不改 registry / check script / runtime / validator；`v0.0.7.74-candidate` 已冻结。
 - v0.0.7.75 将 `texture_low_drinkability` 整理为 candidate notes record：`candidateRecordStatus=candidate_notes_recorded_not_approved`，人话仍为水泥感 / 粉浆感 / 喝不动。本轮仍未 approved，未进入 scaffold，不改 registry / check script / runtime / validator；`v0.0.7.75-candidate` 已冻结。
 - v0.0.7.76 为 `texture_low_drinkability` 做 readiness check：readiness 为 `ready_for_next_batch_scaffold_preparation_not_approval`。本轮仍未 approved，未进入 scaffold，不改 registry / check script / runtime / validator；`texture_straw_resistance` final decision 仍 pending；`v0.0.7.76-candidate` 未创建。
-- v0.0.7.77 是 docs-only workflow pivot：后续 ID 审查默认按同层同类批量处理，不再一个 ID 一个完整长流程；特殊高风险 ID 才单独审。本轮不创建 ID、不创建 registry、不改 scaffold、不改 check script、不改 runtime；`v0.0.7.77-candidate` 未创建。
+- v0.0.7.77 是 docs-only workflow pivot：后续 ID 审查默认按同层同类批量处理，不再一个 ID 一个完整长流程；特殊高风险 ID 才单独审。本轮不创建 ID、不创建 registry、不改 scaffold、不改 check script、不改 runtime；`v0.0.7.77-candidate` 已冻结。
+- v0.0.7.78 是 scope pivot / batch content deferred report：v0.0.7.x 后半段聚焦 pre-tuning pipeline closure、scaffold / check guardrails 和 shadow-entry checklist；批量 accidentTypeId / feedbackTag / triggerMetric / ingredient profile 生产延后到后续 batch-content stage，当前判断 likely v0.0.8.x or later，但不是已确定发布计划。Codex 不得自行生成机制概念。本轮不改 registry / check script / runtime / generated severity；`v0.0.7.78-candidate` 未创建。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
