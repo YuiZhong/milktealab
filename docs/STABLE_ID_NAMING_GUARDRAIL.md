@@ -25,6 +25,21 @@
 - 如果某个 ID 的层级、来源或语义不清楚，应先停下来标记为 draft / needs review，而不是把它写进 stable 字段。
 - 玩家展示差异不能反向污染机制身份。Player-facing display differences must not back-propagate into mechanism identity。
 
+## 1.1 Batch ID Workflow Guardrail
+
+The default unit for future stable ID work is a same-layer / same-family batch, not one full workflow per ID.
+
+普通候选 ID 默认按同层同类批量处理：同批 review、同批补 source notes / evidence / blocked rules、同批进入 scaffold gate。不要为每个普通 ID 重复 decision draft / source notes / candidate notes / readiness / preparation 的完整长流程。
+
+Single-ID review is reserved for high-risk special mechanisms, especially when an ID may:
+
+- encourage one-ingredient-one-accident ID expansion;
+- turn subjective product judgment into mechanism identity;
+- affect save data, runtime, generated severity, validator, or allowed values;
+- bring displayName / player-facing copy back as a system key.
+
+Batch examples in docs are not approvals. They are not registry entries, scaffold entries, allowed values, validator input, generated severity input, or runtime source-of-truth until they pass producer / ChatGPT review and the relevant check script gate.
+
 ## 2. ID 层级分类
 
 ### ingredientId

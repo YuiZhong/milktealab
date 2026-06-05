@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.77
+
+本轮只做 docs-only workflow pivot，把后续 stable ID 审查默认单位从“一个 ID 一个完整长流程”调整为“同层同类批量处理”。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 `v0.0.7.76-candidate` 已冻结，并加入 v0.0.7.77 workflow pivot 短摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 batch ID workflow pivot 小节。
+- 更新 `docs/STABLE_ID_NAMING_GUARDRAIL.md`
+  - 新增 Batch ID Workflow Guardrail。
+
+### 新工作流原则
+
+- 普通同层同类 ID 默认批量走 review / source notes / scaffold。
+- 不再为普通 ID 重复 decision draft / source notes / candidate notes / readiness / preparation 全套长流程。
+- 特殊高风险 ID 才单独审，例如可能诱导“一个原料一个事故 ID”、主观产品评价变机制 ID、displayName 主键回潮，或影响 runtime / generated severity / 存档的 ID。
+- 示例 ID 只作为未来批量处理示例，不是本轮批准的 ID、scaffold entry 或 allowed values。
+
+### 阶段边界
+
+- 本轮不新增 report。
+- 本轮不创建任何新 ID。
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不创建 registry / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.76
 
 本轮只做 docs / readiness check，延续 v0.0.7.72-v0.0.7.75 的 `texture_low_drinkability` 边界、source notes 与 candidate notes record，判断它是否可以进入下一批 minimal scaffold preparation。
