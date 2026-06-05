@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.64-candidate`
-- 最新确认 candidate commit：`6162909281b977159e32f8e97d2543addaff0fd7`
-- `v0.0.7.64-candidate` 已创建并推送成功，指向 `6162909281b977159e32f8e97d2543addaff0fd7`。
-- main / origin/main 已在 v0.0.7.64 candidate 冻结时同步到 `6162909281b977159e32f8e97d2543addaff0fd7`。
+- 最新确认 candidate：`v0.0.7.65-candidate`
+- 最新确认 candidate commit：`41e927209706117d7650acdd4fffd7d9f52fae1d`
+- `v0.0.7.65-candidate` 已创建并推送成功，指向 `41e927209706117d7650acdd4fffd7d9f52fae1d`。
+- main / origin/main 已在 v0.0.7.65 candidate 冻结时同步到 `41e927209706117d7650acdd4fffd7d9f52fae1d`。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.64` 未创建。
-- 当前未创建 `v0.0.7.65-candidate`。
+- 正式 tag `v0.0.7.65` 未创建。
+- 当前未创建 `v0.0.7.66-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -121,7 +121,8 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.62 已新增 `reports/accidentTypeIdRegistryCandidateGate.v0.0.7.62.md`，只为 `taste_acid_overload` 和 `texture_solid_overload` 设计 minimal future registry candidate gate；两项结果为 `passes_minimal_candidate_gate_with_notes`。该 gate design 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values；v0.0.7.62-candidate 已冻结。
 - v0.0.7.63 已新增 `reports/accidentTypeIdRegistryCandidateRecord.v0.0.7.63.md`，只把 `taste_acid_overload` 和 `texture_solid_overload` 记录为 `first_batch_future_registry_candidate_not_approved`。该 candidate record 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values；v0.0.7.63-candidate 已冻结。
 - v0.0.7.64 已新增 `reports/accidentTypeIdFirstBatchSourceIndex.v0.0.7.64.md`，只把 `taste_acid_overload` 和 `texture_solid_overload` 整理为 `ready_for_minimal_registry_candidate_preparation_not_approval` 的 source index / readiness review。该 report 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values；v0.0.7.64-candidate 已冻结。
-- v0.0.7.65 已新增 `reports/accidentTypeIdRegistryCandidatePreparation.v0.0.7.65.md`，只把 `taste_acid_overload` 和 `texture_solid_overload` 整理为 `candidate_preparation_ready_for_reviewed_registry_task_not_approval` 的 minimal candidate preparation。该 report 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values，也不表示 v0.0.7.65-candidate 已冻结。
+- v0.0.7.65 已新增 `reports/accidentTypeIdRegistryCandidatePreparation.v0.0.7.65.md`，只把 `taste_acid_overload` 和 `texture_solid_overload` 整理为 `candidate_preparation_ready_for_reviewed_registry_task_not_approval` 的 minimal candidate preparation。该 report 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values；v0.0.7.65-candidate 已冻结。
+- v0.0.7.66 已新增 `reports/minimalRegistrySchemaTaskPlan.v0.0.7.66.md`，只为 `taste_acid_overload` 和 `texture_solid_overload` 设计 minimal registry / schema task plan。该 task plan 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values，也不表示 v0.0.7.66-candidate 已冻结。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -133,7 +134,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/accidentTypeIdRegistryCandidateRecord.v0.0.7.63.md` / `reports/accidentTypeIdFirstBatchSourceIndex.v0.0.7.64.md` / `reports/accidentTypeIdRegistryCandidatePreparation.v0.0.7.65.md`，再决定是否审查 / 推送 / 冻结 v0.0.7.65，或下一刀是否进入 `v0.0.7.66｜minimal registry/schema task plan`。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/accidentTypeIdRegistryCandidatePreparation.v0.0.7.65.md` / `reports/minimalRegistrySchemaTaskPlan.v0.0.7.66.md`，再决定是否审查 / 推送 / 冻结 v0.0.7.66，或下一刀是否进入 `v0.0.7.67｜minimal accidentTypeId registry/schema task specification`。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。

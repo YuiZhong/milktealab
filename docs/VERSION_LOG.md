@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.66
+
+本轮执行 minimal registry / schema task plan，只把 v0.0.7.65 已准备好的两个 accidentTypeId candidate 接入未来 reviewed registry / schema task 的任务边界设计。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/minimalRegistrySchemaTaskPlan.v0.0.7.66.md`
+  - 只围绕 `taste_acid_overload` 和 `texture_solid_overload`。
+  - 定义未来 reviewed registry / schema task 的最小 scope、candidate intake requirements、future task shape、gate、validator boundary 和 anti-bloat rule。
+  - 明确 future validator 只能读取 reviewed registry / schema，不能读取本 report、collector output、sample sheets、generated observations、docs prose、review pack / sample pack / proposal pack rows 作为 allowed values。
+  - 明确下一步不应继续为这两个 ID 新增 review pack / sample pack / proposal pack，而应进入 minimal accidentTypeId registry / schema task specification。
+  - 明确 `texture_low_drinkability` 仍是 explicit exclusion / Not This Round，本轮不处理。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.66 minimal registry / schema task plan 已完成。
+  - 继续明确 P1-1 / P1-2 / P1-3 / P1-4 未解决，task plan 不是 approval / registry / schema / validator / allowed values。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.65-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / task plan。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 accidentTypeId，也不把任何 ID 写成 `approved_stable`。
+- 本轮不让任何 accidentTypeId 进入 validator、generated severity 或 runtime。
+- 本轮不处理 `texture_low_drinkability`，除了 explicit exclusion / boundary 语境。
+- 本轮不处理 feedbackTag / drinkStructure / durian / dairy / industrial creamer / strong flavor / straw resistance final decision。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.65
 
 本轮执行 minimal accidentTypeId registry candidate preparation，只把已经完成 source index / readiness review 的两个 accidentTypeId 整理成后续 reviewed registry / schema task 可接收的最小候选材料。
