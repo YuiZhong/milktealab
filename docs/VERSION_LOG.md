@@ -1,5 +1,37 @@
 # 版本记录
 
+## v0.0.7.54
+
+本轮执行 stable ID registry entry sample pack，只把 v0.0.7.53 的 registry shape proposal 应用到少量可审查样例行。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/stableIdRegistryEntrySamplePack.v0.0.7.54.md`
+  - 定义 sample entry format，覆盖 `id`、`idFamily`、`proposedStatus`、`currentRuntimeObserved`、`sourceLayer`、`sourceSummary`、`triggerMetric`、`provenance`、`historicalSince`、`replacedBy`、`reviewStatus`、`reviewRequiredBefore`、`canEnterValidator`、`canEnterGeneratedSeverity`、`canAffectRuntime`、`blockedFrom`、`notes`、`humanReviewQuestion`。
+  - 增加 accidentTypeId sample entries，例如 `texture_low_drinkability`、`texture_solid_overload`、historical texture old IDs、`flavor_durian_overload`、`dairy_fat_overload`、`texture_straw_resistance`。
+  - 增加 outcomeTypeId sample entry：`flavor_identity_conflict`。
+  - 增加 feedbackTag / candidateTag sample entries：`bubble_conflict`、`aroma_pressure`、`identity_conflict`。
+  - 增加 human review questions、lessons 和 recommended next slice。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.54 sample pack 已完成。
+  - 继续明确 sample pack 不是 registry / schema / validator / allowed values，不批准任何 ID。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.53-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / sample pack。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 ID、feedbackTag、candidateTag、accidentTypeId、outcomeTypeId、ruleId 或 triggerMetric。
+- 本轮不把 `texture_low_drinkability` / `texture_solid_overload` 写成 `approved_stable`。
+- 本轮不让 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 回流 current validator / generated severity input。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.53
 
 本轮执行 reviewed stable ID registry shape proposal，只把 source-of-truth 设计转成可审查的 registry shape 报告。

@@ -54,6 +54,18 @@ v0.0.7.53 新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，把 v0.0
 
 该 report 不是 registry、schema、enum、validator 或 allowed values；不批准任何 ID，也不表示 P1-1 / P1-2 / P1-3 已解决。后续仍需要 reviewed registry entry sample pack、registry candidate review、source notes、producer / ChatGPT decision 和 validator design gate。
 
+### v0.0.7.54 registry entry sample pack
+
+v0.0.7.54 新增 `reports/stableIdRegistryEntrySamplePack.v0.0.7.54.md`，把 v0.0.7.53 的 registry shape proposal 应用到少量 sample entries，供制作人 / ChatGPT 审查字段、status、blocked gate 和 human review question 是否可读。
+
+该 sample pack 覆盖：
+
+- `accidentTypeId` sample entries，例如 `texture_low_drinkability`、`texture_solid_overload`、historical texture old IDs、`flavor_durian_overload`、`dairy_fat_overload`、`texture_straw_resistance`。
+- `outcomeTypeId` sample entry：`flavor_identity_conflict`。
+- `feedbackTag` / `candidateTag` sample entries：`bubble_conflict`、`aroma_pressure`、`identity_conflict`。
+
+该 report 仍不是 registry、schema、enum、validator 或 allowed values；不批准任何 ID，不把 `texture_low_drinkability` / `texture_solid_overload` 写成 `approved_stable`，也不让 historical texture old IDs 回流 current validator / generated severity input。后续仍需要 registry candidate review、source notes、producer / ChatGPT decision 和 validator design gate。
+
 ## 2. P0 / P1 / P2 定义
 
 - P0：立即阻塞，必须马上修，否则不能继续开发或冻结 candidate。当前四轮审计结果：P0 暂无。
@@ -85,7 +97,7 @@ v0.0.7.53 新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，把 v0.0
 ### P1-1｜AI 生成 ID 与机制命名审计
 
 - 风险：AI / Codex 生成或沿用的 ID 可能看起来稳定，却混用了机制、样本、文案、severity 或 source 层级。
-- 当前状态：v0.0.7.27 已建立 guardrail；v0.0.7.38 已新增 `reports/aiGeneratedIdTagReviewPack.sample.md` 作为 AI-generated ID / tag naming review pack proof；v0.0.7.39 已新增 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md` 作为正式 naming review pack；v0.0.7.40 已新增 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md`，记录制作人 / ChatGPT decision split 和 `taste_conflict` -> `flavor_identity_conflict` 迁移影响审计；v0.0.7.41 已执行该 one-shot migration，使当前 outcomeTypeId 改为 `flavor_identity_conflict`，legacy `taste_conflict` 仅保留为迁移前历史记录；v0.0.7.42 已补充 post-migration outcome / candidate tag / feedbackTag 边界 notes；v0.0.7.53 已新增 reviewed registry shape proposal，把 ID family、status 和 review gate 转成可审查材料。当前仍待 reviewed registry entry sample pack / registry candidate review 和后续 gate，P1-1 仍未解决。
+- 当前状态：v0.0.7.27 已建立 guardrail；v0.0.7.38 已新增 `reports/aiGeneratedIdTagReviewPack.sample.md` 作为 AI-generated ID / tag naming review pack proof；v0.0.7.39 已新增 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md` 作为正式 naming review pack；v0.0.7.40 已新增 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md`，记录制作人 / ChatGPT decision split 和 `taste_conflict` -> `flavor_identity_conflict` 迁移影响审计；v0.0.7.41 已执行该 one-shot migration，使当前 outcomeTypeId 改为 `flavor_identity_conflict`，legacy `taste_conflict` 仅保留为迁移前历史记录；v0.0.7.42 已补充 post-migration outcome / candidate tag / feedbackTag 边界 notes；v0.0.7.53 已新增 reviewed registry shape proposal，把 ID family、status 和 review gate 转成可审查材料；v0.0.7.54 已新增 registry entry sample pack，把少量 sample entries 转成可读 review rows。当前仍待 registry candidate review 和后续 gate，P1-1 仍未解决。
 - 为什么重要：ID 一旦进入 docs、sample sheet、generated data、golden 或 runtime，会被后续 AI 当成事实来源。
 - 必须在什么时候前解决：正式调参前；`candidate_severity_rules` 进入 generated data 前；severity / threshold partial takeover 前；v0.0.7.x 机制部分 final 收口前。
 - 建议路线：按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 的长期审计流程，先列出 `accidentTypeId`、`outcomeTypeId`、`drinkTypeId`、`feedbackTag`、`textId`、`sampleId`、`ruleId`、`candidateId`、`priorityBand`、`severityHint`、`severityLevel`、`sourceLayer`、`sourceSummary`、`triggerMetric` 以及 profile / tag / generated sample 中的 draft ID，再检查层级是否混用；可用 `reports/aiGeneratedIdTagNamingReviewPack.v0.0.7.39.md` 作为正式 review pack 审查材料，并用 `reports/aiGeneratedIdTagNamingDecisionSplit.v0.0.7.40.md` 追踪已记录的制作人方向、技术下一步和迁移影响面。v0.0.7.41 已完成 `taste_conflict` -> `flavor_identity_conflict` one-shot migration，但这只解决一个 outcome ID 迁移点，不等于完成 P1-1；后续仍需 source-of-truth / registry design、ID inventory review 和 gate 审查。
@@ -104,7 +116,7 @@ v0.0.7.53 新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，把 v0.0
 ### P1-2｜known stable ID source of truth / registry / enum / schema
 
 - 风险：future validator 如果没有明确 ID 来源，容易退回 substring / suffix 猜合法性。
-- 当前状态：v0.0.7.27 已明确 validator 前置条件；v0.0.7.51 已更新 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`，明确 observed ≠ approved、collector output ≠ registry、historical legacy reference ≠ current allowed value，并设计 future registry / schema 形态；v0.0.7.53 已新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，提出 registry entry fields、status vocabulary 和 family shape。但尚未新增 registry / enum / schema，也未实现 validator。
+- 当前状态：v0.0.7.27 已明确 validator 前置条件；v0.0.7.51 已更新 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md`，明确 observed ≠ approved、collector output ≠ registry、historical legacy reference ≠ current allowed value，并设计 future registry / schema 形态；v0.0.7.53 已新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，提出 registry entry fields、status vocabulary 和 family shape；v0.0.7.54 已新增 sample pack 测试未来 row shape。但尚未新增 registry / enum / schema，也未实现 validator，sample pack 不等于 approved source of truth。
 - 为什么重要：validator 是防错层，不能自己变成新的字符串 if 地狱。
 - 必须在什么时候前解决：validate candidate severity sheet 正式实现前；任何 generated severity data build 前。
 - 建议路线：先按 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 和 `docs/V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md` 决定 known stable ID 来源；collector 只能提供 observed evidence / drift check，不能直接生成 allowed values。可选来源包括现有 data / rules 中经 review 的 stable ID、统一 ID registry、generated schema、明确 enum / allowed values。
@@ -113,7 +125,7 @@ v0.0.7.53 新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，把 v0.0
 ### P1-3｜candidate severity sheet validator
 
 - 风险：`content_sheets/examples/candidate_severity_rules.sample.csv` 当前只是草案，没有 validator 保护。
-- 当前状态：CSV / JSON 健康，所有样例行 disabled / draft，但还不能进入 build / generated data。v0.0.7.53 只提出 registry shape proposal，仍未提供 validator 可读取的 approved registry / schema。
+- 当前状态：CSV / JSON 健康，所有样例行 disabled / draft，但还不能进入 build / generated data。v0.0.7.53 只提出 registry shape proposal；v0.0.7.54 只提供 registry entry sample pack；二者仍未提供 validator 可读取的 approved registry / schema。
 - 为什么重要：没有 validator 就 build，会污染 generated data 并放大 ID / schema 错误。
 - 必须在什么时候前解决：severity sheet 进入 build / generated data 前。
 - 建议路线：先实现只读 validator，检查 UTF-8 with BOM、表头完整、`ruleId` 唯一、`enabled` 合法、`candidateType` 合法、known stable ID 引用合法、`accidentTypeId` 不误用原料 / severity / sample 语义、`triggerMin` / `triggerMax` / `scoreMultiplier` 区间合法，并禁止 `displayName` / `zhCN` / sampleId 当主键。
@@ -278,7 +290,8 @@ Git candidate = 项目开发版本
 23. v0.0.7.51 已更新 source-of-truth / registry / schema design docs，明确 observed ≠ approved、collector output ≠ registry、runtime observed / golden / generated / sample draft / review pack / historical reference 的分层来源，并把已迁出的三项 texture old IDs 固定为 historical / pre-version legacy reference。该 design 不创建 registry / schema / validator，也不批准任何 ID。
 24. v0.0.7.52 已新增 `reports/p1TodoReview.v0.0.7.52.md`，复盘 P1-1 到 P1-8 的真实剩余状态。结论是：P1 标题保留不等于从零未做，前置工作完成也不等于 final gate solved。
 25. v0.0.7.53 已新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，把 collector observed evidence、legacy inventory、feedbackTag mapping design 和 review pack decision split 汇总为人工可审的 registry shape proposal；该 report 不创建 registry / schema / validator 文件，也不批准任何 ID。
-26. 下一刀可考虑 reviewed registry entry sample pack 或 accidentTypeId registry candidate review pack，把 v0.0.7.53 的字段 / status vocabulary 应用到少量样例行供制作人 / ChatGPT 决策；仍不应直接实现 validator。
+26. v0.0.7.54 已新增 `reports/stableIdRegistryEntrySamplePack.v0.0.7.54.md`，把 v0.0.7.53 的字段 / status vocabulary 应用到少量样例行供制作人 / ChatGPT 审查；该 sample pack 不是 registry，不批准任何 ID，也不提供 validator allowed values。
+27. 下一刀可考虑 accidentTypeId registry candidate review pack，或 feedbackTag / candidate tag registry candidate review pack，把 sample entries 转成真正的人工决策材料；仍不应直接实现 validator。
 27. 另一个可考虑方向是继续 accidentAnalyzer broader route review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
 28. feedbackTag / candidate tag source-of-truth 可把 P1-5 / P1-7 合并规划；drinkStructureAnalyzer displayName staged plan 则保持独立，不应插队成 runtime rewrite。
 29. 在 legacy、drinkStructure、ID、feedbackTag、accidentTypeId、review pack gate 都有明确边界后，再设计 candidate severity sheet validator；validator 不能提前把尚未审清楚的 Codex 生成内容“合法化”。

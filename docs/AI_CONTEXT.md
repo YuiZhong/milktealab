@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.52-candidate`
-- 最新确认 candidate commit：`daa3fd2a6810c84ed03aa569a53565b4fc78c921`
-- `v0.0.7.52-candidate` 已创建并推送成功，指向 `daa3fd2a6810c84ed03aa569a53565b4fc78c921`。
-- main / origin/main 已同步到 `daa3fd2a6810c84ed03aa569a53565b4fc78c921`；工作区应干净。
+- 最新确认 candidate：`v0.0.7.53-candidate`
+- 最新确认 candidate commit：`37a7348f45ab06506072245e593ff083e8283a86`
+- `v0.0.7.53-candidate` 已创建并推送成功，指向 `37a7348f45ab06506072245e593ff083e8283a86`。
+- main / origin/main 已同步到 `37a7348f45ab06506072245e593ff083e8283a86`；工作区应干净。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.52` 未创建。
-- 当前未创建 `v0.0.7.53-candidate`。
+- 正式 tag `v0.0.7.53` 未创建。
+- 当前未创建 `v0.0.7.54-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -110,6 +110,7 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.51 已更新 source-of-truth / registry / schema design docs：observed ≠ approved，collector output ≠ registry / allowed values generator，runtime_review_candidate 不是 definite migration target；本轮不创建 registry / schema / validator。
 - v0.0.7.52 已做 P1 TODO review：P1 标题保留不等于从零未做，前置工作完成也不等于 final gate solved；下一步建议以 `reports/p1TodoReview.v0.0.7.52.md` 为准。
 - v0.0.7.53 已新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，把 reviewed stable ID registry shape 转成可审查 proposal；它不创建 registry / schema / validator / allowed values，不批准任何 ID，也不表示 P1 已解决。
+- v0.0.7.54 已新增 `reports/stableIdRegistryEntrySamplePack.v0.0.7.54.md`，把 registry shape 应用到少量 sample entries；它只是 sample pack，不是 registry / schema / validator / allowed values，不批准任何 ID。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
