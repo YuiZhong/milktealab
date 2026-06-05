@@ -1,5 +1,13 @@
 # Rollback Guide
 
+> 本文档是 historical / operational reference，用于人工回滚、备份、操作参考。
+
+> 它不是当前机制正本，不是版本流水正本，不决定当前项目状态。
+
+> 当前版本 / commit / tag / candidate 状态以 git ref / tag 和 `docs/VERSION_LOG.md` 为准。本文件中的旧 tag、旧路径、旧备份方式如果存在，只作为历史操作参考。
+
+> 执行任何回滚前，必须先确认当前 git 状态和用户明确指令。如果本文与 `docs/DOCS_SOURCE_OF_TRUTH.md` 冲突，以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
+
 本文档记录《奶茶实验室》的回滚与保险做法，避免实验性修改破坏稳定版本。
 
 ## 1. 稳定点规则

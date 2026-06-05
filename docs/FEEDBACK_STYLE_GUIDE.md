@@ -1,5 +1,13 @@
 # Feedback Style Guide
 
+> 本文档是 feedback style support doc / L1 candidate，用于描述反馈文案风格方向。
+
+> 它暂不直接作为完整 feedback system source of truth；后续是否升格为 feedback style 正本需单独审查。
+
+> feedbackTag / generated feedback / validator / registry 边界不由本文决定。stable ID / tag 边界以 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 为准。判定模型以 `docs/TASTE_DECISION_MODEL.md` 为准。文档层级和冲突裁决以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
+
+> 本文件不记录版本流水、commit、candidate、tag、golden samples 数量或当前阶段状态。
+
 本文档记录《奶茶实验室》试喝反馈的文案风格，防止后续变成普通评分器或客服腔。
 
 ## 1. 核心风格

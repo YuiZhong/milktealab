@@ -1,5 +1,13 @@
 # Ingredient Schema
 
+> 本文档是 ingredient schema support doc / L1 candidate，用于说明原料数据结构和 schema 方向。
+
+> 它暂不直接作为 L1 source of truth；后续是否升格为 ingredient schema 正本需单独审查。
+
+> stable ID / tag / registry / validator 边界以 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 为准。三层 profile / summary 长期设计以 `docs/TASTE_SYSTEM_DESIGN.md` 和 `docs/TASTE_ENGINE_ARCHITECTURE.md` 为准。判定模型以 `docs/TASTE_DECISION_MODEL.md` 为准。文档层级和冲突裁决以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
+
+> 本文件不记录版本流水、commit、candidate、tag、golden samples 数量或当前阶段状态。如果本文与 L1 正本冲突，以 L1 正本为准。
+
 本文档记录原料数据的长期结构约定，方便后续增加原料、平衡数值或接入表格管理。
 
 ## 1. 当前数据位置

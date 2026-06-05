@@ -51,15 +51,15 @@ P0
 |---|---|---|---|---|---|---|
 | `AI_CONTEXT.md` | 新对话导航页，指向当前正本、当前 P0 pause mode 和禁止事项 | L0 | active | always read | OK | keep |
 | `DOCS_SOURCE_OF_TRUTH.md` | 文档层级、冲突裁决和更新归属正本 | L1 | active | always read | OK | keep |
-| `FEEDBACK_STYLE_GUIDE.md` | feedback 文案风格支持文档 / 长期正本候选 | L1 candidate | needs-review | read when relevant | P2 | consider L1 inclusion |
-| `INGREDIENT_SCHEMA.md` | ingredient schema 支持文档 / 长期正本候选 | L1 candidate | needs-review | read when relevant | P1 | consider L1 inclusion |
+| `FEEDBACK_STYLE_GUIDE.md` | feedback style support doc / L1 candidate | L1 candidate / support doc | needs-review | read when relevant | P2 / P1 | role header added; decide feedback style source later |
+| `INGREDIENT_SCHEMA.md` | ingredient schema support doc / L1 candidate | L1 candidate / support doc | needs-review | read when relevant | P1 | role header added; decide L1 source vs support later |
 | `PROJECT_RULES.md` | 项目入口规则，概述当前 pause mode、长期工作流和模块边界 | L0 | active | always read | OK | keep |
-| `ROLLBACK_GUIDE.md` | 回滚 / 备份 / 操作参考 | historical | historical | read when relevant | P2 | add historical header |
+| `ROLLBACK_GUIDE.md` | historical / operational reference | historical / operational reference | historical | read when operationally relevant | P2 | historical header added; keep as operational reference |
 | `STABLE_ID_NAMING_GUARDRAIL.md` | stable ID / tag / ruleId / sampleId / candidateId / triggerMetric / registry / validator / generated data guardrail 正本 | L1 | active | always read | OK | keep |
 | `TASTE_DECISION_MODEL.md` | 当前判定模型、priority vs severity、事故层级和全判定层反 if 地狱正本 | L1 | active | always read | OK | keep |
 | `TASTE_ENGINE_ARCHITECTURE.md` | 工程架构承载方式、summary / candidate / priority shell / runtime 边界 | L1 | active | always read | OK | keep |
 | `TASTE_SYSTEM_DESIGN.md` | 味觉系统长期设计细节 | L1 | active | always read | OK | keep |
-| `TEST_CASES.md` | 测试说明 / 历史测试材料，归属待审 | unclear | needs-review | read when relevant | P1 | review later |
+| `TEST_CASES.md` | historical test notes / golden runner support notes | unclear / testing support | historical / needs-review | do not use as current truth; read when relevant | P1 | role header added; consider rewrite as testing guide later |
 | `V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` | v0.0.7.x accidentAnalyzer legacy inventory / stage evidence | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
 | `V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md` | v0.0.7.x drink structure displayName inventory / migration evidence | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
 | `V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md` | v0.0.7.x feedbackTag mapping stage design | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
