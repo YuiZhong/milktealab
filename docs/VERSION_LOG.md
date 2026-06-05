@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.7.81
+
+本轮只做 docs-only mechanism closure / handoff，把 v0.0.7.x 机制阶段当前收口状态写入 report 和关键 docs，方便后续切换 fresh conversation 继续。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/v0.0.7MechanismClosureHandoff.v0.0.7.81.md`
+  - 明确 v0.0.7.x mechanism work can enter closure mode。
+  - 列出 current valid artifacts，包括 scaffold、read-only check、v0.0.7.78 / v0.0.7.79 / v0.0.7.80 reports 和关键 docs。
+  - 明确 batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review packs / validation pipeline / shadow tuning datasets / active validator / runtime takeover / generated severity takeover deferred 到后续 stage，likely v0.0.8.x or later，但不是 fixed release plan。
+  - 明确 fresh conversation handoff：新对话应先读 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / 本 report。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 `v0.0.7.80-candidate` 已冻结，并加入 v0.0.7.81 closure / handoff 短摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 v0.0.7.81 mechanism closure / handoff checkpoint。
+
+### 阶段边界
+
+- 本轮不改 code。
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不生成 accidentTypeId / feedbackTag / triggerMetric / ingredient profile。
+- 本轮不生成 profile、tag 或 allowed values。
+- 本轮不创建 schema / validator。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.80
 
 本轮只做 docs / guardrail consistency audit，审计 v0.0.7.x closure 相关正本文档是否一致，确认没有旧说法残留、边界漂移或 deferred 内容被写成当前阶段任务。
