@@ -1,5 +1,19 @@
 # v0.0.7.x Known Stable ID Source-of-Truth Design
 
+> Stage-bound document / 阶段限定文档
+>
+> 本文件是 v0.0.7.x 阶段专属材料，用于记录该阶段的 TODO、inventory、design draft、gate、audit debt 或迁移证据。
+>
+> 它不是长期正本，不替代 `docs/DOCS_SOURCE_OF_TRUTH.md`、`docs/TASTE_DECISION_MODEL.md`、`docs/STABLE_ID_NAMING_GUARDRAIL.md`、`docs/TASTE_SYSTEM_DESIGN.md` 或 `docs/TASTE_ENGINE_ARCHITECTURE.md`。
+>
+> v0.0.7.x 结束后，本文件必须移出 `AGENTS.md` / `docs/AI_CONTEXT.md` 的长期必读列表，只能作为 historical / stage support 按需读取。
+>
+> 未完成且仍有效的债务应迁移到下一阶段 TODO；长期有效原则应沉淀进 L1 正本。
+>
+> 虽然文件名包含 SOURCE_OF_TRUTH，但本文只是 v0.0.7.x 阶段内的 source-of-truth / registry / schema 设计草案或支撑材料，不是长期 source-of-truth。长期 ID / tag / registry / validator 正本仍以 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 为准。
+>
+> 如果本文与 L1 正本冲突，以 L1 正本为准。
+
 ## 0. 文档定位
 
 本文档是 v0.0.7.x known stable ID source-of-truth / registry / enum / schema 的设计方案。
