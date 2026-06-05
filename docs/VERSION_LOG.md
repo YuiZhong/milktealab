@@ -1,5 +1,32 @@
 # 版本记录
 
+## v0.0.7.74
+
+本轮只做 docs / source notes，延续 v0.0.7.72 / v0.0.7.73 的 texture drinkability boundary 与 candidate draft，为 `texture_low_drinkability` 补 source notes / triggerMetric notes / evidence boundary。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/textureLowDrinkabilitySourceNotes.v0.0.7.74.md`
+  - 记录 `texture_low_drinkability` = 水泥感 / 粉浆感 / 喝不动。
+  - 记录 sourceLayer draft 为 `texture`。
+  - 记录 triggerMetric candidates：`drinkabilityPenalty` / `flowBreakdown` / `pasteLoad` / `sedimentLoad` / `powderSlurryLoad`。
+  - 明确 `texture_taro_overload` / `texture_oreo_overload` 只作 historical evidence，不回流 current registry。
+- 更新 `docs/AI_CONTEXT.md`
+  - 只加入极短接续摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 `texture_low_drinkability` source notes 小节。
+
+### 阶段边界
+
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不做 validator。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.73
 
 本轮只做 docs / candidate decision draft，延续 v0.0.7.72 的 texture drinkability boundary 结论，判断 `texture_low_drinkability` 是否可以进入下一批 accidentTypeId candidate 草案。

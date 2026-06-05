@@ -125,6 +125,26 @@ v0.0.7.73 新增 `reports/textureLowDrinkabilityCandidateDecisionDraft.v0.0.7.73
 - 本轮不改 registry scaffold / check script，不改 runtime / generated / content sheets / golden。
 - 本轮不新增 proposal / sample pack / 大 review pack，也不表示 P1 solved。
 
+### v0.0.7.74 texture_low_drinkability source notes
+
+v0.0.7.74 新增 `reports/textureLowDrinkabilitySourceNotes.v0.0.7.74.md`，只为 `texture_low_drinkability` 补 source notes / triggerMetric notes / evidence boundary。
+
+当前 source notes：
+
+- `texture_low_drinkability` 人话为水泥感 / 粉浆感 / 喝不动。
+- sourceLayer draft 为 `texture`。
+- sourceSummary draft 为 `textureSummary / structure texture summary`。
+- triggerMetric candidates 为 `drinkabilityPenalty` / `flowBreakdown` / `pasteLoad` / `sedimentLoad` / `powderSlurryLoad`。
+
+当前边界：
+
+- 本轮不批准 `texture_low_drinkability`。
+- 本轮不把 `texture_low_drinkability` 加入 scaffold。
+- `texture_straw_resistance` final decision 仍 pending。
+- `texture_taro_overload` / `texture_oreo_overload` 只作为 historical evidence，不回流 current registry。
+- 本轮不改 registry scaffold / check script，不改 runtime / generated / content sheets / golden。
+- 本轮不新增 proposal / sample pack / 大 review pack，也不表示 P1 solved。
+
 ### v0.0.7.70 accidentTypeId first-batch line closure checkpoint
 
 v0.0.7.70 确认 accidentTypeId 第一批候选线阶段性收口。
