@@ -1,5 +1,45 @@
 # 版本记录
 
+## v0.0.7.68
+
+本轮执行 minimal accidentTypeId registry scaffold，第一次创建极小 registry draft 与只读 check script，但仍不进入 runtime / active validator / generated severity。
+
+### 本轮新增 / 更新
+
+- 新增 `data/stableIdRegistry.js`
+  - 只包含 accidentTypeId family。
+  - 只收录 `taste_acid_overload` 和 `texture_solid_overload`。
+  - 两个 entry 的 `status` 均为 `reviewed_candidate_not_approved`。
+  - 两个 entry 的 `canEnterValidator` / `canEnterGeneratedSeverity` / `canAffectRuntime` 均为 `false`。
+  - 未加入 `texture_low_drinkability`。
+  - historical texture old IDs 不作为 current entry；`texture_topping_overload` 只作为 `texture_solid_overload` 的 historical link note。
+- 新增 `scripts/content/checkStableIdRegistry.js`
+  - 只读检查 `data/stableIdRegistry.js` 的 required fields、允许 ID 集合和 hard forbidden conditions。
+  - 不生成 allowed values。
+  - 不接 runtime、generated severity、content sheets 或 collector output。
+  - 不是 active validator。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.68 minimal accidentTypeId registry scaffold 已创建。
+  - 继续明确 P1-1 / P1-2 / P1-3 / P1-4 未完全解决，scaffold / check script 不是 approval / schema / active validator / allowed values。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.67-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只创建最小 accidentTypeId registry scaffold 和只读检查脚本。
+- 本轮不创建 JSON schema。
+- 本轮不生成 allowed values。
+- 本轮不实现 active validator。
+- 本轮不批准任何 accidentTypeId，也不把任何 ID 写成 `approved_stable`。
+- 本轮不让任何 accidentTypeId 进入 validator、generated severity 或 runtime。
+- 本轮不处理 `texture_low_drinkability`，除了 boundary / exclusion / grep 语境。
+- 本轮不处理 feedbackTag / candidateTag / outcomeTypeId / drinkStructure。
+- 本轮不处理 durian / dairy / industrial creamer / strong flavor / straw resistance final decision。
+- 本轮不改 core、index.html、现有 runtime data 逻辑、generated data、content sheets 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.67
 
 本轮执行 minimal accidentTypeId registry / schema task specification，只把 v0.0.7.66 的 task plan 收束成下一步如果真正实现最小 registry / schema 时的任务规格。
