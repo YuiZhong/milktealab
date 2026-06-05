@@ -1,5 +1,38 @@
 # 版本记录
 
+## v0.0.7.57
+
+本轮执行 accidentTypeId likely-stable notes review，只从已有 accidentTypeId review pack 中挑三个最稳的事故机制候选做 source notes / boundary notes / decision-prep。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/accidentTypeIdLikelyStableNotesReview.v0.0.7.57.md`
+  - 只覆盖三个 likely-stable accidentTypeId 候选：`taste_acid_overload`、`texture_low_drinkability`、`texture_solid_overload`。
+  - 为三项分别补充 sourceLayer、sourceSummary、triggerMetric 候选、evidence 边界、相邻机制区别和 remaining gate。
+  - 明确 `taste_acid_overload` 是 taste pressure，不按 lemon / hawthorn / passionfruit 等证据拆 ID。
+  - 明确 `texture_low_drinkability` 覆盖喝不动 / 糊 / 堵 / 流动性崩语境，historical `texture_taro_overload` / `texture_oreo_overload` 不回流 current registry。
+  - 明确 `texture_solid_overload` 覆盖小料太多 / 固体负载 / 液体支撑不足语境，historical `texture_topping_overload` 不回流 current registry。
+  - 增加 Cross-ID Boundary Table 和 Human Review Questions。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.57 notes review 已完成。
+  - 继续明确 notes review 不是 registry / schema / validator / allowed values，不批准任何 accidentTypeId。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.56-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / notes review / decision-prep。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 accidentTypeId，也不把任何 ID 写成 `approved_stable`。
+- 本轮不把 `taste_acid_overload` / `texture_low_drinkability` / `texture_solid_overload` 写成已批准 stable。
+- 本轮不让 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 回流 current registry / validator / generated severity input。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.56
 
 本轮执行 feedbackTag / candidate tag registry candidate review pack，只把 feedbackTag、candidate tag、risk tag、copy direction 和 outcomeTypeId 边界整理成可人工审查材料。
