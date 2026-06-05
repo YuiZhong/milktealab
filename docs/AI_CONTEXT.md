@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.71-candidate`
-- 最新确认 candidate commit：`b33a6a01d62287cc2c0a700940ca9576894a4978`
-- `v0.0.7.71-candidate` 已创建并推送成功，指向 `b33a6a01d62287cc2c0a700940ca9576894a4978`。
-- main / origin/main 已同步到 `b33a6a01d62287cc2c0a700940ca9576894a4978`。
+- 最新确认 candidate：`v0.0.7.72-candidate`
+- 最新确认 candidate commit：`e75cb695d8228e4f26209e01dcc1a5c6a5c68637`
+- `v0.0.7.72-candidate` 已创建并推送成功，指向 `e75cb695d8228e4f26209e01dcc1a5c6a5c68637`。
+- main / origin/main 已同步到 `e75cb695d8228e4f26209e01dcc1a5c6a5c68637`。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.71` 未创建。
-- 当前未创建 `v0.0.7.72-candidate`。
+- 正式 tag `v0.0.7.72` 未创建。
+- 当前未创建 `v0.0.7.73-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -129,6 +129,7 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.70 是 docs-only closure checkpoint：确认 accidentTypeId 第一批候选线阶段性收口。`taste_acid_overload` / `texture_solid_overload` 已进入 minimal registry scaffold，但仍未 approved，仍不能进入 validator / generated severity / runtime。后续不要继续为这两个 ID 新增 review pack / sample pack / proposal pack；下一步应开会决定下一条主线，例如 `texture_low_drinkability` 边界、feedbackTag、minimal registry / read-only check hardening、broader route 等。
 - v0.0.7.71 是 minimal registry read-only check hardening：只加强 `scripts/content/checkStableIdRegistry.js` 的只读检查；registry scaffold 仍只包含 `taste_acid_overload` / `texture_solid_overload`，两项仍为 `reviewed_candidate_not_approved`，`canEnterValidator` / `canEnterGeneratedSeverity` / `canAffectRuntime` 仍为 `false`。本轮不接 runtime、不生成 allowed values、不做 active validator、不新增 review pack / sample pack / proposal pack；`texture_low_drinkability` / feedbackTag / drinkStructure / validator / generated severity 等仍排队。
 - v0.0.7.72 开始 texture drinkability boundary review：八宝粥 / 小料太多 = `texture_solid_overload`，水泥 / 粉浆 / 喝不动 = `texture_low_drinkability`，吸管很累 = `texture_straw_resistance`。本轮只做 boundary report，不改 registry / runtime / validator；`texture_low_drinkability` / `texture_straw_resistance` 仍未加入 scaffold。
+- v0.0.7.73 开始 `texture_low_drinkability` candidate decision draft：`texture_low_drinkability` 人话为水泥感 / 粉浆感 / 喝不动，建议进入下一批 accidentTypeId candidate draft，recommendedDecision 为 `candidate_for_next_batch_after_boundary_notes`。本轮未 approved，未进入 scaffold，不改 registry / check script / runtime / validator；`v0.0.7.73-candidate` 未创建。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`

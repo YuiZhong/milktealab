@@ -1,5 +1,31 @@
 # 版本记录
 
+## v0.0.7.73
+
+本轮只做 docs / candidate decision draft，延续 v0.0.7.72 的 texture drinkability boundary 结论，判断 `texture_low_drinkability` 是否可以进入下一批 accidentTypeId candidate 草案。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/textureLowDrinkabilityCandidateDecisionDraft.v0.0.7.73.md`
+  - 记录 `texture_low_drinkability` = 水泥感 / 粉浆感 / 喝不动。
+  - 建议 `recommendedDecision=candidate_for_next_batch_after_boundary_notes`。
+  - 明确它仍未 approved，仍未进入 scaffold，仍不能进入 validator / generated severity / runtime。
+- 更新 `docs/AI_CONTEXT.md`
+  - 只加入极短接续摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 `texture_low_drinkability` 下一批 candidate 判断小节。
+
+### 阶段边界
+
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不做 validator。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.72
 
 本轮只做 docs / boundary report，切到 texture drinkability boundary review。
