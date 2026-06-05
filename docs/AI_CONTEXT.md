@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.68-candidate`
-- 最新确认 candidate commit：`c5443e2061a18c70c478bc9dfe15265b992d08e3`
-- `v0.0.7.68-candidate` 已创建并推送成功，指向 `c5443e2061a18c70c478bc9dfe15265b992d08e3`。
-- main / origin/main 已同步到 `c5443e2061a18c70c478bc9dfe15265b992d08e3`。
+- 最新确认 candidate：`v0.0.7.70-candidate`
+- 最新确认 candidate commit：`aaec2cc3358f70a87ff65c4d6b7e3ee83f94e63e`
+- `v0.0.7.70-candidate` 已创建并推送成功，指向 `aaec2cc3358f70a87ff65c4d6b7e3ee83f94e63e`。
+- main / origin/main 已同步到 `aaec2cc3358f70a87ff65c4d6b7e3ee83f94e63e`。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.68` 未创建。
-- 当前未创建 `v0.0.7.70-candidate`。
+- 正式 tag `v0.0.7.70` 未创建。
+- 当前未创建 `v0.0.7.71-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -127,6 +127,7 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.68 已创建最小 `data/stableIdRegistry.js` scaffold 和只读 `scripts/content/checkStableIdRegistry.js`，只包含 `taste_acid_overload` / `texture_solid_overload`，两者均为 `reviewed_candidate_not_approved`，且 `canEnterValidator` / `canEnterGeneratedSeverity` / `canAffectRuntime` 均为 `false`。该 scaffold 不是 active validator，不生成 allowed values，不接 runtime / generated severity，不处理 `texture_low_drinkability`、feedbackTag、drinkStructure 或其他 runtime candidates。
 - v0.0.7.68-candidate 已冻结；accidentTypeId 第一批候选线阶段性收口。`texture_low_drinkability` / feedbackTag / drinkStructure / other runtime candidates 仍未处理，处于排队状态，不是消失。后续应先开会整理这条线还剩什么、下一条主线怎么排，再决定 v0.0.7.69 之后的实际工作。
 - v0.0.7.70 是 docs-only closure checkpoint：确认 accidentTypeId 第一批候选线阶段性收口。`taste_acid_overload` / `texture_solid_overload` 已进入 minimal registry scaffold，但仍未 approved，仍不能进入 validator / generated severity / runtime。后续不要继续为这两个 ID 新增 review pack / sample pack / proposal pack；下一步应开会决定下一条主线，例如 `texture_low_drinkability` 边界、feedbackTag、minimal registry / read-only check hardening、broader route 等。
+- v0.0.7.71 是 minimal registry read-only check hardening：只加强 `scripts/content/checkStableIdRegistry.js` 的只读检查；registry scaffold 仍只包含 `taste_acid_overload` / `texture_solid_overload`，两项仍为 `reviewed_candidate_not_approved`，`canEnterValidator` / `canEnterGeneratedSeverity` / `canAffectRuntime` 仍为 `false`。本轮不接 runtime、不生成 allowed values、不做 active validator、不新增 review pack / sample pack / proposal pack；`texture_low_drinkability` / feedbackTag / drinkStructure / validator / generated severity 等仍排队。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -138,7 +139,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/minimalRegistrySchemaTaskPlan.v0.0.7.66.md` / `reports/minimalAccidentTypeRegistrySchemaSpecification.v0.0.7.67.md`，再开会选择下一条主线；不要继续为 `taste_acid_overload` / `texture_solid_overload` 自动新增 review pack / sample pack / proposal pack，也不要跳 validator。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `data/stableIdRegistry.js` / `scripts/content/checkStableIdRegistry.js`，再决定是否继续 harden read-only check 或切到 `texture_low_drinkability` / feedbackTag / drinkStructure 等排队主线；不要继续为 `taste_acid_overload` / `texture_solid_overload` 自动新增 review pack / sample pack / proposal pack，也不要跳 active validator。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。

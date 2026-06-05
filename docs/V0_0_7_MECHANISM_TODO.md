@@ -54,6 +54,40 @@ v0.0.7.68-candidate 已冻结，accidentTypeId 第一批候选线阶段性收口
 - 不要跳 validator。
 - 不要把 v0.0.7.68 scaffold 写成 approved registry / schema / validator。
 
+### v0.0.7.71 minimal registry read-only check hardening
+
+v0.0.7.71 只加强 `scripts/content/checkStableIdRegistry.js` 的只读检查能力。
+
+当前保持不变：
+
+- `data/stableIdRegistry.js` scaffold 仍只包含 `taste_acid_overload` / `texture_solid_overload`。
+- 两项仍为 `reviewed_candidate_not_approved`。
+- 两项 `canEnterValidator` / `canEnterGeneratedSeverity` / `canAffectRuntime` 仍为 `false`。
+- check script 仍是只读检查，不生成 allowed values，不接 runtime，不是 active validator。
+
+本轮 hardening 覆盖：
+
+- current entry 数量必须严格为 2。
+- current entry ID 只能是 `taste_acid_overload` / `texture_solid_overload`。
+- duplicate ID 必须报错。
+- required array fields 必须是非空数组，`historicalLinks` 必须是数组。
+- `status` 只能是 `reviewed_candidate_not_approved`。
+- `sourceLayer` 只能是 `taste` / `texture`，并与两个 ID 的 source layer 对齐。
+- `idFamily` 必须是 `accidentTypeId`。
+- historical texture old IDs 不能作为 current entry；`texture_topping_overload` 只能在 `texture_solid_overload.historicalLinks` 中作为 historical relation 出现。
+
+仍未完成 / 排队：
+
+- `texture_low_drinkability`
+- `texture_straw_resistance`
+- feedbackTag / candidateTag
+- drinkStructure
+- broader accidentAnalyzer route
+- validator / generated severity
+- shadow / partial / active takeover
+
+本轮不新增 registry entry，不新增 review pack / sample pack / proposal pack，也不表示 P1-1 / P1-2 / P1-3 / P1-4 solved。
+
 ### v0.0.7.70 accidentTypeId first-batch line closure checkpoint
 
 v0.0.7.70 确认 accidentTypeId 第一批候选线阶段性收口。

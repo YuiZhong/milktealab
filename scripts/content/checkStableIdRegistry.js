@@ -26,6 +26,25 @@ const ALLOWED_CURRENT_IDS = new Set([
   "texture_solid_overload"
 ]);
 
+const EXPECTED_SOURCE_LAYERS = new Map([
+  ["taste_acid_overload", "taste"],
+  ["texture_solid_overload", "texture"]
+]);
+
+const ALLOWED_SOURCE_LAYERS = new Set([
+  "taste",
+  "texture"
+]);
+
+const ALLOWED_STATUS = "reviewed_candidate_not_approved";
+
+const FORBIDDEN_STATUSES = new Set([
+  "approved_stable",
+  "approved stable",
+  "active",
+  "runtime_enabled"
+]);
+
 const FORBIDDEN_CURRENT_IDS = new Set([
   "texture_low_drinkability",
   "texture_straw_resistance",
@@ -43,6 +62,20 @@ const FORBIDDEN_ID_FAMILIES = new Set([
   "candidateTag",
   "outcomeTypeId",
   "drinkStructure"
+]);
+
+const REQUIRED_NON_EMPTY_ARRAY_FIELDS = [
+  "triggerMetricCandidates",
+  "evidenceNotes",
+  "blockedEvidence",
+  "boundaryNotes",
+  "reviewNotes"
+];
+
+const LEGACY_TEXTURE_IDS = new Set([
+  "texture_taro_overload",
+  "texture_oreo_overload",
+  "texture_topping_overload"
 ]);
 
 function isPlainObject(value) {
@@ -87,12 +120,12 @@ function validateEntry(entry, index, errors) {
     errors.push(`${label}.idFamily is forbidden in this accidentTypeId-only scaffold`);
   }
 
-  if (entry.status !== "reviewed_candidate_not_approved") {
-    errors.push(`${label}.status should be reviewed_candidate_not_approved`);
+  if (entry.status !== ALLOWED_STATUS) {
+    errors.push(`${label}.status should be ${ALLOWED_STATUS}`);
   }
 
-  if (entry.status === "approved_stable") {
-    errors.push(`${label}.status must not be approved_stable`);
+  if (FORBIDDEN_STATUSES.has(entry.status)) {
+    errors.push(`${label}.status must not be ${entry.status}`);
   }
 
   ["humanMeaning", "sourceLayer", "sourceSummary"].forEach(field => {
@@ -101,7 +134,16 @@ function validateEntry(entry, index, errors) {
     }
   });
 
-  ["triggerMetricCandidates", "evidenceNotes", "blockedEvidence", "boundaryNotes", "reviewNotes"].forEach(field => {
+  if (!ALLOWED_SOURCE_LAYERS.has(entry.sourceLayer)) {
+    errors.push(`${label}.sourceLayer should be one of: ${Array.from(ALLOWED_SOURCE_LAYERS).join(", ")}`);
+  }
+
+  const expectedSourceLayer = EXPECTED_SOURCE_LAYERS.get(entry.id);
+  if (expectedSourceLayer && entry.sourceLayer !== expectedSourceLayer) {
+    errors.push(`${label}.sourceLayer should be ${expectedSourceLayer}`);
+  }
+
+  REQUIRED_NON_EMPTY_ARRAY_FIELDS.forEach(field => {
     if (!hasStringArray(entry[field])) {
       errors.push(`${label}.${field} should be a non-empty string array`);
     }
@@ -109,6 +151,25 @@ function validateEntry(entry, index, errors) {
 
   if (!Array.isArray(entry.historicalLinks)) {
     errors.push(`${label}.historicalLinks should be an array`);
+  } else {
+    entry.historicalLinks.forEach((link, linkIndex) => {
+      const linkLabel = `${label}.historicalLinks[${linkIndex}]`;
+
+      if (!isPlainObject(link)) {
+        errors.push(`${linkLabel} should be a plain object`);
+        return;
+      }
+
+      if (!isNonEmptyString(link.id)) {
+        errors.push(`${linkLabel}.id should be a non-empty string`);
+      }
+
+      if (!isNonEmptyString(link.relation)) {
+        errors.push(`${linkLabel}.relation should be a non-empty string`);
+      } else if (!link.relation.includes("historical")) {
+        errors.push(`${linkLabel}.relation should include historical`);
+      }
+    });
   }
 
   if (entry.canEnterValidator !== false) {
@@ -144,6 +205,11 @@ function validateRegistry(entries) {
     }
   });
 
+  const unexpectedCurrentIds = Array.from(seenIds).filter(id => !ALLOWED_CURRENT_IDS.has(id));
+  unexpectedCurrentIds.forEach(id => {
+    errors.push(`${id} is not allowed in this minimal registry scaffold`);
+  });
+
   ALLOWED_CURRENT_IDS.forEach(id => {
     if (!seenIds.has(id)) {
       errors.push(`${id} is missing from the minimal registry scaffold`);
@@ -154,6 +220,12 @@ function validateRegistry(entries) {
     errors.push(`stableIdRegistry should contain exactly ${ALLOWED_CURRENT_IDS.size} entries`);
   }
 
+  LEGACY_TEXTURE_IDS.forEach(id => {
+    if (seenIds.has(id)) {
+      errors.push(`${id} must remain historical and must not be a current registry entry`);
+    }
+  });
+
   return errors;
 }
 
@@ -163,8 +235,7 @@ function main() {
   if (errors.length > 0) {
     console.error("Stable ID registry check failed:");
     errors.forEach(error => console.error(`- ${error}`));
-    process.exitCode = 1;
-    return;
+    process.exit(1);
   }
 
   console.log("Stable ID registry check passed.");

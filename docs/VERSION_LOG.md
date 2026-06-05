@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.7.71
+
+本轮执行 minimal registry read-only check hardening，只加强 `scripts/content/checkStableIdRegistry.js` 的只读检查能力，并同步极短 docs。
+
+### 本轮新增 / 更新
+
+- 更新 `scripts/content/checkStableIdRegistry.js`
+  - 加强 entry 数量和允许 current ID 集合检查。
+  - 加强 duplicate ID 检查。
+  - 加强 required array fields / historicalLinks 检查。
+  - 加强 `status` / `sourceLayer` / `idFamily` / canEnter hard false 检查。
+  - 加强 historical texture old IDs 不能作为 current entry 的检查。
+- 更新 `docs/AI_CONTEXT.md`
+  - 记录 v0.0.7.71 是 read-only check hardening。
+  - 记录 `v0.0.7.70-candidate` 已冻结，当前未创建 `v0.0.7.71-candidate`。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 accidentTypeId 第一批候选线处于阶段性收口后的 hardening 状态。
+
+### 阶段边界
+
+- 本轮不新增 registry entry。
+- registry scaffold 仍只包含 `taste_acid_overload` / `texture_solid_overload`。
+- 两项仍为 `reviewed_candidate_not_approved`。
+- 两项 `canEnterValidator` / `canEnterGeneratedSeverity` / `canAffectRuntime` 仍为 `false`。
+- 本轮不接 runtime，不生成 allowed values，不做 active validator。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不新增 review pack / sample pack / proposal pack。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.70
 
 本轮只做 docs-only closure checkpoint，确认 accidentTypeId 第一批候选线阶段性收口，并把后续工作转为“先选择下一条主线”。
