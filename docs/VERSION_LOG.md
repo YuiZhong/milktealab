@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.7.x closure audit P1 split report
+
+本轮新增 `reports/v0.0.7ClosureAuditP1Split.md`，记录 v0.0.7.x closure audit mode 下 P1-1..P1-8 的分流结果。
+
+这是 docs-only report，不是机制正本，不创建 candidate tag，也不创建 formal tag。
+
+本轮未改 runtime，未开放 v0.0.8.x，未开放 generated severity / generated severity shadow / partial / active takeover。Existing generated feedback shadow, if present, remains non-final and does not affect final feedback / final result.
+
 ## v0.0.7.x closure audit mode transition
 
 这是 docs-only state transition 记录，只说明当前 main 从 P0 docs recovery / pause mode 转入 v0.0.7.x closure audit mode；它不是机制正本，不创建 candidate tag，也不创建 formal tag。
@@ -10,7 +18,8 @@
 - 这不代表 v0.0.7.x 已安全 closure。
 - 这不代表 P1 solved。
 - 这不开放 v0.0.8.x。
-- 这不开放 batch content、generated severity、shadow / partial / active takeover。
+- 这不开放 batch content、generated severity、generated severity shadow / partial / active takeover。
+- Existing generated feedback shadow, if present, remains non-final and does not affect final feedback / final result.
 
 下一步是 v0.0.7.x closure audit：对 P1 做“收口前必须给结论 / 迁移到下一阶段 TODO / 保留为 legacy / historical support / 明确不应现在处理”的分流。
 
