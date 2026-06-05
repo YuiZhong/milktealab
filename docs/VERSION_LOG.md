@@ -1,5 +1,37 @@
 # 版本记录
 
+## v0.0.7.55
+
+本轮执行 accidentTypeId registry candidate review pack，只把 accidentTypeId 候选项整理成可人工审查材料。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md`
+  - 定义 review pack 内部审查状态，例如 `keep_candidate_for_review`、`likely_approve_after_notes`、`keep_runtime_legacy_with_notes`、`special_mechanism_candidate`、`split_review_needed`、`historical_only`、`blocked_from_current_registry`。
+  - 增加 accidentTypeId candidate review table，覆盖 `taste_acid_overload`、`texture_low_drinkability`、`texture_solid_overload`、`flavor_durian_overload`、`dairy_fat_overload`、`industrial_creamer_overload`、`taste_strong_flavor_overload`、`texture_straw_resistance` 以及 historical texture old IDs。
+  - 增加 human review questions by ID，明确每个候选项需要制作人 / ChatGPT 审查的 sourceLayer、triggerMetric、producer semantics 和 registry 风险。
+  - 把候选项分成 likely stable after notes、runtime review / source notes、special / producer review、split review、historical only 等后续工作包。
+  - 推荐下一刀可考虑 accidentTypeId registry producer review decisions，或更保守的 accidentTypeId likely-stable notes review；不建议直接实现 validator。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.55 review pack 已完成。
+  - 继续明确 review pack 不是 registry / schema / enum / allowed values / validator input，不批准任何 accidentTypeId。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.54-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / review pack。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 accidentTypeId，也不把任何 ID 写成 `approved_stable`。
+- 本轮不把 `texture_low_drinkability` / `texture_solid_overload` 写成已批准 stable。
+- 本轮不让 `texture_taro_overload` / `texture_oreo_overload` / `texture_topping_overload` 回流 current registry / validator / generated severity input。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.54
 
 本轮执行 stable ID registry entry sample pack，只把 v0.0.7.53 的 registry shape proposal 应用到少量可审查样例行。
