@@ -1,5 +1,42 @@
 # 版本记录
 
+## P0 docs rescue checkpoint after v0.0.7.81-candidate
+
+这是版本流水 checkpoint，只记录 P0 docs rescue / source-of-truth recovery 已发生的 main 线文档整理，不是 candidate，不是正式 tag，也不是新的机制正本。
+
+当前 latest pushed main 已到：
+
+```text
+26eba67 docs: mark v0.0.7 files as stage-bound
+```
+
+本轮没有创建 candidate tag，没有创建 formal tag。`v0.0.7.81-candidate` 仍是之前的 candidate tag，不在本 checkpoint 中改写。
+
+当前仍不视为 v0.0.7.x 安全 closure，仍不开放 v0.0.8.x。本 checkpoint 不代表 batch content、generated severity、runtime takeover、shadow / partial / active takeover 开放。
+
+P0 docs rescue 已完成以下 main commits：
+
+```text
+9d17f6d docs: recover P0 decision model sources
+897b13c docs: define document source of truth
+a9c4181 docs: add document inventory
+6d89856 docs: add anti doc-hell principle
+7d86b50 docs: clarify support document roles
+26eba67 docs: mark v0.0.7 files as stage-bound
+```
+
+简要作用：
+
+- 建立 `docs/TASTE_DECISION_MODEL.md`，恢复判定模型正本。
+- 瘦身 / 修正 `docs/AI_CONTEXT.md`，恢复导航页定位。
+- 建立 `docs/DOCS_SOURCE_OF_TRUTH.md`，定义文档层级、冲突裁决、更新归属。
+- 建立 `docs/DOCS_INVENTORY.md`，给 docs 文件建立库存索引。
+- 加入文档单一职责 / 反 doc 地狱原则。
+- 给 support docs 加 role header。
+- 给 `V0_0_7_*` 阶段文件加 stage-bound header。
+
+当前机制正本仍以 `docs/TASTE_DECISION_MODEL.md` 为准；文档层级仍以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
+
 ## v0.0.7.81
 
 本轮只做 docs-only mechanism closure / handoff，把 v0.0.7.x 机制阶段当前收口状态写入 report 和关键 docs，方便后续切换 fresh conversation 继续。
