@@ -8,6 +8,8 @@
 
 《奶茶实验室》不是手忙脚乱接单摇奶茶的游戏，而是饮品研发、配方实验、试喝吐槽、经营验证的游戏。
 
+文档层级、冲突裁决和更新归属以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
+
 ## 2. 当前阶段
 
 当前项目处于 P0 docs recovery / pause mode，直到 ChatGPT + 用户确认解除。

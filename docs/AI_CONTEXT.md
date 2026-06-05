@@ -4,7 +4,11 @@
 
 > 它不是机制正本，不是版本流水账，不是历史 report 汇总，也不替代 git ref / tag。
 
-> 当前机制判定以 `docs/TASTE_DECISION_MODEL.md` 为准。ID / tag / registry / validator 边界以 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 为准。版本流水以 `docs/VERSION_LOG.md` 和 git ref / tag 为准。reports 只作为历史证据，不自动升级为当前事实。
+> 文档层级、冲突裁决和更新归属以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。当前机制判定以 `docs/TASTE_DECISION_MODEL.md` 为准。ID / tag / registry / validator 边界以 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 为准。版本流水以 `docs/VERSION_LOG.md` 和 git ref / tag 为准。reports 只作为历史证据，不自动升级为当前事实。
+
+> 如果 `docs/AI_CONTEXT.md` 与正本冲突，信正本，并修 `docs/AI_CONTEXT.md`。
+
+> 新阶段开工前必须先创建并登记 active stage TODO。阶段 TODO 只在对应阶段内必读，阶段结束后移出长期必读列表。`docs/DOCS_SOURCE_OF_TRUTH.md` 自身不记录版本流水或当前阶段状态；版本流水仍以 `docs/VERSION_LOG.md` 和 git ref / tag 为准。
 
 ---
 
@@ -31,23 +35,26 @@ P0-B: AI_CONTEXT source-of-truth pollution / navigation failure。
 
 新 ChatGPT / Codex 对话应先读取：
 
-1. `docs/TASTE_DECISION_MODEL.md`
+1. `docs/DOCS_SOURCE_OF_TRUTH.md`
+   - 文档层级、冲突裁决和更新归属正本。
+   - 用于判断该读谁、更新谁、文件冲突信谁。
+2. `docs/TASTE_DECISION_MODEL.md`
    - 当前判定模型正本。
    - 包含特殊服务事故、质地事故、味觉事故、风味冲突、正常好组合、普通分类的当前层级。
    - 包含 priority vs severity、priorityBand vs severityLevel、severityHint vs scoreMultiplier 边界。
    - 包含所有判定层反 if 地狱原则。
-2. `docs/STABLE_ID_NAMING_GUARDRAIL.md`
+3. `docs/STABLE_ID_NAMING_GUARDRAIL.md`
    - stable ID / tag / ruleId / sampleId / candidateId / triggerMetric / priorityBand / severityLevel / registry / validator / generated data 的长期正本。
-3. `docs/V0_0_7_MECHANISM_TODO.md`
+4. `docs/V0_0_7_MECHANISM_TODO.md`
    - v0.0.7.x 机制 / ID / 内容管线债务正本。
    - 当前 P0 / P1 / P2 状态以此文件为准。
-4. `docs/TASTE_SYSTEM_DESIGN.md`
+5. `docs/TASTE_SYSTEM_DESIGN.md`
    - 味觉系统设计细节。
    - 包含三层 profile / summary、candidate、severity / threshold 管线草案。
-5. `docs/TASTE_ENGINE_ARCHITECTURE.md`
+6. `docs/TASTE_ENGINE_ARCHITECTURE.md`
    - 味觉引擎架构笔记。
    - 记录 stable ID、三层 profile / summary、candidate priority shell 和 runtime 只读边界。
-6. `docs/VERSION_LOG.md`
+7. `docs/VERSION_LOG.md`
    - 版本流水账。
    - 只用于确认历史版本变化，不作为当前机制正本。
 
