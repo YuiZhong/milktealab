@@ -7,7 +7,7 @@
 当前 latest pushed main 已到：
 
 ```text
-26eba67 docs: mark v0.0.7 files as stage-bound
+10ab7b4 docs: record P0 rescue checkpoint
 ```
 
 本轮没有创建 candidate tag，没有创建 formal tag。`v0.0.7.81-candidate` 仍是之前的 candidate tag，不在本 checkpoint 中改写。
@@ -23,6 +23,7 @@ a9c4181 docs: add document inventory
 6d89856 docs: add anti doc-hell principle
 7d86b50 docs: clarify support document roles
 26eba67 docs: mark v0.0.7 files as stage-bound
+10ab7b4 docs: record P0 rescue checkpoint
 ```
 
 简要作用：
@@ -34,6 +35,7 @@ a9c4181 docs: add document inventory
 - 加入文档单一职责 / 反 doc 地狱原则。
 - 给 support docs 加 role header。
 - 给 `V0_0_7_*` 阶段文件加 stage-bound header。
+- 在 `docs/VERSION_LOG.md` 记录 P0 docs rescue checkpoint，不创建 candidate / formal tag。
 
 当前机制正本仍以 `docs/TASTE_DECISION_MODEL.md` 为准；文档层级仍以 `docs/DOCS_SOURCE_OF_TRUTH.md` 为准。
 

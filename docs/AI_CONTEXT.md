@@ -22,6 +22,8 @@ P0-A: Taste decision model source-of-truth missing / stale priority model。
 
 P0-B: AI_CONTEXT source-of-truth pollution / navigation failure。
 
+P0-C: Docs source-of-truth hierarchy failure。
+
 在 P0 修复前：
 
 - 不开 v0.0.8.x。

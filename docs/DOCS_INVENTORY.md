@@ -64,7 +64,7 @@ P0
 | `V0_0_7_DRINK_STRUCTURE_DISPLAYNAME_INVENTORY.md` | v0.0.7.x drink structure displayName inventory / migration evidence | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
 | `V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN.md` | v0.0.7.x feedbackTag mapping stage design | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
 | `V0_0_7_ID_INVENTORY.md` | v0.0.7.x ID inventory / audit evidence | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
-| `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md` | v0.0.7.x stable ID source-of-truth design draft / stage design | L2 | active-stage-only | read when relevant | P1 | add historical header |
+| `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md` | v0.0.7.x stable ID source-of-truth design draft / stage design | L2 | active-stage-only | read when relevant | P1 | stage-bound header added; stage-end archive |
 | `V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md` | v0.0.7.x mechanism review pack gate design | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
 | `V0_0_7_MECHANISM_TODO.md` | v0.0.7.x / P0 recovery active stage TODO / debt / gate | L2 | active-stage-only | stage read | OK | archive later |
 | `VERSION_LOG.md` | 版本流水 | L3 | active | read when relevant | OK | keep |
@@ -123,4 +123,4 @@ v0.0.7.x 结束后：
 3. 审 `TEST_CASES.md` 是否含旧阶段当前语境。
 4. 审 `ROLLBACK_GUIDE.md` 是否需要 historical / operational header。
 5. v0.0.7.x 收口时，移出所有 `V0_0_7_*` 的长期必读身份。
-6. 后续可考虑给 `V0_0_7_*` 文件统一加 stage-bound header，但本轮不做。
+6. `V0_0_7_*` 文件已统一加 stage-bound header；后续只需在 v0.0.7.x 收口时迁移仍有效债务并归档阶段文件。
