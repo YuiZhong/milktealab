@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.61-candidate`
-- 最新确认 candidate commit：`ec3d3ee0c6ee783cef57ccca33fc5ea5f0d7e2a1`
-- `v0.0.7.61-candidate` 已创建并推送成功，指向 `ec3d3ee0c6ee783cef57ccca33fc5ea5f0d7e2a1`。
-- main / origin/main 已在 v0.0.7.61 candidate 冻结时同步到 `ec3d3ee0c6ee783cef57ccca33fc5ea5f0d7e2a1`。
+- 最新确认 candidate：`v0.0.7.62-candidate`
+- 最新确认 candidate commit：`1f4d3a8d6e8e38e4f9347e549981b80968867dc6`
+- `v0.0.7.62-candidate` 已创建并推送成功，指向 `1f4d3a8d6e8e38e4f9347e549981b80968867dc6`。
+- main / origin/main 已在 v0.0.7.62 candidate 冻结时同步到 `1f4d3a8d6e8e38e4f9347e549981b80968867dc6`。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.61` 未创建。
-- 当前未创建 `v0.0.7.62-candidate`。
+- 正式 tag `v0.0.7.62` 未创建。
+- 当前未创建 `v0.0.7.63-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -119,6 +119,7 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.60 已新增 `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md`，只给 `taste_acid_overload` 和 `texture_solid_overload` 补 sourceLayer / sourceSummary / triggerMetric / evidence boundary notes；`texture_low_drinkability` 只在 boundary / Not This Round 语境出现。该 report 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values；当前 candidate 冻结状态以上方快照为准。
 - v0.0.7.61 已新增 `reports/accidentTypeIdFirstBatchCandidateNotesRecord.v0.0.7.61.md`，把 `taste_acid_overload` 和 `texture_solid_overload` 收束为 `candidateRecordStatus=candidate_notes_recorded_not_approved` 的 candidate notes record。该 record 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values。
 - v0.0.7.62 已新增 `reports/accidentTypeIdRegistryCandidateGate.v0.0.7.62.md`，只为 `taste_acid_overload` 和 `texture_solid_overload` 设计 minimal future registry candidate gate；两项结果为 `passes_minimal_candidate_gate_with_notes`。该 gate design 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values，也不表示 v0.0.7.62-candidate 已冻结。
+- v0.0.7.63 已新增 `reports/accidentTypeIdRegistryCandidateRecord.v0.0.7.63.md`，只把 `taste_acid_overload` 和 `texture_solid_overload` 记录为 `first_batch_future_registry_candidate_not_approved`。该 candidate record 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values，也不表示 v0.0.7.63-candidate 已冻结。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -130,7 +131,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md` / `reports/accidentTypeIdLikelyStableNotesReview.v0.0.7.57.md` / `reports/accidentTypeIdFirstBatchDecisionDraft.v0.0.7.58.md` / `reports/accidentTypeIdFirstBatchDecisionRecord.v0.0.7.59.md` / `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md` / `reports/accidentTypeIdFirstBatchCandidateNotesRecord.v0.0.7.61.md` / `reports/accidentTypeIdRegistryCandidateGate.v0.0.7.62.md`，再决定是否审查 / 推送 / 冻结 v0.0.7.62，或下一刀是否进入 minimal accidentTypeId registry candidate record。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md` / `reports/accidentTypeIdLikelyStableNotesReview.v0.0.7.57.md` / `reports/accidentTypeIdFirstBatchDecisionDraft.v0.0.7.58.md` / `reports/accidentTypeIdFirstBatchDecisionRecord.v0.0.7.59.md` / `reports/accidentTypeIdFirstBatchSourceNotes.v0.0.7.60.md` / `reports/accidentTypeIdFirstBatchCandidateNotesRecord.v0.0.7.61.md` / `reports/accidentTypeIdRegistryCandidateGate.v0.0.7.62.md` / `reports/accidentTypeIdRegistryCandidateRecord.v0.0.7.63.md`，再决定是否审查 / 推送 / 冻结 v0.0.7.63，或下一刀是否进入 minimal accidentTypeId registry candidate source index / readiness review。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。
