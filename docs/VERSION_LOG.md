@@ -1,5 +1,39 @@
 # 版本记录
 
+## v0.0.7.56
+
+本轮执行 feedbackTag / candidate tag registry candidate review pack，只把 feedbackTag、candidate tag、risk tag、copy direction 和 outcomeTypeId 边界整理成可人工审查材料。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/feedbackTagCandidateReviewPack.v0.0.7.56.md`
+  - 定义 review pack 内部 tag layer legend，例如 `runtime_observed_feedbackTag`、`generated_observed_feedbackTag`、`candidate_risk_tag`、`copy_direction_candidate`、`outcomeTypeId_not_feedbackTag`、`blocked_as_feedbackTag`、`needs_producer_copy_review`、`needs_copy_pool_expansion`、`needs_mapping_review`。
+  - 增加 candidate review table，覆盖 runtime observed feedbackTags：`bubble_conflict`、`greasy_overload`、`straw_disaster`、`straw_followup`。
+  - 增加 candidate / risk / copy direction rows：`aroma_pressure`、`identity_conflict`、`low_beverage_fit`、`savory_identity`、`texture_sediment`、`novelty`。
+  - 增加 outcomeTypeId boundary row：`flavor_identity_conflict`。
+  - 增加 human review questions by tag、recommended grouping 和 recommended next slice。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.56 review pack 已完成。
+  - 继续明确 P1-5 / P1-7 未解决，review pack 不是 registry / schema / validator / allowed values。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.55-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / review pack。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 feedbackTag、candidateTag、risk tag、copy direction 或 outcomeTypeId。
+- 本轮不把 `flavor_identity_conflict` 写成 feedbackTag。
+- 本轮不把 `identity_conflict` 写成 outcomeTypeId 或 runtime feedbackTag。
+- 本轮不把 `bubble_conflict` 泛化为 generic flavor identity conflict。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html、feedback 文案池或 golden expected。
+- 本轮不做 generated feedback active takeover。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.55
 
 本轮执行 accidentTypeId registry candidate review pack，只把 accidentTypeId 候选项整理成可人工审查材料。

@@ -64,14 +64,14 @@
 
 【可删】截至当前文档：
 
-- 最新确认 candidate：`v0.0.7.54-candidate`
-- 最新确认 candidate commit：`560272d971c74c3d559cf430440eaf3e3ef9dd3c`
-- `v0.0.7.54-candidate` 已创建并推送成功，指向 `560272d971c74c3d559cf430440eaf3e3ef9dd3c`。
-- main / origin/main 已同步到 `560272d971c74c3d559cf430440eaf3e3ef9dd3c`；工作区应干净。
+- 最新确认 candidate：`v0.0.7.55-candidate`
+- 最新确认 candidate commit：`a8af616f6d2d493ba35c812a6f9c947d087a52f9`
+- `v0.0.7.55-candidate` 已创建并推送成功，指向 `a8af616f6d2d493ba35c812a6f9c947d087a52f9`。
+- main / origin/main 已同步到 `a8af616f6d2d493ba35c812a6f9c947d087a52f9`；工作区应干净。
 - golden samples 当前应为 `23/23 passed`。
 - `git diff --check` 已通过。
-- 正式 tag `v0.0.7.54` 未创建。
-- 当前未创建 `v0.0.7.55-candidate`。
+- 正式 tag `v0.0.7.55` 未创建。
+- 当前未创建 `v0.0.7.56-candidate`。
 
 ### v0.0.7.30-v0.0.7.32 压缩摘要
 
@@ -111,7 +111,8 @@ texture_topping_overload -> texture_solid_overload
 - v0.0.7.52 已做 P1 TODO review：P1 标题保留不等于从零未做，前置工作完成也不等于 final gate solved；下一步建议以 `reports/p1TodoReview.v0.0.7.52.md` 为准。
 - v0.0.7.53 已新增 `reports/stableIdRegistryShapeProposal.v0.0.7.53.md`，把 reviewed stable ID registry shape 转成可审查 proposal；它不创建 registry / schema / validator / allowed values，不批准任何 ID，也不表示 P1 已解决。
 - v0.0.7.54 已新增 `reports/stableIdRegistryEntrySamplePack.v0.0.7.54.md`，把 registry shape 应用到少量 sample entries；它只是 sample pack，不是 registry / schema / validator / allowed values，不批准任何 ID。
-- v0.0.7.55 已新增 `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md`，把 accidentTypeId 候选项整理成人工 review pack；它不是 registry / schema / validator / allowed values，不批准任何 accidentTypeId，也不表示 v0.0.7.55-candidate 已冻结。
+- v0.0.7.55 已新增 `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md`，把 accidentTypeId 候选项整理成人工 review pack；它不是 registry / schema / validator / allowed values，不批准任何 accidentTypeId。
+- v0.0.7.56 已新增 `reports/feedbackTagCandidateReviewPack.v0.0.7.56.md`，把 feedbackTag / candidate tag / risk tag / copy direction / outcomeTypeId 边界整理成人工 review pack；它不是 registry / schema / validator / allowed values，不批准任何 feedbackTag / candidateTag / outcomeTypeId，也不表示 v0.0.7.56-candidate 已冻结。
 - P1-4 仍未完全解决；texture content-specific staged migration 三步已完成，但 broader accidentAnalyzer migration route、source-of-truth / registry / schema、validator / generated severity / shadow / partial takeover gates 仍未完成。
 - 不新增：
   - `texture_paste_overload`
@@ -123,7 +124,7 @@ texture_topping_overload -> texture_solid_overload
 
 ### 当前下一步
 
-- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `reports/p1TodoReview.v0.0.7.52.md` / `reports/stableIdRegistryShapeProposal.v0.0.7.53.md` / `reports/stableIdRegistryEntrySamplePack.v0.0.7.54.md` / `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md` / legacy inventory 与三份 migration report，做状态恢复和 P1 TODO 复盘，再决定 v0.0.7.55 是否冻结或下一刀是否进入 accidentTypeId producer decisions / likely-stable notes review。
+- 当前下一步：新对话先读取 `AI_CONTEXT` / `VERSION_LOG` / `V0_0_7_MECHANISM_TODO` / `STABLE_ID_NAMING_GUARDRAIL` / `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN` / `V0_0_7_FEEDBACK_TAG_MAPPING_DESIGN` / `reports/p1TodoReview.v0.0.7.52.md` / `reports/stableIdRegistryShapeProposal.v0.0.7.53.md` / `reports/stableIdRegistryEntrySamplePack.v0.0.7.54.md` / `reports/accidentTypeIdRegistryCandidateReviewPack.v0.0.7.55.md` / `reports/feedbackTagCandidateReviewPack.v0.0.7.56.md` / legacy inventory 与三份 migration report，做状态恢复和 P1 TODO 复盘，再决定 v0.0.7.56 是否冻结或下一刀是否进入 feedbackTag producer review decisions / runtime feedbackTag notes review。
 - 不要回头做 v0.0.7.45 / v0.0.7.46 / v0.0.7.47 / v0.0.7.48 / v0.0.7.49。
 - 不要把 v0.0.7.48 guardrail 写成 registry / validator 已完成。
 - 不要为单个组合、recipe、sample、文案梗或 review item 新增机制 ID。
