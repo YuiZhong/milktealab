@@ -1,5 +1,37 @@
 # 版本记录
 
+## v0.0.7.59
+
+本轮执行 accidentTypeId first-batch decision record，把 v0.0.7.58 的 producer / ChatGPT decision draft 收束为更明确的人类可读决策记录。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/accidentTypeIdFirstBatchDecisionRecord.v0.0.7.59.md`
+  - 只处理三个 accidentTypeId：`taste_acid_overload`、`texture_low_drinkability`、`texture_solid_overload`。
+  - 记录 `taste_acid_overload` 的 decisionRecord 为 `first_batch_candidate_pending_source_notes`。
+  - 记录 `texture_solid_overload` 的 decisionRecord 为 `first_batch_candidate_pending_source_notes`。
+  - 记录 `texture_low_drinkability` 的 decisionRecord 为 `boundary_notes_required_before_first_batch_candidate`。
+  - 明确 `canEnterValidatorNow` / `canEnterGeneratedSeverityNow` / `canAffectRuntimeNow` 均为 hard `no`。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 记录 v0.0.7.59 decision record 已完成。
+  - 继续明确 P1-1 / P1-2 / P1-3 / P1-4 未解决，decision record 不是 registry / schema / validator / allowed values。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新已冻结 candidate 到 `v0.0.7.58-candidate`。
+  - 只加入极短接续摘要。
+
+### 阶段边界
+
+- 本轮只做 docs / report / decision record。
+- 本轮不创建 registry / enum / schema / validator。
+- 本轮不生成 allowed values。
+- 本轮不批准任何 accidentTypeId，也不把任何 ID 写成 `approved_stable`。
+- 本轮不让任何 accidentTypeId 进入 validator、generated severity 或 runtime。
+- 本轮不处理 feedbackTag / drinkStructure / durian / dairy / strong flavor / straw resistance final decision。
+- 本轮不改 runtime、data、scripts、generated data、content sheets、index.html 或 golden expected。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.58
 
 本轮执行 accidentTypeId first-batch decision draft，只围绕三个最稳事故机制整理第一批 future registry candidate 的人工决策草案。
