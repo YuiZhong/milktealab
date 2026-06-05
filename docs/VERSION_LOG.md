@@ -1,5 +1,43 @@
 # 版本记录
 
+## v0.0.7.69
+
+本轮是 post-v0.0.7.68 docs-only checkpoint sync，只把 `v0.0.7.68-candidate` 冻结后的真实状态同步进关键 docs，并记录 accidentTypeId 第一批候选线已经阶段性收口。
+
+### 本轮新增 / 更新
+
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步最新确认 candidate 为 `v0.0.7.68-candidate`。
+  - 同步最新确认 candidate commit 为 `c5443e2061a18c70c478bc9dfe15265b992d08e3`。
+  - 记录 main / origin/main 已同步到该 commit。
+  - 记录正式 tag `v0.0.7.68` 未创建，当前未创建 `v0.0.7.69-candidate`。
+  - 记录 v0.0.7.68 minimal accidentTypeId registry scaffold 已冻结。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 post-v0.0.7.68 checkpoint。
+  - 记录 accidentTypeId 第一批候选线阶段性收口。
+  - 记录 `taste_acid_overload` / `texture_solid_overload` 已进入 minimal registry scaffold，但仍为 `reviewed_candidate_not_approved`。
+  - 记录 `texture_low_drinkability`、feedbackTag / candidate tag、drinkStructure、broader accidentAnalyzer route、reviewed registry / schema task、active validator / generated severity / shadow / partial takeover 仍未完成 / 排队。
+
+### 阶段边界
+
+- 本轮只同步 docs。
+- 本轮不改 runtime、data、scripts、generated data、content sheets 或 golden expected。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不创建 registry 新内容。
+- 本轮不实现 validator。
+- 本轮不生成 allowed values。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
+### 下一步提醒
+
+- v0.0.7.68-candidate 已冻结，accidentTypeId 第一批候选线已经阶段性收口。
+- 后续需要先开会整理“当前主线还剩什么”和“下一条主线怎么排”。
+- 不要继续自动新增 review pack / sample pack / proposal pack。
+- 不要把 current scaffold 直接升级为 approved registry、active validator 或 allowed values。
+
 ## v0.0.7.68
 
 本轮执行 minimal accidentTypeId registry scaffold，第一次创建极小 registry draft 与只读 check script，但仍不进入 runtime / active validator / generated severity。

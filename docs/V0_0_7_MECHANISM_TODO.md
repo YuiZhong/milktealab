@@ -25,6 +25,35 @@
 - P1：存在若干机制 / ID / validator / legacy 迁移债务，必须在对应 gate 前解决，不能带到 v0.0.7.x 机制收口之后。
 - P2：存在 docs / housekeeping / 轻技术债，不阻塞当前机制推进，但应择机整理。
 
+### v0.0.7.69 post-v0.0.7.68 checkpoint
+
+v0.0.7.68-candidate 已冻结，accidentTypeId 第一批候选线阶段性收口。
+
+当前已完成：
+
+- `taste_acid_overload` 已进入 minimal registry scaffold。
+- `texture_solid_overload` 已进入 minimal registry scaffold。
+- 两项均为 `reviewed_candidate_not_approved`。
+- 两项均不能进入 validator / generated severity / runtime。
+- `scripts/content/checkStableIdRegistry.js` 是只读检查脚本。
+
+仍未完成 / 排队：
+
+- `texture_low_drinkability` 边界。
+- `texture_straw_resistance` final decision。
+- feedbackTag / candidate tag 线。
+- drinkStructure 线。
+- broader accidentAnalyzer route。
+- reviewed registry / schema task。
+- active validator / generated severity / shadow / partial takeover。
+
+下一步原则：
+
+- 先开会整理当前主线还剩什么。
+- 不要继续自动新增 review pack / sample pack / proposal pack。
+- 不要跳 validator。
+- 不要把 v0.0.7.68 scaffold 写成 approved registry / schema / validator。
+
 ### v0.0.7.52 P1 TODO review
 
 v0.0.7.52 新增 `reports/p1TodoReview.v0.0.7.52.md`，用于复盘 P1-1 到 P1-8 在 v0.0.7.51 source-of-truth / registry / schema design 之后的真实剩余状态。
@@ -521,7 +550,7 @@ Git candidate = 项目开发版本
 38. v0.0.7.66 已新增 `reports/minimalRegistrySchemaTaskPlan.v0.0.7.66.md`，设计最小 registry / schema task 如何接收这两个 candidate；该 task plan 不批准任何 accidentTypeId，不创建 registry / schema / validator / allowed values，也明确不再为这两个 ID 继续新增 review pack / sample pack / proposal pack。
 39. v0.0.7.67 已新增 `reports/minimalAccidentTypeRegistrySchemaSpecification.v0.0.7.67.md`，设计 future minimal accidentTypeId registry / schema implementation task 的最小规格：如果创建最小 registry / schema，具体可讨论哪些 future files、字段、read-only check script、测试和禁止事项；该 specification 不创建 registry / schema / validator / check script / allowed values，也不批准任何 accidentTypeId。
 40. v0.0.7.68 已创建 `data/stableIdRegistry.js` 极小 registry scaffold 与 `scripts/content/checkStableIdRegistry.js` 只读 check script；它只收录 `taste_acid_overload` / `texture_solid_overload`，不接 runtime，不做 active validator enforcement，不生成 allowed values / generated severity，也不做 partial takeover。
-41. 后续若继续，应先审查 / 推送 / 冻结 v0.0.7.68，再决定是否进入 schema / validator boundary 小任务；不要把当前 scaffold 直接升级成 approved registry / allowed values。
+41. v0.0.7.69 已在 v0.0.7.68-candidate 冻结后同步 checkpoint：accidentTypeId 第一批候选线阶段性收口，后续应先开会整理当前主线还剩什么，再决定是否进入 schema / validator boundary 小任务；不要把当前 scaffold 直接升级成 approved registry / allowed values。
 42. feedbackTag producer review decisions 仍可作为并行候选，但不应直接实现 generated feedback active takeover、generated severity 或 partial takeover。
 43. 另一个可考虑方向是继续 accidentAnalyzer broader route review：确认 legacy if thresholds、dedupe fallback、structure rule append / suppression、score / cap / feedbackTags 与 producer review gate。
 44. drinkStructureAnalyzer displayName staged plan 保持独立，不应插队成 runtime rewrite。
