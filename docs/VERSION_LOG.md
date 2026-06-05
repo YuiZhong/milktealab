@@ -1,5 +1,35 @@
 # 版本记录
 
+## v0.0.7.76
+
+本轮只做 docs / readiness check，延续 v0.0.7.72-v0.0.7.75 的 `texture_low_drinkability` 边界、source notes 与 candidate notes record，判断它是否可以进入下一批 minimal scaffold preparation。
+
+### 本轮新增 / 更新
+
+- 新增 `reports/textureLowDrinkabilityReadinessCheck.v0.0.7.76.md`
+  - 记录 `texture_low_drinkability` = 水泥感 / 粉浆感 / 喝不动。
+  - 记录 readiness 为 `ready_for_next_batch_scaffold_preparation_not_approval`。
+  - 明确 `texture_solid_overload` = 八宝粥 / 小料太多。
+  - 明确 `texture_straw_resistance` = 吸管很累，final decision 仍 pending。
+  - 明确 `texture_taro_overload` / `texture_oreo_overload` 只作 historical evidence，不回流 current registry。
+- 更新 `docs/AI_CONTEXT.md`
+  - 同步 `v0.0.7.75-candidate` 已冻结，并加入极短 v0.0.7.76 接续摘要。
+- 更新 `docs/V0_0_7_MECHANISM_TODO.md`
+  - 新增 `texture_low_drinkability` readiness check 小节。
+
+### 阶段边界
+
+- 本轮不改 registry scaffold。
+- 本轮不改 `data/stableIdRegistry.js`。
+- 本轮不改 `scripts/content/checkStableIdRegistry.js`。
+- 本轮不批准 `texture_low_drinkability`。
+- 本轮不把 `texture_low_drinkability` 加入 scaffold。
+- 本轮不改 runtime、generated data、content sheets 或 golden expected。
+- 本轮不做 validator。
+- 本轮不做 generated severity / shadow / partial / active takeover。
+- 本轮不跑 golden。
+- 本轮不 push、不 tag。
+
 ## v0.0.7.75
 
 本轮只做 docs / candidate notes record，延续 v0.0.7.73 / v0.0.7.74 的 `texture_low_drinkability` candidate decision draft 与 source notes，把它整理成下一批 accidentTypeId candidate notes record。
