@@ -14,9 +14,9 @@
 
 ---
 
-## 0. 当前 v0.0.7.x closure audit mode
+## 0. 当前 v0.0.7.x safe closure discussion / closure checkpoint preparation
 
-当前项目处于 v0.0.7.x closure audit mode。
+当前项目处于 v0.0.7.x safe closure discussion / closure checkpoint preparation。
 
 P0-A: resolved。判定模型正本污染已通过 `docs/TASTE_DECISION_MODEL.md` 修复。
 
@@ -30,12 +30,15 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 - 不做 batch content。
 - 不生成新 ID / feedbackTag / triggerMetric / ingredient profile。
 - 不做 severity / generated severity。
-- 不做 shadow / partial / active takeover。
+- 不做 generated severity shadow / partial / active takeover。
+- existing generated feedback shadow 如存在，仍是 non-final，不影响 final feedback / final result。
 - 不让 Codex 发明机制概念。
-- 不把 v0.0.7.x 视为安全 closure。
+- 不把 v0.0.7.x 写成已完成 formal safe closure / candidate / formal tag。
 - 不把 P1 写成 solved。
 
-下一步是 v0.0.7.x closure audit：对 P1 做收口前必须给结论 / 迁移到下一阶段 TODO / 保留 legacy support 的分流。
+`reports/v0.0.7SafeClosureDecision.md` 记录：P0-A / P0-B / P0-C 已 resolved，P1 split 已足以进入 safe closure discussion / closure checkpoint preparation；这不代表 P1 solved，也不开放 v0.0.8.x / batch content / generated severity / takeover。
+
+下一步应是 docs-only closure checkpoint / candidate discussion，或在 ChatGPT + 用户确认 closure path 后创建下一阶段 active TODO。下一步不是 implementation。
 
 ## 1. 新对话启动必读
 
@@ -152,10 +155,10 @@ reports / sample packs / review packs / decision drafts / candidate notes 只作
 
 ## 6. v0.0.7.x 当前路线
 
-v0.0.7.x 已从 P0 docs recovery 转入 closure audit mode。
+v0.0.7.x 已从 P0 docs recovery 转入 safe closure discussion / closure checkpoint preparation。
 
-这不是 v0.0.8.x 开工，不是 v0.0.7.x 安全 closure，也不代表 P1 solved。
+这不是 v0.0.8.x 开工，不是 v0.0.7.x formal safe closure / candidate / formal tag，也不代表 P1 solved。
 
-batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review pack / generated severity / shadow tuning datasets / active validator / runtime takeover，仍全部暂停。
+batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review pack / generated severity / generated severity shadow / partial / active takeover / active validator / runtime takeover，仍全部暂停。Existing generated feedback shadow 如存在，仍是 non-final，不影响 final feedback / final result。
 
-下一步应做 v0.0.7.x closure audit：确认 P1-8 final audit 如何执行，并把 P1-1 到 P1-7 分流为收口前必须给结论、迁移到下一阶段 TODO、保留 legacy support 或明确不应现在处理。
+下一步应做 docs-only closure checkpoint / candidate discussion，或在 ChatGPT + 用户确认后创建下一阶段 active TODO。剩余 P1 债务应迁移或保留为 staged legacy support，不应在 v0.0.7.x 中继续扩张实现。

@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.7.x safe closure decision report
+
+本轮新增 `reports/v0.0.7SafeClosureDecision.md`，记录 v0.0.7.x P0 docs rescue / P1 closure split / P1-8 final audit 后的 safe closure discussion / closure checkpoint preparation 结论。
+
+这是 docs-only closure decision report，不是机制正本，不创建 candidate tag，也不创建 formal tag。
+
+本轮未改 runtime，未改 data / scripts / generated / golden，未开放 v0.0.8.x，未开放 batch content，未开放 generated severity / generated severity shadow / partial / active takeover。Existing generated feedback shadow, if present, remains non-final and does not affect final feedback / final result。
+
+该记录只表示可以准备 v0.0.7.x closure checkpoint / candidate discussion；不表示 P1 solved，也不表示 v0.0.8.x 开工。
+
 ## Batch Content Authoring Workflow guardrail
 
 本轮在 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 新增长期 Batch Content Authoring Workflow guardrail，并在 `AGENTS.md` / `docs/AI_CONTEXT.md` 加短提醒。
