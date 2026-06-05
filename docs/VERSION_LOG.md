@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.7.x docs-only closure checkpoint
+
+本轮新增 `reports/v0.0.7ClosureCheckpoint.md`，作为 v0.0.7.x docs-only closure checkpoint。
+
+本轮不创建 candidate tag，不创建 formal tag，不改 runtime，不改 data / scripts / generated / golden，不开放 v0.0.8.x，不开放 generated severity / takeover。
+
+下一步仍需用户 + ChatGPT 决策：candidate / tag discussion、next-stage active TODO、final no-op verification，或 fresh conversation。
+
 ## v0.0.7.x closure checkpoint discussion report
 
 本轮新增 `reports/v0.0.7ClosureCheckpointDiscussion.md`，作为 docs-only closure checkpoint / candidate discussion report。

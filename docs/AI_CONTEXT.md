@@ -14,9 +14,9 @@
 
 ---
 
-## 0. 当前 v0.0.7.x safe closure discussion / closure checkpoint preparation
+## 0. 当前 v0.0.7.x docs-only closure checkpoint reached
 
-当前项目处于 v0.0.7.x safe closure discussion / closure checkpoint preparation。
+当前项目处于 v0.0.7.x docs-only closure checkpoint reached。
 
 P0-A: resolved。判定模型正本污染已通过 `docs/TASTE_DECISION_MODEL.md` 修复。
 
@@ -40,7 +40,9 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 
 `reports/v0.0.7ClosureCheckpointDiscussion.md` 是当前 closure checkpoint / candidate discussion report。它支持准备 docs-only closure checkpoint discussion，但不创建 candidate / formal tag，也不开放 v0.0.8.x。
 
-下一步应是 docs-only closure checkpoint / candidate discussion，或在 ChatGPT + 用户确认 closure path 后创建下一阶段 active TODO。下一步不是 implementation。
+`reports/v0.0.7ClosureCheckpoint.md` 记录当前 docs-only closure checkpoint 已达到稳定状态；它不是 candidate tag / formal tag，不开放 v0.0.8.x，也不表示 P1 solved。
+
+下一步应由用户 + ChatGPT 决策：candidate / tag discussion、next-stage active TODO、final no-op verification，或 fresh conversation。下一步不是 implementation。
 
 ## 1. 新对话启动必读
 
@@ -157,12 +159,12 @@ reports / sample packs / review packs / decision drafts / candidate notes 只作
 
 ## 6. v0.0.7.x 当前路线
 
-v0.0.7.x 已从 P0 docs recovery 转入 safe closure discussion / closure checkpoint preparation。
+v0.0.7.x 已从 P0 docs recovery 转入 docs-only closure checkpoint reached。
 
 这不是 v0.0.8.x 开工，不是 v0.0.7.x formal safe closure / candidate / formal tag，也不代表 P1 solved。
 
 batch accidentTypeId / feedbackTag / triggerMetric / ingredient profile / threshold / severity / score / review pack / generated severity / generated severity shadow / partial / active takeover / active validator / runtime takeover，仍全部暂停。Existing generated feedback shadow 如存在，仍是 non-final，不影响 final feedback / final result。
 
-下一步应做 docs-only closure checkpoint / candidate discussion，或在 ChatGPT + 用户确认后创建下一阶段 active TODO。剩余 P1 债务应迁移或保留为 staged legacy support，不应在 v0.0.7.x 中继续扩张实现。
+下一步应由用户 + ChatGPT 决策：candidate / tag discussion、next-stage active TODO、final no-op verification，或 fresh conversation。剩余 P1 债务应迁移或保留为 staged legacy support，不应在 v0.0.7.x 中继续扩张实现。
 
 当前更具体的下一步候选是：docs-only closure checkpoint commit，或 next-stage active TODO decision，等待用户 + ChatGPT 确认。
