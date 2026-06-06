@@ -1,5 +1,15 @@
 # 版本记录
 
+## first 6 severity sample rows dry-run round 1
+
+本轮新增 `reports/human_review/first6SeveritySampleRowsDryRun.round1.md`，为第一批 6 个 `proposedDraftId` 试填 light / medium / heavy severity 示例行，用于验证 severity sample sheet shape 是否够用。
+
+本轮所有 sample rows 都是 illustrative / draft / notApproved；示意 threshold 不是正式阈值，`scoreMultiplierDraft` 保持 blank / TBD，feedback intensity 也不是正式文案强度。
+
+本轮未创建 CSV / JSON / schema / validator / generated data，未填写正式 threshold / `scoreMultiplier` / feedback intensity。
+
+本轮未开放 implementation / batch content / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## candidate severity sample sheet shape round 1
 
 本轮新增 `reports/human_review/candidateSeveritySampleSheetShape.round1.md`，规划 future severity sample sheet / Google Sheets / CSV 的人类可读表格形状。
