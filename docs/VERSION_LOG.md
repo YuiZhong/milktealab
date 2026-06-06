@@ -1,5 +1,15 @@
 # 版本记录
 
+## numeric-first profile / summary rule boundary
+
+本轮将 `reports/human_review/candidateSeverityRuleSchemaReview.round1.md` 中已经验证清楚的 numeric-first boundary，极短沉淀进 `docs/TASTE_SYSTEM_DESIGN.md` / `docs/TASTE_ENGINE_ARCHITECTURE.md`，并在 `docs/AI_CONTEXT.md` 加短导航。
+
+底层 profile / summary / `triggerMetric` 应优先支持 numeric values / numeric load；中文档位或 high / medium / low 只作为 human-readable label / review hint，不作为正式计算主数据。
+
+本轮未创建 CSV / JSON / schema / validator / generated severity，未填写正式 threshold / `scoreMultiplier`。
+
+本轮未开放 implementation / batch content / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## candidate severity rule schema review round 1
 
 本轮新增 `reports/human_review/candidateSeverityRuleSchemaReview.round1.md`，规划 future candidate severity rule / threshold table 的字段形状、中文解释、gate 边界和第一批 6 个概念的 metric / severity 方向。

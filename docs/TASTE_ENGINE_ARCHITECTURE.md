@@ -48,6 +48,8 @@ v0.0.7.x：再调 severity 和数值
 
 三层细分项必须可扩展。`tasteSummary` / `textureSummary` / `flavorSummary` 的字段、类别、阈值、说明和权重后续都可能大量增删；v0.0.6.x 初期应优先定义 schema 和 summary 产物，不急着完整调参，也不要把字段和阈值写死在 analyzer if 中。
 
+analyzer / summary 层应优先产出可验证的 numeric summary / numeric load，供 future severity rule 读取。severity rule 应读取 numeric `triggerMetric` / numeric summary，而不是读取中文显示文案、high / medium / low 档位文字或 review note。high / medium / low 可以作为 human label、`severityLabelDraft` 或 UI 辅助，但不能成为底层计算主数据。numeric-first 是架构原则，不表示本轮实现 severity engine。
+
 v0.0.6.x 不需要立刻实现完整权重系统，但 schema 不能堵死未来权重、阈值、severity 和 priority 接入。profile / summary / rule / candidate 应预留或允许扩展 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等字段；默认权重可以先不启用或使用默认值。完整 `severity` / `scoreMultiplier` / 大规模数值调优和 golden 扩容，留到 v0.0.7.x 更合适。
 
 不只原料有属性。原料有 profile，组合规则、事故规则、反馈规则、结果候选也应逐步拥有结构化 metadata，例如 `sourceLayer`、`triggerMetric`、`threshold`、`feedbackTags`、`outcomeTypeId`、`priorityBand`、`severityHint`。不要把具体组合判断长期写成 if 某原料 + 某原料；数据负责“判什么”，代码负责“怎么汇总 / 调度”。

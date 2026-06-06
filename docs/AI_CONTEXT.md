@@ -96,6 +96,8 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 
 ID / draft ID / registry / validator 相关任务必须复用 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 与现有 source-of-truth / registry planning；新增或修改 ID 前必须先查 existing / legacy / observed ID，不要从零重新设计 ID approval flow。`reports/human_review/draftIdNamingReviewProtocol.round1.md` 和 `reports/human_review/sourceOfTruthRegistryPlanning.round1.md` 是当前阶段证据 / 操作协议，不是 registry 或 allowed values。
 
+Profile / summary / `triggerMetric` / severity 相关任务遵守 numeric-first：机器计算优先使用 numeric values / numeric load，中文档位或 high / medium / low 只做人类提示。
+
 ## 2. 当前机制正本
 
 当前完整判定层级、priority vs severity 边界和所有判定层反 if 地狱原则，以 `docs/TASTE_DECISION_MODEL.md` 为准。
