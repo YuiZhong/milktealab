@@ -151,6 +151,12 @@ severity / scoreMultiplier / evidence / triggerMetric / thresholds / weights
 
 不得把 `light` / `medium` / `heavy` / `severe` / `mild` / 分数倍率 / severity 含义编码进 `accidentTypeId`。
 
+这条原则适用于所有可分级事故机制，包括 taste、texture、flavor / structure 等层。水泥感 / 粉泥感只是示例，不是特例。
+
+taste 层中的甜度过载、酸度过载、苦味、咸味 / 咸甜失衡等，后续也应按同一机制内的 severity 连续谱讨论。不得拆出 `sweet_light`、`sweet_heavy`、`acid_medium`、`flavor_xxx_heavy`、`texture_xxx_medium` 之类按强度编码的 `accidentTypeId`。
+
+轻中重应由 `triggerMetric` 区间、`severityLevel`、`scoreMultiplier`、feedback intensity 表达。
+
 例如，“水泥感 / 粉泥感”可以从轻微浑浊、粉感明显、喝着费劲，到重度吸不上来，形成同一机制下的严重度连续谱。它们不应拆成多个 `accidentTypeId`；未来应由 `triggerMetric` 区间、`severityLevel`、`scoreMultiplier` 和反馈文案强度表达。
 
 示例数值和文案只可作为制作人讨论材料，不是正式阈值，不是正式文案，不是 runtime data。

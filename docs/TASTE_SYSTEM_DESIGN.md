@@ -34,6 +34,10 @@
 
 future severity table / candidate severity rules 应表达同一机制的区间化强度，而不是用多个事故 ID 表达轻中重。
 
+这是跨层通用机制，不只服务 texture。taste / texture / flavor / structure 的可分级事故，都应使用同一种“机制身份 + severity 分级”的设计思想。
+
+taste layer concept review 中，甜度 / 酸度 / 苦味 / 咸味等应默认讨论轻中重表现，但不创建多个 `accidentTypeId`。
+
 轻中重等级应读取 summary / candidate / `triggerMetric` 等结构化字段。`scoreMultiplier` 属于 severity / scoring layer，不属于 `accidentTypeId`。
 
 文案强度可以随 severity 调整，但文案变化不反向创造新机制 ID。

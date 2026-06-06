@@ -130,6 +130,8 @@ Codex 不得自行补概念、扩事故、批量发明相似 ID，或把 notes /
 
 它是 prototype / sample / review material，不是 source-of-truth，不是 runtime data，不能接管 final feedback，也不能自动修改 golden expected。
 
+进入 taste layer concept review 前，默认所有 taste accident concept 都按“同一机制可分级，不拆 accidentTypeId”的全局原则审查。
+
 规划边界：
 
 - review pack 是制作人评审材料，不是 runtime data。

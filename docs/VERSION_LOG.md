@@ -1,5 +1,15 @@
 # 版本记录
 
+## global severity identity boundary
+
+本轮补充 severity identity boundary 的跨层适用说明：水泥感 / 粉泥感只是示例，不是特例。
+
+taste / texture / flavor / structure 的可分级事故都应通过 `severityLevel`、`scoreMultiplier`、feedback intensity 和 rule row 表达轻中重，不拆 `accidentTypeId`。
+
+本轮未填写正式阈值 / 正式文案 / 正式 `scoreMultiplier`，未生成新 ID / draft ID / registry candidate，未形成 approved concept list。
+
+本轮未改 runtime / core / data / generated / golden，未开放 implementation / batch content / generated severity / takeover，未 push，未 tag。
+
 ## flavor / structure approved concept list draft
 
 本轮新增 `reports/human_review/approvedConceptList.flavorStructure.round1.draft.md`，整理 flavor / structure round 1 的 approved concept list draft。
