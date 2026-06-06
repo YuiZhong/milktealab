@@ -1,5 +1,13 @@
 # 版本记录
 
+## concept review template
+
+本轮新增 `reports/human_review/conceptReview.template.md`，作为自然语言 scenario / concept candidates 的制作人审批入口。
+
+本轮只建立人类审批模板，未生成真实 concept，未生成新 ID / feedbackTag / triggerMetric / ingredient profile。
+
+本轮未改 runtime / core / data / generated / golden，未开放 batch content / implementation / generated severity / takeover，未 push，未 tag。
+
 ## feedback shadow review output path alignment
 
 本轮将 `scripts/content/buildFeedbackShadowReviewPack.js` 的默认输出路径迁到 `reports/human_review/feedbackShadowReview.sample.md`，与人类审批 / 制作人评审材料目录保持一致。

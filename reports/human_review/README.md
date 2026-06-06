@@ -16,4 +16,11 @@
 
 机器详情可以存在，但必须服务于人类审核，不反向成为机制正本。
 
+## 模板与样例
+
+- `conceptReview.template.md` 用于自然语言 scenario / concept candidates 审核；它审的是“场景 / 机制概念”。
+- `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
+
+两者都不是 source-of-truth，也不是 runtime data。
+
 `reports/` 根目录仍保留历史审计 / closure / decision reports；不要把整个 `reports/` 目录迁入本目录。

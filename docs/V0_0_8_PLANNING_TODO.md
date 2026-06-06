@@ -116,6 +116,10 @@ Codex 不得自行补概念、扩事故、批量发明相似 ID，或把 notes /
 
 ## 7. review pack planning
 
+已新增 `reports/human_review/conceptReview.template.md`，作为自然语言 scenario / concept candidates 的人类审批模板。
+
+该文件是 template / review material，不是 source-of-truth，不生成 ID，不开放 implementation；它服务于 Scenario first, ID later 工作流。
+
 已知 feedback shadow review sample 位于 `reports/human_review/feedbackShadowReview.sample.md`。
 
 它是 prototype / sample / review material，不是 source-of-truth，不是 runtime data，不能接管 final feedback，也不能自动修改 golden expected。
