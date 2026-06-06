@@ -1,5 +1,15 @@
 # 版本记录
 
+## registry candidate row shape planning round 1
+
+本轮新增 `reports/human_review/registryCandidateRowShapePlanning.round1.md`，规划 future registry candidate row fields 和 false gates。
+
+本轮只设计 row shape，不填第一批 6 个真实 registry candidate rows。
+
+本轮未创建 registry row / registry / enum / schema / validator / allowed values，未生成 stable ID / registry candidate。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## draft ID proposal review round 1
 
 本轮新增 `reports/human_review/draftIdProposalReview.round1.md`，记录用户 + ChatGPT 对 Draft ID Proposal Dry-Run Round 1 的审阅结论。

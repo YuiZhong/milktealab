@@ -33,6 +33,7 @@
 - `draftIdNamingReviewProtocol.round1.md` 记录 draft ID naming review protocol；它不是 ID list、registry、schema 或 runtime data。
 - `draftIdProposalDryRun.round1.md` 记录第一批 6 个概念的 draft ID proposal dry-run；它不是 stable ID list、registry candidate、allowed values、schema 或 runtime data。
 - `draftIdProposalReview.round1.md` 记录第一批 6 个 proposedDraftId 的 proposal wording 审阅结论；它不是 stable ID list、registry、schema、allowed values 或 runtime data。
+- `registryCandidateRowShapePlanning.round1.md` 规划 future registry candidate row shape；它不是 registry、schema、validator、allowed values 或 runtime data。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
 
 这些材料都不是 source-of-truth，也不是 runtime data。
