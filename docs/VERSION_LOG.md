@@ -1,5 +1,13 @@
 # 版本记录
 
+## severity sample sheet CSV / JSON shape planning round 1
+
+本轮新增 `reports/human_review/severitySampleSheetCsvJsonShapePlanning.round1.md`，规划 future severity sample sheet 如果落成 CSV / JSON，文件结构、字段分组、人类可读规则和 CSV -> JSON 转换边界应如何设计。
+
+本轮只规划未来 CSV / JSON 文件形状，未创建 CSV / JSON / JS / schema / validator / generated data。
+
+本轮未开放 generated severity / shadow / runtime，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## severity validator / lint planning round 1
 
 本轮新增 `reports/human_review/severityValidatorLintPlanning.round1.md`，规划 future severity validator / lint 的 error / warning / info 检查。
