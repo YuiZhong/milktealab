@@ -1,5 +1,19 @@
 # 版本记录
 
+## candidate severity rule schema review round 1
+
+本轮新增 `reports/human_review/candidateSeverityRuleSchemaReview.round1.md`，规划 future candidate severity rule / threshold table 的字段形状、中文解释、gate 边界和第一批 6 个概念的 metric / severity 方向。
+
+本轮记录 numeric-first boundary：未来 severity rule 应优先读取数值型 triggerMetric / numeric summary，high / medium / low 或中文档位只作为 human-readable label / review hint，不作为正式计算主数据。
+
+本轮只做 schema planning，不创建 CSV / JSON / JS / schema / validator / generated data。
+
+本轮未填写正式 threshold / `scoreMultiplier` / feedback intensity，也未改变 final feedback / final result。
+
+本轮未生成 stable ID / registry candidate / allowed values，未创建 registry / enum / schema / validator。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## registry candidate field split round 1
 
 本轮新增 `reports/human_review/registryCandidateFieldSplit.round1.md`，将 future registry candidate row fields 分成 required / required-if-applicable / optional / machine-derived / report-only。
