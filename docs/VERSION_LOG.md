@@ -1,5 +1,17 @@
 # 版本记录
 
+## triggerMetric direction review record round 1
+
+本轮新增 `reports/human_review/triggerMetricDirectionReviewRecord.round1.md`，记录用户 + ChatGPT 接受 `triggerMetricDirectionReview.round1.md` 作为 planning checkpoint。
+
+本轮记录 texture 四类边界通过：小料固体负载、粉泥低流动性、奶脂 / 奶盖 / 奶油油腻负担、糖浆 / 胶质黏稠挂口。
+
+这些 direction 仍只是 planning direction，不是正式 triggerMetric、metric registry、schema、validator input 或 allowed values。
+
+本轮未填写正式 numeric values / threshold / `scoreMultiplier`，未生成 generated severity，未开放 implementation / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## triggerMetric direction review round 1
 
 本轮新增 `reports/human_review/triggerMetricDirectionReview.round1.md`，审阅第一批 6 个机制的 possibleMetricDirections 和 numeric summary / numeric load 方向。
