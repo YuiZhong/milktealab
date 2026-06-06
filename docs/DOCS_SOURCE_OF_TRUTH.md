@@ -120,6 +120,7 @@ v0.0.6.17-candidate 已冻结，commit xxx，golden 20/20
 
 ```text
 reports/**
+reports/human_review/**
 ```
 
 职责：
@@ -129,6 +130,12 @@ reports/**
 - review pack。
 - 当时上下文中的决策草案。
 - 当时 next step 建议。
+
+`reports/human_review/**` 是 L4 下的人类审批 / 制作人评审材料子目录，用于集中用户要看的 review pack、candidate 文案审核包、concept candidates 审核包或 generated shadow review。
+
+它仍属于 reports / review material 层，不是 L1 正本，不是 L2 active stage TODO，不是 runtime data。
+
+`reports/` 根目录仍可保留历史审计 / closure / decision reports；不要把整个 `reports/` 目录迁入 `reports/human_review/`。
 
 规则：
 

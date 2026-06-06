@@ -79,6 +79,8 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 
 必要时再读：
 
+- `reports/human_review/`
+  - 人类审批 / 制作人评审材料目录；只作为 review material，不是 source-of-truth / runtime data。
 - `data/stableIdRegistry.js`
 - `scripts/content/checkStableIdRegistry.js`
 - `docs/V0_0_7_MECHANISM_TODO.md`

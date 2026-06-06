@@ -116,9 +116,9 @@ Codex 不得自行补概念、扩事故、批量发明相似 ID，或把 notes /
 
 ## 7. review pack planning
 
-本轮只读搜索未发现 `docs/feedbackShadowReview.sample.md` 或同名近似 sample 文件。
+已知 feedback shadow review sample 位于 `reports/human_review/feedbackShadowReview.sample.md`。
 
-如果后续新增或引用 review pack sample，它只能是 prototype / sample / review material，不是 source-of-truth，不是 runtime data。
+它是 prototype / sample / review material，不是 source-of-truth，不是 runtime data，不能接管 final feedback，也不能自动修改 golden expected。
 
 规划边界：
 

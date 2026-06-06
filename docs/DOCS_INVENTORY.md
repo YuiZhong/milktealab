@@ -89,7 +89,15 @@ v0.0.7.x 结束后：
 - `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md` 风险较高，因为文件名含 `SOURCE_OF_TRUTH`，未来容易被误读为长期正本；当前只能按 v0.0.7.x stage design / historical support 使用。
 - `V0_0_7_ACCIDENT_ANALYZER_LEGACY_INVENTORY.md` 可能有 inventory 正本语气，必须确保只在 legacy inventory 语境内成立，不得升级为当前机制正本。
 
-## 4. 需要后续归属确认的文件
+## 4. 外部目录补充索引
+
+本文件主体只覆盖 `docs/*.md`。以下是与文档治理相关的外部目录短索引。
+
+| path | current_role | level | risk | next_action |
+|---|---|---|---|---|
+| `reports/human_review/**` | 人类审批 / 制作人评审材料，集中 review pack、candidate 文案审核包、concept candidates 审核包和 generated shadow review | L4 review material | OK / P2 housekeeping | keep separate from historical reports root; never treat as source-of-truth or runtime data |
+
+## 5. 需要后续归属确认的文件
 
 ### `INGREDIENT_SCHEMA.md`
 
@@ -115,7 +123,7 @@ v0.0.7.x 结束后：
 
 可保留为操作参考，但不应进入当前机制必读列表。
 
-## 5. 后续建议队列
+## 6. 后续建议队列
 
 以下只是后续建议，本轮不执行：
 

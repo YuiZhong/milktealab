@@ -1,5 +1,15 @@
 # 版本记录
 
+## human review reports organization
+
+本轮新增 `reports/human_review/`，用于集中人类审批 / 制作人评审材料。
+
+本轮移动 `reports/feedbackShadowReview.sample.md` 到 `reports/human_review/feedbackShadowReview.sample.md`，并修正 `docs/V0_0_8_PLANNING_TODO.md` 中 review pack sample 的事实定位。
+
+`reports/human_review/**` 仍属于 review material，不是 source-of-truth，不是 runtime data，不能自动修改 golden expected，也不能接管 final feedback / final result。
+
+本轮未改 runtime / core / data / generated / golden，未开放 implementation / batch content / generated severity / takeover，未 push，未 tag。
+
 ## v0.0.8 planning TODO established
 
 本轮新建 `docs/V0_0_8_PLANNING_TODO.md`，登记为 v0.0.8.x planning TODO / active stage TODO。
