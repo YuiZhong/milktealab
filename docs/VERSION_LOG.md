@@ -1,5 +1,17 @@
 # 版本记录
 
+## taste concept review round 1
+
+本轮新增 `reports/human_review/tasteConceptReview.round1.md`，记录第一轮 taste layer concept candidates 的制作人审核结果。
+
+本轮记录 C001 / C002 / C003 / C004 / C006 / C007 / C008 keep，C005 revise to salty overload。
+
+本轮记录 C004 / C006 / C007 future customer preference sensitivity；C008 high risk and must not include all flavor identity in taste overload。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 approved concept list，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## global severity identity boundary
 
 本轮补充 severity identity boundary 的跨层适用说明：水泥感 / 粉泥感只是示例，不是特例。
