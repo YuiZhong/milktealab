@@ -1,5 +1,15 @@
 # 版本记录
 
+## reusable ID workflow AI context index
+
+本轮在 `docs/AI_CONTEXT.md` 中补充 reusable ID / draft ID / registry workflow 的短索引。
+
+新对话应复用 `docs/STABLE_ID_NAMING_GUARDRAIL.md` 和现有 source-of-truth / registry planning，不从零重做 ID approval flow；`reports/human_review/draftIdNamingReviewProtocol.round1.md` 和 `reports/human_review/sourceOfTruthRegistryPlanning.round1.md` 只作为当前阶段证据 / 操作协议，不是 registry 或 allowed values。
+
+本轮未生成 stable ID / draft ID / registry candidate，未创建 registry / enum / schema / validator，也未生成 allowed values。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## reusable ID workflow promoted to guardrail
 
 本轮将 `reports/human_review/draftIdNamingReviewProtocol.round1.md` 中已经验证清楚、适合长期复用的流程原则，精简沉淀进 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
