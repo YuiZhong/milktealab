@@ -1,5 +1,15 @@
 # 版本记录
 
+## texture / mouthfeel boundary source-of-truth sedimentation
+
+本轮将 `reports/human_review/triggerMetricDirectionReview.round1.md` 和 `triggerMetricDirectionReviewRecord.round1.md` 中已通过用户 + ChatGPT 审阅的 texture / mouthfeel 四类成熟主边界，极短沉淀进 `docs/TASTE_SYSTEM_DESIGN.md` / `docs/TASTE_ENGINE_ARCHITECTURE.md`。
+
+当前成熟边界为：固体小料负载、粉泥低流动性、奶脂油腻负担、糖浆胶质黏稠挂口。它们不能混成泛泛 `texture_overload`，但也不表示 texture 永远只有四类。
+
+本轮未生成正式 triggerMetric / metric registry / schema / validator / generated data，未填写正式 numeric values / threshold / `scoreMultiplier`。
+
+本轮未开放 implementation / batch content / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## triggerMetric direction review record round 1
 
 本轮新增 `reports/human_review/triggerMetricDirectionReviewRecord.round1.md`，记录用户 + ChatGPT 接受 `triggerMetricDirectionReview.round1.md` 作为 planning checkpoint。

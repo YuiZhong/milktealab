@@ -50,6 +50,10 @@ v0.0.7.x：再调 severity 和数值
 
 analyzer / summary 层应优先产出可验证的 numeric summary / numeric load，供 future severity rule 读取。severity rule 应读取 numeric `triggerMetric` / numeric summary，而不是读取中文显示文案、high / medium / low 档位文字或 review note。high / medium / low 可以作为 human label、`severityLabelDraft` 或 UI 辅助，但不能成为底层计算主数据。numeric-first 是架构原则，不表示本轮实现 severity engine。
 
+Texture / mouthfeel 架构上不应被一个泛泛“厚重”或 `texture_overload` 分支吞掉。未来 analyzer / summary 层应能区分 solid-load、low-flow、dairy-fat greasiness、syrupy-stickiness 等不同 numeric metric directions：小料固体负载读取 `solidLoad` / `toppingLoad` / `chewLoad` / `liquidSupport`，粉泥低流动性读取 `slurryLoad` / `pasteLoad` / `powderLoad` / `lowFlowPenalty`，奶脂油腻读取 `fatLoad` / `creamLoad` / `dairyFatLoad` / `greasyPressure` / possible `mouthCoating`，糖浆胶质黏稠读取 `viscosity` / `syrupiness` / `stickiness` / `gumminess` / `adhesiveLoad` / possible `mouthCoating`。
+
+多个 metric 可以同时存在，但后续 severity / priority 层需要 dedupe / dominant mechanism selection，避免重复扣同一件事。本段只是架构原则，不表示本轮实现 texture engine、severity engine、dedupe logic、正式 triggerMetric 或 registry。
+
 v0.0.6.x 不需要立刻实现完整权重系统，但 schema 不能堵死未来权重、阈值、severity 和 priority 接入。profile / summary / rule / candidate 应预留或允许扩展 `metadata`、`weights`、`thresholds`、`evidence`、`sourceLayer`、`priorityBand`、`severityHint` 等字段；默认权重可以先不启用或使用默认值。完整 `severity` / `scoreMultiplier` / 大规模数值调优和 golden 扩容，留到 v0.0.7.x 更合适。
 
 不只原料有属性。原料有 profile，组合规则、事故规则、反馈规则、结果候选也应逐步拥有结构化 metadata，例如 `sourceLayer`、`triggerMetric`、`threshold`、`feedbackTags`、`outcomeTypeId`、`priorityBand`、`severityHint`。不要把具体组合判断长期写成 if 某原料 + 某原料；数据负责“判什么”，代码负责“怎么汇总 / 调度”。
