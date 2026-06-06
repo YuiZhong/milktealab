@@ -1,5 +1,15 @@
 # 版本记录
 
+## pre-shadow gate review round 1
+
+本轮新增 `reports/human_review/preShadowGateReview.round1.md`，检查当前 sample CSV / JSON、minimal validator stub、proposal / draft ID / triggerMetric direction / source-of-truth 边界是否足够进入 Generated Severity Shadow Shape Planning。
+
+结论：可以进入 Generated Severity Shadow Shape Planning，但不能进入 shadow implementation。
+
+本轮未生成 generated severity，未接 shadow / runtime，未创建 registry / schema / active validator / allowed values。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## minimal severity validator stub review record round 1
 
 本轮新增 `reports/human_review/minimalSeverityValidatorStubReview.round1.md`，记录第一版 `scripts/content/validateSeveritySampleRows.js` 已被用户 + ChatGPT 接受为离线防呆工具。

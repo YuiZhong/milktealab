@@ -44,6 +44,7 @@
 - `severitySampleSheetCsvJsonShapePlanning.round1.md` 规划 future severity sample sheet 的 CSV / JSON 文件形状；它不是 CSV、JSON、schema、validator、generated data 或 runtime data。
 - `minimalSeverityValidatorStubPlanning.round1.md` 规划 future minimal severity validator stub 的输入 / 输出 / CLI / 报错格式；它不是 script、schema、generated data 或 runtime data。
 - `minimalSeverityValidatorStubReview.round1.md` 记录第一版 minimal severity validator stub 的审阅结论；它不是 schema、generated data、runtime data 或 active validator。
+- `preShadowGateReview.round1.md` 记录 pre-shadow gate / source-of-truth boundary check；它不是 generated severity、shadow implementation 或 runtime data。
 - `triggerMetricDirectionReview.round1.md` 审阅第一批 6 个机制的 triggerMetric direction；它不是 metric registry、schema、validator、generated data 或 runtime data。
 - `triggerMetricDirectionReviewRecord.round1.md` 记录用户 + ChatGPT 对 triggerMetric direction review 的审阅结论；它不是 metric registry、schema、validator、allowed values 或 runtime data。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
