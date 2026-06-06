@@ -1,5 +1,15 @@
 # 版本记录
 
+## candidate severity sample sheet shape round 1
+
+本轮新增 `reports/human_review/candidateSeveritySampleSheetShape.round1.md`，规划 future severity sample sheet / Google Sheets / CSV 的人类可读表格形状。
+
+本轮只规划人类可读区、身份与来源区、指标与数值区、评分 / 文案 / 偏好区、gate / review 区，帮助后续 first 6 severity sample rows dry-run 避免填表地狱。
+
+本轮未创建 CSV / JSON / schema / validator / generated data，未填写正式 threshold / `scoreMultiplier` / feedback intensity。
+
+本轮未开放 implementation / batch content / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## texture / mouthfeel boundary source-of-truth sedimentation
 
 本轮将 `reports/human_review/triggerMetricDirectionReview.round1.md` 和 `triggerMetricDirectionReviewRecord.round1.md` 中已通过用户 + ChatGPT 审阅的 texture / mouthfeel 四类成熟主边界，极短沉淀进 `docs/TASTE_SYSTEM_DESIGN.md` / `docs/TASTE_ENGINE_ARCHITECTURE.md`。
