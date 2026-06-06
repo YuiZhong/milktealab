@@ -1,5 +1,17 @@
 # 版本记录
 
+## texture approved concept list draft
+
+本轮新增 `reports/human_review/approvedConceptList.texture.round1.draft.md`，整理 texture / drinkability round 1 的 approved concept list draft。
+
+本轮草案包含四个制作人已通过的自然语言概念：八宝粥感 / 固体小料负载过高、水泥感 / 粉泥感 / 低流动性、奶脂 / 奶盖 / 奶油油腻负担、胶粘感 / 胶质负担。
+
+本轮记录 C003 / C008 合并或降级为表现线索，C006 rejected，C007 reclassified 到后续 flavor / structure conflict review。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 runtime data，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## severity identity boundary
 
 本轮将 texture concept review round 1 中确认的 severity 分级原则沉淀到机制正本 / 系统设计 / 架构 / stable ID guardrail。
