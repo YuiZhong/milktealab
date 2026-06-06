@@ -1,5 +1,15 @@
 # 版本记录
 
+## astringency draft ID proposal wording fix
+
+本轮修正 `reports/human_review/draftIdProposalDryRun.round1.md` 中涩感 / 收敛感过强的 `proposedDraftId`，从 `taste_astringent_overload` 改为 `taste_astringency_overload`。
+
+这是命名 proposal 小修：`astringency` 更像“涩感 / 收敛感”这个机制 / 指标名词，`astringent` 更像形容词。
+
+本轮不批准 stable ID，不创建 registry candidate，不生成 validator allowed values。
+
+本轮未创建 registry / enum / schema / validator，未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## draft ID proposal dry-run round 1
 
 本轮新增 `reports/human_review/draftIdProposalDryRun.round1.md`，在既有 guardrail 和 draft ID naming protocol 约束下，为第一批 6 个 structuring candidates 提出 `proposedDraftId`。

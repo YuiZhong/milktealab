@@ -84,8 +84,8 @@
 
 - 未发现 current runtime `accidentTypeId`。
 - `core/tasteSummaryEngine.js` 已有 `astringency` 结构指标语境。
-- `docs/V0_0_7_MECHANISM_TODO.md` 中曾把 `taste_astringent_overload` 列为 future batch item。
-- 结论：本 dry-run 提出 `taste_astringent_overload`，但需要 review taste / special sensation boundary。
+- `core/tasteSummaryEngine.js` 中的 `astringency` 更像“涩感 / 收敛感”机制 / 指标名词语境。
+- 结论：本 dry-run 提出 `taste_astringency_overload`，但需要 review taste / special sensation boundary。
 
 ### 2.5 水泥感 / 粉泥感 / 低流动性
 
@@ -115,7 +115,7 @@
 | 1 | 甜度过载 | `taste_sweet_overload` | accidentTypeId | accident | AC-TASTE-R1-02 / STRUCT-R1-01 | `reports/human_review/approvedConceptList.taste.round1.draft.md`; `reports/human_review/structuringCandidatePlan.round1.md` | taste | `taste_sweet_overload_candidate`; `sweet_overload`; `sweet_overload_risk` | new draft proposal aligned with existing candidate/risk stem; not runtime observed | draft_proposal_pending_user_chatgpt_review | false | false | false |
 | 2 | 酸度过载 | `taste_acid_overload` | accidentTypeId | accident | AC-TASTE-R1-03 / STRUCT-R1-02 | `reports/human_review/approvedConceptList.taste.round1.draft.md`; `reports/human_review/structuringCandidatePlan.round1.md` | taste | `taste_acid_overload` runtime / golden / summary / scaffold evidence | reuse existing observed ID as draft proposal; current scaffold status remains `reviewed_candidate_not_approved` | draft_proposal_pending_user_chatgpt_review | false | false | false |
 | 3 | 苦味过载 | `taste_bitter_overload` | accidentTypeId | accident | AC-TASTE-R1-04 / STRUCT-R1-03 | `reports/human_review/approvedConceptList.taste.round1.draft.md`; `reports/human_review/structuringCandidatePlan.round1.md` | taste | `taste_bitterness_overload_candidate`; `bitterness_overload`; `bitterness_overload_risk` | new draft proposal; needs review against `taste_bitterness_overload` wording | draft_proposal_pending_user_chatgpt_review | false | false | false |
-| 4 | 涩感 / 收敛感过强 | `taste_astringent_overload` | accidentTypeId | accident | AC-TASTE-R1-06 / STRUCT-R1-04 | `reports/human_review/approvedConceptList.taste.round1.draft.md`; `reports/human_review/structuringCandidatePlan.round1.md` | taste / special sensation boundary | `astringency`; `taste_astringent_overload` future-batch docs mention | new draft proposal aligned with existing future-batch wording; needs taste / sensation boundary review | draft_proposal_pending_user_chatgpt_review | false | false | false |
+| 4 | 涩感 / 收敛感过强 | `taste_astringency_overload` | accidentTypeId | accident | AC-TASTE-R1-06 / STRUCT-R1-04 | `reports/human_review/approvedConceptList.taste.round1.draft.md`; `reports/human_review/structuringCandidatePlan.round1.md` | taste / special sensation boundary | `astringency` metric / evidence; earlier future-batch wording needs noun-form review | new draft proposal uses `astringency` because it is closer to the mechanism / metric noun for 涩感 / 收敛感; needs taste / sensation boundary review | draft_proposal_pending_user_chatgpt_review | false | false | false |
 | 5 | 水泥感 / 粉泥感 / 低流动性 | `texture_low_drinkability` | accidentTypeId | accident | AC-TEX-R1-02 / STRUCT-R1-05 | `reports/human_review/approvedConceptList.texture.round1.draft.md`; `reports/human_review/structuringCandidatePlan.round1.md` | texture / drinkability | `texture_low_drinkability` runtime-like / golden / summary / migration evidence; `low_drinkability` candidate tag / profile tag | reuse existing observed ID as draft proposal; still forbidden from current scaffold / validator | draft_proposal_pending_user_chatgpt_review | false | false | false |
 | 6 | 八宝粥感 / 固体小料负载过高 | `texture_solid_overload` | accidentTypeId | accident | AC-TEX-R1-01 / STRUCT-R1-06 | `reports/human_review/approvedConceptList.texture.round1.draft.md`; `reports/human_review/structuringCandidatePlan.round1.md` | texture / drink structure | `texture_solid_overload` runtime-like / golden / summary / scaffold evidence | reuse existing observed ID as draft proposal; current scaffold status remains `reviewed_candidate_not_approved` | draft_proposal_pending_user_chatgpt_review | false | false | false |
 
@@ -148,10 +148,10 @@
 - Not this: not "all bitterness is bad"; customer tolerance may change score or feedback.
 - Needs review: choose `taste_bitter_overload` vs `taste_bitterness_overload` before any future registry candidate.
 
-### 4.4 `taste_astringent_overload`
+### 4.4 `taste_astringency_overload`
 
 - Current true status: `astringency` metric/evidence exists; no current runtime accidentTypeId found.
-- Why this draft name: aligns with existing future-batch docs mention and keeps it distinct from bitter overload.
+- Why this draft name: `astringency` is closer to the mechanism / metric noun for 涩感 / 收敛感; `astringent` reads more like an adjective. This keeps the draft distinct from bitter overload while still requiring boundary review.
 - Anti-if notes: do not write black tea / oolong / coffee-specific if; do not merge back into a generic strong stimulation umbrella.
 - Severity boundary: drying / astringency intensity belongs to triggerMetric / severity / feedback intensity.
 - Not this: not bitter overload, not spicy / numbing / alcohol burn.
