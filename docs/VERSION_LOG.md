@@ -1,5 +1,15 @@
 # 版本记录
 
+## severity validator / lint planning round 1
+
+本轮新增 `reports/human_review/severityValidatorLintPlanning.round1.md`，规划 future severity validator / lint 的 error / warning / info 检查。
+
+本轮只规划未来防呆检查：阻止 dry-run rows 被误读为正式 threshold、正式 `scoreMultiplier`、正式 allowed values、generated severity 或 runtime data。
+
+本轮未创建 scripts / CSV / JSON / schema / validator / generated data，未开放 generated severity / shadow / runtime。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## first 6 severity sample rows review record round 1
 
 本轮新增 `reports/human_review/first6SeveritySampleRowsReview.round1.md`，记录用户 + ChatGPT 已接受 `first6SeveritySampleRowsDryRun.round1.md` 作为 planning dry-run checkpoint。
