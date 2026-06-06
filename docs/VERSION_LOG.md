@@ -1,5 +1,15 @@
 # 版本记录
 
+## texture concept review round 1
+
+本轮新增 `reports/human_review/textureConceptReview.round1.md`，记录第一轮质地 / 可饮用性 concept candidates 的制作人审核结果。
+
+本轮记录：C001 / C002 / C004 / C005 keep，C003 / C008 merge，C006 reject，C007 reclassify。
+
+本轮未整理 approved concept list，未生成新 ID / draft ID / registry candidate，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## concept review template
 
 本轮新增 `reports/human_review/conceptReview.template.md`，作为自然语言 scenario / concept candidates 的制作人审批入口。
