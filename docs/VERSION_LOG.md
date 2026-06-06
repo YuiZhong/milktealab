@@ -1,5 +1,17 @@
 # 版本记录
 
+## registry candidate field split round 1
+
+本轮新增 `reports/human_review/registryCandidateFieldSplit.round1.md`，将 future registry candidate row fields 分成 required / required-if-applicable / optional / machine-derived / report-only。
+
+本轮新增中文字段速读 / 字段解释，避免未来制作人审核材料只有英文 key，也避免每条 row 都变成填表地狱。
+
+本轮仍保留 source / legacy / anti-if / false gate 安全字段，但明确用户不需要手填机器字段。
+
+本轮未创建 registry row / registry / enum / schema / validator / allowed values，未生成 stable ID / registry candidate。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## registry candidate proposal round 1
 
 本轮新增 `reports/human_review/registryCandidateProposal.round1.md`，把第一批 6 个 accepted proposal wording 整理为 registry candidate proposal rows。
