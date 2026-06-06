@@ -1,5 +1,13 @@
 # 版本记录
 
+## minimal severity validator stub planning round 1
+
+本轮新增 `reports/human_review/minimalSeverityValidatorStubPlanning.round1.md`，规划 future 第一版 severity validator / lint stub 的输入、输出、CLI、退出码和人类友好报错格式。
+
+本轮只规划未来 validator stub，不创建 scripts / CSV / JSON / schema / validator / generated data。
+
+本轮未开放 generated severity / shadow / runtime，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## severity sample sheet CSV / JSON shape planning round 1
 
 本轮新增 `reports/human_review/severitySampleSheetCsvJsonShapePlanning.round1.md`，规划 future severity sample sheet 如果落成 CSV / JSON，文件结构、字段分组、人类可读规则和 CSV -> JSON 转换边界应如何设计。
