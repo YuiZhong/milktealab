@@ -1,5 +1,17 @@
 # 版本记录
 
+## taste approved concept list draft
+
+本轮新增 `reports/human_review/approvedConceptList.taste.round1.draft.md`，整理第一轮 taste layer 的 approved concept list draft。
+
+本轮草案包含 7 个 approved / revised concepts：饮品存在感过低、甜度过载、酸度过载、苦味过载、咸味过载、涩感 / 收敛感、基础味觉整体过载。
+
+本轮记录 C007 特殊刺激过强不作为单一 approved concept，转为 umbrella / splitNeeded / later review；原 C005 从“咸甜失衡”修正为“咸味过载”。C004 / C006 标记 customerPreferenceSensitive，C008 标记 highRisk。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 runtime data，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## taste stimulation concept boundary
 
 本轮修正 `reports/human_review/tasteConceptReview.round1.md` 中 C007 特殊刺激过强的归档边界。
