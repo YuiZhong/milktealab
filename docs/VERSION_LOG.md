@@ -1,5 +1,17 @@
 # 版本记录
 
+## flavor / structure approved concept list draft
+
+本轮新增 `reports/human_review/approvedConceptList.flavorStructure.round1.draft.md`，整理 flavor / structure round 1 的 approved concept list draft。
+
+本轮草案包含五个制作人已通过的自然语言概念：清爽感被厚重吞掉、强风味身份压制、风味身份错位、饮品类型承诺失败、风味主题过载。
+
+本轮记录 C004 rejected，C006 / C008 reclassified to taste layer。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 runtime data，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## flavor / structure concept review round 1
 
 本轮新增 `reports/human_review/flavorStructureConceptReview.round1.md`，记录第一轮风味 / 饮品结构冲突 concept candidates 的制作人审核结果。
