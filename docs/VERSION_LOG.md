@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8 concept review checkpoint
+
+本轮新增 `reports/human_review/v0.0.8ConceptReviewCheckpoint.md`，汇总 texture / drinkability、flavor / structure、taste 三条基础概念线的 concept review checkpoint。
+
+当前三条基础概念线均已到 approved concept list draft：texture 4 个概念，flavor / structure 5 个概念，taste 7 个 approved / revised concepts。
+
+本轮仅记录 human review / planning checkpoint；未生成 stable ID / draft ID / registry candidate，未形成 validator input 或 runtime data。
+
+本轮未开放 implementation / batch content / generated severity / generated severity shadow / partial / active takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## taste approved concept list draft
 
 本轮新增 `reports/human_review/approvedConceptList.taste.round1.draft.md`，整理第一轮 taste layer 的 approved concept list draft。
