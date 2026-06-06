@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8 concept review checkpoint update
+
+本轮更新 `reports/human_review/v0.0.8ConceptReviewCheckpoint.md`，将 special sensation line 纳入当前 concept review checkpoint。
+
+当前 texture / drinkability、flavor / structure、taste、special sensation 四条概念线均已到 approved concept list draft checkpoint。
+
+本轮未生成 stable ID / draft ID / registry candidate，未形成 validator input 或 runtime data，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## special sensation approved concept list draft
 
 本轮新增 `reports/human_review/approvedConceptList.specialSensation.round1.draft.md`，整理第一轮 special sensation sub-channel 的 approved concept list draft。
