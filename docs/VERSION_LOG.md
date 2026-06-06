@@ -1,5 +1,17 @@
 # 版本记录
 
+## triggerMetric direction review round 1
+
+本轮新增 `reports/human_review/triggerMetricDirectionReview.round1.md`，审阅第一批 6 个机制的 possibleMetricDirections 和 numeric summary / numeric load 方向。
+
+本轮重点记录 texture 四类边界：固体小料负载、粉泥低流动性、奶脂 / 奶盖 / 奶油油腻负担、糖浆 / 胶质黏稠挂口。
+
+奶脂油腻边界明确为“饮用流畅但油腻 / 恶心 / 奶脂压口 / 下咽负担”，不是吸不动，也不是八宝粥感或糖浆胶质黏稠。
+
+本轮未生成正式 triggerMetric / metric registry / schema / validator / generated data，未填写正式 numeric values / threshold / `scoreMultiplier`。
+
+本轮未开放 implementation / batch content / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## numeric-first profile / summary rule boundary
 
 本轮将 `reports/human_review/candidateSeverityRuleSchemaReview.round1.md` 中已经验证清楚的 numeric-first boundary，极短沉淀进 `docs/TASTE_SYSTEM_DESIGN.md` / `docs/TASTE_ENGINE_ARCHITECTURE.md`，并在 `docs/AI_CONTEXT.md` 加短导航。
