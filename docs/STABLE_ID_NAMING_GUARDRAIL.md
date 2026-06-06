@@ -136,7 +136,17 @@ Codex handles structuring, validation, import, testing, and reporting.
 
 This workflow is not only for v0.0.8.x. Future batch additions of ingredients, accidents, feedbackTags, triggerMetrics, flavor relations, customer preferences, seasonal content, and operation events should follow this process.
 
-## 1.4 v0.0.7.x Closure / Pre-Shadow Boundary
+## 1.4 Reuse Existing Guardrails Before New ID Work
+
+Any future task that proposes, modifies, or promotes draft ID, registry candidate, validator allowed value, or stable ID must first read and reuse this file plus the current source-of-truth / registry planning.
+
+Before creating a new ID, the task must search existing / legacy / observed IDs and decide whether each relevant value should be reused, replaced, migrated, deprecated, or superseded by a new candidate.
+
+Do not redesign the ID approval flow from scratch for every stage. Stage reports may record local workflow differences, but long-term ID / naming rules should be consolidated back into this file or the proper L1 source-of-truth.
+
+Specific v0.0.8 report formats, round numbers, and temporary field examples do not automatically become long-term rules.
+
+## 1.5 v0.0.7.x Closure / Pre-Shadow Boundary
 
 v0.0.7.x closure mode should not add new batch ID generation unless the user explicitly reopens that scope. Batch stable ID generation belongs to a later batch-content workflow paired with profile / source / evidence validation, not to the v0.0.7.x pre-shadow checklist itself.
 

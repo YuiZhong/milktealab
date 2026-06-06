@@ -1,5 +1,19 @@
 # 版本记录
 
+## draft ID naming review protocol round 1
+
+本轮新增 `reports/human_review/draftIdNamingReviewProtocol.round1.md`，记录未来 draft ID 命名审查流程。
+
+本轮复用 v0.0.7.x stable ID / naming guardrail，不从零重做 ID approval flow；默认 prefix 倾向是 ID 第一个 segment 优先表达主导 `sourceLayer`，但 prefix 不替代 `sourceLayer` / `sourceSummary` / `triggerMetric` / evidence 等结构字段。
+
+本轮记录 long-term candidates / not yet promoted 边界：v0.0.8 report 格式、round 编号和字段样例不自动升级为长期正本。
+
+本轮极短补充 `docs/STABLE_ID_NAMING_GUARDRAIL.md`：未来新增 / 修改 ID 前必须复用既有 guardrail，并先搜索 existing / legacy / observed ID，避免重复造轮子。
+
+本轮只做命名审查流程，未生成 stable ID / draft ID / registry candidate，未创建 registry / enum / schema / validator。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## source-of-truth / registry planning round 1
 
 本轮新增 `reports/human_review/sourceOfTruthRegistryPlanning.round1.md`，记录后续 draft ID / registry candidate / validator 的 source-of-truth 前置规划。
