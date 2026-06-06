@@ -1,5 +1,15 @@
 # 版本记录
 
+## cross-layer customer preference principle
+
+本轮补充 cross-layer customer preference / audience tolerance 设计原则。
+
+未来顾客偏好可调节 taste / texture / flavor / structure / severity / feedback / score，不只接 taste。
+
+本轮明确当前不创建 `customerTag` / `audienceId`，不实现顾客系统，不改 runtime / core / data / generated / golden。
+
+本轮未生成新 ID / draft ID / registry candidate，未开放 implementation / batch content / generated severity / takeover，未 push，未 tag。
+
 ## taste concept review round 1
 
 本轮新增 `reports/human_review/tasteConceptReview.round1.md`，记录第一轮 taste layer concept candidates 的制作人审核结果。

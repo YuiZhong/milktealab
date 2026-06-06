@@ -197,6 +197,7 @@ registry candidate 不等于 source-of-truth。
 - 大量文案扩写
 - 事故 / 饮品 / outcome 新 ID 批量创建
 - profile / threshold / severity 大规模调参
+- cross-layer customer preference / audience tolerance integration：后续可规划接入 taste / texture / flavor / structure 等层；当前 concept review 不实现顾客系统，不创建 `customerTag` / `audienceId`
 
 ## 12. Exit criteria for v0.0.8 planning readiness
 

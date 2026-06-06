@@ -152,6 +152,14 @@ candidate 应携带足够 evidence 和来源信息，例如：
 
 candidate 层尤其不能变成新的 if 地狱。错误方向是把 `if 榴莲 + 咖啡`、`if 奥利奥 > 30`、`if 某 tag + 某 tag` 挪到 candidate engine 里继续堆内容判断。正确方向是：summary 提供结构化指标，规则表 / relation matrix / 阈值表读取这些指标并产出 candidate，调度层只负责排序、冲突处理和最终选择。
 
+### Cross-layer customer preference / audience tolerance 架构边界
+
+未来 customer preference / audience tolerance 应作为 summary / candidate / severity 之后的调节层或规则输入，而不是写进 `tasteAnalyzer` / `textureAnalyzer` / `flavorAnalyzer` 的具体 if。
+
+analyzer 负责产出 facts / summary / candidates；顾客系统未来读取这些结构化结果做偏好、容忍度、反馈强度或分数调节。它应能跨 taste / texture / flavor / structure 等层工作，而不是只接 taste 层。
+
+顾客偏好不应反向污染 `accidentTypeId`、stable ID 或 `displayName`。也不应写成单个客群 + 单个原料组合 if，例如 `if 小孩 then 喜欢甜`、`if 上班族 then 喜欢苦咖啡`。当前仅预留架构方向，不实现 runtime，不创建 `customerTag` / `audienceId`，不改变评分。
+
 ### v0.0.6.14 candidate priority shell 架构边界
 
 candidate priority shell 位于 `summaryCandidates` 和最终 result 调度之间。它的职责是把已经产出的 candidate 按粗粒度优先级组织成只读观察结构，帮助后续调试、golden 断言和调度设计；它不是最终判定层，不直接改写 `score`、事故、饮品类型、feedback、`result.type`、`accidentTypeId`、`drinkTypeId` 或 `outcomeTypeId`。
