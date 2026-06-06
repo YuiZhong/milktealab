@@ -1,5 +1,15 @@
 # 版本记录
 
+## source-of-truth / registry planning round 1
+
+本轮新增 `reports/human_review/sourceOfTruthRegistryPlanning.round1.md`，记录后续 draft ID / registry candidate / validator 的 source-of-truth 前置规划。
+
+本轮只规划 ID 来源、draft 晋级、registry candidate 层级和 validator 读取原则。
+
+本轮未生成 stable ID / draft ID / registry candidate，未创建 registry / enum / schema / validator，也未生成 allowed values。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## first-batch structuring candidate plan
 
 本轮新增 `reports/human_review/structuringCandidatePlan.round1.md`，记录第一批适合后续 structuring planning 的自然语言概念范围。
