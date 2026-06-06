@@ -1,5 +1,15 @@
 # 版本记录
 
+## first 6 severity sample rows review record round 1
+
+本轮新增 `reports/human_review/first6SeveritySampleRowsReview.round1.md`，记录用户 + ChatGPT 已接受 `first6SeveritySampleRowsDryRun.round1.md` 作为 planning dry-run checkpoint。
+
+本轮确认 18 条 dry-run 示例行可作为 human-readable severity intuition / planning input，但它们仍不是正式 threshold、正式 `scoreMultiplier`、正式 feedback intensity 或 generated severity source。
+
+本轮未创建 CSV / JSON / schema / validator / generated data，未填写正式 threshold / `scoreMultiplier` / feedback intensity。
+
+本轮未开放 implementation / generated severity / shadow / runtime，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## first 6 severity sample rows dry-run round 1
 
 本轮新增 `reports/human_review/first6SeveritySampleRowsDryRun.round1.md`，为第一批 6 个 `proposedDraftId` 试填 light / medium / heavy severity 示例行，用于验证 severity sample sheet shape 是否够用。

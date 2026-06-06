@@ -39,6 +39,7 @@
 - `candidateSeverityRuleSchemaReview.round1.md` 规划 future candidate severity rule / threshold table fields；它不是 schema、validator、generated severity 或 runtime data。
 - `candidateSeveritySampleSheetShape.round1.md` 规划 future severity sample sheet 的人类可读表格形状；它不是 CSV、schema、validator、generated data 或 runtime data。
 - `first6SeveritySampleRowsDryRun.round1.md` 试填第一批 6 个 proposedDraftId 的 light / medium / heavy severity 示例行；它不是 CSV、schema、validator、generated data 或 runtime data。
+- `first6SeveritySampleRowsReview.round1.md` 记录用户 + ChatGPT 对 first 6 severity sample rows dry-run 的审阅结论；它不是 CSV、schema、validator、generated data 或 runtime data。
 - `triggerMetricDirectionReview.round1.md` 审阅第一批 6 个机制的 triggerMetric direction；它不是 metric registry、schema、validator、generated data 或 runtime data。
 - `triggerMetricDirectionReviewRecord.round1.md` 记录用户 + ChatGPT 对 triggerMetric direction review 的审阅结论；它不是 metric registry、schema、validator、allowed values 或 runtime data。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
