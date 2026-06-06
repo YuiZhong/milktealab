@@ -1,5 +1,17 @@
 # 版本记录
 
+## reusable ID workflow promoted to guardrail
+
+本轮将 `reports/human_review/draftIdNamingReviewProtocol.round1.md` 中已经验证清楚、适合长期复用的流程原则，精简沉淀进 `docs/STABLE_ID_NAMING_GUARDRAIL.md`。
+
+未来新增 / 修改 / 晋级 draft ID、registry candidate、validator allowed value 或 stable ID 前，必须复用既有 guardrail 和当前 source-of-truth / registry planning，先搜索 existing / legacy / observed ID，并判断 reuse / replace / migrate / deprecate / supersede / new candidate 等处理方向。
+
+本轮明确不从零重做 ID approval flow；stage report 可以记录局部差异，但长期 ID / naming 规则应回到 L1 正本。
+
+本轮没有生成 stable ID / draft ID / registry candidate，没有创建 registry / enum / schema / validator，也没有生成 allowed values。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## draft ID naming review protocol round 1
 
 本轮新增 `reports/human_review/draftIdNamingReviewProtocol.round1.md`，记录未来 draft ID 命名审查流程。

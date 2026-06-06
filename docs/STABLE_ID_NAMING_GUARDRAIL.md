@@ -146,7 +146,42 @@ Do not redesign the ID approval flow from scratch for every stage. Stage reports
 
 Specific v0.0.8 report formats, round numbers, and temporary field examples do not automatically become long-term rules.
 
-## 1.5 v0.0.7.x Closure / Pre-Shadow Boundary
+## 1.5 Draft ID / Registry Candidate Proposal Protocol
+
+Any future draft ID / registry candidate / stable ID proposal must start from existing guardrails, not from a blank naming discussion.
+
+Before proposing new IDs, run a read-only search for existing / legacy / observed IDs and summarize their status. Each relevant existing value must be classified as one of:
+
+- reuse candidate;
+- migration candidate;
+- deprecated;
+- superseded;
+- unrelated;
+- needs review.
+
+Each draft ID / registry candidate proposal must answer a consistent review checklist:
+
+- source approved concept;
+- source review file;
+- source review item / conceptRef;
+- dominant `sourceLayer`;
+- cross-layer note, if any;
+- legacy / observed IDs;
+- naming rationale;
+- anti-if notes;
+- severity boundary;
+- notThis;
+- no runtime effect.
+
+Prefixes such as `taste_`, `texture_`, `flavor_`, `structure_`, or `sensation_` are only naming tendencies for the dominant layer. Structure fields such as `sourceLayer`, `sourceSummary`, `triggerMetric`, and evidence remain the source of truth.
+
+Reports, review packs, approved concept list drafts, `conceptRef`, `planningRef`, `displayNameDraft`, grep results, and stage report examples are not allowed values.
+
+Future validator allowed values must come from explicit approved registry / enum / schema / existing reviewed stable data. If source-of-truth / registry / enum / schema is unclear, stop and plan that first.
+
+Do not copy stage report formats, round numbers, or temporary field examples into long-term schema.
+
+## 1.6 v0.0.7.x Closure / Pre-Shadow Boundary
 
 v0.0.7.x closure mode should not add new batch ID generation unless the user explicitly reopens that scope. Batch stable ID generation belongs to a later batch-content workflow paired with profile / source / evidence validation, not to the v0.0.7.x pre-shadow checklist itself.
 
