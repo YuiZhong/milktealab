@@ -1,5 +1,15 @@
 # 版本记录
 
+## special sensation concept review round 1
+
+本轮新增 `reports/human_review/specialSensationConceptReview.round1.md`，记录第一轮 special sensation sub-channel concept candidates 的制作人审核结果。
+
+本轮记录 C001 辣感 / 灼辣感过强、C002 麻感 / 震麻感过强、C003 酒精灼烧 / 挥发刺激过强、C004 清凉刺激过强、C005 辛香刺激过强、C006 特殊刺激主题饮均保留为自然语言审核结果；其中 C006 标记为 high-level / overlap / later review，不作为低风险机制候选。
+
+本轮未生成 stable ID / draft ID / registry candidate，未形成 approved concept list，未形成 validator input 或 runtime data。
+
+本轮未开放 implementation / batch content / generated severity / generated feedback takeover / runtime takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## v0.0.8 concept review checkpoint
 
 本轮新增 `reports/human_review/v0.0.8ConceptReviewCheckpoint.md`，汇总 texture / drinkability、flavor / structure、taste 三条基础概念线的 concept review checkpoint。
