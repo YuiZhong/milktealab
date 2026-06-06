@@ -1,5 +1,13 @@
 # 版本记录
 
+## minimal severity validator stub review record round 1
+
+本轮新增 `reports/human_review/minimalSeverityValidatorStubReview.round1.md`，记录第一版 `scripts/content/validateSeveritySampleRows.js` 已被用户 + ChatGPT 接受为离线防呆工具。
+
+该 checkpoint 只确认它可用于 CSV / JSON planning examples 的最小 validator / lint stub；它不生成 generated severity，不接 shadow / runtime，不创建 allowed values，也不是 runtime / active / registry validator。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## minimal severity sample rows validator stub
 
 本轮新增 `scripts/content/validateSeveritySampleRows.js`，作为 first 6 severity sample rows CSV / JSON examples 的最小 validator / lint stub。
