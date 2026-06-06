@@ -1,5 +1,15 @@
 # 版本记录
 
+## flavor / structure concept review round 1
+
+本轮新增 `reports/human_review/flavorStructureConceptReview.round1.md`，记录第一轮风味 / 饮品结构冲突 concept candidates 的制作人审核结果。
+
+本轮记录 C001 / C002 / C003 / C005 / C007 keep，C004 reject，C006 / C008 reclassify to taste layer。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 approved concept list，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## single-line workflow / Parking Lot
 
 本轮补充单主线 / Parking Lot 协作节奏短规则：默认一条设计线尽量闭环后再开启下一条，相邻想法和新债务先进入 Parking Lot，除非明确阻塞当前线。

@@ -21,6 +21,7 @@
 - `conceptReview.template.md` 用于自然语言 scenario / concept candidates 审核；它审的是“场景 / 机制概念”。
 - `textureConceptReview.round1.md` 记录第一轮质地 / 可饮用性 concept candidates 的制作人审核结果；它不是 approved concept list。
 - `approvedConceptList.texture.round1.draft.md` 整理第一轮 texture / drinkability 已通过概念的 approved concept list draft；它不是 stable ID、registry candidate 或 runtime data。
+- `flavorStructureConceptReview.round1.md` 记录第一轮风味 / 饮品结构冲突 concept candidates 的制作人审核结果；它不是 approved concept list、source-of-truth 或 runtime data。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
 
 这些材料都不是 source-of-truth，也不是 runtime data。
