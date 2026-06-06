@@ -1,5 +1,15 @@
 # 版本记录
 
+## draft ID proposal dry-run round 1
+
+本轮新增 `reports/human_review/draftIdProposalDryRun.round1.md`，在既有 guardrail 和 draft ID naming protocol 约束下，为第一批 6 个 structuring candidates 提出 `proposedDraftId`。
+
+本轮 `proposedDraftId` 只用于用户 + ChatGPT review；它们不是 stable ID、registry candidate 或 validator allowed values。
+
+本轮未创建 registry / enum / schema / validator，未生成 allowed values，未生成正式 triggerMetric，未填写正式阈值 / `scoreMultiplier`。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## reusable ID workflow AI context index
 
 本轮在 `docs/AI_CONTEXT.md` 中补充 reusable ID / draft ID / registry workflow 的短索引。

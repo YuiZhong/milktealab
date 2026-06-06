@@ -31,6 +31,7 @@
 - `structuringCandidatePlan.round1.md` 记录第一批适合后续结构化规划的自然语言概念范围；它不是 stable ID、registry candidate 或 runtime data。
 - `sourceOfTruthRegistryPlanning.round1.md` 记录 source-of-truth / registry / enum / schema 前置规划；它不是 registry、schema、validator 或 runtime data。
 - `draftIdNamingReviewProtocol.round1.md` 记录 draft ID naming review protocol；它不是 ID list、registry、schema 或 runtime data。
+- `draftIdProposalDryRun.round1.md` 记录第一批 6 个概念的 draft ID proposal dry-run；它不是 stable ID list、registry candidate、allowed values、schema 或 runtime data。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
 
 这些材料都不是 source-of-truth，也不是 runtime data。
