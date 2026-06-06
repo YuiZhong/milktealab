@@ -1,5 +1,13 @@
 # 版本记录
 
+## severity identity boundary
+
+本轮将 texture concept review round 1 中确认的 severity 分级原则沉淀到机制正本 / 系统设计 / 架构 / stable ID guardrail。
+
+当前原则：同一事故按 `triggerMetric` 数值区间、`severityLevel`、`scoreMultiplier` 和 feedback intensity 分轻中重，不拆 `accidentTypeId`。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 approved concept list，未改 runtime / core / data / generated / golden，未开放 implementation / batch content / generated severity / takeover，未 push，未 tag。
+
 ## texture concept severity principle
 
 本轮补充 `reports/human_review/textureConceptReview.round1.md` 的 severity / 表现强度原则：同一事故机制后续应通过 triggerMetric 数值区间、severityLevel、scoreMultiplier 和 feedback intensity 区分轻中重，而不是拆成多个 accidentTypeId。

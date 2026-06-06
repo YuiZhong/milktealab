@@ -143,6 +143,18 @@ severity / scoreMultiplier / evidence / triggerMetric / thresholds / weights
 
 > 柠檬比例极高导致酸度过载，属于味觉事故，priority 低于特殊服务事故和质地事故，但 severity 可以很高，最终扣分可能比某个轻微质地适配问题更重。
 
+### 2.1 Accident Identity vs Severity Strength
+
+`accidentTypeId` 表示“这是什么事故机制”。`severityLevel` / `scoreMultiplier` / feedback intensity 表示“这个事故有多严重、扣分多重、文案多狠”。
+
+同一个 `accidentTypeId` 后续应通过 `triggerMetric` 数值区间、`severityLevel`、`scoreMultiplier` 和 feedback intensity 区分轻度 / 中度 / 重度，不得为了轻中重拆出多个 `accidentTypeId`。
+
+不得把 `light` / `medium` / `heavy` / `severe` / `mild` / 分数倍率 / severity 含义编码进 `accidentTypeId`。
+
+例如，“水泥感 / 粉泥感”可以从轻微浑浊、粉感明显、喝着费劲，到重度吸不上来，形成同一机制下的严重度连续谱。它们不应拆成多个 `accidentTypeId`；未来应由 `triggerMetric` 区间、`severityLevel`、`scoreMultiplier` 和反馈文案强度表达。
+
+示例数值和文案只可作为制作人讨论材料，不是正式阈值，不是正式文案，不是 runtime data。
+
 ## 3. 三层属性输入与反 if 地狱总原则
 
 反 if 地狱是整个判定模型的总原则，不是 flavor 层专属原则。
@@ -239,4 +251,3 @@ deprecated / historical rough rule only
 - 它没有区分味觉事故与风味冲突。
 - 它没有表达“高 priority 低 severity”的情况。
 - 它不适合继续作为 v0.0.7.x / 后续 batch-content / severity / scoreMultiplier 的正本。
-

@@ -1245,6 +1245,10 @@ group 定义以后可以从中文 name 过渡到 `ingredientId` / refs / profile
 - 高 severity 才进入重大事故。
 - 好组合不能洗白高 severity 事故。
 
+severity / `scoreMultiplier` 未来应由数据化 rule / table / generated config 承载。analyzer 不应散落 `if light / medium / heavy`，也不应为了某个 severity 档硬编码新的事故类型。
+
+engine 可以汇总指标、保留 evidence、调度规则和读取 severity 映射，但不应通过新增 `accidentTypeId` 表达严重程度。同一个事故机制的强弱变化应留给 `triggerMetric` 区间、`severityLevel`、`scoreMultiplier` 和 feedback intensity。
+
 ### 本节用途
 
 本节用于指导后续 `ingredientGroupHelper`、`tasteSummary` / `textureSummary` / `flavorSummary`、`flavorProfile`、flavor relation matrix、`flavorConflictRules`、`severityConfig`、`feedbackTags` 和 golden samples 扩展。

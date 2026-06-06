@@ -153,9 +153,11 @@ v0.0.7.x closure mode should not add new batch ID generation unless the user exp
 - 事故机制大类。
 - 不能按每个原料拆分。
 - 不能带 severity 后缀。
+- 不能通过 `xxx_light` / `xxx_medium` / `xxx_heavy` / `xxx_severe` / `xxx_mild` / `xxx_0_40` 等方式把强度编码进事故 ID。
 - 不能带 sampleId 语义。
 - 不能为单个组合、单个 recipe、单个 golden sample、单条文案梗、单个制作人备注或单个 review pack item 创建专属事故机制 ID。
 - 具体性应放在 `evidence`、`sourceIngredientIds`、`triggerMetric`、`sourceLayer`、`ruleId`、`sampleId`、feedback copy、review pack 或 notes 中。
+- 严重度应使用 `severityLevel` / `scoreMultiplier` / feedback intensity / rule row 表达，而不是新增 `accidentTypeId`。
 
 错误示例：
 
@@ -163,6 +165,10 @@ v0.0.7.x closure mode should not add new batch ID generation unless the user exp
 accidentTypeId: taste_acid_overload_lemon
 accidentTypeId: taste_acid_overload_hawthorn
 accidentTypeId: taste_acid_overload_high
+accidentTypeId: texture_low_drinkability_light
+accidentTypeId: texture_low_drinkability_medium
+accidentTypeId: texture_low_drinkability_heavy
+accidentTypeId: texture_low_drinkability_0_40
 accidentTypeId: extreme_lemon_accident
 accidentTypeId: texture_low_drinkability_oreo_milk
 accidentTypeId: taro_black_tea_paste_overload
@@ -190,6 +196,8 @@ ruleId: texture_low_drinkability_sediment_high
 sampleId: oreo_low_drinkability_migration
 feedback copy: 奥利奥碎比例太高，喝起来像在用吸管开采甜品矿层
 ```
+
+同一 `accidentTypeId` 可以覆盖不同严重度。AI / Codex 批量生成 ID、draft ID 或 registry candidate 时，如果想表达轻微、明显、严重、致命等强度差异，应改写为 rule row / severity row / feedback intensity，而不是创建新的事故 ID。
 
 ### outcomeTypeId
 

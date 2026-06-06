@@ -30,6 +30,25 @@
 - `厚乳 70 + 淡奶油 20 + 植脂奶 10` 必须优先考虑奶脂过载。
 - `芋泥 45 + 奥利奥碎 32 + 珍珠 16` 必须优先考虑吸管阻力事故。
 
+### 1.1 同一机制的 severity 区间化原则
+
+future severity table / candidate severity rules 应表达同一机制的区间化强度，而不是用多个事故 ID 表达轻中重。
+
+轻中重等级应读取 summary / candidate / `triggerMetric` 等结构化字段。`scoreMultiplier` 属于 severity / scoring layer，不属于 `accidentTypeId`。
+
+文案强度可以随 severity 调整，但文案变化不反向创造新机制 ID。
+
+非正式示意：
+
+```text
+0-40: no trigger
+40-60: light
+60-80: medium
+80-100: heavy
+```
+
+这些区间只是制作人讨论示例，不是正式阈值。本节不新增正式字段、不改变既有 schema、不写正式 `scoreMultiplier`。
+
 ## 2. v0.0.5.0 数据化地基
 
 v0.0.5.0 的目标是建立味觉系统数据化地基，不是玩法更新，也不追求评分明显变化。
