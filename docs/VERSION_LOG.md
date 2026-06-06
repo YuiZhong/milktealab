@@ -1,5 +1,13 @@
 # 版本记录
 
+## single-line workflow / Parking Lot
+
+本轮补充单主线 / Parking Lot 协作节奏短规则：默认一条设计线尽量闭环后再开启下一条，相邻想法和新债务先进入 Parking Lot，除非明确阻塞当前线。
+
+这是 docs navigation / planning alignment，不是 implementation，不生成新 ID，不开放 batch content、generated severity 或 takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## texture approved concept list draft
 
 本轮新增 `reports/human_review/approvedConceptList.texture.round1.draft.md`，整理 texture / drinkability round 1 的 approved concept list draft。

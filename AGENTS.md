@@ -30,6 +30,8 @@
 
 Codex 当前任务重点是 planning TODO、债务迁移分桶和 docs alignment；不得自行推进机制内容。
 
+默认单主线推进；非当前线内容先进 Parking Lot，发现阻塞先报告，不自行扩范围。
+
 当前完整判定模型以 `docs/TASTE_DECISION_MODEL.md` 为准。旧线性优先级：
 
 ```text

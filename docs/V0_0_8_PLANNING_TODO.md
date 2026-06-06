@@ -33,6 +33,12 @@
 
 本阶段前半段先规划和建立流程，不直接生产大量内容，不直接进入 runtime / generated / golden。
 
+### Single-line workflow / Parking Lot
+
+v0.0.8.x 默认一次只推进一条内容设计线。当前线未形成清晰 checkpoint 前，不并行开启另一条同级内容线。新想法、新债务和相邻方向先进入 Parking Lot；只有明确阻塞当前线的问题，才临时处理，并在解除阻塞后回到原主线。
+
+当前例子：texture / drinkability round 1 已推进到 approved concept list draft 后，才适合讨论下一条 flavor / structure conflict review。这只是协作节奏说明，不开放 implementation。
+
 ## 2. 必读正本 / 裁决关系
 
 - `docs/DOCS_SOURCE_OF_TRUTH.md` 管文档层级、阶段 TODO 生命周期和冲突裁决。

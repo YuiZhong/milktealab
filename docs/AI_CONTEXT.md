@@ -42,6 +42,8 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 - 不把 v0.0.7.x 写成已完成 formal safe closure / candidate / formal tag。
 - 不把 P1 写成 solved。
 
+当前协作节奏：默认一条设计线尽量闭环后再开启下一条。当前线如果已进入 concept candidates / human review record / approved concept list draft / later structuring planning，应优先收束到清晰 checkpoint；新灵感、新债务和相邻方向先进入 Parking Lot，除非明确阻塞当前线。
+
 `reports/v0.0.7SafeClosureDecision.md` 记录：P0-A / P0-B / P0-C 已 resolved，P1 split 已足以进入 safe closure discussion / closure checkpoint preparation；这不代表 P1 solved，也不开放 v0.0.8.x / batch content / generated severity / takeover。
 
 `reports/v0.0.7ClosureCheckpointDiscussion.md` 是当前 closure checkpoint / candidate discussion report。它支持准备 docs-only closure checkpoint discussion，但不创建 candidate / formal tag，也不开放 v0.0.8.x。
