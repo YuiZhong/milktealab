@@ -1,5 +1,15 @@
 # 版本记录
 
+## draft ID proposal review round 1
+
+本轮新增 `reports/human_review/draftIdProposalReview.round1.md`，记录用户 + ChatGPT 对 Draft ID Proposal Dry-Run Round 1 的审阅结论。
+
+第一批 6 个 `proposedDraftId` 已接受为 proposal wording，可进入下一步 registry candidate row shape planning。
+
+这些 proposal wording 不是 stable ID、registry candidate 或 validator allowed values。
+
+本轮未创建 registry / enum / schema / validator，未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## astringency draft ID proposal wording fix
 
 本轮修正 `reports/human_review/draftIdProposalDryRun.round1.md` 中涩感 / 收敛感过强的 `proposedDraftId`，从 `taste_astringent_overload` 改为 `taste_astringency_overload`。
