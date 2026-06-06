@@ -1,5 +1,15 @@
 # 版本记录
 
+## first-batch structuring candidate plan
+
+本轮新增 `reports/human_review/structuringCandidatePlan.round1.md`，记录第一批适合后续 structuring planning 的自然语言概念范围。
+
+第一批候选为：甜度过载、酸度过载、苦味过载、涩感 / 收敛感、水泥感 / 粉泥感、八宝粥感。
+
+本轮未生成 stable ID / draft ID / registry candidate，未形成 validator input、rule row、正式 triggerMetric、正式阈值或正式 `scoreMultiplier`。
+
+本轮未开放 implementation / batch content / generated severity / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## v0.0.8 concept review checkpoint update
 
 本轮更新 `reports/human_review/v0.0.8ConceptReviewCheckpoint.md`，将 special sensation line 纳入当前 concept review checkpoint。

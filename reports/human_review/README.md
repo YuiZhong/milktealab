@@ -28,6 +28,7 @@
 - `flavorStructureConceptReview.round1.md` 记录第一轮风味 / 饮品结构冲突 concept candidates 的制作人审核结果；它不是 approved concept list、source-of-truth 或 runtime data。
 - `approvedConceptList.flavorStructure.round1.draft.md` 整理第一轮 flavor / structure 已通过概念的 approved concept list draft；它不是 stable ID、registry candidate 或 runtime data。
 - `v0.0.8ConceptReviewCheckpoint.md` 汇总 texture / flavor / taste 三条基础概念线的 concept review checkpoint；它不是 source-of-truth、stable ID、registry 或 runtime data。
+- `structuringCandidatePlan.round1.md` 记录第一批适合后续结构化规划的自然语言概念范围；它不是 stable ID、registry candidate 或 runtime data。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
 
 这些材料都不是 source-of-truth，也不是 runtime data。
