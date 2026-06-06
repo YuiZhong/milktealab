@@ -22,6 +22,7 @@
 - `tasteConceptReview.round1.md` 记录第一轮 taste layer concept candidates 的制作人审核结果；它不是 approved concept list、source-of-truth 或 runtime data。
 - `approvedConceptList.taste.round1.draft.md` 整理第一轮 taste layer 已通过 / 修正概念的 approved concept list draft；它不是 stable ID、registry candidate 或 runtime data。
 - `specialSensationConceptReview.round1.md` 记录第一轮 special sensation sub-channel concept candidates 的制作人审核结果；它不是 approved concept list、source-of-truth 或 runtime data。
+- `approvedConceptList.specialSensation.round1.draft.md` 整理第一轮 special sensation sub-channel 已通过概念的 approved concept list draft；它不是 stable ID、registry candidate 或 runtime data。
 - `textureConceptReview.round1.md` 记录第一轮质地 / 可饮用性 concept candidates 的制作人审核结果；它不是 approved concept list。
 - `approvedConceptList.texture.round1.draft.md` 整理第一轮 texture / drinkability 已通过概念的 approved concept list draft；它不是 stable ID、registry candidate 或 runtime data。
 - `flavorStructureConceptReview.round1.md` 记录第一轮风味 / 饮品结构冲突 concept candidates 的制作人审核结果；它不是 approved concept list、source-of-truth 或 runtime data。

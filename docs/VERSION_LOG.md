@@ -1,5 +1,17 @@
 # 版本记录
 
+## special sensation approved concept list draft
+
+本轮新增 `reports/human_review/approvedConceptList.specialSensation.round1.draft.md`，整理第一轮 special sensation sub-channel 的 approved concept list draft。
+
+本轮草案包含 5 个 approved sub-channel concepts：辣感 / 灼辣感、麻感 / 震麻感、酒精灼烧 / 挥发刺激、清凉刺激、辛香刺激 / 香料压力。
+
+本轮记录 C006 特殊刺激主题饮为 high-level / overlap / later review，不作为普通低风险机制候选进入本 round 的普通 approved list。
+
+本轮未生成 stable ID / draft ID / registry candidate，未形成 validator input 或 runtime data，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## special sensation concept review round 1
 
 本轮新增 `reports/human_review/specialSensationConceptReview.round1.md`，记录第一轮 special sensation sub-channel concept candidates 的制作人审核结果。
