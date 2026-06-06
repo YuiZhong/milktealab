@@ -1,5 +1,15 @@
 # 版本记录
 
+## registry candidate proposal round 1
+
+本轮新增 `reports/human_review/registryCandidateProposal.round1.md`，把第一批 6 个 accepted proposal wording 整理为 registry candidate proposal rows。
+
+这些 rows 只是 proposal report，不是 approved stable ID、actual registry candidate source-of-truth 或 validator allowed values。
+
+本轮未创建 registry / enum / schema / validator，未生成 allowed values，未填写正式 triggerMetric / 阈值 / `scoreMultiplier`。
+
+本轮未开放 implementation / batch content / generated severity / generated feedback / takeover，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## registry candidate row shape planning round 1
 
 本轮新增 `reports/human_review/registryCandidateRowShapePlanning.round1.md`，规划 future registry candidate row fields 和 false gates。
