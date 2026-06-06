@@ -1,5 +1,13 @@
 # 版本记录
 
+## texture concept severity principle
+
+本轮补充 `reports/human_review/textureConceptReview.round1.md` 的 severity / 表现强度原则：同一事故机制后续应通过 triggerMetric 数值区间、severityLevel、scoreMultiplier 和 feedback intensity 区分轻中重，而不是拆成多个 accidentTypeId。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 approved concept list，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## texture concept review round 1
 
 本轮新增 `reports/human_review/textureConceptReview.round1.md`，记录第一轮质地 / 可饮用性 concept candidates 的制作人审核结果。

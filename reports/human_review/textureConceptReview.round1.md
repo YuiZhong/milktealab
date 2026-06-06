@@ -30,6 +30,21 @@ Codex 不得从本文件自行生成 ID、registry row、validator rule 或 runt
 - `merge` / `reclassify` / `evidenceOnly` / `expressionTag` 只是审核结论，不是机器枚举。
 - 本轮不处理具体数值、阈值、severity、scoreMultiplier。
 
+## 1.1 Severity / 表现强度补充原则
+
+制作人补充：同一事故机制后续应通过 triggerMetric 数值区间、severityLevel、scoreMultiplier 和 feedback intensity 区分轻中重，而不是拆成多个 accidentTypeId。
+
+示例方向：
+
+- 0-40：不触发。
+- 40-60：轻度，例如轻微浑浊感 / 粗糙粉感。
+- 60-80：中度，例如喝着费劲、粉浆感明显。
+- 80-100：重度，例如水泥感、根本吸不上来。
+
+这些数值和文案只是制作人随口举例，不是正式阈值，不是正式文案，不是 runtime data。
+
+后续正式数值、severityLevel、scoreMultiplier 和文案强度必须另走 approved concept list / rule draft / validator / review 流程。
+
 ## 2. 制作人原始审核摘要
 
 ### C001｜小料多到不像饮料 / 八宝粥感
@@ -44,7 +59,7 @@ Codex 不得从本文件自行生成 ID、registry row、validator rule 或 runt
 - producerStatus: keep
 - producerDecision: 通过，水泥感 / 吸不上来是游戏最早就想到的核心概念。
 - 归档建议：机制概念候选。
-- 备注：泥、粉、渣、糊导致低流动性；区别于油腻和胶粘。
+- 备注：泥、粉、渣、糊导致低流动性；区别于油腻和胶粘。粗糙粉感 / 沙感 / 轻微粉浆感不应拆成独立 texture accident concept，应作为 C002 水泥感 / 粉泥感的低 severity 表现或文案方向。C002 可以覆盖从轻度粉感到重度水泥感的同一机制连续谱。
 
 ### C003｜吸管阻力过高
 
@@ -52,7 +67,7 @@ Codex 不得从本文件自行生成 ID、registry row、validator rule 或 runt
 - producerDecision: 不作为独立机制。更像 C001 / C002 的弱化表现或表现标签。
 - mergeTarget: C002 primary, C001 secondary
 - 归档建议：表现标签 / 严重程度线索 / 文案触发依据。
-- 备注：八宝粥感和水泥感都可能产生吸管阻力；“吸管吸瘪了”可作为表现，不单独成病名。
+- 备注：八宝粥感和水泥感都可能产生吸管阻力；“吸管吸瘪了”可作为表现，不单独成病名。吸管阻力可服务 C001 / C002 等多个机制的文案触发或严重度表达，不单独成为机制。
 
 ### C004｜奶脂 / 奶盖厚到发腻
 
