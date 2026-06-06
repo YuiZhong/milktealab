@@ -6,7 +6,7 @@ const path = require("path");
 const vm = require("vm");
 
 const repoRoot = path.resolve(__dirname, "../..");
-const defaultOutputPath = "reports/feedbackShadowReview.sample.md";
+const defaultOutputPath = "reports/human_review/feedbackShadowReview.sample.md";
 const sampleIds = [
   "classic_milk_tea",
   "extreme_lemon_accident",

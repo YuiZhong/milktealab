@@ -1,5 +1,11 @@
 # 版本记录
 
+## feedback shadow review output path alignment
+
+本轮将 `scripts/content/buildFeedbackShadowReviewPack.js` 的默认输出路径迁到 `reports/human_review/feedbackShadowReview.sample.md`，与人类审批 / 制作人评审材料目录保持一致。
+
+本轮只做 docs/tooling alignment，未改 runtime / core / data / generated / golden，未开放 implementation / batch content / generated severity / takeover，未 push，未 tag。
+
 ## human review reports organization
 
 本轮新增 `reports/human_review/`，用于集中人类审批 / 制作人评审材料。
