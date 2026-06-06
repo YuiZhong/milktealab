@@ -1,5 +1,15 @@
 # 版本记录
 
+## minimal severity sample rows validator stub
+
+本轮新增 `scripts/content/validateSeveritySampleRows.js`，作为 first 6 severity sample rows CSV / JSON examples 的最小 validator / lint stub。
+
+该脚本支持 `content_sheets/examples/severity_sample_rows.sample.csv` 和 `content_sheets/examples/severity_sample_rows.sample.json`，检查 UTF-8 BOM、required fields、18 rows、已知 `proposedDraftId`、dangerous gates false、未批准 status、`scoreMultiplierDraft`、JSON metadata 和人类友好的 boundary warnings。
+
+本轮未生成 generated severity，未接 shadow / runtime，未创建 schema / validator allowed values。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## severity sample rows example CSV / JSON
 
 本轮新增 `content_sheets/examples/severity_sample_rows.sample.csv` 和 `content_sheets/examples/severity_sample_rows.sample.json`，基于 first 6 severity dry-run rows 提供人类可读的 planning examples。
