@@ -61,6 +61,7 @@ L1 文件只写当前有效原则，不写版本流水账、commit hash、candid
 
 ```text
 docs/V0_0_7_MECHANISM_TODO.md
+docs/V0_0_8_PLANNING_TODO.md
 docs/V0_0_8_*.md
 docs/V0_0_9_*.md
 ```
@@ -83,7 +84,11 @@ docs/V0_0_9_*.md
 
 特别说明：
 
-`docs/V0_0_7_MECHANISM_TODO.md` 是 v0.0.7.x 阶段专属 TODO / 债务 / gate。它不是长期正本。当前仍处于 P0 recovery / v0.0.7.x 机制债务处理语境时，它可以作为阶段内必读。v0.0.7.x 完结后，它必须移出 AGENTS / AI_CONTEXT 的长期必读列表。
+`docs/V0_0_7_MECHANISM_TODO.md` 是 v0.0.7.x 阶段专属 TODO / 债务 / gate。它不是长期正本。v0.0.7.x 完结后，它必须移出 AGENTS / AI_CONTEXT 的长期必读列表。
+
+`docs/V0_0_8_PLANNING_TODO.md` 是 v0.0.8.x planning TODO / active stage TODO。它只负责内容管线、review pack、draft ID、registry candidate 和 validator gate 的 planning，不开放 implementation，不替代 L1 正本。
+
+`docs/V0_0_7_MECHANISM_TODO.md` 在 v0.0.8 planning TODO 建立后应降级为 historical / previous stage material，只在追溯 v0.0.7.x 债务迁移时按需读取，不再指导当前任务。
 
 ### L3：版本流水
 

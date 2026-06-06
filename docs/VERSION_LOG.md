@@ -1,5 +1,17 @@
 # 版本记录
 
+## v0.0.8 planning TODO established
+
+本轮新建 `docs/V0_0_8_PLANNING_TODO.md`，登记为 v0.0.8.x planning TODO / active stage TODO。
+
+这是 docs-only planning / docs alignment，不是 implementation，不是 formal release，不创建 candidate tag，也不创建 formal tag。
+
+本轮只规划内容管线、review pack、approved concept list、draft ID、registry candidate、validator gate 和 traceability；不生成新 ID / feedbackTag / triggerMetric / ingredient profile，不做 batch content，不改 runtime / core / data / scripts / generated / golden。
+
+P1 split accepted but not solved。`docs/V0_0_7_MECHANISM_TODO.md` 在 v0.0.8 planning 建立后降级为 previous stage material，仅作为债务迁移参考。
+
+当前仍不开放 generated severity、generated severity shadow / partial / active takeover、generated feedback takeover 或 runtime takeover。
+
 ## v0.0.7.x docs-only closure checkpoint
 
 本轮新增 `reports/v0.0.7ClosureCheckpoint.md`，作为 v0.0.7.x docs-only closure checkpoint。

@@ -49,7 +49,7 @@ P0
 
 | file | current_role | level | active_or_historical | read_policy | risk | next_action |
 |---|---|---|---|---|---|---|
-| `AI_CONTEXT.md` | 新对话导航页，指向当前正本、当前 P0 pause mode 和禁止事项 | L0 | active | always read | OK | keep |
+| `AI_CONTEXT.md` | 新对话导航页，指向当前正本、当前 planning-only 状态和禁止事项 | L0 | active | always read | OK | keep |
 | `DOCS_SOURCE_OF_TRUTH.md` | 文档层级、冲突裁决和更新归属正本 | L1 | active | always read | OK | keep |
 | `FEEDBACK_STYLE_GUIDE.md` | feedback style support doc / L1 candidate | L1 candidate / support doc | needs-review | read when relevant | P2 / P1 | role header added; decide feedback style source later |
 | `INGREDIENT_SCHEMA.md` | ingredient schema support doc / L1 candidate | L1 candidate / support doc | needs-review | read when relevant | P1 | role header added; decide L1 source vs support later |
@@ -66,14 +66,15 @@ P0
 | `V0_0_7_ID_INVENTORY.md` | v0.0.7.x ID inventory / audit evidence | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
 | `V0_0_7_ID_SOURCE_OF_TRUTH_DESIGN.md` | v0.0.7.x stable ID source-of-truth design draft / stage design | L2 | active-stage-only | read when relevant | P1 | stage-bound header added; stage-end archive |
 | `V0_0_7_MECHANISM_REVIEW_PACK_GATE_DESIGN.md` | v0.0.7.x mechanism review pack gate design | L2 | active-stage-only | read when relevant | P1 | stage-end archive |
-| `V0_0_7_MECHANISM_TODO.md` | v0.0.7.x / P0 recovery active stage TODO / debt / gate | L2 | active-stage-only | stage read | OK | archive later |
+| `V0_0_7_MECHANISM_TODO.md` | v0.0.7.x previous stage TODO / debt / gate / migration evidence | L2 | previous-stage material | read for migration only | OK | keep historical / migrate remaining debt |
+| `V0_0_8_PLANNING_TODO.md` | v0.0.8.x content pipeline / review pack / registry-validator planning TODO | L2 active stage TODO / planning | active planning-only | always read during v0.0.8 planning | OK | planning-only; no implementation |
 | `VERSION_LOG.md` | 版本流水 | L3 | active | read when relevant | OK | keep |
 
 ## 3. V0_0_7_* 文件统一规则
 
 所有 `V0_0_7_*` 文件都是 v0.0.7.x 阶段文件。
 
-当前它们可作为 v0.0.7.x P0 recovery / 机制债务处理的阶段材料，但它们不是长期正本。
+当前它们已降级为 previous-stage material / historical stage support，可在追溯 v0.0.7.x 债务迁移时按需读取，但它们不是长期正本，也不是当前 active stage TODO。
 
 v0.0.7.x 结束后：
 
@@ -81,7 +82,7 @@ v0.0.7.x 结束后：
 - 未完成且仍有效的债务，应迁移到下一阶段 TODO。
 - 长期有效原则，应沉淀进 L1 正本。
 - 原文件保留为 historical / stage support。
-- 进入 v0.0.8.x 前，不得继续把 `V0_0_7_*` 文件当默认开工依据。
+- 进入 v0.0.8 planning 后，不得继续把 `V0_0_7_*` 文件当默认开工依据。
 
 特别注意：
 
