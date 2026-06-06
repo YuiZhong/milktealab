@@ -80,10 +80,10 @@ Codex 不得从本文件自行生成 ID、registry row、validator rule 或 runt
 
 ### C007｜特殊刺激过强
 
-- producerStatus: keep / customerPreferenceSensitive
-- producerDecision: 通过。
-- 归档建议：机制概念候选或后续可按项目内容拆分，且需要顾客偏好系统参与调节。
-- 备注：辣、麻、酒精灼烧感等刺激感有人喜欢。后续不要写成 if 酒 / if 辣；应通过刺激感通道、profile、intensity、客群 tolerance 处理。
+- producerStatus: revise / splitNeeded / umbrella
+- producerDecision: 特殊刺激方向成立，但不应作为单一机制直接进入 approved concept list。
+- 归档建议：作为上位分类 / umbrella / later review。后续应拆成具体刺激通道分别审核。
+- 备注：涩感 / 收敛感已由 C006 单独保留。辣感 / 灼辣感、麻感 / 震麻感、酒精灼烧 / 挥发刺激等应作为未来子概念候选。顾客偏好 / tolerance 也应接到具体 sensation channel，而不是只接一个统一的 strongStimulation。喜欢酒精灼烧感的顾客不等于喜欢辣椒油；喜欢辣的人也不等于喜欢麻或涩。后续不要写成 if 酒 / if 辣 / if 麻，应通过 sensation profile / intensity / audience tolerance / rule table 处理。
 
 ### C008｜基础味觉整体过载
 
@@ -101,7 +101,7 @@ Codex 不得从本文件自行生成 ID、registry row、validator rule 或 runt
 | keep / mechanism candidate | C003 酸度过载 | 后续可进入 approved concept list 草案讨论，酸味原料只作 evidence |
 | keep / customerPreferenceSensitive | C004 苦味过载 | 后续需要顾客偏好 / tolerance 参与调节 |
 | keep / customerPreferenceSensitive | C006 涩感 / 收敛感过强 | 后续需要顾客偏好 / tolerance 参与调节 |
-| keep / customerPreferenceSensitive | C007 特殊刺激过强 | 后续需要顾客偏好 / tolerance 参与调节 |
+| revise / splitNeeded / umbrella / later review | C007 特殊刺激过强 | 不进入本轮 approved concept list as standalone mechanism；未来可拆分为辣感过载、麻感过载、酒精灼烧 / 挥发刺激过强等候选，再单独 concept review |
 | revise | C005 改为“咸味过载”，去掉“咸甜失衡”作为事故方向 | 咸甜组合本身不应被惩罚 |
 | keep / highRisk | C008 基础味觉整体过载 | 高风险，不能简单累加所有 flavor identity |
 
@@ -111,7 +111,8 @@ Codex 不得从本文件自行生成 ID、registry row、validator rule 或 runt
 - 下一步若继续，应先由 ChatGPT / 用户把 keep / revise 后成立的项整理成 approved concept list 草案。
 - Codex 不能直接根据本文件生成 stable ID。
 - Codex 不能直接把 keep 项写入 registry / validator / runtime。
-- C004 / C006 / C007 后续必须考虑顾客偏好 / tolerance，不能默认所有顾客都讨厌苦、涩、刺激。
+- C004 / C006 后续必须考虑顾客偏好 / tolerance，不能默认所有顾客都讨厌苦、涩。
+- C007 不能作为单一 accident concept 直接结构化。特殊刺激可作为上位分类，但具体顾客偏好和事故判断应落在更具体的刺激通道上，例如辣感 / 灼辣感、麻感 / 震麻感、酒精灼烧 / 挥发刺激等。
 - C005 应按“咸味过载”继续，不应把咸甜组合本身判成事故。
 - C008 后续必须重点防误算 flavor identity，不能简单把所有 flavor identity 加入 taste overload。
 - 本轮不处理顾客系统，不实现 taste layer，不调数值。

@@ -1,5 +1,15 @@
 # 版本记录
 
+## taste stimulation concept boundary
+
+本轮修正 `reports/human_review/tasteConceptReview.round1.md` 中 C007 特殊刺激过强的归档边界。
+
+C007 现在标记为 umbrella / splitNeeded / later review，不作为单一机制直接进入 approved concept list。涩感 / 收敛感已由 C006 单独保留；辣感、麻感、酒精灼烧 / 挥发刺激等应作为未来子概念候选单独 review。
+
+本轮未生成新 ID / draft ID / registry candidate，未形成 approved concept list，未开放 implementation / batch content / generated severity / takeover。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## cross-layer customer preference principle
 
 本轮补充 cross-layer customer preference / audience tolerance 设计原则。
