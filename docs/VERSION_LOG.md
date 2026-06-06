@@ -1,5 +1,13 @@
 # 版本记录
 
+## severity sample rows example CSV / JSON
+
+本轮新增 `content_sheets/examples/severity_sample_rows.sample.csv` 和 `content_sheets/examples/severity_sample_rows.sample.json`，基于 first 6 severity dry-run rows 提供人类可读的 planning examples。
+
+这些 examples 不等于 generated severity、runtime data、official threshold table 或 official `scoreMultiplier` table。
+
+本轮未实现 validator，未开放 generated severity / shadow / runtime，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## minimal severity validator stub planning round 1
 
 本轮新增 `reports/human_review/minimalSeverityValidatorStubPlanning.round1.md`，规划 future 第一版 severity validator / lint stub 的输入、输出、CLI、退出码和人类友好报错格式。
