@@ -427,8 +427,11 @@ function createRenderer(app) {
 
     const composedText = document.createElement("p");
     composedText.textContent = composedDrinkType
-      ? `组合类型：${composedDrinkType.composedTypeLabel || "待观察"}；broad ID：${composedDrinkType.drinkTypeId || "无"}；modifier：${Array.isArray(composedDrinkType.modifierIdentityTags) && composedDrinkType.modifierIdentityTags.length ? composedDrinkType.modifierIdentityTags.join(" / ") : "无"}；fallback：${composedDrinkType.fallbackReason || "无"}。`
+      ? `组合类型（debug）：${composedDrinkType.composedTypeLabel || "待观察"}；broad ID：${composedDrinkType.drinkTypeId || "无"}；modifier：${Array.isArray(composedDrinkType.modifierIdentityTags) && composedDrinkType.modifierIdentityTags.length ? composedDrinkType.modifierIdentityTags.join(" / ") : "无"}；fallback：${composedDrinkType.fallbackReason || "无"}。`
       : "组合类型：本轮没有普通饮品类型 composer 输出，可能是事故优先或 composer fallback。";
+
+    const displayText = document.createElement("p");
+    displayText.textContent = `主显示来源：${unifiedJudgment?.displayTypeSource || "待观察"}；主显示：${unifiedJudgment?.primaryDisplayType || unifiedJudgment?.type || "待观察"}；问题显示：${unifiedJudgment?.problemDisplayType || "无"}；普通组合名：${unifiedJudgment?.normalComposedTypeLabel || "无"}。`;
 
     const unifiedFeedback = unifiedJudgment?.unifiedFeedback || null;
     const feedbackSource = unifiedFeedback?.sourcePressure?.pressureKey
@@ -458,7 +461,7 @@ function createRenderer(app) {
       warningList.append(item);
     }
 
-    block.append(title, reasonText, composedText, feedbackText, warningList);
+    block.append(title, reasonText, displayText, composedText, feedbackText, warningList);
     return block;
   }
 
@@ -572,6 +575,11 @@ function createRenderer(app) {
     appendSuggestionMeta(meta, "旧系统 outcome ID", result?.legacyOutcomeTypeId || "无");
     appendSuggestionMeta(meta, "旧系统 feedback", unifiedJudgment?.legacyComparison?.legacyFeedback || "无");
     appendSuggestionMeta(meta, "Unified 类型", unifiedJudgment?.type || "待观察");
+    appendSuggestionMeta(meta, "Unified 显示来源", unifiedJudgment?.displayTypeSource || "无");
+    appendSuggestionMeta(meta, "Unified 主显示", unifiedJudgment?.primaryDisplayType || "无");
+    appendSuggestionMeta(meta, "Unified 问题显示", unifiedJudgment?.problemDisplayType || "无");
+    appendSuggestionMeta(meta, "Unified 普通组合名", unifiedJudgment?.normalComposedTypeLabel || "无");
+    appendSuggestionMeta(meta, "Unified 显示优先级", unifiedJudgment?.displayPriorityReason || "无");
     appendSuggestionMeta(meta, "Unified 事故 ID", unifiedJudgment?.accidentTypeId || "无");
     appendSuggestionMeta(meta, "Unified 饮品 ID", unifiedJudgment?.drinkTypeId || "无");
     appendSuggestionMeta(meta, "Unified outcome ID", unifiedJudgment?.outcomeTypeId || "无");

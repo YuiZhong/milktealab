@@ -496,6 +496,9 @@ function formatUnifiedJudgment(unifiedJudgment) {
   const unifiedFeedback = unifiedJudgment.unifiedFeedback || null;
   return [
     `type:${unifiedJudgment.type || "n/a"}`,
+    `displaySource:${unifiedJudgment.displayTypeSource || "none"}`,
+    `problemType:${unifiedJudgment.problemDisplayType || "none"}`,
+    `normalComposed:${unifiedJudgment.normalComposedTypeLabel || "none"}`,
     `accident:${unifiedJudgment.accidentTypeId || "none"}`,
     `drink:${unifiedJudgment.drinkTypeId || "none"}`,
     `outcome:${unifiedJudgment.outcomeTypeId || "none"}`,

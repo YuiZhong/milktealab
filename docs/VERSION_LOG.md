@@ -1,5 +1,11 @@
 # 版本记录
 
+## v0.0.8.33 accident-dominant display priority
+
+本轮修正 playtest unified judgment 的显示优先级：当事故 / 压力已经主导时，页面主显示优先表达问题类型，普通 composed drink label 只保留为 debug 对照。
+
+本轮未调分、未改 profile、未改 golden expected、未写 `data/generated`、未新增 report、未新增 recipe whitelist / sample-specific if / display text key，未 push，未 tag。
+
 ## v0.0.8.31 playtest unified scoring calibration v1
 
 本轮在 default unified judgment + v0.0.8.15 anchor profile 生效后，校准 `core/unifiedScoringEngine.js` 的 pressure bands、support / balance、aggregation 和 broad type structural coherence，使正常饮品回到可试玩区间，同时保持极端甜 / 酸 / 苦 / 奶脂 / 低流动性 / 固体负载低分。

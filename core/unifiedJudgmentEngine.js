@@ -3,7 +3,7 @@ const { clamp } = window.MILK_TEA_LAB_HELPERS;
 const drinkTypeComposer = window.MILK_TEA_LAB_DRINK_TYPE_COMPOSER;
 const unifiedFeedbackComposer = window.MILK_TEA_LAB_UNIFIED_FEEDBACK_COMPOSER;
 
-const schemaVersion = "unifiedJudgment.v0.0.8.28";
+const schemaVersion = "unifiedJudgment.v0.0.8.33";
 
 const pressureJudgmentRules = {
   sweetnessPressure: {
@@ -77,6 +77,18 @@ function shouldTreatAsAccident(pressure, score) {
   return pressure.severityLevel === "medium" && isNumber(score) && score <= 42;
 }
 
+function compactPressureForJudgment(pressure) {
+  if (!pressure) return null;
+  return {
+    pressureKey: pressure.pressureKey || null,
+    sourceLayer: pressure.sourceLayer || null,
+    triggerMetric: pressure.triggerMetric || null,
+    severityLevel: pressure.severityLevel || null,
+    observedValue: isNumber(pressure.observedValue) ? rounded(pressure.observedValue) : null,
+    adjustedPenalty: isNumber(pressure.adjustedPenalty) ? rounded(pressure.adjustedPenalty) : null
+  };
+}
+
 function buildDrinkTypeCandidate(input, warnings) {
   const composedDrinkType = drinkTypeComposer?.composeDrinkType
     ? drinkTypeComposer.composeDrinkType({
@@ -111,11 +123,10 @@ function buildDrinkTypeCandidate(input, warnings) {
   };
 }
 
-function buildPressureJudgment(input, warnings) {
-  const pressure = getDominantPressure(input.unifiedScoring);
+function buildPressureJudgmentFromPressure(pressure, score, warnings, reason) {
   const rule = pressure ? pressureJudgmentRules[pressure.pressureKey] : null;
 
-  if (!pressure || !rule || !shouldTreatAsAccident(pressure, input.unifiedScoring?.score)) {
+  if (!pressure || !rule || !shouldTreatAsAccident(pressure, score)) {
     return null;
   }
 
@@ -129,8 +140,86 @@ function buildPressureJudgment(input, warnings) {
     outcomeTypeId: rule.outcomeTypeId || null,
     feedbackTags: rule.feedbackTags,
     feedback: rule.feedback,
-    reason: `${pressure.pressureKey} reached ${pressure.severityLevel} as playtest unified judgment.`
+    reason: reason || `${pressure.pressureKey} reached ${pressure.severityLevel} as playtest unified judgment.`
   };
+}
+
+function buildPressureJudgment(input, warnings) {
+  const pressure = getDominantPressure(input.unifiedScoring);
+  return buildPressureJudgmentFromPressure(
+    pressure,
+    input.unifiedScoring?.score,
+    warnings
+  );
+}
+
+function getPressureByKey(unifiedScoring, pressureKey) {
+  const pressures = Array.isArray(unifiedScoring?.pressures) ? unifiedScoring.pressures : [];
+  return pressures.find(pressure => pressure?.pressureKey === pressureKey) || null;
+}
+
+function buildTextureFloorBlockerPressure(unifiedScoring) {
+  const structuralCoherence = unifiedScoring?.structuralCoherence || {};
+  if (!structuralCoherence.blockedByTexturePressure) return null;
+
+  const blockerKeys = Array.isArray(structuralCoherence.floorBlockerKeys)
+    ? structuralCoherence.floorBlockerKeys
+    : [];
+  const pressureKeys = Array.isArray(structuralCoherence.floorBlockerPressureKeys)
+    ? structuralCoherence.floorBlockerPressureKeys
+    : [];
+  const pressureKey = pressureKeys.includes("lowFlowPressure")
+    ? "lowFlowPressure"
+    : pressureKeys.includes("solidLoadPressure") || blockerKeys.includes("highTextureModifierLoad")
+      ? "solidLoadPressure"
+      : null;
+  if (!pressureKey) return null;
+
+  const existingPressure = getPressureByKey(unifiedScoring, pressureKey);
+  if (existingPressure) {
+    return {
+      ...existingPressure,
+      severityLevel: existingPressure.severityLevel === "info" || existingPressure.severityLevel === "light"
+        ? "medium"
+        : existingPressure.severityLevel,
+      matched: true,
+      adjustedPenalty: isNumber(existingPressure.adjustedPenalty) && existingPressure.adjustedPenalty > 0
+        ? existingPressure.adjustedPenalty
+        : 1,
+      reason: `${pressureKey} selected because structural score floor was blocked by texture pressure.`
+    };
+  }
+
+  return {
+    pressureKey,
+    sourceLayer: "texture",
+    triggerMetric: pressureKey === "lowFlowPressure" ? "drinkabilityPenalty" : "solidLoad",
+    observedValue: null,
+    severityLevel: "medium",
+    adjustedPenalty: 1,
+    matched: true,
+    reason: `${pressureKey} selected because structural score floor was blocked by texture pressure.`
+  };
+}
+
+function buildStructuralFloorJudgment(input, warnings) {
+  const unifiedScoring = input.unifiedScoring || {};
+  const pressure = buildTextureFloorBlockerPressure(unifiedScoring);
+  if (!pressure) return null;
+  const score = unifiedScoring.score;
+  if (!isNumber(score) || score > 42) return null;
+
+  return buildPressureJudgmentFromPressure(
+    pressure,
+    score,
+    warnings,
+    `${pressure.pressureKey} selected as accident-dominant display because structural floor was blocked by texture pressure.`
+  );
+}
+
+function buildAccidentDominantJudgment(input, warnings) {
+  return buildPressureJudgment(input, warnings)
+    || buildStructuralFloorJudgment(input, warnings);
 }
 
 function uniqueItems(items) {
@@ -156,8 +245,9 @@ function buildFeedback(judgment, drinkTypeCandidate, unifiedScoring) {
   return `${base}${support}${source}`;
 }
 
-function buildJudgmentReasons(judgment, drinkTypeCandidate, unifiedScoring) {
+function buildJudgmentReasons(judgment, drinkTypeCandidate, unifiedScoring, displayPriorityReason) {
   const reasons = [];
+  if (displayPriorityReason) reasons.push(displayPriorityReason);
   if (judgment) reasons.push(judgment.reason);
   if (drinkTypeCandidate?.reason) reasons.push(drinkTypeCandidate.reason);
   (Array.isArray(unifiedScoring?.scoreReasons) ? unifiedScoring.scoreReasons : []).slice(0, 3).forEach(reason => {
@@ -172,9 +262,16 @@ function buildUnifiedJudgment(input = {}) {
     "playtest unified judgment takeover only; not final production takeover.",
     "does not affect golden expected; legacy route remains available for rollback/debug."
   ];
-  const pressureJudgment = buildPressureJudgment(input, warnings);
-  const drinkTypeCandidate = pressureJudgment ? null : buildDrinkTypeCandidate(input, warnings);
+  const drinkTypeCandidate = buildDrinkTypeCandidate(input, warnings);
+  const pressureJudgment = buildAccidentDominantJudgment(input, warnings);
   const finalCandidate = pressureJudgment || drinkTypeCandidate || {};
+  const displayTypeSource = pressureJudgment ? "accident_dominant" : "composed_drink_type";
+  const normalComposedTypeLabel = drinkTypeCandidate?.composedDrinkType?.composedTypeLabel || null;
+  const problemDisplayType = pressureJudgment?.type || null;
+  const primaryDisplayType = finalCandidate.type || "实验特调（试玩）";
+  const displayPriorityReason = pressureJudgment
+    ? `display_priority:accident_dominant:${pressureJudgment.pressure?.pressureKey || "unknown_pressure"}; normal composed label kept for debug only.`
+    : "display_priority:composed_drink_type:no accident-dominant pressure selected.";
   const score = isNumber(unifiedScoring.score) ? rounded(clamp(unifiedScoring.score)) : null;
   const legacy = input.legacyComparison || {};
   const fallbackFeedbackTags = uniqueItems([
@@ -210,17 +307,24 @@ function buildUnifiedJudgment(input = {}) {
     affectsOutcome: true,
     affectsGoldenExpected: false,
     score,
-    type: finalCandidate.type || "实验特调（试玩）",
+    type: primaryDisplayType,
+    displayTypeSource,
+    primaryDisplayType,
+    problemDisplayType,
+    normalComposedTypeLabel,
+    composerDrinkTypeId: drinkTypeCandidate?.composedDrinkType?.drinkTypeId || drinkTypeCandidate?.drinkTypeId || null,
+    displayPriorityReason,
     accidentTypeId: finalCandidate.accidentTypeId || null,
     drinkTypeId: finalCandidate.drinkTypeId || null,
     outcomeTypeId: finalCandidate.outcomeTypeId || null,
-    composedDrinkType: finalCandidate.composedDrinkType || null,
+    composedDrinkType: drinkTypeCandidate?.composedDrinkType || null,
     feedback,
     feedbackTags,
     unifiedFeedback,
     dominantPressure: unifiedScoring.dominantPressure || null,
+    displayPriorityPressure: compactPressureForJudgment(pressureJudgment?.pressure || null),
     scoreReasons: Array.isArray(unifiedScoring.scoreReasons) ? unifiedScoring.scoreReasons : [],
-    judgmentReasons: buildJudgmentReasons(pressureJudgment, drinkTypeCandidate, unifiedScoring),
+    judgmentReasons: buildJudgmentReasons(pressureJudgment, drinkTypeCandidate, unifiedScoring, displayPriorityReason),
     warnings,
     legacyComparison: {
       legacyScore: legacy.legacyScore ?? null,
