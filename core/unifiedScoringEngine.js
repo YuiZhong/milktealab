@@ -142,8 +142,8 @@ const supportTargets = {
 };
 
 const identityConflictSupportTargets = [
-  { supportKey: "dairySupport", ratio: 1.05 },
-  { supportKey: "sweetnessBalance", ratio: 0.7 }
+  { supportKey: "dairySupport", ratio: 2.2 },
+  { supportKey: "sweetnessBalance", ratio: 1.1 }
 ];
 
 const secondaryContributionFactors = [1, 0.35, 0.22, 0.14, 0.08];
@@ -294,6 +294,14 @@ function getSupportTargets(pressure) {
   return supportTargets[pressure.pressureKey] || [];
 }
 
+function getSupportCap(pressure) {
+  if (pressure.pressureKey === "strongIdentityPressure" && pressure.triggerMetric === "identityConflictRisk") {
+    if (pressure.severityLevel === "critical") return 0.55;
+    if (pressure.severityLevel === "heavy") return 0.8;
+  }
+  return severitySupportCap(pressure.severityLevel);
+}
+
 function applySupport(pressures, supportState, warnings) {
   const balances = [];
 
@@ -303,7 +311,7 @@ function applySupport(pressures, supportState, warnings) {
     const targets = getSupportTargets(pressure);
     if (!targets.length) return;
 
-    const maxSupport = pressure.rawPenalty * severitySupportCap(pressure.severityLevel);
+    const maxSupport = pressure.rawPenalty * getSupportCap(pressure);
     let supportTotal = 0;
 
     targets.forEach(target => {
