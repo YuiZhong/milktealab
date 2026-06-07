@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.2 multi-sample generated severity shadow output
+
+本轮新增 `reports/debug/generatedSeverityShadow.multiSample.sample.json`，基于现有 Node-only / debug-only / read-only generated severity shadow proof，对多个 golden samples 生成 multi-sample debug shadow output。
+
+该输出保留 non-final flags：不影响 final result / score / feedback / result type / golden expected，不是 runtime data，不是 generated severity data，不写入 `data/generated`。
+
+`matchState` wording 已改为 observation-style，例如 `metric_observed_positive` / `metric_observed_zero`，避免把“看见指标”误读为“正式触发事故”。
+
+本轮未改 runtime / core / data / generated / golden，未开放 implementation / batch content / generated severity takeover，未 push，未 tag。
+
 ## minimal generated severity shadow proof
 
 本轮新增第一版 Node-only / debug-only / read-only generated severity shadow proof。

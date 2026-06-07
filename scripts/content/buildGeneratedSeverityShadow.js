@@ -292,10 +292,10 @@ function buildMatch(row, legacySnapshots) {
   }
 
   return {
-    matchState: positiveMetric ? "matched" : "not_matched",
+    matchState: positiveMetric ? "metric_observed_positive" : "metric_observed_zero",
     matchReason: positiveMetric
-      ? "An exact numeric summary metric is available and positive; observation only."
-      : "An exact numeric summary metric is available but not positive; observation only.",
+      ? "An exact numeric summary metric is available and positive; shadow observation only, not final accident, official severity, or official triggerMetric registry hit."
+      : "An exact numeric summary metric is available but not positive; shadow observation only, not final accident, official severity, or official triggerMetric registry hit.",
     evidence
   };
 }

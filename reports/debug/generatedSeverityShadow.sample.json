@@ -17,7 +17,7 @@
   "validatorIsActiveValidator": false,
   "metadata": {
     "generatedAt": null,
-    "sourceCommit": "a18ecb938ddc683650655686399666aa0c12bbac",
+    "sourceCommit": "ab759f903b61ee8bf9aa62c1a727f32e3c4dc397",
     "builderMode": "node_only_debug_readonly_proof",
     "shadowCandidateCount": 18,
     "legacySnapshotCount": 1,
@@ -1176,8 +1176,8 @@
       "triggerMetricDirection": "solidLoad",
       "humanSeverityLabel": "light / 轻度",
       "severityLevelDraft": "light_draft",
-      "matchState": "matched",
-      "matchReason": "An exact numeric summary metric is available and positive; observation only.",
+      "matchState": "metric_observed_positive",
+      "matchReason": "An exact numeric summary metric is available and positive; shadow observation only, not final accident, official severity, or official triggerMetric registry hit.",
       "evidence": [
         {
           "sampleId": "classic_milk_tea",
@@ -1218,8 +1218,8 @@
       "triggerMetricDirection": "solidLoad",
       "humanSeverityLabel": "medium / 中度",
       "severityLevelDraft": "medium_draft",
-      "matchState": "matched",
-      "matchReason": "An exact numeric summary metric is available and positive; observation only.",
+      "matchState": "metric_observed_positive",
+      "matchReason": "An exact numeric summary metric is available and positive; shadow observation only, not final accident, official severity, or official triggerMetric registry hit.",
       "evidence": [
         {
           "sampleId": "classic_milk_tea",
@@ -1260,8 +1260,8 @@
       "triggerMetricDirection": "solidLoad",
       "humanSeverityLabel": "heavy / 重度",
       "severityLevelDraft": "heavy_draft",
-      "matchState": "matched",
-      "matchReason": "An exact numeric summary metric is available and positive; observation only.",
+      "matchState": "metric_observed_positive",
+      "matchReason": "An exact numeric summary metric is available and positive; shadow observation only, not final accident, official severity, or official triggerMetric registry hit.",
       "evidence": [
         {
           "sampleId": "classic_milk_tea",
