@@ -1,6 +1,6 @@
 (function() {
 function bindDomEvents(app) {
-  const { el, state, recipeEngine, evaluateCup, saveStorage, groups, ui } = app;
+  const { el, state, recipeEngine, evaluateCup, saveStorage, groups, ui, calibrationPresets = [] } = app;
   const { clamp } = window.MILK_TEA_LAB_HELPERS;
   const recipeNormalizer = window.MILK_TEA_LAB_RECIPE_NORMALIZER;
 
@@ -76,6 +76,14 @@ function bindDomEvents(app) {
     ui.render();
   }
 
+  function loadCalibrationPreset(presetId) {
+    const preset = calibrationPresets.find(item => item.id === presetId);
+    if (!preset) return;
+    state.cup = recipeNormalizer.normalizeSavedCup(preset.cup);
+    state.lastResult = null;
+    ui.render();
+  }
+
   function saveRecipe() {
     if (!canTaste()) return;
     const result = state.lastResult || evaluateCup(state.cup);
@@ -138,6 +146,12 @@ function bindDomEvents(app) {
     removeIngredient(Number(row.dataset.index));
   });
 
+  el.calibrationPresets?.addEventListener("click", event => {
+    const button = event.target.closest('[data-action="load-calibration-preset"]');
+    if (!button) return;
+    loadCalibrationPreset(button.dataset.presetId);
+  });
+
   el.tasteBtn.addEventListener("click", () => {
     state.lastResult = evaluateCup(state.cup);
     ui.renderTasteReport(state.lastResult);
@@ -185,6 +199,7 @@ function bindDomEvents(app) {
     removeIngredient,
     randomCup,
     clearCup,
+    loadCalibrationPreset,
     saveRecipe,
     loadRecipe,
     totalRatio,

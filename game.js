@@ -2,6 +2,7 @@ const { groups } = window.MILK_TEA_LAB_INGREDIENTS;
 const recipeEngine = window.MILK_TEA_LAB_RECIPE_ENGINE;
 const { evaluateCup } = window.MILK_TEA_LAB_TASTE_JUDGE;
 const saveStorage = window.MILK_TEA_LAB_SAVE_STORAGE;
+const calibrationPresets = window.MILK_TEA_LAB_CALIBRATION_PRESETS?.calibrationPresets || [];
 const categoryByName = new Map(groups.flatMap(group => group.items.map(item => [item, group.name])));
 
 const state = {
@@ -18,6 +19,7 @@ const el = {
   cupNote: document.querySelector("#cup-note"),
   visualFill: document.querySelector(".visual-fill"),
   visualToppings: document.querySelector("#visual-toppings"),
+  calibrationPresets: document.querySelector("#calibration-presets"),
   tasteBtn: document.querySelector("#taste-btn"),
   randomBtn: document.querySelector("#random-btn"),
   balanceBtn: document.querySelector("#balance-btn"),
@@ -47,6 +49,7 @@ const app = {
   evaluateCup,
   saveStorage
 };
+app.calibrationPresets = calibrationPresets;
 
 app.ui = window.MILK_TEA_LAB_RENDER.createRenderer(app);
 app.events = window.MILK_TEA_LAB_EVENTS.bindDomEvents(app);

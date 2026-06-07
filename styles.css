@@ -328,6 +328,75 @@ h1 {
   padding: 0 18px 18px;
 }
 
+.calibration-presets {
+  display: grid;
+  gap: 10px;
+  padding: 0 18px 16px;
+}
+
+.calibration-presets-details {
+  border: 1px dashed #dfcfc0;
+  border-radius: 8px;
+  background: #fffaf2;
+}
+
+.calibration-presets-details summary {
+  min-height: 38px;
+  padding: 9px 11px;
+  color: #6b5146;
+  font-size: 0.9rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.calibration-presets-head {
+  display: grid;
+  gap: 4px;
+  padding: 0 11px 8px;
+}
+
+.calibration-presets-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.calibration-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 11px 11px;
+}
+
+.calibration-preset-button {
+  display: grid;
+  gap: 3px;
+  min-height: 54px;
+  padding: 8px 10px;
+  border: 1px solid #eaded0;
+  border-radius: 8px;
+  color: #3b2b25;
+  text-align: left;
+  background: #fff6ec;
+}
+
+.calibration-preset-button:hover {
+  background: #fffdf9;
+  box-shadow: 0 7px 15px rgba(92, 61, 42, 0.11);
+}
+
+.calibration-preset-button span {
+  font-weight: 900;
+}
+
+.calibration-preset-button small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .empty-state {
   color: var(--muted);
   font-weight: 700;
@@ -739,6 +808,10 @@ h1 {
   .actions-core,
   .actions-secondary {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .calibration-presets-grid {
+    grid-template-columns: 1fr;
   }
 
 }

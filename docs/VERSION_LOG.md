@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.8 page-visible calibration presets
+
+本轮新增页面 calibration presets 快捷入口，用于快速载入代表性配方，观察 legacy score vs generated severity suggestion。
+
+这些 presets 是制作人 / debug helper，默认放在可折叠小区块中，不是正式玩家 UI，不是 golden expected，不是 runtime source-of-truth，不进入 scoring logic。
+
+本轮不改 final score / feedback / result.type / accident / golden expected，未写 `data/generated`，未做 final override / active takeover，未 push，未 tag。
+
 ## v0.0.8.7 Chinese display labels for generated severity suggestion UI
 
 本轮为页面 generated severity suggestion / calibration review 增加中文展示标签。

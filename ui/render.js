@@ -1,6 +1,6 @@
 (function() {
 function createRenderer(app) {
-  const { groups, categoryByName, el, state, recipeEngine } = app;
+  const { groups, categoryByName, el, state, recipeEngine, calibrationPresets = [] } = app;
   const { clamp, displayName } = window.MILK_TEA_LAB_HELPERS;
   const ingredientRegistry = window.MILK_TEA_LAB_INGREDIENT_REGISTRY;
   const recipeNormalizer = window.MILK_TEA_LAB_RECIPE_NORMALIZER;
@@ -143,6 +143,50 @@ function createRenderer(app) {
     el.visualFill.style.height = `${clamp(total * 0.8, 18, 88)}%`;
     el.visualFill.style.background = makeCupGradient();
     renderToppings();
+  }
+
+  function renderCalibrationPresets() {
+    if (!el.calibrationPresets) return;
+    const wasOpen = Boolean(el.calibrationPresets.querySelector("details")?.open);
+    el.calibrationPresets.innerHTML = "";
+
+    const details = document.createElement("details");
+    details.className = "calibration-presets-details";
+    details.open = wasOpen;
+
+    const summary = document.createElement("summary");
+    summary.textContent = "制作人校准样本 / Debug";
+
+    const heading = document.createElement("div");
+    heading.className = "calibration-presets-head";
+
+    const description = document.createElement("p");
+    description.textContent = "点击载入代表配方，再试喝观察新旧分数差。此区块是制作人调试入口，不是正式玩家 UI。";
+
+    heading.append(description);
+
+    const grid = document.createElement("div");
+    grid.className = "calibration-presets-grid";
+
+    calibrationPresets.forEach(preset => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "calibration-preset-button";
+      button.dataset.action = "load-calibration-preset";
+      button.dataset.presetId = preset.id;
+
+      const label = document.createElement("span");
+      label.textContent = preset.title;
+
+      const note = document.createElement("small");
+      note.textContent = preset.note || "载入后再点击试喝。";
+
+      button.append(label, note);
+      grid.append(button);
+    });
+
+    details.append(summary, heading, grid);
+    el.calibrationPresets.append(details);
   }
 
   function makeCupGradient() {
@@ -552,6 +596,7 @@ function createRenderer(app) {
 
   function render() {
     renderCup();
+    renderCalibrationPresets();
     updateSelectedIngredientButtons();
     renderTasteReport(state.lastResult);
   }
@@ -559,6 +604,7 @@ function createRenderer(app) {
   return {
     renderIngredients,
     renderCup,
+    renderCalibrationPresets,
     renderCupMeta,
     syncRatioControls,
     renderTasteReport,
