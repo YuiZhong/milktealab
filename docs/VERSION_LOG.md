@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.26 ingredient composition / display-role tag gate
+
+本轮新增 `data/ingredientCompositionTags.js`，为 37/37 原料补齐 stable composition / role / base / identity / display-role tags，作为未来 composable drink type labeler 的干净输入。
+
+新增 `scripts/content/checkIngredientCompositionTags.js`，校验 37/37 覆盖、tag 形状、禁止中文 / display category / recipe combo tag 进入机制 key，并确认白糖为 `hidden_balance`、小料保留具体 identityTags、抹茶 / 可可不继承旧“水果/风味”语义。
+
+本轮不是 drinkType composer，不新增 report，不改 core / ui / scoring / runtime / data/generated / golden expected，未 push，未 tag。
+
 ## v0.0.8.25 playtest unified judgment takeover scaffold
 
 本轮新增 `core/unifiedJudgmentEngine.js`，建立第一版可试玩 unified judgment engine：基于 unified scoring result、taste / texture / flavor summary、pressure、balance 和 candidate shell 输出试玩版 type / accident / drinkType / outcome / feedback。

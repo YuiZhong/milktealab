@@ -119,6 +119,7 @@ v0.0.8.x 默认一次只推进一条内容设计线。当前线未形成清晰 c
 ### First implementation queue
 
 0. Done for non-final gate：v0.0.8.22 已建立 minimum scoring registry / validator gate，覆盖 pressureKey / triggerMetric / severityLevel / sourceLayer / ruleId / scoreRuleStatus 的最小 allowed values；它不是 active validator，不接 runtime / final score / golden。
+0a. Done for drink type composer input gate：v0.0.8.26 已新增 `data/ingredientCompositionTags.js` 与 `scripts/content/checkIngredientCompositionTags.js`，覆盖 37/37 原料的 stable composition / role / display-role tags；它不是 drinkType composer，不接 runtime / scoring / golden。
 1. P0：补 high sweetness overload 的 non-final scoring suggestion rule，并保留反 if gate。
 2. P0：补 `bitterPressure` / `dairySupport` / `sweetnessBalance` 的通用 pressure balance shape。
 3. P1：补 powder / sediment ratio + `liquidSupport` 的 non-final 判断雏形。
