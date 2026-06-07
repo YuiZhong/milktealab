@@ -1,5 +1,13 @@
 # 版本记录
 
+## generated severity shadow read path planning round 1
+
+本轮新增 `reports/human_review/generatedSeverityShadowReadPathPlanning.round1.md`，规划 future generated severity shadow builder 的输入来源 / read path。
+
+该 report 只设计未来应如何读取 sample CSV / JSON、现有 result snapshot、summary / candidate 结构和 validator diagnostics；不实现 shadow builder，不生成 generated severity，不接 runtime / final result / golden expected。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## generated severity shadow shape planning round 1
 
 本轮新增 `reports/human_review/generatedSeverityShadowShapePlanning.round1.md`，规划 future `generatedSeverityShadow` 的输出结构、metadata、legacy comparison、sample row trace、candidate / severity draft 字段和 hard non-final boundary。
