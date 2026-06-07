@@ -58,6 +58,76 @@ v0.0.8.x 默认一次只推进一条内容设计线。当前线未形成清晰 c
 
 当前例子：texture / drinkability round 1 已推进到 approved concept list draft 后，才适合讨论下一条 flavor / structure conflict review。这只是协作节奏说明，不开放 implementation。
 
+## Calibration blocker inventory / implementation queue
+
+本节记录进入正式调优前必须补齐的字段、机制和技术债。它是 implementation queue，不是新 report，不批准 runtime / generated / golden 变更，也不允许写 recipe whitelist、sample-specific if 或 displayName / 中文名主键。
+
+优先级含义：
+
+- P0：进入下一轮 non-final scoring calibration 前必须补，否则会白调。
+- P1：进入 partial / active takeover 前必须补。
+- P2：可后续完善，不阻塞当前 calibration loop。
+
+### A. Missing profile / taste fields
+
+- P1 `saltiness`：海盐需要正式 numeric taste field，不能长期借 `weirdness` / `savoryRisk`。先作为 tasteProfile / tasteSummary schema gap，不创建 accidentTypeId。
+- P1 `astringency`：茶涩 / 收敛感与 `bitterness` 不完全相同，后续茶类校准需要单独表达。
+- P2 其他基础味觉字段缺口：只有在明确阻塞样本校准或制作人 review 后再补，不为“看起来完整”发明字段。
+
+### B. Missing pressure / summary fields
+
+- P0 `sweetnessPressure`：高甜事故和 scoreDelta 不应继续靠样本直觉临时判断。
+- P0 `bitterPressure` + `dairySupport` + `sweetnessBalance`：咖啡 / 抹茶 / 可可与奶、甜之间需要 summary / scoring / balance 层表达，不能写成具体配方 if。
+- P1 `acidPressure`：酸度需要区分清爽偏酸与高酸压力。
+- P1 `fatPressure` / `dairyFatPressure`：奶脂油腻负担属于 mouthfeel / scoring pressure，不等于低流动性。
+- P1 `powderPressure`：粉泥 / 沉淀 / 粉浆压力需要从 texture summary 进入 scoring。
+- P1 `strongIdentityPressure`：榴莲、咖啡、抹茶、可可等强身份需要通用 support / conflict 判断。
+- P1 `liquidSupport`：小料、粉泥、固体负载应结合液体支撑判断。
+- P1 `drinkTypeExpectation`：正向饮品预期应作为 generic structure，不写具体饮品白名单。
+
+### C. Texture / mouthfeel gaps
+
+- P1 `powderLoad` / `slurryLoad`：用于粉泥、糊状、低流动性和吸管吃力。
+- P1 `creamLoad` / `dairyFatLoad`：用于奶脂、奶盖、奶油油腻负担。
+- P1 `syrupiness` / `stickiness`：用于糖浆感、胶质感、黏稠挂口。
+- P2 `mouthCoating`：需要决定是共用指标，还是拆成奶脂挂口、胶质挂口、粉浆挂口等子指标。
+
+### D. Scoring / balance missing mechanisms
+
+- P0 high sweetness overload non-final rule：白糖高甜压力需要先有通用规则雏形，但不能硬编码样本或配方。
+- P0 bitterPressure balance with `dairySupport` / `sweetnessBalance`：咖啡牛奶、抹茶牛奶、可可牛奶不能用单杯 if 修。
+- P1 powder / sediment threshold by ratio and `liquidSupport`：粉泥 / 沉淀应按比例和液体支撑判断。
+- P1 strongIdentity support / conflict balance：强身份可以被合适载体支撑，也可能压制主题。
+- P1 score aggregation / diminishing returns / dominant mechanism selection：多项压力叠加时需要通用聚合方式，避免扣分无限堆。
+- P1 positive drink expectation as generic structure：正常好组合应来自结构化支撑关系，不来自 recipe whitelist。
+
+### E. Takeover blockers / old technical debt
+
+- P1 displayName / 中文主键 runtime residue。
+- P1 legacy accident route still deciding final score / cap / type。
+- P1 stable ID registry scaffold only，不能当 approved registry。
+- P1 active validator missing。
+- P1 golden update protocol missing。
+- P1 score takeover flag exists but remains score-only trial，未接管 feedback / result.type / accident / golden。
+
+### F. Tooling debt
+
+- P0 shadow runner proposed profile parsing fixed in v0.0.8.18；当前 non-final calibration 不再被该工具债阻塞。
+- P0 future sample review must clearly distinguish runtime profile vs proposed draft，避免把旧 runtime snapshot 当 proposed profile。
+- P2 human-readable sample review may be needed, but avoid report / doc hell；优先复用现有 debug output 和 review pack。
+
+### First implementation queue
+
+1. P0：补 high sweetness overload 的 non-final scoring suggestion rule，并保留反 if gate。
+2. P0：补 `bitterPressure` / `dairySupport` / `sweetnessBalance` 的通用 pressure balance shape。
+3. P1：补 powder / sediment ratio + `liquidSupport` 的 non-final 判断雏形。
+4. P1：补 strong identity support / conflict balance。
+5. P1：补 score aggregation / diminishing returns / dominant mechanism selection。
+6. P1：partial / active takeover 前清 displayName / registry / active validator / legacy route / golden update protocol。
+7. P2：再处理 mouthCoating 拆分、customer preference、完整 Sheets workflow 和 review pack polish。
+
+任何 implementation 都必须先通过 anti-if gate：只允许中枢开关、合法数字检查、fallback、scoreSource 展示等少量调度 if；不得新增具体原料、组合、样本、中文显示名或 recipe whitelist 特判。
+
 ## 2. 必读正本 / 裁决关系
 
 - `docs/DOCS_SOURCE_OF_TRUTH.md` 管文档层级、阶段 TODO 生命周期和冲突裁决。

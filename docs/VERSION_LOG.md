@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.19 calibration blocker inventory / implementation queue
+
+本轮在 `docs/V0_0_8_PLANNING_TODO.md` 新增 calibration blocker inventory / implementation queue，用 P0 / P1 / P2 分桶整理正式调优前必须补的 profile / summary / pressure / scoring / takeover / tooling 债务。
+
+本轮最小同步 `docs/AI_CONTEXT.md`，记录 latest main 已到 `0302f7d chore: fix profile draft shadow runner parsing`，并提醒下一刀应优先从 high sweetness overload non-final rule 和 bitter / dairy / sweetness pressure balance 开始。
+
+本轮未新增 report / planning doc，未改 runtime / core / ui / data / generated / golden，未新增 recipe whitelist / sample-specific if，未 push，未 tag。
+
 ## v0.0.8.15 anchor scale correction draft
 
 本轮新增 `scripts/content/buildIngredientProfileValueDraftV0015.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.15.csv` 与 `.json`。
