@@ -14,10 +14,10 @@ const audienceIdByName = {
 };
 
 const fruitTeaTeaRefs = [
-  { name: "茉莉茶", ref: { ingredientId: "tea_jasmine" } },
-  { name: "绿茶", ref: { ingredientId: "tea_green" } },
-  { name: "乌龙茶", ref: { ingredientId: "tea_oolong" } },
-  { name: "红茶", ref: { ingredientId: "tea_black" } }
+  { displayName: "茉莉茶", ref: { ingredientId: "tea_jasmine" }, scoreBonus: 5, add: { fresh: 5, photo: 3 }, type: "水果茉莉茶", drinkTypeId: "fruit_jasmine_tea" },
+  { displayName: "绿茶", ref: { ingredientId: "tea_green" }, scoreBonus: 4, add: { fresh: 5 }, type: "水果绿茶", drinkTypeId: "fruit_green_tea" },
+  { displayName: "乌龙茶", ref: { ingredientId: "tea_oolong" }, scoreBonus: 2, add: { tea: 3 }, type: "水果乌龙茶", drinkTypeId: "fruit_oolong_tea" },
+  { displayName: "红茶", ref: { ingredientId: "tea_black" }, scoreBonus: 1, add: { fresh: -2 }, type: "水果红茶", drinkTypeId: "fruit_black_tea" }
 ];
 
 const fruitTeaFruitRefs = [
@@ -62,7 +62,7 @@ function analyzeFruitTeaBlend(context) {
   if (teaTotal < 25 || fruitCount < 2 || fruitTotal < 32 || disruptiveTotal > 18) return null;
 
   const primaryTea = fruitTeaTeaRefs
-    .map(item => ({ name: item.name, ratio: ratioOfRuleRef(context, item.ref) }))
+    .map(item => ({ ...item, ratio: ratioOfRuleRef(context, item.ref) }))
     .sort((left, right) => right.ratio - left.ratio)[0];
   if (!primaryTea || primaryTea.ratio <= 0) return null;
 
@@ -73,20 +73,10 @@ function analyzeFruitTeaBlend(context) {
   let cap = 88;
   const add = { fresh: 18, fruit: 18, tea: 8, photo: 8, odd: -8 };
 
-  if (primaryTea.name === "茉莉茶") {
-    score += 5;
-    add.fresh += 5;
-    add.photo += 3;
-  } else if (primaryTea.name === "绿茶") {
-    score += 4;
-    add.fresh += 5;
-  } else if (primaryTea.name === "乌龙茶") {
-    score += 2;
-    add.tea += 3;
-  } else if (primaryTea.name === "红茶") {
-    score += 1;
-    add.fresh -= 2;
-  }
+  score += primaryTea.scoreBonus || 0;
+  Object.entries(primaryTea.add || {}).forEach(([key, value]) => {
+    add[key] = (add[key] || 0) + value;
+  });
 
   if (fruitCount === 2) {
     score += 4;
@@ -108,18 +98,12 @@ function analyzeFruitTeaBlend(context) {
     cap = 91;
   }
 
-  const typeMap = {
-    茉莉茶: { type: "水果茉莉茶", drinkTypeId: "fruit_jasmine_tea" },
-    绿茶: { type: "水果绿茶", drinkTypeId: "fruit_green_tea" },
-    乌龙茶: { type: "水果乌龙茶", drinkTypeId: "fruit_oolong_tea" },
-    红茶: { type: "水果红茶", drinkTypeId: "fruit_black_tea" }
-  };
   const typeResult = bubble >= 10
     ? { type: "气泡水果茶", drinkTypeId: "sparkling_fruit_tea" }
-    : typeMap[primaryTea.name] || { type: "花果茶", drinkTypeId: "flower_fruit_tea" };
+    : { type: primaryTea.type || "花果茶", drinkTypeId: primaryTea.drinkTypeId || "flower_fruit_tea" };
   const note = bubble >= 10
     ? "茶、水果和气泡的结构成立，清爽感很足，但气泡不是万能满分按钮。"
-    : `${primaryTea.name}和水果搭得自然，像一杯认真做过功课的花果茶。`;
+    : `${primaryTea.displayName}和水果搭得自然，像一杯认真做过功课的花果茶。`;
 
   return { ...typeResult, score, add, cap, note };
 }
@@ -162,6 +146,7 @@ function hasAllDrinkTypeRefs(context, refs = []) {
 }
 
 function hasLegacyIngredient(context, names, name) {
+  // Legacy compatibility only for rule rows that have not yet migrated to ingredientId refs.
   return has(name, names) || hasDrinkTypeRef(context, name);
 }
 
@@ -201,6 +186,7 @@ function inferType(attr, names, score, context = null) {
 }
 
 function hasAudienceIngredient(context, names, name, ref) {
+  // Prefer stable refs; names remain only as legacy compatibility for old callers.
   return hasDrinkTypeRef(context, ref) || has(name, names);
 }
 

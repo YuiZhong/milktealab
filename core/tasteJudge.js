@@ -34,11 +34,11 @@ function getRuleIngredientIds(rule) {
 
 function isLemonMilkConflict(rule) {
   const ingredientIds = getRuleIngredientIds(rule);
-  if (ingredientIds.includes("fruit_lemon") && ingredientIds.includes("dairy_milk")) return true;
-  return Array.isArray(rule?.names) && rule.names.includes("柠檬") && rule.names.includes("牛奶");
+  return ingredientIds.includes("fruit_lemon") && ingredientIds.includes("dairy_milk");
 }
 
 function isDairyFatOverloadAccident(accident) {
+  // Legacy display type fallback stays only for pre-ID accidents.
   return accident.accidentTypeId === "dairy_fat_overload" || accident.type === "奶脂过载";
 }
 
@@ -260,10 +260,10 @@ function evaluateCup(cup) {
     });
   }
 
-  const teaCount = context.countByCategory("茶类");
-  const toppingCount = context.countByCategory("小料");
-  const dairyCount = context.countByCategory("乳类");
-  const flavorCount = context.countByCategory("水果/风味");
+  const teaCount = context.countByCategoryId("tea");
+  const toppingCount = context.countByCategoryId("topping");
+  const dairyCount = context.countByCategoryId("dairy");
+  const flavorCount = context.countByCategoryId("flavor");
   const teaMixRule = combinationAnalyzer.getTeaMixRule();
 
   if (teaCount >= teaMixRule.minCount) {

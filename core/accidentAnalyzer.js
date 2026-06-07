@@ -46,10 +46,9 @@ function hasTextureAccidentTag(accident) {
 }
 
 function isLegacyTextureAccident(accident) {
-  return accident.type === "口感事故" && (
-    (accident.add?.straw || 0) >= 40 ||
-    /吸管|半固体|水泥|物理|勺子/.test(accident.note)
-  );
+  // Legacy compatibility only for pre-ID accidents. Do not use player-visible note copy as a mechanism key.
+  if (accident.accidentTypeId || Array.isArray(accident.tags)) return false;
+  return accident.type === "口感事故" && (accident.add?.straw || 0) >= 40;
 }
 
 function isTextureAccident(accident) {

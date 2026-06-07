@@ -4,6 +4,17 @@ const { displayName } = window.MILK_TEA_LAB_HELPERS;
 const ingredientRegistry = window.MILK_TEA_LAB_INGREDIENT_REGISTRY;
 const categoryByName = new Map(groups.flatMap(group => group.items.map(item => [item, group.name])));
 
+function getStableCategoryId(meta, item = {}) {
+  const ingredientId = meta?.id || item.ingredientId || "";
+  if (ingredientId.startsWith("tea_")) return "tea";
+  if (ingredientId.startsWith("dairy_")) return "dairy";
+  if (ingredientId.startsWith("topping_")) return "topping";
+  if (ingredientId.startsWith("fruit_") || ingredientId.startsWith("flavor_")) return "flavor";
+  if (ingredientId.startsWith("liquid_")) return "liquid";
+  if (ingredientId.startsWith("sweetener_") || ingredientId.startsWith("seasoning_")) return "seasoning";
+  return null;
+}
+
 function createTasteContext(cup) {
   const activeCup = cup
     .filter(item => item.ratio > 0)
@@ -14,6 +25,7 @@ function createTasteContext(cup) {
         ...item,
         name,
         ingredientId: meta?.id || item.ingredientId || null,
+        categoryId: getStableCategoryId(meta, item),
         category: meta?.category || categoryByName.get(name) || item.category || null
       };
     });
@@ -63,7 +75,12 @@ function createTasteContext(cup) {
   }
 
   function countByCategory(categoryName) {
+    // Legacy display-label compatibility only. Runtime scoring should prefer countByCategoryId.
     return activeCup.filter(item => item.category === categoryName || categoryByName.get(item.name) === categoryName).length;
+  }
+
+  function countByCategoryId(categoryId) {
+    return activeCup.filter(item => item.categoryId === categoryId).length;
   }
 
   return {
@@ -81,7 +98,8 @@ function createTasteContext(cup) {
     sumRatiosByIds,
     sumRatiosByRefs,
     hasIngredientRef,
-    countByCategory
+    countByCategory,
+    countByCategoryId
   };
 }
 

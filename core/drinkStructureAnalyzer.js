@@ -2,7 +2,7 @@
 const { clamp } = window.MILK_TEA_LAB_HELPERS;
 const { getTasteProfile } = window.MILK_TEA_LAB_INGREDIENT_TASTE_PROFILES;
 
-// v0.0.5.3 transition lists: keep role detection centralized until these roles move into data tables.
+// Legacy transition lists: compatibility only. Main runtime path should use stable categoryId + profile tags.
 const baseLiquidNames = new Set(["红茶", "绿茶", "乌龙茶", "茉莉茶", "普洱茶", "牛奶", "厚乳", "淡奶油", "椰奶", "燕麦奶", "植脂奶", "纯水", "气泡水", "咖啡"]);
 const flavorNames = new Set(["柠檬", "草莓", "芒果", "榴莲", "西瓜", "葡萄", "桃子", "荔枝", "抹茶", "可可"]);
 const textureNames = new Set(["珍珠", "椰果", "布丁", "仙草", "芋圆", "奥利奥碎", "芋泥", "奶盖"]);
@@ -12,20 +12,53 @@ function hasTag(profile, tag) {
   return profile.tags?.includes(tag);
 }
 
-function isBaseLiquidIngredient(name, profile) {
-  return baseLiquidNames.has(name) || hasTag(profile, "tea") || hasTag(profile, "dairy") || hasTag(profile, "liquid") || hasTag(profile, "coffee");
+function getItemCategoryId(itemOrName) {
+  return itemOrName && typeof itemOrName === "object" ? itemOrName.categoryId : null;
 }
 
-function isFlavorIngredient(name, profile) {
-  return flavorNames.has(name) || hasTag(profile, "fruit") || hasTag(profile, "floral") || hasTag(profile, "tropical") || hasTag(profile, "controversial");
+function getLegacyName(itemOrName) {
+  return typeof itemOrName === "string" ? itemOrName : itemOrName?.name || null;
 }
 
-function isTextureIngredient(name, profile) {
-  return textureNames.has(name) || hasTag(profile, "topping") || hasTag(profile, "paste") || hasTag(profile, "chewy") || hasTag(profile, "cookie");
+function isBaseLiquidIngredient(itemOrName, profile) {
+  const categoryId = getItemCategoryId(itemOrName);
+  const legacyName = getLegacyName(itemOrName);
+  return ["tea", "dairy", "liquid"].includes(categoryId)
+    || hasTag(profile, "tea")
+    || hasTag(profile, "dairy")
+    || hasTag(profile, "liquid")
+    || hasTag(profile, "coffee")
+    || baseLiquidNames.has(legacyName);
 }
 
-function isSweetenerIngredient(name, profile) {
-  return sweetenerNames.has(name) || hasTag(profile, "sweetener");
+function isFlavorIngredient(itemOrName, profile) {
+  const categoryId = getItemCategoryId(itemOrName);
+  const legacyName = getLegacyName(itemOrName);
+  return categoryId === "flavor"
+    || hasTag(profile, "fruit")
+    || hasTag(profile, "floral")
+    || hasTag(profile, "tropical")
+    || hasTag(profile, "controversial")
+    || flavorNames.has(legacyName);
+}
+
+function isTextureIngredient(itemOrName, profile) {
+  const categoryId = getItemCategoryId(itemOrName);
+  const legacyName = getLegacyName(itemOrName);
+  return categoryId === "topping"
+    || hasTag(profile, "topping")
+    || hasTag(profile, "paste")
+    || hasTag(profile, "chewy")
+    || hasTag(profile, "cookie")
+    || textureNames.has(legacyName);
+}
+
+function isSweetenerIngredient(itemOrName, profile) {
+  const categoryId = getItemCategoryId(itemOrName);
+  const legacyName = getLegacyName(itemOrName);
+  return categoryId === "seasoning"
+    || hasTag(profile, "sweetener")
+    || sweetenerNames.has(legacyName);
 }
 
 function roundMetric(value) {
@@ -42,24 +75,24 @@ function analyzeDrinkStructure(context) {
   let weightedViscosity = 0;
 
   context.activeCup.forEach(item => {
-    const profile = getTasteProfile(item.name);
+    const profile = getTasteProfile({ ingredientId: item.ingredientId, name: item.name });
     const calculationProfile = profile.calculationProfile || {};
     const viscosity = Math.max(0, profile.viscosity ?? calculationProfile.thick ?? 0);
     const strawResistance = Math.max(0, profile.strawResistance ?? calculationProfile.straw ?? 0);
     const textureRisk = profile.textureRisk ? 1 : 0;
 
-    if (isTextureIngredient(item.name, profile)) {
+    if (isTextureIngredient(item, profile)) {
       textureRatio += item.ratio;
-    } else if (isSweetenerIngredient(item.name, profile)) {
+    } else if (isSweetenerIngredient(item, profile)) {
       sweetenerRatio += item.ratio;
-    } else if (isFlavorIngredient(item.name, profile)) {
+    } else if (isFlavorIngredient(item, profile)) {
       flavorRatio += item.ratio;
-    } else if (isBaseLiquidIngredient(item.name, profile)) {
+    } else if (isBaseLiquidIngredient(item, profile)) {
       baseLiquidRatio += item.ratio;
     }
 
     weightedSolid += item.ratio * (
-      (isTextureIngredient(item.name, profile) ? 0.8 : 0) +
+      (isTextureIngredient(item, profile) ? 0.8 : 0) +
       strawResistance / 120 +
       viscosity / 180 +
       textureRisk * 0.18

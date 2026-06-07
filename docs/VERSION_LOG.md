@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.20 player-visible content key cleanup for score takeover path
+
+本轮清理正式 score takeover 前最高风险的 player-visible content key / display text key runtime 债：正式计分路径不再通过 `"茶类"` / `"小料"` / `"乳类"` / `"水果/风味"` 这类玩家可见 category label 计数，改为 `tasteContext` 里的 stable `categoryId`。
+
+本轮同时降级 `accidentAnalyzer` 中用事故 note 文案关键词判断 texture accident 的 legacy fallback；新路径优先读取 `accidentTypeId` / tags / structured fields。`drinkStructureAnalyzer` 的结构角色识别改为优先读取 stable `categoryId` 与 profile tags；`drinkTypeAnalyzer` 的 fruit tea line 改为按 stable ingredient ref 选择茶底规则，显示名只保留在最终可见 note 中。
+
+本轮同步 `index.html` 中本次改动 core 脚本的 cache query 与页面版本标识，仅用于避免旧页面 / 旧脚本缓存误导 UI smoke。
+
+本轮未调分、未改 profile 数值、未改 generated severity suggestion rules、未改 feedback / result.type 文案、未改 golden expected、未写 `data/generated`，未新增 recipe whitelist / sample-specific if，未 push，未 tag。
+
 ## v0.0.8.19 calibration blocker inventory / implementation queue
 
 本轮在 `docs/V0_0_8_PLANNING_TODO.md` 新增 calibration blocker inventory / implementation queue，用 P0 / P1 / P2 分桶整理正式调优前必须补的 profile / summary / pressure / scoring / takeover / tooling 债务。
