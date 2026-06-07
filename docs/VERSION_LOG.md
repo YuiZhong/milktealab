@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.22 minimum scoring registry / validator gate
+
+本轮新增 `data/scoringRuleRegistry.js` 和 `scripts/content/checkScoringRuleRegistry.js`，为 official score takeover 前建立最小 non-final registry / validator gate。
+
+该 registry 覆盖 `pressureKey`、`triggerMetric`、`severityLevel`、`sourceLayer`、`ruleId` 和 `scoreRuleStatus` 的最小 allowed values，并明确区分 observed、draft_profile_only 和 missing_summary_mapping。
+
+validator 检查 ID 唯一、状态白名单、sourceLayer / severityLevel 合法、pressureKey / triggerMetric 不含 display text / sample / ingredient 语义，以及所有 entry 都保持 `canAffectFinalScore=false`、`canAffectRuntime=false`、`canAffectGoldenExpected=false`。
+
+本轮未实现 scoring engine，未改 generatedSeveritySuggestion scoring rules，未改 final score / feedback / result.type / accident / golden expected，未写 `data/generated`，未新增 report / recipe whitelist / sample-specific if，未 push，未 tag。
+
 ## v0.0.8.21 legacy score route isolation for official score takeover
 
 本轮将 legacy final score / accident / drinkType / outcome route 明确隔离为旧系统 debug 对照：`tasteJudge` 输出 `legacyScoreSource`、`legacyFinalScoreRoute`、`legacyType`、`legacyAccidentTypeId`、`legacyDrinkTypeId`、`legacyOutcomeTypeId` 和 `legacyPrimaryNotes`。
