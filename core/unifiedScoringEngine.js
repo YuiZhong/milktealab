@@ -141,6 +141,11 @@ const supportTargets = {
   ]
 };
 
+const identityConflictSupportTargets = [
+  { supportKey: "dairySupport", ratio: 1.05 },
+  { supportKey: "sweetnessBalance", ratio: 0.7 }
+];
+
 const secondaryContributionFactors = [1, 0.35, 0.22, 0.14, 0.08];
 
 const structuralScoreFloors = {
@@ -282,15 +287,20 @@ function severitySupportCap(severityLevel) {
   return 0;
 }
 
+function getSupportTargets(pressure) {
+  if (pressure.pressureKey === "strongIdentityPressure" && pressure.triggerMetric === "identityConflictRisk") {
+    return identityConflictSupportTargets;
+  }
+  return supportTargets[pressure.pressureKey] || [];
+}
+
 function applySupport(pressures, supportState, warnings) {
   const balances = [];
 
   pressures.forEach(pressure => {
     if (!pressure.matched || pressure.rawPenalty <= 0) return;
 
-    const targets = pressure.triggerMetric === "identityConflictRisk"
-      ? []
-      : supportTargets[pressure.pressureKey] || [];
+    const targets = getSupportTargets(pressure);
     if (!targets.length) return;
 
     const maxSupport = pressure.rawPenalty * severitySupportCap(pressure.severityLevel);
@@ -325,6 +335,46 @@ function applySupport(pressures, supportState, warnings) {
   });
 
   return balances;
+}
+
+function applyConflictAdjustments(input, pressures) {
+  const adjustments = [];
+  const taste = getValues(input, "tasteSummary");
+
+  pressures.forEach(pressure => {
+    if (
+      pressure.pressureKey !== "strongIdentityPressure" ||
+      pressure.triggerMetric !== "identityConflictRisk" ||
+      !pressure.matched ||
+      pressure.adjustedPenalty <= 0 ||
+      (pressure.severityLevel !== "heavy" && pressure.severityLevel !== "critical")
+    ) {
+      return;
+    }
+
+    const roastedBitterSignal = Math.max(
+      supportMetric(taste.coffeeRoast),
+      supportMetric(taste.bitterness) * 0.8
+    );
+    const conflictSignal = supportMetric(pressure.observedValue);
+    const extraPenalty = rounded(Math.min(
+      22,
+      Math.max(0, (roastedBitterSignal - 26) * 1.8 + (conflictSignal - 74))
+    ));
+    if (extraPenalty <= 0) return;
+
+    pressure.adjustedPenalty += extraPenalty;
+    adjustments.push({
+      adjustmentKey: "roastedBitterIdentityConflict",
+      pressureKey: pressure.pressureKey,
+      roastedBitterSignal: rounded(roastedBitterSignal),
+      conflictSignal: rounded(conflictSignal),
+      extraPenalty,
+      reason: "Roasted / bitter signal aggravates strong identity conflict as a generic balance rule, not as a recipe exception."
+    });
+  });
+
+  return adjustments;
 }
 
 function checkFuturePressureWarnings(input, warnings) {
@@ -422,7 +472,7 @@ function buildStructuralCoherence(input, pressures, aggregation, warnings) {
   };
 }
 
-function buildScoreReasons(pressures, balances, aggregation, structuralCoherence) {
+function buildScoreReasons(pressures, balances, aggregation, structuralCoherence, conflictAdjustments) {
   const pressureReasons = aggregation.contributions.slice(0, 4).map(item => {
     const pressure = pressures.find(entry => entry.pressureKey === item.pressureKey);
     return `${item.pressureKey}: ${pressure?.observedValue ?? "n/a"} / ${item.severityLevel} / -${item.finalPenaltyContribution}`;
@@ -436,7 +486,11 @@ function buildScoreReasons(pressures, balances, aggregation, structuralCoherence
     ? [`structuralCoherence floor ${structuralCoherence.scoreFloor} from ${structuralCoherence.drinkTypeId}`]
     : [];
 
-  return [...pressureReasons, ...balanceReasons, ...structuralReasons];
+  const conflictReasons = conflictAdjustments.slice(0, 2).map(item =>
+    `${item.adjustmentKey} added ${item.extraPenalty} to ${item.pressureKey}`
+  );
+
+  return [...pressureReasons, ...balanceReasons, ...conflictReasons, ...structuralReasons];
 }
 
 function buildConfidence(warnings, pressures) {
@@ -453,6 +507,7 @@ function buildUnifiedScoring(input = {}) {
   const pressures = buildPressureObservations(input, warnings);
   const supportState = buildSupportState(input);
   const balances = applySupport(pressures, supportState, warnings);
+  const conflictAdjustments = applyConflictAdjustments(input, pressures);
   checkFuturePressureWarnings(input, warnings);
   const aggregation = buildAggregation(pressures);
   const structuralCoherence = buildStructuralCoherence(input, pressures, aggregation, warnings);
@@ -480,11 +535,12 @@ function buildUnifiedScoring(input = {}) {
     confidence: buildConfidence(warnings, pressures),
     pressures,
     balances,
+    conflictAdjustments,
     supportState,
     structuralCoherence,
     aggregation,
     dominantPressure: aggregation.dominantPressure,
-    scoreReasons: buildScoreReasons(pressures, balances, aggregation, structuralCoherence),
+    scoreReasons: buildScoreReasons(pressures, balances, aggregation, structuralCoherence, conflictAdjustments),
     warnings
   };
 }
