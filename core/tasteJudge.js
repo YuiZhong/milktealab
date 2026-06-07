@@ -142,6 +142,58 @@ function buildCandidatePriorityShell(summaryCandidates) {
   return candidatePriorityShellEngine.buildCandidatePriorityShell(summaryCandidates);
 }
 
+function readScoreTakeoverQueryFlag() {
+  try {
+    if (!window.location?.search) return null;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("scoreTakeover")) return null;
+    return params.get("scoreTakeover");
+  } catch (error) {
+    return null;
+  }
+}
+
+function readScoreTakeoverStorageFlag() {
+  try {
+    if (!window.localStorage) return null;
+    return window.localStorage.getItem("MILK_TEA_LAB_SCORE_TAKEOVER_TRIAL");
+  } catch (error) {
+    return null;
+  }
+}
+
+function isTruthyDebugFlag(value) {
+  return ["1", "true", "yes", "on", "debug"].includes(String(value || "").toLowerCase());
+}
+
+function isScoreTakeoverTrialRequested() {
+  const queryValue = readScoreTakeoverQueryFlag();
+  if (queryValue !== null) return isTruthyDebugFlag(queryValue);
+  return isTruthyDebugFlag(readScoreTakeoverStorageFlag());
+}
+
+function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion) {
+  const suggestedScore = generatedSeveritySuggestion?.scoreSuggestion?.suggestedScore;
+  const hasValidSuggestedScore = Number.isFinite(suggestedScore);
+  const takeoverRequested = isScoreTakeoverTrialRequested();
+  const scoreTakeoverEnabled = takeoverRequested && hasValidSuggestedScore;
+  const generatedSuggestedScore = hasValidSuggestedScore ? Math.round(clamp(suggestedScore)) : null;
+
+  return {
+    score: scoreTakeoverEnabled ? generatedSuggestedScore : legacyScore,
+    legacyScore,
+    generatedSuggestedScore,
+    scoreSource: scoreTakeoverEnabled ? "generated_suggestion_takeover_trial" : "legacy",
+    scoreTakeoverMode: takeoverRequested ? "debug_flag" : "off",
+    scoreTakeoverEnabled,
+    scoreTakeoverNote: scoreTakeoverEnabled
+      ? "已开启 Debug 分数接管试验；只覆盖最终分数，反馈 / 类型 / 事故仍保持旧系统。"
+      : takeoverRequested
+        ? "Debug 分数接管开关已开启，但新系统建议分不可用或非法，已自动回退旧系统分数。"
+        : "默认使用旧系统分数。仅在 Debug 试验时使用 ?scoreTakeover=1 或 localStorage MILK_TEA_LAB_SCORE_TAKEOVER_TRIAL=1。"
+  };
+}
+
 function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
@@ -262,13 +314,13 @@ function evaluateCup(cup) {
     attr[key] = Math.round(clamp(attr[key]));
   });
 
-  const finalScore = scoreEngine.finalizeScore(score);
+  const legacyScore = scoreEngine.finalizeScore(score);
   const inferredTypeResult = forcedType
     ? null
-    : drinkTypeAnalyzer.inferTypeResult(attr, context.normalizedNames, finalScore, context);
+    : drinkTypeAnalyzer.inferTypeResult(attr, context.normalizedNames, legacyScore, context);
   const type = forcedType || inferredTypeResult.type;
   const drinkTypeId = forcedDrinkTypeId || inferredTypeResult?.drinkTypeId;
-  const audienceResult = drinkTypeAnalyzer.inferAudienceResult(attr, context.normalizedNames, finalScore, context);
+  const audienceResult = drinkTypeAnalyzer.inferAudienceResult(attr, context.normalizedNames, legacyScore, context);
   const { audience, audienceIds } = audienceResult;
   const priorityNotes = accidentNotes.length
     ? accidentNotes
@@ -280,12 +332,18 @@ function evaluateCup(cup) {
           ? [segmentNotes[0]]
           : generalNotes;
   const feedbackOptions = { feedbackTags: sourceFeedbackTags };
-  const feedbackTags = feedbackEngine.getFeedbackTags(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
-  const feedback = feedbackEngine.makeFeedback(attr, finalScore, priorityNotes, accidents.length > 0, feedbackOptions);
+  const feedbackTags = feedbackEngine.getFeedbackTags(attr, legacyScore, priorityNotes, accidents.length > 0, feedbackOptions);
+  const feedback = feedbackEngine.makeFeedback(attr, legacyScore, priorityNotes, accidents.length > 0, feedbackOptions);
 
   const result = {
     attr,
-    score: finalScore,
+    score: legacyScore,
+    legacyScore,
+    generatedSuggestedScore: null,
+    scoreSource: "legacy",
+    scoreTakeoverMode: "off",
+    scoreTakeoverEnabled: false,
+    scoreTakeoverNote: "默认使用旧系统分数。",
     type,
     audience,
     audienceIds,
@@ -310,7 +368,7 @@ function evaluateCup(cup) {
   if (feedbackEngine.buildGeneratedFeedbackShadow) {
     result.generatedFeedbackShadow = feedbackEngine.buildGeneratedFeedbackShadow({
       feedbackTags,
-      score: finalScore,
+      score: legacyScore,
       accidentTypeId: result.accidentTypeId,
       drinkTypeId: result.drinkTypeId,
       outcomeTypeId: result.outcomeTypeId
@@ -319,6 +377,7 @@ function evaluateCup(cup) {
   if (generatedSeveritySuggestionEngine?.buildGeneratedSeveritySuggestion) {
     result.generatedSeveritySuggestion = generatedSeveritySuggestionEngine.buildGeneratedSeveritySuggestion(result);
   }
+  Object.assign(result, createScoreTakeoverState(legacyScore, result.generatedSeveritySuggestion));
   return result;
 }
 

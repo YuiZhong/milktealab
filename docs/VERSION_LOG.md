@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.13 score-only partial takeover flag / rollback scaffold
+
+本轮新增 score-only debug takeover scaffold：默认仍使用 legacy score；只有显式 debug flag 开启且 `generatedSeveritySuggestion.scoreSuggestion.suggestedScore` 合法时，才试验性用新系统建议分覆盖 `result.score`。
+
+结果对象保留 `legacyScore`、`generatedSuggestedScore`、`scoreSource`、`scoreTakeoverMode`、`scoreTakeoverEnabled` 和 `scoreTakeoverNote`，页面同步显示最终分数来源、旧系统分数、新系统建议分、分数差和 debug / rollback 说明。
+
+本轮只做开关 / fallback / 分数来源 / 页面展示；未新增具体评分规则 if，未扩写 draft scoring rules，未接管 feedback / `result.type` / accident / `drinkTypeId` / `outcomeTypeId`，未改 runtime data / `data/generated` / golden expected，未 push，未 tag。
+
 ## v0.0.8.12 all-37 source-referenced profile value first pass
 
 本轮新增 `scripts/content/buildIngredientProfileValueDraftV0012.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.12.csv` 与 `.json`。

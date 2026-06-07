@@ -398,7 +398,7 @@ function createRenderer(app) {
     return block;
   }
 
-  function renderGeneratedSeveritySuggestion(suggestion) {
+  function renderGeneratedSeveritySuggestion(suggestion, result) {
     const panel = el.generatedSeveritySuggestion;
     if (!panel) return;
     panel.innerHTML = "";
@@ -413,21 +413,46 @@ function createRenderer(app) {
     const title = document.createElement("h4");
     title.textContent = "新系统观察｜Generated severity suggestion";
 
+    const scoreTakeoverEnabled = Boolean(result?.scoreTakeoverEnabled);
+    const scoreSourceText = scoreTakeoverEnabled
+      ? "新系统建议分接管试验（Debug，可回滚）"
+      : "旧系统（默认）";
+    const scoreSuggestion = suggestion.scoreSuggestion || {};
+    const legacyScore = Number.isFinite(result?.legacyScore)
+      ? result.legacyScore
+      : scoreSuggestion.legacyScore;
+    const generatedSuggestedScore = Number.isFinite(result?.generatedSuggestedScore)
+      ? result.generatedSuggestedScore
+      : scoreSuggestion.suggestedScore;
+    const takeoverModeText = result?.scoreTakeoverMode === "debug_flag"
+      ? "debug_flag（显式调试开关）"
+      : "off（默认关闭）";
+
     const mode = document.createElement("p");
     mode.className = "suggestion-mode";
-    mode.textContent = "当前模式：只读建议，不影响最终结果";
+    mode.textContent = scoreTakeoverEnabled
+      ? "当前模式：Debug 分数接管试验，只覆盖分数；反馈、类型、事故和 golden 仍不接管。"
+      : "当前模式：旧系统最终分数；新系统只读建议，不影响最终结果。";
 
     const meta = document.createElement("div");
     meta.className = "suggestion-meta";
-    const scoreSuggestion = suggestion.scoreSuggestion || {};
-    appendSuggestionMeta(meta, "旧系统分数", suggestionScore(scoreSuggestion.legacyScore));
-    appendSuggestionMeta(meta, "建议分数", `${suggestionScore(scoreSuggestion.suggestedScore)}（暂未接管）`);
+    appendSuggestionMeta(meta, "最终分数来源", scoreSourceText);
+    appendSuggestionMeta(meta, "接管开关", scoreTakeoverEnabled ? "已开启（Debug，可回滚）" : "关闭");
+    appendSuggestionMeta(meta, "接管模式", takeoverModeText);
+    appendSuggestionMeta(meta, "旧系统分数", suggestionScore(legacyScore));
+    appendSuggestionMeta(meta, "新系统建议分", `${suggestionScore(generatedSuggestedScore)}（${scoreTakeoverEnabled ? "当前接管试验" : "未接管"}）`);
     appendSuggestionMeta(meta, "分数差", suggestionDelta(scoreSuggestion.scoreDelta));
     appendSuggestionMeta(meta, "置信度", displayLabel(confidenceDisplayLabels, scoreSuggestion.confidence || "low"));
 
     const reason = document.createElement("p");
     reason.className = "suggestion-reason";
     reason.textContent = `主要原因：${localizeMachineKeysInText(scoreSuggestion.reason || "尚未启用正式 threshold / scoreMultiplier。")}`;
+
+    const takeoverNote = document.createElement("p");
+    takeoverNote.className = "suggestion-footnote";
+    takeoverNote.textContent = result?.scoreTakeoverNote
+      ? `接管说明：${result.scoreTakeoverNote}`
+      : "接管说明：默认关闭；仅用于制作人 Debug / rollback 试验。";
 
     const calibrationBlock = renderCalibrationReview(suggestion.calibrationReview);
 
@@ -484,7 +509,7 @@ function createRenderer(app) {
     observation.className = "suggestion-footnote";
     observation.textContent = `已观察到 ${observationCount} 条新系统观察项；它们不是正式 generated severity。`;
 
-    panel.append(title, mode, meta, reason, calibrationBlock, metricTitle, metricList, draftObservationTitle, draftObservationList, observation);
+    panel.append(title, mode, meta, reason, takeoverNote, calibrationBlock, metricTitle, metricList, draftObservationTitle, draftObservationList, observation);
   }
 
   function updateSelectedIngredientButtons() {
@@ -529,7 +554,7 @@ function createRenderer(app) {
     el.drinkType.textContent = resultText(result.type, "历史配方");
     el.scoreValue.textContent = resultScore(result);
     el.feedback.textContent = resultText(result.feedback, "暂无反馈");
-    renderGeneratedSeveritySuggestion(result.generatedSeveritySuggestion);
+    renderGeneratedSeveritySuggestion(result.generatedSeveritySuggestion, result);
     el.audienceTags.innerHTML = "";
     resultAudience(result).forEach(name => {
       const tag = document.createElement("span");
