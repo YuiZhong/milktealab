@@ -1,8 +1,9 @@
 (function() {
 const { clamp } = window.MILK_TEA_LAB_HELPERS;
 const drinkTypeComposer = window.MILK_TEA_LAB_DRINK_TYPE_COMPOSER;
+const unifiedFeedbackComposer = window.MILK_TEA_LAB_UNIFIED_FEEDBACK_COMPOSER;
 
-const schemaVersion = "unifiedJudgment.v0.0.8.27";
+const schemaVersion = "unifiedJudgment.v0.0.8.28";
 
 const pressureJudgmentRules = {
   sweetnessPressure: {
@@ -176,10 +177,25 @@ function buildUnifiedJudgment(input = {}) {
   const finalCandidate = pressureJudgment || drinkTypeCandidate || {};
   const score = isNumber(unifiedScoring.score) ? rounded(clamp(unifiedScoring.score)) : null;
   const legacy = input.legacyComparison || {};
-  const feedbackTags = uniqueItems([
+  const fallbackFeedbackTags = uniqueItems([
     ...(Array.isArray(finalCandidate.feedbackTags) ? finalCandidate.feedbackTags : []),
     pressureJudgment ? "accident" : "normal_good"
   ]);
+  const unifiedFeedback = unifiedFeedbackComposer?.buildUnifiedFeedback
+    ? unifiedFeedbackComposer.buildUnifiedFeedback({
+      pressureJudgment,
+      drinkTypeCandidate,
+      finalCandidate,
+      unifiedScoring
+    })
+    : null;
+  (Array.isArray(unifiedFeedback?.warnings) ? unifiedFeedback.warnings : []).forEach(warning => {
+    warnings.push(`unified_feedback_composer:${warning}`);
+  });
+  const feedback = unifiedFeedback?.feedback || buildFeedback(pressureJudgment, drinkTypeCandidate, unifiedScoring);
+  const feedbackTags = Array.isArray(unifiedFeedback?.feedbackTags) && unifiedFeedback.feedbackTags.length
+    ? uniqueItems(unifiedFeedback.feedbackTags)
+    : fallbackFeedbackTags;
 
   return {
     schemaVersion,
@@ -198,8 +214,9 @@ function buildUnifiedJudgment(input = {}) {
     drinkTypeId: finalCandidate.drinkTypeId || null,
     outcomeTypeId: finalCandidate.outcomeTypeId || null,
     composedDrinkType: finalCandidate.composedDrinkType || null,
-    feedback: buildFeedback(pressureJudgment, drinkTypeCandidate, unifiedScoring),
+    feedback,
     feedbackTags,
+    unifiedFeedback,
     dominantPressure: unifiedScoring.dominantPressure || null,
     scoreReasons: Array.isArray(unifiedScoring.scoreReasons) ? unifiedScoring.scoreReasons : [],
     judgmentReasons: buildJudgmentReasons(pressureJudgment, drinkTypeCandidate, unifiedScoring),

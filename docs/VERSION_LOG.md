@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.28 playtest unified feedback composer
+
+本轮新增 `core/unifiedFeedbackComposer.js`，让 `judgmentTakeover=1` 试玩路径下的 unified feedback 由新系统 pressure / balance / outcome / drinkType composer 输出组合生成。
+
+本轮 feedback composer 只读取 unified pressure、support / balance、dominant pressure、outcome、composed drink type 和 stable feedback tags；旧系统 feedback / type / accident / note 只保留为 debug 对照，不作为新 feedback 判断来源。
+
+本轮不是正式 feedback system / final production takeover；默认 legacy 路径不变，未改 golden expected，未写 `data/generated`，未改 profile 数值，未新增 report，未新增 recipe whitelist / sample-specific if / displayName key，未 push，未 tag。
+
 ## v0.0.8.27 playtest composable drink type labeler
 
 本轮新增 `core/drinkTypeComposer.js`，在 `judgmentTakeover=1` 试玩路径中读取 stable ingredient composition tags，按通用 rule table 组合 broad drink type、modifier 和中文展示标签。

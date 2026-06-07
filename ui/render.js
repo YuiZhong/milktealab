@@ -430,6 +430,20 @@ function createRenderer(app) {
       ? `组合类型：${composedDrinkType.composedTypeLabel || "待观察"}；broad ID：${composedDrinkType.drinkTypeId || "无"}；modifier：${Array.isArray(composedDrinkType.modifierIdentityTags) && composedDrinkType.modifierIdentityTags.length ? composedDrinkType.modifierIdentityTags.join(" / ") : "无"}；fallback：${composedDrinkType.fallbackReason || "无"}。`
       : "组合类型：本轮没有普通饮品类型 composer 输出，可能是事故优先或 composer fallback。";
 
+    const unifiedFeedback = unifiedJudgment?.unifiedFeedback || null;
+    const feedbackSource = unifiedFeedback?.sourcePressure?.pressureKey
+      || unifiedJudgment?.dominantPressure
+      || "none";
+    const feedbackTags = Array.isArray(unifiedFeedback?.feedbackTags) && unifiedFeedback.feedbackTags.length
+      ? unifiedFeedback.feedbackTags.join(" / ")
+      : Array.isArray(unifiedJudgment?.feedbackTags) && unifiedJudgment.feedbackTags.length
+        ? unifiedJudgment.feedbackTags.join(" / ")
+        : "无";
+    const feedbackText = document.createElement("p");
+    feedbackText.textContent = unifiedFeedback
+      ? `Unified feedback 来源：${displayMetricLabel(feedbackSource)}；tone：${unifiedFeedback.tone || "无"}；tags：${feedbackTags}。`
+      : "Unified feedback 来源：暂无 composer 输出，可能使用 fallback。";
+
     const warningList = document.createElement("ul");
     warningList.className = "suggestion-list";
     const warnings = Array.isArray(unifiedJudgment?.warnings) ? unifiedJudgment.warnings : [];
@@ -444,7 +458,7 @@ function createRenderer(app) {
       warningList.append(item);
     }
 
-    block.append(title, reasonText, composedText, warningList);
+    block.append(title, reasonText, composedText, feedbackText, warningList);
     return block;
   }
 
@@ -548,11 +562,17 @@ function createRenderer(app) {
     appendSuggestionMeta(meta, "旧系统事故 ID", result?.legacyAccidentTypeId || "无");
     appendSuggestionMeta(meta, "旧系统饮品 ID", result?.legacyDrinkTypeId || "无");
     appendSuggestionMeta(meta, "旧系统 outcome ID", result?.legacyOutcomeTypeId || "无");
+    appendSuggestionMeta(meta, "旧系统 feedback", unifiedJudgment?.legacyComparison?.legacyFeedback || "无");
     appendSuggestionMeta(meta, "Unified 类型", unifiedJudgment?.type || "待观察");
     appendSuggestionMeta(meta, "Unified 事故 ID", unifiedJudgment?.accidentTypeId || "无");
     appendSuggestionMeta(meta, "Unified 饮品 ID", unifiedJudgment?.drinkTypeId || "无");
     appendSuggestionMeta(meta, "Unified outcome ID", unifiedJudgment?.outcomeTypeId || "无");
     appendSuggestionMeta(meta, "Unified feedback", unifiedJudgment?.feedback || "待观察");
+    const unifiedFeedback = unifiedJudgment?.unifiedFeedback || null;
+    appendSuggestionMeta(meta, "Unified feedback tags", Array.isArray(unifiedFeedback?.feedbackTags) && unifiedFeedback.feedbackTags.length ? unifiedFeedback.feedbackTags.join(" / ") : "无");
+    appendSuggestionMeta(meta, "Unified feedback tone", unifiedFeedback?.tone || "无");
+    appendSuggestionMeta(meta, "Unified feedback source", displayMetricLabel(unifiedFeedback?.sourcePressure?.pressureKey || unifiedJudgment?.dominantPressure || "none"));
+    appendSuggestionMeta(meta, "Unified feedback drinkType", unifiedFeedback?.sourceDrinkTypeId || "无");
     const composedDrinkType = unifiedJudgment?.composedDrinkType || null;
     appendSuggestionMeta(meta, "Composer 组合类型", composedDrinkType?.composedTypeLabel || "无");
     appendSuggestionMeta(meta, "Composer broad ID", composedDrinkType?.drinkTypeId || "无");

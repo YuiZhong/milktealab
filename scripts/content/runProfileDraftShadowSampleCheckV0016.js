@@ -56,6 +56,7 @@ const postPatchScripts = [
   "core/generatedSeveritySuggestionEngine.js",
   "core/unifiedScoringEngine.js",
   "core/drinkTypeComposer.js",
+  "core/unifiedFeedbackComposer.js",
   "core/unifiedJudgmentEngine.js",
   "core/tasteJudge.js",
 ];
@@ -465,6 +466,7 @@ function formatUnifiedJudgment(unifiedJudgment) {
     return "n/a";
   }
   const composed = unifiedJudgment.composedDrinkType || null;
+  const unifiedFeedback = unifiedJudgment.unifiedFeedback || null;
   return [
     `type:${unifiedJudgment.type || "n/a"}`,
     `accident:${unifiedJudgment.accidentTypeId || "none"}`,
@@ -472,6 +474,8 @@ function formatUnifiedJudgment(unifiedJudgment) {
     `outcome:${unifiedJudgment.outcomeTypeId || "none"}`,
     `composed:${composed?.composedTypeLabel || "none"}`,
     `broad:${composed?.drinkTypeId || "none"}`,
+    `feedbackTone:${unifiedFeedback?.tone || "none"}`,
+    `feedbackSource:${unifiedFeedback?.sourcePressure?.pressureKey || unifiedJudgment.dominantPressure || "none"}`,
     `tags:${Array.isArray(unifiedJudgment.feedbackTags) ? unifiedJudgment.feedbackTags.join("+") || "none" : "none"}`
   ].join(" / ");
 }
