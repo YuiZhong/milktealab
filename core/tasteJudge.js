@@ -11,6 +11,7 @@ const summaryCandidateEngine = window.MILK_TEA_LAB_SUMMARY_CANDIDATE_ENGINE;
 const candidatePriorityShellEngine = window.MILK_TEA_LAB_CANDIDATE_PRIORITY_SHELL_ENGINE;
 const generatedSeveritySuggestionEngine = window.MILK_TEA_LAB_GENERATED_SEVERITY_SUGGESTION_ENGINE;
 const unifiedScoringEngine = window.MILK_TEA_LAB_UNIFIED_SCORING_ENGINE;
+const unifiedJudgmentEngine = window.MILK_TEA_LAB_UNIFIED_JUDGMENT_ENGINE;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -154,10 +155,30 @@ function readScoreTakeoverQueryFlag() {
   }
 }
 
+function readJudgmentTakeoverQueryFlag() {
+  try {
+    if (!window.location?.search) return null;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("judgmentTakeover")) return null;
+    return params.get("judgmentTakeover");
+  } catch (error) {
+    return null;
+  }
+}
+
 function readScoreTakeoverStorageFlag() {
   try {
     if (!window.localStorage) return null;
     return window.localStorage.getItem("MILK_TEA_LAB_SCORE_TAKEOVER_TRIAL");
+  } catch (error) {
+    return null;
+  }
+}
+
+function readJudgmentTakeoverStorageFlag() {
+  try {
+    if (!window.localStorage) return null;
+    return window.localStorage.getItem("MILK_TEA_LAB_JUDGMENT_TAKEOVER_TRIAL");
   } catch (error) {
     return null;
   }
@@ -173,31 +194,47 @@ function isScoreTakeoverTrialRequested() {
   return isTruthyDebugFlag(readScoreTakeoverStorageFlag());
 }
 
-function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion, unifiedScoring) {
+function isJudgmentTakeoverTrialRequested() {
+  const queryValue = readJudgmentTakeoverQueryFlag();
+  if (queryValue !== null) return isTruthyDebugFlag(queryValue);
+  return isTruthyDebugFlag(readJudgmentTakeoverStorageFlag());
+}
+
+function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion, unifiedScoring, unifiedJudgment) {
   const suggestedScore = generatedSeveritySuggestion?.scoreSuggestion?.suggestedScore;
   const hasValidSuggestedScore = Number.isFinite(suggestedScore);
   const unifiedScore = Number.isFinite(unifiedScoring?.score)
     ? Math.round(clamp(unifiedScoring.score))
     : null;
+  const unifiedJudgmentScore = Number.isFinite(unifiedJudgment?.score)
+    ? Math.round(clamp(unifiedJudgment.score))
+    : null;
   const hasValidUnifiedScore = Number.isFinite(unifiedScore);
   const takeoverRequested = isScoreTakeoverTrialRequested();
-  const scoreTakeoverEnabled = takeoverRequested && hasValidUnifiedScore;
+  const judgmentTakeoverRequested = isJudgmentTakeoverTrialRequested();
+  const judgmentTakeoverEnabled = judgmentTakeoverRequested && Number.isFinite(unifiedJudgmentScore);
+  const scoreTakeoverEnabled = !judgmentTakeoverEnabled && takeoverRequested && hasValidUnifiedScore;
   const generatedSuggestedScore = hasValidSuggestedScore ? Math.round(clamp(suggestedScore)) : null;
 
   return {
-    score: scoreTakeoverEnabled ? unifiedScore : legacyScore,
+    score: judgmentTakeoverEnabled ? unifiedJudgmentScore : scoreTakeoverEnabled ? unifiedScore : legacyScore,
     legacyScore,
     generatedSuggestedScore,
     unifiedScore,
+    unifiedJudgmentScore,
     unifiedScoreDeltaFromLegacy: hasValidUnifiedScore ? unifiedScore - legacyScore : null,
     dominantPressure: unifiedScoring?.dominantPressure || null,
     scoreReasons: Array.isArray(unifiedScoring?.scoreReasons) ? unifiedScoring.scoreReasons : [],
-    scoreSource: scoreTakeoverEnabled ? "playtest_unified_score" : "legacy",
+    scoreSource: judgmentTakeoverEnabled ? "playtest_unified_judgment" : scoreTakeoverEnabled ? "playtest_unified_score" : "legacy",
     scoreTakeoverMode: takeoverRequested ? "debug_flag" : "off",
+    judgmentTakeoverMode: judgmentTakeoverRequested ? "debug_flag" : "off",
     scoreTakeoverEnabled,
+    judgmentTakeoverEnabled,
     scoreTakeoverNote: scoreTakeoverEnabled
       ? "已开启 Playtest unified score takeover；只覆盖最终分数，反馈 / 类型 / 事故仍保持旧系统。"
-      : takeoverRequested
+      : judgmentTakeoverEnabled
+        ? "已开启 Playtest unified judgment takeover；分数、类型、事故和反馈使用 unified judgment 试玩输出。"
+        : takeoverRequested
         ? "Debug 分数接管开关已开启，但 unified score 不可用或非法，已自动回退旧系统分数。"
         : "默认使用旧系统分数。仅在 Debug 试验时使用 ?scoreTakeover=1 或 localStorage MILK_TEA_LAB_SCORE_TAKEOVER_TRIAL=1。"
   };
@@ -412,7 +449,33 @@ function evaluateCup(cup) {
       legacyScore
     });
   }
-  Object.assign(result, createScoreTakeoverState(legacyScore, result.generatedSeveritySuggestion, result.unifiedScoring));
+  if (unifiedJudgmentEngine?.buildUnifiedJudgment) {
+    result.unifiedJudgment = unifiedJudgmentEngine.buildUnifiedJudgment({
+      tasteSummary,
+      textureSummary,
+      flavorSummary,
+      summaryCandidates,
+      candidatePriorityShell,
+      unifiedScoring: result.unifiedScoring,
+      legacyComparison: {
+        legacyScore,
+        legacyType: type,
+        legacyAccidentTypeId,
+        legacyDrinkTypeId,
+        legacyOutcomeTypeId: result.legacyOutcomeTypeId,
+        legacyFeedback: feedback
+      }
+    });
+  }
+  Object.assign(result, createScoreTakeoverState(legacyScore, result.generatedSeveritySuggestion, result.unifiedScoring, result.unifiedJudgment));
+  if (result.judgmentTakeoverEnabled && result.unifiedJudgment) {
+    result.type = result.unifiedJudgment.type;
+    result.feedback = result.unifiedJudgment.feedback;
+    result.feedbackTags = Array.isArray(result.unifiedJudgment.feedbackTags) ? result.unifiedJudgment.feedbackTags : [];
+    result.accidentTypeId = result.unifiedJudgment.accidentTypeId || null;
+    result.drinkTypeId = result.unifiedJudgment.drinkTypeId || null;
+    result.outcomeTypeId = result.unifiedJudgment.outcomeTypeId || null;
+  }
   return result;
 }
 

@@ -54,6 +54,7 @@ const postPatchScripts = [
   "core/candidatePriorityShellEngine.js",
   "core/generatedSeveritySuggestionEngine.js",
   "core/unifiedScoringEngine.js",
+  "core/unifiedJudgmentEngine.js",
   "core/tasteJudge.js",
 ];
 
@@ -385,6 +386,12 @@ function getUnifiedScoring(result) {
     : null;
 }
 
+function getUnifiedJudgment(result) {
+  return result && result.unifiedJudgment
+    ? result.unifiedJudgment
+    : null;
+}
+
 function collectSignals(result) {
   const tasteValues = (result.tasteSummary && result.tasteSummary.values) || {};
   const textureValues = (result.textureSummary && result.textureSummary.values) || {};
@@ -449,6 +456,19 @@ function formatUnifiedScoring(unifiedScoring) {
   }
   parts.push(`dominant:${dominantPressure}`);
   return parts.join(" / ");
+}
+
+function formatUnifiedJudgment(unifiedJudgment) {
+  if (!unifiedJudgment) {
+    return "n/a";
+  }
+  return [
+    `type:${unifiedJudgment.type || "n/a"}`,
+    `accident:${unifiedJudgment.accidentTypeId || "none"}`,
+    `drink:${unifiedJudgment.drinkTypeId || "none"}`,
+    `outcome:${unifiedJudgment.outcomeTypeId || "none"}`,
+    `tags:${Array.isArray(unifiedJudgment.feedbackTags) ? unifiedJudgment.feedbackTags.join("+") || "none" : "none"}`
+  ].join(" / ");
 }
 
 function getValue(result, summaryKey, metric) {
@@ -521,6 +541,8 @@ function main() {
     const draftSuggestion = getScoreSuggestion(draftResult);
     const currentUnifiedScoring = getUnifiedScoring(currentResult);
     const draftUnifiedScoring = getUnifiedScoring(draftResult);
+    const currentUnifiedJudgment = getUnifiedJudgment(currentResult);
+    const draftUnifiedJudgment = getUnifiedJudgment(draftResult);
 
     return {
       sampleName: sample.name,
@@ -528,8 +550,10 @@ function main() {
       legacyScore: formatScore(currentResult.legacyScore || currentResult.score),
       currentRuntimeSuggestion: formatScoreDelta(currentSuggestion),
       currentRuntimeUnifiedScore: formatUnifiedScoring(currentUnifiedScoring),
+      currentRuntimeUnifiedJudgment: formatUnifiedJudgment(currentUnifiedJudgment),
       profileDraftShadow: formatScoreDelta(draftSuggestion),
       profileDraftUnifiedScore: formatUnifiedScoring(draftUnifiedScoring),
+      profileDraftUnifiedJudgment: formatUnifiedJudgment(draftUnifiedJudgment),
       profileDraftTopSignals: collectSignals(draftResult),
       initialReviewLabel: buildInitialReviewLabel(draftResult),
       warningOrNote: buildRowNote(draft),
@@ -550,11 +574,11 @@ function main() {
   console.log(`parseWarnings: ${draft.warnings.length ? draft.warnings.join("; ") : "none"}`);
   console.log("runtimeBoundary: read-only shadow observation; no runtime/data/generated/golden writes");
   console.log("");
-  console.log("| sample | recipe | legacy score | current runtime draft suggestion | current runtime unified score | v0.0.8.15 proposed profile draft suggestion | v0.0.8.15 proposed profile unified score | key observed pressures | warning / note | initial review label | boundary |");
-  console.log("|---|---|---:|---|---|---|---|---|---|---|---|");
+  console.log("| sample | recipe | legacy score | current runtime draft suggestion | current runtime unified score | current runtime unified judgment | v0.0.8.15 proposed profile draft suggestion | v0.0.8.15 proposed profile unified score | v0.0.8.15 proposed profile unified judgment | key observed pressures | warning / note | initial review label | boundary |");
+  console.log("|---|---|---:|---|---|---|---|---|---|---|---|---|---|");
   rows.forEach((row) => {
     console.log(
-      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.currentRuntimeUnifiedScore)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftUnifiedScore)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.warningOrNote)} | ${escapeMarkdown(row.initialReviewLabel)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
+      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.currentRuntimeUnifiedScore)} | ${escapeMarkdown(row.currentRuntimeUnifiedJudgment)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftUnifiedScore)} | ${escapeMarkdown(row.profileDraftUnifiedJudgment)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.warningOrNote)} | ${escapeMarkdown(row.initialReviewLabel)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
     );
   });
 }

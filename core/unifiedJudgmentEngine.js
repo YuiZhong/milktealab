@@ -1,0 +1,270 @@
+(function() {
+const { clamp } = window.MILK_TEA_LAB_HELPERS;
+
+const schemaVersion = "unifiedJudgment.v0.0.8.25";
+
+const pressureJudgmentRules = {
+  sweetnessPressure: {
+    type: "味觉过载（试玩）",
+    feedbackTags: ["sweet"],
+    feedback: "甜味压力过高，几乎没有被其他味道平衡。",
+    missingStableIdWarning: "missing_stable_accident_type:sweetnessPressure"
+  },
+  acidPressure: {
+    type: "味觉事故（试玩）",
+    accidentTypeId: "taste_acid_overload",
+    feedbackTags: ["acid_accident"],
+    feedback: "酸度压力已经压过清爽感，需要更明确的甜度、茶感或水感支撑。"
+  },
+  bitterPressure: {
+    type: "味觉过载（试玩）",
+    feedbackTags: ["weird"],
+    feedback: "苦味压力偏高；如果没有乳基或甜味承接，会让整杯显得生硬。",
+    missingStableIdWarning: "missing_stable_accident_type:bitterPressure"
+  },
+  fatPressure: {
+    type: "奶脂过载（试玩）",
+    accidentTypeId: "dairy_fat_overload",
+    feedbackTags: ["greasy_overload"],
+    feedback: "奶脂负担明显，喝得动，但入口和下咽后的压力会变重。"
+  },
+  solidLoadPressure: {
+    type: "质地事故（试玩）",
+    accidentTypeId: "texture_solid_overload",
+    feedbackTags: ["straw_disaster"],
+    feedback: "固体小料负载过高，喝一口更像在做咀嚼训练。"
+  },
+  lowFlowPressure: {
+    type: "质地事故（试玩）",
+    accidentTypeId: "texture_low_drinkability",
+    feedbackTags: ["straw_disaster"],
+    feedback: "低流动性压力偏高，整杯开始变得难以顺畅饮用。"
+  },
+  strongIdentityPressure: {
+    type: "风味冲突（试玩）",
+    outcomeTypeId: "novelty_experiment",
+    feedbackTags: ["weird"],
+    feedback: "风味身份非常强，需要足够支撑；支撑不足时会压过整杯。"
+  }
+};
+
+function isNumber(value) {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function rounded(value) {
+  return Math.round(value);
+}
+
+function getValues(summary) {
+  return summary?.values || {};
+}
+
+function collectTags(...summaries) {
+  return new Set(summaries.flatMap(summary => Array.isArray(summary?.tags) ? summary.tags : []));
+}
+
+function hasTag(tags, tag) {
+  return tags.has(tag);
+}
+
+function getActivePressures(unifiedScoring) {
+  return (Array.isArray(unifiedScoring?.pressures) ? unifiedScoring.pressures : [])
+    .filter(pressure => pressure?.matched && pressure.adjustedPenalty > 0)
+    .sort((left, right) => right.adjustedPenalty - left.adjustedPenalty);
+}
+
+function getDominantPressure(unifiedScoring) {
+  const activePressures = getActivePressures(unifiedScoring);
+  if (!activePressures.length) return null;
+  const dominantKey = unifiedScoring?.dominantPressure;
+  return activePressures.find(pressure => pressure.pressureKey === dominantKey) || activePressures[0];
+}
+
+function shouldTreatAsAccident(pressure, score) {
+  if (!pressure) return false;
+  if (pressure.severityLevel === "critical" || pressure.severityLevel === "heavy") return true;
+  return pressure.severityLevel === "medium" && isNumber(score) && score <= 42;
+}
+
+function buildDrinkTypeCandidate(input, warnings) {
+  const taste = getValues(input.tasteSummary);
+  const texture = getValues(input.textureSummary);
+  const flavor = getValues(input.flavorSummary);
+  const tags = collectTags(input.tasteSummary, input.textureSummary, input.flavorSummary);
+  const score = input.unifiedScoring?.score;
+
+  if (isNumber(score) && score < 45) {
+    return {
+      type: "实验事故（试玩）",
+      drinkTypeId: null,
+      outcomeTypeId: "experimental_special",
+      reason: "unified score 较低，先保留为试玩实验结果。"
+    };
+  }
+
+  const hasCoffeeIdentity = hasTag(tags, "coffee");
+  const hasDairySupport = hasTag(tags, "dairy") && (taste.milkiness || 0) >= 8;
+
+  if (hasCoffeeIdentity && hasDairySupport) {
+    return {
+      type: "咖啡乳饮（试玩）",
+      drinkTypeId: "coffee_special",
+      outcomeTypeId: null,
+      reason: "咖啡身份和乳基支撑都在 summary tags / numeric summary 中可见。"
+    };
+  }
+
+  if (hasTag(tags, "premium") && hasTag(tags, "tea") && hasTag(tags, "dairy") && (taste.milkiness || 0) >= 8) {
+    return {
+      type: "高级厚乳款（试玩）",
+      drinkTypeId: "premium_thick_milk_tea",
+      outcomeTypeId: null,
+      reason: "茶感、乳基和 premium / thick support 标签同时成立。"
+    };
+  }
+
+  if (hasTag(tags, "tea") && hasTag(tags, "dairy") && (taste.teaStrength || 0) >= 8 && (taste.milkiness || 0) >= 8) {
+    return {
+      type: "经典奶茶（试玩）",
+      drinkTypeId: "classic_milk_tea",
+      outcomeTypeId: null,
+      reason: "茶感和乳基支撑形成稳定奶茶结构。"
+    };
+  }
+
+  if ((hasTag(tags, "fruit") || hasTag(tags, "fresh")) && (flavor.beverageFit || 0) >= 55 && (texture.drinkability || 0) >= 50) {
+    return {
+      type: "清爽饮品（试玩）",
+      drinkTypeId: "fresh_fruit_tea",
+      outcomeTypeId: null,
+      reason: "果味 / 清爽标签、beverageFit 和 drinkability 支撑清爽饮品方向。"
+    };
+  }
+
+  if ((texture.fatLoad || 0) >= 18 || (taste.creaminess || 0) >= 14 || ((flavor.dessertFit || 0) >= 55 && hasTag(tags, "dessert"))) {
+    warnings.push("playtest_drink_type_candidate:creamy_dessert_drink_missing_stable_id");
+    return {
+      type: "奶感甜品饮（试玩）",
+      drinkTypeId: null,
+      outcomeTypeId: null,
+      reason: "奶脂、奶油感或甜品适配信号支持奶感甜品饮方向。"
+    };
+  }
+
+  return {
+    type: "实验特调（试玩）",
+    drinkTypeId: "experimental_special",
+    outcomeTypeId: null,
+    reason: "没有更明确的试玩 drink type candidate 命中。"
+  };
+}
+
+function buildPressureJudgment(input, warnings) {
+  const pressure = getDominantPressure(input.unifiedScoring);
+  const rule = pressure ? pressureJudgmentRules[pressure.pressureKey] : null;
+
+  if (!pressure || !rule || !shouldTreatAsAccident(pressure, input.unifiedScoring?.score)) {
+    return null;
+  }
+
+  if (rule.missingStableIdWarning) warnings.push(rule.missingStableIdWarning);
+
+  return {
+    pressure,
+    type: rule.type,
+    accidentTypeId: rule.accidentTypeId || null,
+    drinkTypeId: null,
+    outcomeTypeId: rule.outcomeTypeId || null,
+    feedbackTags: rule.feedbackTags,
+    feedback: rule.feedback,
+    reason: `${pressure.pressureKey} reached ${pressure.severityLevel} as playtest unified judgment.`
+  };
+}
+
+function uniqueItems(items) {
+  return [...new Set(items.filter(Boolean))];
+}
+
+function buildSupportReason(unifiedScoring) {
+  const balances = Array.isArray(unifiedScoring?.balances) ? unifiedScoring.balances : [];
+  const strongBalances = balances
+    .filter(item => item.bufferAmount >= 3)
+    .slice(0, 2)
+    .map(item => `${item.supportKey} buffered ${item.pressureKey}`);
+  return strongBalances.length ? strongBalances.join("; ") : null;
+}
+
+function buildFeedback(judgment, drinkTypeCandidate, unifiedScoring) {
+  const supportReason = buildSupportReason(unifiedScoring);
+  const base = judgment?.feedback || "这杯当前没有明显事故，结构大体成立，可以进入试玩反馈。";
+  const support = supportReason ? ` 支撑观察：${supportReason}。` : "";
+  const source = judgment
+    ? " 这是 playtest unified judgment 文案，不反向驱动系统。"
+    : ` 类型判断：${drinkTypeCandidate.reason}。`;
+  return `${base}${support}${source}`;
+}
+
+function buildJudgmentReasons(judgment, drinkTypeCandidate, unifiedScoring) {
+  const reasons = [];
+  if (judgment) reasons.push(judgment.reason);
+  if (drinkTypeCandidate?.reason) reasons.push(drinkTypeCandidate.reason);
+  (Array.isArray(unifiedScoring?.scoreReasons) ? unifiedScoring.scoreReasons : []).slice(0, 3).forEach(reason => {
+    reasons.push(reason);
+  });
+  return reasons;
+}
+
+function buildUnifiedJudgment(input = {}) {
+  const unifiedScoring = input.unifiedScoring || {};
+  const warnings = [
+    "playtest unified judgment takeover only; not final production takeover.",
+    "does not affect golden expected; legacy route remains available for rollback/debug."
+  ];
+  const pressureJudgment = buildPressureJudgment(input, warnings);
+  const drinkTypeCandidate = pressureJudgment ? null : buildDrinkTypeCandidate(input, warnings);
+  const finalCandidate = pressureJudgment || drinkTypeCandidate || {};
+  const score = isNumber(unifiedScoring.score) ? rounded(clamp(unifiedScoring.score)) : null;
+  const legacy = input.legacyComparison || {};
+  const feedbackTags = uniqueItems([
+    ...(Array.isArray(finalCandidate.feedbackTags) ? finalCandidate.feedbackTags : []),
+    pressureJudgment ? "accident" : "normal_good"
+  ]);
+
+  return {
+    schemaVersion,
+    mode: "playtest_unified_judgment_takeover",
+    playtestOnly: true,
+    affectsScore: true,
+    affectsFeedback: true,
+    affectsResultType: true,
+    affectsAccident: true,
+    affectsDrinkType: true,
+    affectsOutcome: true,
+    affectsGoldenExpected: false,
+    score,
+    type: finalCandidate.type || "实验特调（试玩）",
+    accidentTypeId: finalCandidate.accidentTypeId || null,
+    drinkTypeId: finalCandidate.drinkTypeId || null,
+    outcomeTypeId: finalCandidate.outcomeTypeId || null,
+    feedback: buildFeedback(pressureJudgment, drinkTypeCandidate, unifiedScoring),
+    feedbackTags,
+    dominantPressure: unifiedScoring.dominantPressure || null,
+    scoreReasons: Array.isArray(unifiedScoring.scoreReasons) ? unifiedScoring.scoreReasons : [],
+    judgmentReasons: buildJudgmentReasons(pressureJudgment, drinkTypeCandidate, unifiedScoring),
+    warnings,
+    legacyComparison: {
+      legacyScore: legacy.legacyScore ?? null,
+      legacyType: legacy.legacyType || null,
+      legacyAccidentTypeId: legacy.legacyAccidentTypeId || null,
+      legacyDrinkTypeId: legacy.legacyDrinkTypeId || null,
+      legacyOutcomeTypeId: legacy.legacyOutcomeTypeId || null,
+      legacyFeedback: legacy.legacyFeedback || null
+    }
+  };
+}
+
+window.MILK_TEA_LAB_UNIFIED_JUDGMENT_ENGINE = {
+  buildUnifiedJudgment
+};
+})();

@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.25 playtest unified judgment takeover scaffold
+
+本轮新增 `core/unifiedJudgmentEngine.js`，建立第一版可试玩 unified judgment engine：基于 unified scoring result、taste / texture / flavor summary、pressure、balance 和 candidate shell 输出试玩版 type / accident / drinkType / outcome / feedback。
+
+新增 `judgmentTakeover=1` debug flag：默认模式仍 legacy；`scoreTakeover=1` 仍只接管 score；`judgmentTakeover=1` 接管 score / type / accident / drinkType / outcome / feedback，用于制作人和朋友试玩反馈闭环。
+
+本轮不是 final production takeover；legacy route 仍保留为 debug 对照和回滚路径。未改 golden expected，未写 `data/generated`，未改 profile 数值，未新增 report，未新增 recipe whitelist / sample-specific if / display text key，未 push，未 tag。
+
 ## v0.0.8.24 playtest score takeover scaffold
 
 本轮新增 `core/unifiedScoringEngine.js`，建立第一版可试玩 unified scoring engine：读取 taste / texture / flavor summary 的 numeric values，形成 pressure observations、generic support / balance、aggregation、dominant pressure 和 score reasons。
