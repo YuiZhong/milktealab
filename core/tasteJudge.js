@@ -334,11 +334,26 @@ function evaluateCup(cup) {
   const feedbackOptions = { feedbackTags: sourceFeedbackTags };
   const feedbackTags = feedbackEngine.getFeedbackTags(attr, legacyScore, priorityNotes, accidents.length > 0, feedbackOptions);
   const feedback = feedbackEngine.makeFeedback(attr, legacyScore, priorityNotes, accidents.length > 0, feedbackOptions);
+  const legacyAccidentTypeId = primaryAccident?.accidentTypeId || null;
+  const legacyDrinkTypeId = drinkTypeId || null;
+  const legacyTypeRoute = forcedType
+    ? primaryAccident
+      ? "legacy_accident_route"
+      : "legacy_forced_type_route"
+    : "legacy_drink_type_analyzer";
 
   const result = {
     attr,
     score: legacyScore,
     legacyScore,
+    legacyScoreSource: "legacy_score_engine",
+    legacyFinalScoreRoute: "legacy_score_engine",
+    legacyAccidentTypeId,
+    legacyDrinkTypeId,
+    legacyOutcomeTypeId: null,
+    legacyType: type,
+    legacyTypeRoute,
+    legacyPrimaryNotes: priorityNotes.slice(0, 3),
     generatedSuggestedScore: null,
     scoreSource: "legacy",
     scoreTakeoverMode: "off",
@@ -355,13 +370,14 @@ function evaluateCup(cup) {
     summaryCandidates,
     candidatePriorityShell
   };
-  if (primaryAccident?.accidentTypeId) {
-    result.accidentTypeId = primaryAccident.accidentTypeId;
+  if (legacyAccidentTypeId) {
+    result.accidentTypeId = legacyAccidentTypeId;
   }
-  if (drinkTypeId && !primaryAccident?.accidentTypeId && !badNotes.length) {
-    result.drinkTypeId = drinkTypeId;
+  if (legacyDrinkTypeId && !legacyAccidentTypeId && !badNotes.length) {
+    result.drinkTypeId = legacyDrinkTypeId;
   }
   const outcomeTypeId = inferOutcomeTypeId(result.type, result.accidentTypeId, result.drinkTypeId);
+  result.legacyOutcomeTypeId = outcomeTypeId || null;
   if (outcomeTypeId) {
     result.outcomeTypeId = outcomeTypeId;
   }

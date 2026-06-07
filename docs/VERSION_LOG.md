@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.21 legacy score route isolation for official score takeover
+
+本轮将 legacy final score / accident / drinkType / outcome route 明确隔离为旧系统 debug 对照：`tasteJudge` 输出 `legacyScoreSource`、`legacyFinalScoreRoute`、`legacyType`、`legacyAccidentTypeId`、`legacyDrinkTypeId`、`legacyOutcomeTypeId` 和 `legacyPrimaryNotes`。
+
+`generatedSeveritySuggestion` 的 score suggestion 现在明确以 `legacyScore` 作为 baseline；页面 debug 面板同步显示 legacy baseline、旧系统类型 / 事故 / drinkType / outcome 对照，以及“旧系统不是新系统 source-of-truth”的接管说明。
+
+本轮只做 legacy route 隔离和 debug clarity；未实现 unified scoring engine，未调分，未改 generated severity scoring rules，未接管 feedback / result.type / accident / golden expected，未写 `data/generated`，未新增 recipe whitelist / sample-specific if，未 push，未 tag。
+
 ## v0.0.8.20 player-visible content key cleanup for score takeover path
 
 本轮清理正式 score takeover 前最高风险的 player-visible content key / display text key runtime 债：正式计分路径不再通过 `"茶类"` / `"小料"` / `"乳类"` / `"水果/风味"` 这类玩家可见 category label 计数，改为 `tasteContext` 里的 stable `categoryId`。

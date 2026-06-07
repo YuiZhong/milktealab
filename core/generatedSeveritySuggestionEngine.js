@@ -313,10 +313,18 @@ function buildSeverityObservations(result, draftRuleObservations) {
 }
 
 function buildScoreSuggestion(result, draftRuleObservations) {
-  const legacyScore = isNumber(result?.score) ? result.score : null;
+  const hasExplicitLegacyScore = isNumber(result?.legacyScore);
+  const legacyScore = hasExplicitLegacyScore
+    ? result.legacyScore
+    : isNumber(result?.score)
+      ? result.score
+      : null;
+  const baselineScoreSource = hasExplicitLegacyScore ? "legacyScore" : "score_fallback";
   if (!isNumber(legacyScore)) {
     return {
       legacyScore,
+      baselineScoreSource,
+      baselineScoreIsLegacy: hasExplicitLegacyScore,
       suggestedScore: null,
       scoreDelta: 0,
       confidence: "low",
@@ -332,6 +340,8 @@ function buildScoreSuggestion(result, draftRuleObservations) {
   if (!draftRuleObservations.length) {
     return {
       legacyScore,
+      baselineScoreSource,
+      baselineScoreIsLegacy: hasExplicitLegacyScore,
       suggestedScore,
       scoreDelta,
       confidence: "low",
@@ -346,6 +356,8 @@ function buildScoreSuggestion(result, draftRuleObservations) {
 
   return {
     legacyScore,
+    baselineScoreSource,
+    baselineScoreIsLegacy: hasExplicitLegacyScore,
     suggestedScore,
     scoreDelta,
     confidence: "low",

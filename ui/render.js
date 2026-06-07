@@ -440,9 +440,14 @@ function createRenderer(app) {
     appendSuggestionMeta(meta, "接管开关", scoreTakeoverEnabled ? "已开启（Debug，可回滚）" : "关闭");
     appendSuggestionMeta(meta, "接管模式", takeoverModeText);
     appendSuggestionMeta(meta, "旧系统分数", suggestionScore(legacyScore));
+    appendSuggestionMeta(meta, "建议分基线", scoreSuggestion.baselineScoreIsLegacy ? "legacyScore（旧系统对照）" : "score fallback（旧字段兜底）");
     appendSuggestionMeta(meta, "新系统建议分", `${suggestionScore(generatedSuggestedScore)}（${scoreTakeoverEnabled ? "当前接管试验" : "未接管"}）`);
     appendSuggestionMeta(meta, "分数差", suggestionDelta(scoreSuggestion.scoreDelta));
     appendSuggestionMeta(meta, "置信度", displayLabel(confidenceDisplayLabels, scoreSuggestion.confidence || "low"));
+    appendSuggestionMeta(meta, "旧系统类型", result?.legacyType || "无");
+    appendSuggestionMeta(meta, "旧系统事故 ID", result?.legacyAccidentTypeId || "无");
+    appendSuggestionMeta(meta, "旧系统饮品 ID", result?.legacyDrinkTypeId || "无");
+    appendSuggestionMeta(meta, "旧系统 outcome ID", result?.legacyOutcomeTypeId || "无");
 
     const reason = document.createElement("p");
     reason.className = "suggestion-reason";
@@ -451,7 +456,7 @@ function createRenderer(app) {
     const takeoverNote = document.createElement("p");
     takeoverNote.className = "suggestion-footnote";
     takeoverNote.textContent = result?.scoreTakeoverNote
-      ? `接管说明：${result.scoreTakeoverNote}`
+      ? `接管说明：${result.scoreTakeoverNote} 旧系统事故 / 类型 / 反馈仍只是 debug 对照，不是新系统 source-of-truth。`
       : "接管说明：默认关闭；仅用于制作人 Debug / rollback 试验。";
 
     const calibrationBlock = renderCalibrationReview(suggestion.calibrationReview);
