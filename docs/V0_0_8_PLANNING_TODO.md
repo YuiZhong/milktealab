@@ -50,6 +50,8 @@
 
 partial / active takeover 仍要明确 gate，但当前没有外部玩家，可以比面向真实玩家的线上产品更积极推进 non-final / feature flag / debug overlay / partial route。没有玩家只降低发布风险，不降低工程质量要求：仍需测试、回滚、边界说明和反 if 地狱。
 
+score suggestion overlay / early tuning loop 可以更积极推进，但 score 目标不能反向污染原料 profile。后续如果进入批量 ingredient profile value draft，应先建立资料参考、人类审阅和 shadow calibration 流程；原料数值草案必须与现实属性相容，不能为了让某个 golden sample、校正测试或某杯饮料达到目标分数而扭曲。玩家 / 制作人反馈主要用于校准判定层，例如 threshold、severity、scoreMultiplier、组合关系、positive synergy、饮品类型预期、客群偏好和 score aggregation；当“现实合理 profile”与“目标分数直觉”冲突时，优先调判定层，不优先改原料事实。
+
 ### Single-line workflow / Parking Lot
 
 v0.0.8.x 默认一次只推进一条内容设计线。当前线未形成清晰 checkpoint 前，不并行开启另一条同级内容线。新想法、新债务和相邻方向先进入 Parking Lot；只有明确阻塞当前线的问题，才临时处理，并在解除阻塞后回到原主线。

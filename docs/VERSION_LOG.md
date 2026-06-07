@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8 docs sync: ingredient factual baseline and scoring calibration boundary
+
+本轮同步未来原料数值生成原则：不能随机生成或拍脑袋，后续批量原料数值阶段应参考食品资料、论文、pH、糖度、质地资料等，先形成资料基线和游戏化相对数值草案。
+
+同步 profile 与 scoring 边界：原料 profile 描述材料事实 / 游戏化相对属性，判定系统定义什么算好喝。不能为了让某杯饮料达到目标分数、通过校正测试或贴合旧 golden 而扭曲原料数值。
+
+玩家 / 制作人反馈主要用于校准评分 / 判定系统；只有发现原料数值偏离现实事实或相对尺度明显错误时，才调整原料 profile。当现实合理 profile 与人类直觉分数冲突时，优先校正 threshold、severity、scoreMultiplier、synergy、drinkType expectation、preference 和 aggregation。
+
+本轮只改 docs，未改 runtime / data / generated / golden，未 push，未 tag。
+
 ## v0.0.8.5 first non-zero generated severity scoreDeltaDraft
 
 本轮让页面上的 `generatedSeveritySuggestion` 开始基于 existing summary metrics 产生第一版非零 `scoreDeltaDraft` / severity draft observation。

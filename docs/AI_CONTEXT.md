@@ -105,6 +105,8 @@ ID / draft ID / registry / validator 相关任务必须复用 `docs/STABLE_ID_NA
 
 Profile / summary / `triggerMetric` / severity 相关任务遵守 numeric-first：机器计算优先使用 numeric values / numeric load，中文档位或 high / medium / low 只做人类提示。
 
+未来 ingredient profile value draft / 批量原料数值阶段不能随机生成或纯拍脑袋，应先参考联网搜索、食品资料、论文、食品成分、pH、糖度和质地资料，形成“参考基线 + 游戏化相对数值草案”。原料 profile 描述材料事实 / 游戏化相对属性；scoring / judgment system 定义什么算好喝。不能为了让某杯饮料达到目标分数或通过校正测试而扭曲原料 profile；若现实合理 profile 得出不符合直觉的分数，优先检查 threshold、severity、scoreMultiplier、组合关系、饮品类型预期、客群偏好、positive synergy / accident balance 和 score aggregation。只有原料数值偏离现实事实或相对尺度明显错误时，才调整原料 profile。
+
 ## 2. 当前机制正本
 
 当前完整判定层级、priority vs severity 边界和所有判定层反 if 地狱原则，以 `docs/TASTE_DECISION_MODEL.md` 为准。
