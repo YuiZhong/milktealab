@@ -309,14 +309,37 @@ function createRenderer(app) {
       metricList.append(row);
     }
 
+    const draftObservationTitle = document.createElement("p");
+    draftObservationTitle.className = "suggestion-subtitle";
+    draftObservationTitle.textContent = "Draft severity observations";
+
+    const draftObservationList = document.createElement("ul");
+    draftObservationList.className = "suggestion-list";
+    const draftObservations = Array.isArray(suggestion.severityObservations)
+      ? suggestion.severityObservations.filter(item => item.observationType === "draft_score_rule_matched")
+      : [];
+    draftObservations.slice(0, 3).forEach(item => {
+      const row = document.createElement("li");
+      const valueText = Number.isFinite(item.observedValue) ? ` ${Math.round(item.observedValue)}` : "";
+      const deltaText = Number.isFinite(item.scoreDeltaDraft) ? `，建议 ${suggestionDelta(item.scoreDeltaDraft)}` : "";
+      const humanReviewText = item.requiresHumanReview ? "，需人审" : "";
+      row.textContent = `${item.displayName || item.metric || "unknown"}${valueText}：${item.severityLevelDraft || "draft"} draft${deltaText}${humanReviewText}`;
+      draftObservationList.append(row);
+    });
+    if (!draftObservationList.children.length) {
+      const row = document.createElement("li");
+      row.textContent = "暂无命中的 draft severity observation。";
+      draftObservationList.append(row);
+    }
+
     const observationCount = Array.isArray(suggestion.severityObservations)
       ? suggestion.severityObservations.length
       : 0;
     const observation = document.createElement("p");
     observation.className = "suggestion-footnote";
-    observation.textContent = `已观察到 ${observationCount} 条 summary candidate；它们不是正式 generated severity。`;
+    observation.textContent = `已观察到 ${observationCount} 条新系统观察项；它们不是正式 generated severity。`;
 
-    panel.append(title, mode, meta, reason, metricTitle, metricList, observation);
+    panel.append(title, mode, meta, reason, metricTitle, metricList, draftObservationTitle, draftObservationList, observation);
   }
 
   function updateSelectedIngredientButtons() {

@@ -525,8 +525,8 @@ function checkGeneratedFeedbackShadowExpectation(result, expectation, failures) 
 }
 
 function checkGeneratedSeveritySuggestionStructure(suggestion, result, failures) {
-  if (suggestion?.schemaVersion !== "generatedSeveritySuggestion.v0.0.8.4") {
-    failures.push('generatedSeveritySuggestion.schemaVersion should be "generatedSeveritySuggestion.v0.0.8.4"');
+  if (suggestion?.schemaVersion !== "generatedSeveritySuggestion.v0.0.8.5") {
+    failures.push('generatedSeveritySuggestion.schemaVersion should be "generatedSeveritySuggestion.v0.0.8.5"');
   }
   if (suggestion?.readonly !== true) failures.push("generatedSeveritySuggestion.readonly should be true");
   if (suggestion?.affectsFinalResult !== false) failures.push("generatedSeveritySuggestion.affectsFinalResult should be false");
@@ -541,18 +541,33 @@ function checkGeneratedSeveritySuggestionStructure(suggestion, result, failures)
     if (suggestion.scoreSuggestion.legacyScore !== result?.score) {
       failures.push(`generatedSeveritySuggestion.scoreSuggestion.legacyScore should be ${result?.score}`);
     }
-    if (suggestion.scoreSuggestion.suggestedScore !== result?.score) {
-      failures.push(`generatedSeveritySuggestion.scoreSuggestion.suggestedScore should be ${result?.score}`);
+    if (!Number.isFinite(suggestion.scoreSuggestion.suggestedScore)) {
+      failures.push("generatedSeveritySuggestion.scoreSuggestion.suggestedScore should be a number");
     }
-    if (suggestion.scoreSuggestion.scoreDelta !== 0) {
-      failures.push("generatedSeveritySuggestion.scoreSuggestion.scoreDelta should be 0");
+    if (
+      Number.isFinite(suggestion.scoreSuggestion.suggestedScore)
+      && (suggestion.scoreSuggestion.suggestedScore < 0 || suggestion.scoreSuggestion.suggestedScore > 100)
+    ) {
+      failures.push("generatedSeveritySuggestion.scoreSuggestion.suggestedScore should be between 0 and 100");
     }
-    if (suggestion.scoreSuggestion.confidence !== "low") {
-      failures.push('generatedSeveritySuggestion.scoreSuggestion.confidence should be "low"');
+    if (!Number.isFinite(suggestion.scoreSuggestion.scoreDelta)) {
+      failures.push("generatedSeveritySuggestion.scoreSuggestion.scoreDelta should be a number");
+    }
+    if (!["low", "medium"].includes(suggestion.scoreSuggestion.confidence)) {
+      failures.push('generatedSeveritySuggestion.scoreSuggestion.confidence should be "low" or "medium"');
     }
   }
   if (!Array.isArray(suggestion?.severityObservations)) {
     failures.push("generatedSeveritySuggestion.severityObservations should be an array");
+  } else {
+    suggestion.severityObservations.forEach((observation, index) => {
+      if (observation?.affectsFinalResult === true) {
+        failures.push(`generatedSeveritySuggestion.severityObservations[${index}].affectsFinalResult should not be true`);
+      }
+      if (observation?.officialSeverity === true) {
+        failures.push(`generatedSeveritySuggestion.severityObservations[${index}].officialSeverity should not be true`);
+      }
+    });
   }
   if (!Array.isArray(suggestion?.metricAvailability)) {
     failures.push("generatedSeveritySuggestion.metricAvailability should be an array");

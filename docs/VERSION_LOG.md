@@ -1,5 +1,17 @@
 # 版本记录
 
+## v0.0.8.5 first non-zero generated severity scoreDeltaDraft
+
+本轮让页面上的 `generatedSeveritySuggestion` 开始基于 existing summary metrics 产生第一版非零 `scoreDeltaDraft` / severity draft observation。
+
+新增的小型 draft rule config 只读取当前 `tasteSummary.values` / `textureSummary.values` 中已经存在的 numeric metrics，例如 `solidLoad`、`fatLoad`、`drinkabilityPenalty`、`acidity`、`bitterness`；它不读取 sample CSV / JSON / markdown report，也不生成新 `triggerMetric`、`accidentTypeId`、`feedbackTag` 或 ingredient profile。
+
+`suggestedScore` 只存在于 `generatedSeveritySuggestion.scoreSuggestion`，用于 UI debug / suggestion overlay；它不覆盖 final `result.score`、feedback、`result.type`、accident 或 golden expected。
+
+本轮不批量生成原料 profile 数值，不做联网 ingredient value draft。后续原料数值生成阶段应结合联网资料、食品数据、论文、pH、糖度、质地常识和游戏体验校正，而不是随机生成或拍脑袋。
+
+本轮未写 `data/generated`，未改 golden final expected，未做 active takeover / final result override，未 push，未 tag。
+
 ## v0.0.8.4 page-visible generated severity / score suggestion overlay
 
 本轮新增页面可见的 generated severity / score suggestion overlay，让用户在试喝报告里直接看到“新系统观察｜Generated severity suggestion”。
