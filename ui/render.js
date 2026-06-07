@@ -224,6 +224,73 @@ function createRenderer(app) {
     return Number.isFinite(value) ? clamp(value, 0, 100) : 0;
   }
 
+  const metricDisplayLabels = {
+    acidity: "酸度",
+    acidityLoad: "酸度负载方向",
+    aromaPressure: "香气压力",
+    astringency: "涩感 / 收敛感",
+    astringencyLoad: "涩感负载方向",
+    bitterness: "苦味",
+    bitternessLoad: "苦味负载方向",
+    drinkability: "可饮用性",
+    drinkabilityPenalty: "低流动性压力",
+    fatLoad: "奶脂负担",
+    flavorIntensity: "风味强度",
+    lowFlowPenalty: "低流动性惩罚方向",
+    solidLoad: "固体小料负载",
+    strawResistance: "吸管阻力",
+    sweetness: "甜度",
+    sweetnessLoad: "甜度负载方向"
+  };
+
+  const adjustmentTargetDisplayLabels = {
+    threshold: "阈值",
+    severityLevel: "严重度档位",
+    scoreMultiplier: "扣分倍率",
+    positiveSynergy: "好组合加成",
+    drinkTypeExpectation: "饮品类型预期",
+    scoreAggregation: "分数汇总方式",
+    customerPreference: "客群偏好",
+    profileFactualCheck: "原料事实复查"
+  };
+
+  const severityDraftDisplayLabels = {
+    light: "轻度",
+    medium: "中度",
+    heavy: "重度"
+  };
+
+  const confidenceDisplayLabels = {
+    low: "低",
+    medium: "中",
+    high: "高"
+  };
+
+  const textDisplayLabels = {
+    "positive synergy": "好组合加成",
+    "drinkType expectation": "饮品类型预期",
+    "score aggregation": "分数汇总方式",
+    "customer preference": "客群偏好"
+  };
+
+  function displayLabel(map, key, fallback = "待确认") {
+    if (!key) return fallback;
+    return map[key] || `${key}（未登记中文名）`;
+  }
+
+  function displayMetricLabel(key) {
+    if (!key) return "待确认";
+    const label = metricDisplayLabels[key];
+    return label ? `${label}（${key}）` : `${key}（未登记中文名）`;
+  }
+
+  function localizeMachineKeysInText(text) {
+    if (typeof text !== "string") return "";
+    return Object.entries({ ...textDisplayLabels, ...metricDisplayLabels, ...adjustmentTargetDisplayLabels, ...severityDraftDisplayLabels, ...confidenceDisplayLabels })
+      .sort((left, right) => right[0].length - left[0].length)
+      .reduce((current, [key, label]) => current.replaceAll(key, label), text);
+  }
+
   function suggestionScore(value) {
     return Number.isFinite(value) ? String(value) : "待观察";
   }
@@ -272,10 +339,10 @@ function createRenderer(app) {
     trust.textContent = "是否可直接相信：否，仍是 draft";
 
     const prompt = document.createElement("p");
-    prompt.textContent = `判断提示：${calibration.reviewPrompt || "请结合制作人直觉判断新系统建议是否合理。"}`;
+    prompt.textContent = `判断提示：${localizeMachineKeysInText(calibration.reviewPrompt || "请结合制作人直觉判断新系统建议是否合理。")}`;
 
     const targets = Array.isArray(calibration.likelyAdjustmentTargets) && calibration.likelyAdjustmentTargets.length
-      ? calibration.likelyAdjustmentTargets.join(" / ")
+      ? calibration.likelyAdjustmentTargets.map(target => displayLabel(adjustmentTargetDisplayLabels, target)).join(" / ")
       : "暂无";
     const targetText = document.createElement("p");
     targetText.textContent = `优先排查：${targets}`;
@@ -312,11 +379,11 @@ function createRenderer(app) {
     appendSuggestionMeta(meta, "旧系统分数", suggestionScore(scoreSuggestion.legacyScore));
     appendSuggestionMeta(meta, "建议分数", `${suggestionScore(scoreSuggestion.suggestedScore)}（暂未接管）`);
     appendSuggestionMeta(meta, "分数差", suggestionDelta(scoreSuggestion.scoreDelta));
-    appendSuggestionMeta(meta, "置信度", scoreSuggestion.confidence || "low");
+    appendSuggestionMeta(meta, "置信度", displayLabel(confidenceDisplayLabels, scoreSuggestion.confidence || "low"));
 
     const reason = document.createElement("p");
     reason.className = "suggestion-reason";
-    reason.textContent = `主要原因：${scoreSuggestion.reason || "尚未启用正式 threshold / scoreMultiplier。"}`;
+    reason.textContent = `主要原因：${localizeMachineKeysInText(scoreSuggestion.reason || "尚未启用正式 threshold / scoreMultiplier。")}`;
 
     const calibrationBlock = renderCalibrationReview(suggestion.calibrationReview);
 
@@ -332,7 +399,7 @@ function createRenderer(app) {
     metrics.slice(0, 8).forEach(item => {
       const row = document.createElement("li");
       const valueText = Number.isFinite(item.observedValue) ? `，当前值 ${Math.round(item.observedValue)}` : "";
-      row.textContent = `${item.metric || "unknown"}：${availabilityLabel(item.availability)}${valueText}`;
+      row.textContent = `${displayMetricLabel(item.metric)}：${availabilityLabel(item.availability)}${valueText}`;
       metricList.append(row);
     });
     if (!metricList.children.length) {
@@ -343,7 +410,7 @@ function createRenderer(app) {
 
     const draftObservationTitle = document.createElement("p");
     draftObservationTitle.className = "suggestion-subtitle";
-    draftObservationTitle.textContent = "Draft severity observations";
+    draftObservationTitle.textContent = "草案严重度观察";
 
     const draftObservationList = document.createElement("ul");
     draftObservationList.className = "suggestion-list";
@@ -355,7 +422,9 @@ function createRenderer(app) {
       const valueText = Number.isFinite(item.observedValue) ? ` ${Math.round(item.observedValue)}` : "";
       const deltaText = Number.isFinite(item.scoreDeltaDraft) ? `，建议 ${suggestionDelta(item.scoreDeltaDraft)}` : "";
       const humanReviewText = item.requiresHumanReview ? "，需人审" : "";
-      row.textContent = `${item.displayName || item.metric || "unknown"}${valueText}：${item.severityLevelDraft || "draft"} draft${deltaText}${humanReviewText}`;
+      const displayName = item.displayName || displayMetricLabel(item.metric);
+      const severityText = displayLabel(severityDraftDisplayLabels, item.severityLevelDraft, "草案");
+      row.textContent = `${displayName}${valueText}：${severityText}草案${deltaText}${humanReviewText}`;
       draftObservationList.append(row);
     });
     if (!draftObservationList.children.length) {

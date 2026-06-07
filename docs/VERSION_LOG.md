@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.7 Chinese display labels for generated severity suggestion UI
+
+本轮为页面 generated severity suggestion / calibration review 增加中文展示标签。
+
+内部 stable key / ID 保持英文不变，只在 `ui/render.js` display layer 将 metric、adjustment targets、severity draft 和 confidence 映射为中文可读文案。
+
+本轮没有把中文显示文案变成主键，未改 scoring logic / final result / golden expected，未写 `data/generated`，未做 final override / active takeover，未 push，未 tag。
+
 ## v0.0.8.6 page-visible score suggestion calibration review hints
 
 本轮在页面新系统建议区新增 calibration review hints，并在 `generatedSeveritySuggestion` 中新增 `calibrationReview`。
