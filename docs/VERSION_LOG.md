@@ -1,5 +1,17 @@
 # 版本记录
 
+## v0.0.8 route correction: golden role, no-player risk boundary, and visible-product priority
+
+本轮同步 v0.0.8.x 路线纠偏：当前已进入 read-only generated severity shadow proof / multi-sample shadow output / human-readable review pack，不再把“无限保护旧 golden 一致性”作为最高目标。
+
+旧 golden samples 不是圣经，而是回归报警器和 safety net。后续新系统与旧 golden 冲突时，应通过 shadow / review pack 暴露差异，由用户 + ChatGPT 判断调新系统、更新 golden 或标记 pending。
+
+当前没有外部玩家，因此可以在 non-final、feature flag、debug overlay 或 partial takeover 方向更积极推进新系统调优；但这不取消测试、回滚、人工确认、记录和反 if 地狱边界。
+
+本轮同时清理 planning-only 旧表述：当前 v0.0.8.x 已进入 read-only shadow proof / review pack / early calibration stage，但 active takeover 仍未开放。
+
+本轮只改 docs，未改 runtime / data / generated / golden，未开放 active takeover，未 push，未 tag。
+
 ## v0.0.8.3 human-readable generated severity shadow review pack
 
 本轮新增 `scripts/content/buildGeneratedSeverityShadowReviewPack.js` 和 `reports/human_review/generatedSeverityShadowReview.sample.md`，基于 multi-sample debug shadow output 生成中文友好的制作人速读材料。

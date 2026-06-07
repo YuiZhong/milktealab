@@ -166,6 +166,16 @@ analyzer 负责产出 facts / summary / candidates；顾客系统未来读取这
 
 顾客偏好不应反向污染 `accidentTypeId`、stable ID 或 `displayName`。也不应写成单个客群 + 单个原料组合 if，例如 `if 小孩 then 喜欢甜`、`if 上班族 then 喜欢苦咖啡`。当前仅预留架构方向，不实现 runtime，不创建 `customerTag` / `audienceId`，不改变评分。
 
+### Shadow / calibration pipeline and golden boundary
+
+Generated severity shadow 是 non-final side channel。shadow / review pack 应展示 legacy result 与 generated severity suggestion 的差异，帮助制作人和 ChatGPT 判断下一步，而不是直接改 final result。
+
+Golden mismatch 不应自动判定为 new system failure；它首先是 review trigger。旧 golden 继续保护结构、回归和误炸，但不能阻止新系统调优。
+
+Generated severity 进入 partial / active takeover 前，需要 shadow review、human confirmation、controlled golden updates 和 rollback path。任何 final result、score、feedback 或 golden expected 变更都必须是 explicit task。
+
+当前项目没有外部玩家，所以可以优先用 Node-only、debug overlay、feature flag 或 partial route 更快验证新系统；不需要像线上产品一样长期保守。但这不允许为了接管进度新增具体原料组合 if、golden sample 专属 if 或文案专属 if；仍应继续走数据、rule、summary 和 shadow pipeline。
+
 ### v0.0.6.14 candidate priority shell 架构边界
 
 candidate priority shell 位于 `summaryCandidates` 和最终 result 调度之间。它的职责是把已经产出的 candidate 按粗粒度优先级组织成只读观察结构，帮助后续调试、golden 断言和调度设计；它不是最终判定层，不直接改写 `score`、事故、饮品类型、feedback、`result.type`、`accidentTypeId`、`drinkTypeId` 或 `outcomeTypeId`。

@@ -4,22 +4,23 @@
 
 本文件是 v0.0.8.x planning TODO / active stage TODO，用于承接 v0.0.7 docs closure checkpoint 之后的下一阶段施工图。
 
-本文件只做 planning，不开放 implementation。
+本文件是 v0.0.8.x active stage TODO，当前已承接 read-only generated severity shadow proof、multi-sample debug output、human-readable review pack 与 early new-system tuning loop。
 
 本文件不开放：
 
 - batch content generation
-- generated severity
-- generated severity shadow / partial / active takeover
+- active generated severity
+- final takeover / runtime takeover
+- generated severity partial / active takeover
+- read-only shadow proof、debug output、review pack、score suggestion overlay 属于允许推进的 non-final path
 - generated feedback takeover
-- runtime takeover
 - new stable ID / feedbackTag / triggerMetric / ingredient profile generation
 
 本文件不表示 P1 solved，不替代 L1 正本，不批准任何 ID / tag / registry / validator / generated data。
 
 ## 1. 当前唯一主线
 
-当前唯一主线是把内容生产管线从原则整理成可执行规划。
+当前唯一主线是把内容生产管线和 generated severity 调优路线，从原则整理成可见、可审、可回滚的产品路径。
 
 规划重点：
 
@@ -30,8 +31,24 @@
 - registry candidate。
 - validator gate。
 - traceability。
+- first read-only generated severity shadow proof。
+- human-readable shadow review pack。
+- early new-system tuning loop。
 
-本阶段前半段先规划和建立流程，不直接生产大量内容，不直接进入 runtime / generated / golden。
+本阶段不再以“保持旧 golden 完全一致”为最高目标。旧 golden samples 的角色是 regression alert / safety net，不是 absolute expected truth。新 generated severity / scoring system 的目标是逐步符合玩家 / 制作人直觉，而不是复刻 legacy judge。
+
+后续路线应尽快收束到可见产物链路：
+
+1. multi-sample shadow output。
+2. human-readable shadow review pack。
+3. new-system severity / score suggestion overlay。
+4. old system vs new suggestion comparison。
+5. human review：调新系统 / 更新 golden / pending。
+6. 小范围 feature flag / debug overlay / partial takeover discussion。
+
+不再默认新增纯 planning report；只有改 runtime / golden / final result / `data/generated` / active validator / partial takeover，或遇到明确 blocker 时，才提高 gate。
+
+partial / active takeover 仍要明确 gate，但当前没有外部玩家，可以比面向真实玩家的线上产品更积极推进 non-final / feature flag / debug overlay / partial route。没有玩家只降低发布风险，不降低工程质量要求：仍需测试、回滚、边界说明和反 if 地狱。
 
 ### Single-line workflow / Parking Lot
 

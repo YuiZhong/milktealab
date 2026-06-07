@@ -83,6 +83,22 @@ Texture / mouthfeel 当前成熟的主边界至少包括四类：小料固体负
 
 这些是当前成熟边界，不表示 texture 永远只有四类。本节不生成正式 `triggerMetric`，不创建 metric registry / schema / validator，也不填写正式 threshold / `scoreMultiplier`。
 
+### 1.4 Golden samples and calibration role｜golden 样本与调优角色
+
+Golden samples 是 regression protection / change detector，不是永久味觉真理。早期 golden expected 可能来自早期直觉、placeholder 或 Codex 草案，不应无条件压制新系统。
+
+新 generated severity / scoring system 的目标是逐步符合玩家 / 制作人直觉，而不是复刻 legacy judge。当前没有外部玩家，因此新系统可以更早进入 shadow、score suggestion 或 limited partial takeover 的校准循环；重点是快速暴露差异并修正，而不是长期停留在旧系统一致性。
+
+当新系统建议与旧 golden 冲突时：
+
+- 新系统明显误判：调新系统，不改 golden。
+- 旧 golden 明显不合理：可有意识更新 golden。
+- 灰区 / 偏好问题：标记 pending，继续采样 / review。
+
+更新 golden 必须有原因、人工确认、记录和回滚线索。不得为了让测试通过而无意识改 expected。
+
+更积极接入不等于 if 地狱或硬切。后续应继续通过表格、rule data、shadow output、feature gate 和 partial rollout 推进，不把具体原料组合或单个样本写成长期机制。
+
 ## 2. v0.0.5.0 数据化地基
 
 v0.0.5.0 的目标是建立味觉系统数据化地基，不是玩法更新，也不追求评分明显变化。
