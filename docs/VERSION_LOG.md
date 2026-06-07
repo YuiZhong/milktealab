@@ -1,5 +1,13 @@
 # 版本记录
 
+## generated severity shadow shape planning round 1
+
+本轮新增 `reports/human_review/generatedSeverityShadowShapePlanning.round1.md`，规划 future `generatedSeverityShadow` 的输出结构、metadata、legacy comparison、sample row trace、candidate / severity draft 字段和 hard non-final boundary。
+
+该 report 只做 docs / report planning，不实现 shadow builder，不生成 generated severity，不创建 generated data，不接 runtime。
+
+本轮未创建 registry / schema / active validator / allowed values，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## pre-shadow gate review round 1
 
 本轮新增 `reports/human_review/preShadowGateReview.round1.md`，检查当前 sample CSV / JSON、minimal validator stub、proposal / draft ID / triggerMetric direction / source-of-truth 边界是否足够进入 Generated Severity Shadow Shape Planning。
