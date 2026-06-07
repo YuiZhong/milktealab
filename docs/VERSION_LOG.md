@@ -1,5 +1,13 @@
 # 版本记录
 
+## sample result snapshot planning round 1
+
+本轮新增 `reports/human_review/sampleResultSnapshotPlanning.round1.md`，规划 future generated severity shadow builder 所需的 current result snapshot / golden sample result snapshot 结构。
+
+该 report 只做 docs / report planning；不创建 snapshot 文件，不实现 builder，不生成 generated severity，不接 runtime / final result / golden expected。
+
+本轮未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## generated severity shadow builder planning round 1
 
 本轮新增 `reports/human_review/generatedSeverityShadowBuilderPlanning.round1.md`，规划 future generated severity shadow builder 的最小职责、输入 / 输出、执行方式和测试边界。
