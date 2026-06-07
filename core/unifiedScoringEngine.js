@@ -1,7 +1,7 @@
 (function() {
 const { clamp } = window.MILK_TEA_LAB_HELPERS;
 
-const schemaVersion = "unifiedScoring.v0.0.8.31";
+const schemaVersion = "unifiedScoring.v0.0.8.32";
 const baseScore = 84;
 
 const pressureRules = [
@@ -166,6 +166,25 @@ const texturePressureScoreCaps = {
   heavy: 18,
   critical: 12
 };
+
+const highTextureModifierRatioThreshold = 55;
+
+const visibleIdentityFitDrinkTypes = new Set([
+  "milk_tea",
+  "coffee_milk_drink",
+  "dessert_milk_drink",
+  "fruit_tea",
+  "fruit_drink",
+  "sparkling_fruit_drink",
+  "coffee_drink"
+]);
+
+const visibleIdentityFitScoreBonus = {
+  modifier: 2,
+  primary_identity: 2
+};
+
+const visibleIdentityFitMaxBonus = 4;
 
 function isNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -464,6 +483,41 @@ function getDrinkTypeComposerOutput(input, warnings) {
   return composed || null;
 }
 
+function cloneTags(value) {
+  return Array.isArray(value) ? value.filter(Boolean) : [];
+}
+
+function getCompositionEntry(ingredientId) {
+  const api = window.MILK_TEA_LAB_INGREDIENT_COMPOSITION_TAGS;
+  return api?.getIngredientCompositionTags && ingredientId
+    ? api.getIngredientCompositionTags(ingredientId)
+    : null;
+}
+
+function getHighTextureModifierLoadBlockers(input) {
+  return (Array.isArray(input?.recipeItems) ? input.recipeItems : [])
+    .map(item => {
+      const entry = getCompositionEntry(item?.ingredientId);
+      const tags = new Set([
+        ...cloneTags(entry?.compositionTags),
+        ...cloneTags(entry?.roleTags)
+      ]);
+      const ratio = isNumber(item?.ratio) ? item.ratio : null;
+      const isTextureModifier = entry?.displayRole === "modifier"
+        && (tags.has("topping") || tags.has("texture"))
+        && isNumber(ratio)
+        && ratio >= highTextureModifierRatioThreshold;
+      return isTextureModifier
+        ? {
+          ingredientId: item.ingredientId,
+          ratio: rounded(ratio),
+          blockerKey: "highTextureModifierLoad"
+        }
+        : null;
+    })
+    .filter(Boolean);
+}
+
 function getStructuralFloorTextureBlockers(activePressures) {
   return activePressures.filter(pressure => (
     structuralFloorBlockingTexturePressures.has(pressure.pressureKey)
@@ -480,6 +534,12 @@ function getTexturePressureScoreCap(textureBlockers) {
   return caps.length > 0 ? Math.min(...caps) : null;
 }
 
+function isMediumOrHigherPressure(pressure) {
+  return pressure?.severityLevel === "medium"
+    || pressure?.severityLevel === "heavy"
+    || pressure?.severityLevel === "critical";
+}
+
 function buildStructuralCoherence(input, pressures, aggregation, warnings) {
   const composedDrinkType = getDrinkTypeComposerOutput(input, warnings);
   const drinkTypeId = composedDrinkType?.drinkTypeId || null;
@@ -489,10 +549,20 @@ function buildStructuralCoherence(input, pressures, aggregation, warnings) {
     pressure.severityLevel === "heavy" || pressure.severityLevel === "critical"
   );
   const textureFloorBlockers = getStructuralFloorTextureBlockers(active);
-  const blockedByTexturePressure = textureFloorBlockers.length > 0;
+  const textureModifierLoadBlockers = getHighTextureModifierLoadBlockers(input);
+  const blockedByTexturePressure = textureFloorBlockers.length > 0 || textureModifierLoadBlockers.length > 0;
   const floorBlockerPressureKeys = textureFloorBlockers.map(pressure => pressure.pressureKey);
+  const floorBlockerKeys = [
+    ...floorBlockerPressureKeys,
+    ...textureModifierLoadBlockers.map(item => item.blockerKey)
+  ];
   const scoreCap = blockedByTexturePressure
-    ? getTexturePressureScoreCap(textureFloorBlockers)
+    ? Math.min(
+      ...[
+        getTexturePressureScoreCap(textureFloorBlockers),
+        textureModifierLoadBlockers.length ? texturePressureScoreCaps.medium : null
+      ].filter(isNumber)
+    )
     : null;
   const mediumCount = active.filter(pressure => pressure.severityLevel === "medium").length;
   const scoreFloor = !hasHeavyOrCritical && !blockedByTexturePressure && isNumber(baseFloor)
@@ -500,20 +570,23 @@ function buildStructuralCoherence(input, pressures, aggregation, warnings) {
     : null;
 
   if (blockedByTexturePressure) {
-    warnings.push(`structural_floor_blocked_by_texture_pressure:${floorBlockerPressureKeys.join("+")}`);
+    warnings.push(`structural_floor_blocked_by_texture_pressure:${floorBlockerKeys.join("+")}`);
   }
 
   return {
     enabled: true,
+    composedDrinkType,
     drinkTypeId,
     broadTypeLabel: composedDrinkType?.broadTypeLabel || null,
     scoreFloor,
     scoreCap,
     blockedByTexturePressure,
     floorBlockerPressureKeys,
+    floorBlockerKeys,
+    textureModifierLoadBlockers,
     applied: isNumber(scoreFloor) && scoreFloor > baseScore - aggregation.totalPenalty,
     reason: blockedByTexturePressure
-      ? `Structural floor blocked by medium-or-higher texture pressure: ${floorBlockerPressureKeys.join(", ")}.`
+      ? `Structural floor blocked by texture pressure or high texture modifier load: ${floorBlockerKeys.join(", ")}.`
       : isNumber(scoreFloor)
       ? `${drinkTypeId} gives a generic structural coherence floor when no heavy/critical pressure is active.`
       : drinkTypeId
@@ -522,7 +595,78 @@ function buildStructuralCoherence(input, pressures, aggregation, warnings) {
   };
 }
 
-function buildScoreReasons(pressures, balances, aggregation, structuralCoherence, conflictAdjustments) {
+function getVisibleIdentityFitEntries(composedDrinkType) {
+  const labelParts = Array.isArray(composedDrinkType?.labelParts) ? composedDrinkType.labelParts : [];
+  return labelParts.filter(part =>
+    (part?.source === "modifier" || part?.source === "primary_identity")
+    && part.ingredientId
+  );
+}
+
+function buildVisibleIdentityFitSupport(structuralCoherence, pressures) {
+  const composedDrinkType = structuralCoherence?.composedDrinkType || null;
+  const drinkTypeId = composedDrinkType?.drinkTypeId || null;
+  const entries = getVisibleIdentityFitEntries(composedDrinkType);
+  const blockingPressures = pressures
+    .filter(pressure => pressure?.matched && pressure.adjustedPenalty > 0 && isMediumOrHigherPressure(pressure))
+    .map(pressure => pressure.pressureKey);
+
+  if (!visibleIdentityFitDrinkTypes.has(drinkTypeId)) {
+    return {
+      enabled: false,
+      applied: false,
+      scoreBonus: 0,
+      drinkTypeId,
+      entries,
+      blockingPressures,
+      reason: "No eligible broad drink type for visible identity fit support."
+    };
+  }
+
+  if (!entries.length) {
+    return {
+      enabled: false,
+      applied: false,
+      scoreBonus: 0,
+      drinkTypeId,
+      entries,
+      blockingPressures,
+      reason: "No visible modifier or primary identity to support drink completeness."
+    };
+  }
+
+  if (blockingPressures.length || structuralCoherence?.blockedByTexturePressure) {
+    return {
+      enabled: false,
+      applied: false,
+      scoreBonus: 0,
+      drinkTypeId,
+      entries,
+      blockingPressures,
+      reason: "Visible identity fit support blocked by medium-or-higher pressure."
+    };
+  }
+
+  const rawBonus = entries.reduce((total, entry) => {
+    return total + (visibleIdentityFitScoreBonus[entry.source] || 0);
+  }, 0);
+  const scoreBonus = Math.min(rawBonus, visibleIdentityFitMaxBonus);
+
+  return {
+    enabled: true,
+    applied: scoreBonus > 0,
+    scoreBonus,
+    drinkTypeId,
+    entries: entries.map(entry => ({
+      source: entry.source,
+      ingredientId: entry.ingredientId
+    })),
+    blockingPressures,
+    reason: `Visible identity / modifier fit supports ${drinkTypeId} completeness without overriding pressure.`
+  };
+}
+
+function buildScoreReasons(pressures, balances, aggregation, structuralCoherence, conflictAdjustments, visibleIdentityFitSupport) {
   const pressureReasons = aggregation.contributions.slice(0, 4).map(item => {
     const pressure = pressures.find(entry => entry.pressureKey === item.pressureKey);
     return `${item.pressureKey}: ${pressure?.observedValue ?? "n/a"} / ${item.severityLevel} / -${item.finalPenaltyContribution}`;
@@ -535,14 +679,18 @@ function buildScoreReasons(pressures, balances, aggregation, structuralCoherence
   const structuralReasons = structuralCoherence?.applied
     ? [`structuralCoherence floor ${structuralCoherence.scoreFloor} from ${structuralCoherence.drinkTypeId}`]
     : structuralCoherence?.blockedByTexturePressure
-      ? [`structuralCoherence floor blocked by texture pressure (${structuralCoherence.floorBlockerPressureKeys.join(", ")}); texture score cap ${structuralCoherence.scoreCap}`]
+      ? [`structuralCoherence floor blocked by texture pressure (${structuralCoherence.floorBlockerKeys.join(", ")}); texture score cap ${structuralCoherence.scoreCap}`]
     : [];
 
   const conflictReasons = conflictAdjustments.slice(0, 2).map(item =>
     `${item.adjustmentKey} added ${item.extraPenalty} to ${item.pressureKey}`
   );
 
-  return [...pressureReasons, ...balanceReasons, ...conflictReasons, ...structuralReasons];
+  const visibleIdentityReasons = visibleIdentityFitSupport?.applied
+    ? [`visibleIdentityFitSupport +${visibleIdentityFitSupport.scoreBonus} from ${visibleIdentityFitSupport.entries.map(entry => entry.source).join("+")}`]
+    : [];
+
+  return [...pressureReasons, ...visibleIdentityReasons, ...balanceReasons, ...conflictReasons, ...structuralReasons];
 }
 
 function buildConfidence(warnings, pressures) {
@@ -563,13 +711,15 @@ function buildUnifiedScoring(input = {}) {
   checkFuturePressureWarnings(input, warnings);
   const aggregation = buildAggregation(pressures);
   const structuralCoherence = buildStructuralCoherence(input, pressures, aggregation, warnings);
+  const visibleIdentityFitSupport = buildVisibleIdentityFitSupport(structuralCoherence, pressures);
   const rawScore = rounded(clamp(baseScore - aggregation.totalPenalty));
   const scoreBeforeTextureCap = rounded(clamp(isNumber(structuralCoherence.scoreFloor)
     ? Math.max(rawScore, structuralCoherence.scoreFloor)
     : rawScore));
-  const score = rounded(clamp(isNumber(structuralCoherence.scoreCap)
+  const scoreBeforeVisibleIdentityFitSupport = rounded(clamp(isNumber(structuralCoherence.scoreCap)
     ? Math.min(scoreBeforeTextureCap, structuralCoherence.scoreCap)
     : scoreBeforeTextureCap));
+  const score = rounded(clamp(scoreBeforeVisibleIdentityFitSupport + visibleIdentityFitSupport.scoreBonus));
   const legacyScore = isNumber(input.legacyScore) ? rounded(clamp(input.legacyScore)) : null;
 
   return {
@@ -586,6 +736,7 @@ function buildUnifiedScoring(input = {}) {
     score,
     rawScoreBeforeStructuralFloor: rawScore,
     scoreBeforeTextureCap,
+    scoreBeforeVisibleIdentityFitSupport,
     legacyScore,
     scoreDeltaFromLegacy: isNumber(legacyScore) ? score - legacyScore : null,
     confidence: buildConfidence(warnings, pressures),
@@ -594,9 +745,10 @@ function buildUnifiedScoring(input = {}) {
     conflictAdjustments,
     supportState,
     structuralCoherence,
+    visibleIdentityFitSupport,
     aggregation,
     dominantPressure: aggregation.dominantPressure,
-    scoreReasons: buildScoreReasons(pressures, balances, aggregation, structuralCoherence, conflictAdjustments),
+    scoreReasons: buildScoreReasons(pressures, balances, aggregation, structuralCoherence, conflictAdjustments, visibleIdentityFitSupport),
     warnings
   };
 }
