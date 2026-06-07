@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.15 anchor scale correction draft
+
+本轮新增 `scripts/content/buildIngredientProfileValueDraftV0015.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.15.csv` 与 `.json`。
+
+该草案基于 v0.0.8.14 profile value scale recalibration draft，按制作人确认的锚点标尺继续修正 `proposed*`：如果一杯饮料是 90% 某味觉锚点 + 10% 水或茶，应稳定触发约 80 左右的未来重度事故阈值，因此主锚点原料本身应接近 90-100。
+
+主要锚点包括：柠檬 acidity 92、白糖 sweetness 95、咖啡 bitterness 90、淡奶油 fatLoad 92、芋泥 pasteRisk 93 / drinkabilityPenalty 84、珍珠 chewiness 88 / solidLoad 85、芋圆 chewiness 82 / solidLoad 78、榴莲 aromaPressure / identityStrength / dominantPotential 94 / 96 / 92，以及海盐 `saltiness` 继续作为 review-only schema gap。
+
+本轮只生成 draft workspace；所有 runtime / score / golden gates 仍为 false，未改 runtime / data / `data/generated` / scoring logic / final result / golden expected，未新增正式 ID / registry / validator，未 push，未 tag。
+
 ## v0.0.8.14 profile value scale recalibration draft
 
 本轮新增 `scripts/content/buildIngredientProfileValueDraftV0014.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.14.csv` 与 `.json`。
