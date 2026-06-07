@@ -156,6 +156,17 @@ const structuralScoreFloors = {
   fruit_drink: 66
 };
 
+const structuralFloorBlockingTexturePressures = new Set([
+  "lowFlowPressure",
+  "solidLoadPressure"
+]);
+
+const texturePressureScoreCaps = {
+  medium: 25,
+  heavy: 18,
+  critical: 12
+};
+
 function isNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
 }
@@ -453,6 +464,22 @@ function getDrinkTypeComposerOutput(input, warnings) {
   return composed || null;
 }
 
+function getStructuralFloorTextureBlockers(activePressures) {
+  return activePressures.filter(pressure => (
+    structuralFloorBlockingTexturePressures.has(pressure.pressureKey)
+    && (pressure.severityLevel === "medium"
+      || pressure.severityLevel === "heavy"
+      || pressure.severityLevel === "critical")
+  ));
+}
+
+function getTexturePressureScoreCap(textureBlockers) {
+  const caps = textureBlockers
+    .map(pressure => texturePressureScoreCaps[pressure.severityLevel])
+    .filter(isNumber);
+  return caps.length > 0 ? Math.min(...caps) : null;
+}
+
 function buildStructuralCoherence(input, pressures, aggregation, warnings) {
   const composedDrinkType = getDrinkTypeComposerOutput(input, warnings);
   const drinkTypeId = composedDrinkType?.drinkTypeId || null;
@@ -461,18 +488,33 @@ function buildStructuralCoherence(input, pressures, aggregation, warnings) {
   const hasHeavyOrCritical = active.some(pressure =>
     pressure.severityLevel === "heavy" || pressure.severityLevel === "critical"
   );
+  const textureFloorBlockers = getStructuralFloorTextureBlockers(active);
+  const blockedByTexturePressure = textureFloorBlockers.length > 0;
+  const floorBlockerPressureKeys = textureFloorBlockers.map(pressure => pressure.pressureKey);
+  const scoreCap = blockedByTexturePressure
+    ? getTexturePressureScoreCap(textureFloorBlockers)
+    : null;
   const mediumCount = active.filter(pressure => pressure.severityLevel === "medium").length;
-  const scoreFloor = !hasHeavyOrCritical && isNumber(baseFloor)
+  const scoreFloor = !hasHeavyOrCritical && !blockedByTexturePressure && isNumber(baseFloor)
     ? Math.max(0, baseFloor - Math.max(0, mediumCount - 1) * 4)
     : null;
+
+  if (blockedByTexturePressure) {
+    warnings.push(`structural_floor_blocked_by_texture_pressure:${floorBlockerPressureKeys.join("+")}`);
+  }
 
   return {
     enabled: true,
     drinkTypeId,
     broadTypeLabel: composedDrinkType?.broadTypeLabel || null,
     scoreFloor,
+    scoreCap,
+    blockedByTexturePressure,
+    floorBlockerPressureKeys,
     applied: isNumber(scoreFloor) && scoreFloor > baseScore - aggregation.totalPenalty,
-    reason: isNumber(scoreFloor)
+    reason: blockedByTexturePressure
+      ? `Structural floor blocked by medium-or-higher texture pressure: ${floorBlockerPressureKeys.join(", ")}.`
+      : isNumber(scoreFloor)
       ? `${drinkTypeId} gives a generic structural coherence floor when no heavy/critical pressure is active.`
       : drinkTypeId
         ? `${drinkTypeId} has no structural floor or is blocked by heavy/critical pressure.`
@@ -492,6 +534,8 @@ function buildScoreReasons(pressures, balances, aggregation, structuralCoherence
 
   const structuralReasons = structuralCoherence?.applied
     ? [`structuralCoherence floor ${structuralCoherence.scoreFloor} from ${structuralCoherence.drinkTypeId}`]
+    : structuralCoherence?.blockedByTexturePressure
+      ? [`structuralCoherence floor blocked by texture pressure (${structuralCoherence.floorBlockerPressureKeys.join(", ")}); texture score cap ${structuralCoherence.scoreCap}`]
     : [];
 
   const conflictReasons = conflictAdjustments.slice(0, 2).map(item =>
@@ -520,9 +564,12 @@ function buildUnifiedScoring(input = {}) {
   const aggregation = buildAggregation(pressures);
   const structuralCoherence = buildStructuralCoherence(input, pressures, aggregation, warnings);
   const rawScore = rounded(clamp(baseScore - aggregation.totalPenalty));
-  const score = rounded(clamp(isNumber(structuralCoherence.scoreFloor)
+  const scoreBeforeTextureCap = rounded(clamp(isNumber(structuralCoherence.scoreFloor)
     ? Math.max(rawScore, structuralCoherence.scoreFloor)
     : rawScore));
+  const score = rounded(clamp(isNumber(structuralCoherence.scoreCap)
+    ? Math.min(scoreBeforeTextureCap, structuralCoherence.scoreCap)
+    : scoreBeforeTextureCap));
   const legacyScore = isNumber(input.legacyScore) ? rounded(clamp(input.legacyScore)) : null;
 
   return {
@@ -538,6 +585,7 @@ function buildUnifiedScoring(input = {}) {
     affectsGoldenExpected: false,
     score,
     rawScoreBeforeStructuralFloor: rawScore,
+    scoreBeforeTextureCap,
     legacyScore,
     scoreDeltaFromLegacy: isNumber(legacyScore) ? score - legacyScore : null,
     confidence: buildConfidence(warnings, pressures),
