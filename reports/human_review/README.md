@@ -47,6 +47,7 @@
 - `preShadowGateReview.round1.md` 记录 pre-shadow gate / source-of-truth boundary check；它不是 generated severity、shadow implementation 或 runtime data。
 - `generatedSeverityShadowShapePlanning.round1.md` 规划 future `generatedSeverityShadow` 输出结构；它不是 shadow builder、generated severity、generated data 或 runtime data。
 - `generatedSeverityShadowReadPathPlanning.round1.md` 规划 future generated severity shadow input / read path；它不是 shadow builder、generated severity、generated data 或 runtime data。
+- `generatedSeverityShadowBuilderPlanning.round1.md` 规划 future generated severity shadow builder 的最小职责 / 输入输出 / 执行方式 / 测试边界；它不是 builder implementation、generated severity、generated data 或 runtime data。
 - `triggerMetricDirectionReview.round1.md` 审阅第一批 6 个机制的 triggerMetric direction；它不是 metric registry、schema、validator、generated data 或 runtime data。
 - `triggerMetricDirectionReviewRecord.round1.md` 记录用户 + ChatGPT 对 triggerMetric direction review 的审阅结论；它不是 metric registry、schema、validator、allowed values 或 runtime data。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
