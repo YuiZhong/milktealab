@@ -71,6 +71,15 @@ const samples = [
     ],
   },
   {
+    name: "黑糖珍珠奶茶",
+    recipe: [
+      { ingredientId: "tea_black", ratio: 40 },
+      { ingredientId: "dairy_milk", ratio: 35 },
+      { ingredientId: "sweetener_brown_sugar", ratio: 15 },
+      { ingredientId: "topping_pearl", ratio: 10 },
+    ],
+  },
+  {
     name: "乌龙厚乳",
     recipe: [
       { ingredientId: "tea_oolong", ratio: 50 },
@@ -79,10 +88,28 @@ const samples = [
     ],
   },
   {
+    name: "芒果奶茶",
+    recipe: [
+      { ingredientId: "tea_black", ratio: 35 },
+      { ingredientId: "dairy_milk", ratio: 35 },
+      { ingredientId: "fruit_mango", ratio: 20 },
+      { ingredientId: "sweetener_white_sugar", ratio: 10 },
+    ],
+  },
+  {
     name: "咖啡牛奶",
     recipe: [
       { ingredientId: "liquid_coffee", ratio: 45 },
       { ingredientId: "dairy_milk", ratio: 45 },
+      { ingredientId: "sweetener_white_sugar", ratio: 10 },
+    ],
+  },
+  {
+    name: "芒果咖啡牛奶",
+    recipe: [
+      { ingredientId: "liquid_coffee", ratio: 35 },
+      { ingredientId: "dairy_milk", ratio: 35 },
+      { ingredientId: "fruit_mango", ratio: 20 },
       { ingredientId: "sweetener_white_sugar", ratio: 10 },
     ],
   },
@@ -480,6 +507,11 @@ function formatUnifiedJudgment(unifiedJudgment) {
   ].join(" / ");
 }
 
+function formatScoreReasons(unifiedScoring) {
+  const reasons = Array.isArray(unifiedScoring?.scoreReasons) ? unifiedScoring.scoreReasons : [];
+  return reasons.slice(0, 3).join("; ") || "none";
+}
+
 function getValue(result, summaryKey, metric) {
   const value = result && result[summaryKey] && result[summaryKey].values
     ? result[summaryKey].values[metric]
@@ -563,6 +595,7 @@ function main() {
       profileDraftShadow: formatScoreDelta(draftSuggestion),
       profileDraftUnifiedScore: formatUnifiedScoring(draftUnifiedScoring),
       profileDraftUnifiedJudgment: formatUnifiedJudgment(draftUnifiedJudgment),
+      profileDraftScoreReasons: formatScoreReasons(draftUnifiedScoring),
       profileDraftTopSignals: collectSignals(draftResult),
       initialReviewLabel: buildInitialReviewLabel(draftResult),
       warningOrNote: buildRowNote(draft),
@@ -583,11 +616,11 @@ function main() {
   console.log(`parseWarnings: ${draft.warnings.length ? draft.warnings.join("; ") : "none"}`);
   console.log("runtimeBoundary: read-only shadow observation; no runtime/data/generated/golden writes");
   console.log("");
-  console.log("| sample | recipe | legacy score | current runtime draft suggestion | current runtime unified score | current runtime unified judgment | v0.0.8.15 proposed profile draft suggestion | v0.0.8.15 proposed profile unified score | v0.0.8.15 proposed profile unified judgment | key observed pressures | warning / note | initial review label | boundary |");
-  console.log("|---|---|---:|---|---|---|---|---|---|---|---|---|---|");
+  console.log("| sample | recipe | legacy score | current runtime draft suggestion | current runtime unified score | current runtime unified judgment | v0.0.8.15 proposed profile draft suggestion | v0.0.8.15 proposed profile unified score | v0.0.8.15 proposed profile unified judgment | score reasons | key observed pressures | warning / note | initial review label | boundary |");
+  console.log("|---|---|---:|---|---|---|---|---|---|---|---|---|---|---|");
   rows.forEach((row) => {
     console.log(
-      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.currentRuntimeUnifiedScore)} | ${escapeMarkdown(row.currentRuntimeUnifiedJudgment)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftUnifiedScore)} | ${escapeMarkdown(row.profileDraftUnifiedJudgment)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.warningOrNote)} | ${escapeMarkdown(row.initialReviewLabel)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
+      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.currentRuntimeUnifiedScore)} | ${escapeMarkdown(row.currentRuntimeUnifiedJudgment)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftUnifiedScore)} | ${escapeMarkdown(row.profileDraftUnifiedJudgment)} | ${escapeMarkdown(row.profileDraftScoreReasons)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.warningOrNote)} | ${escapeMarkdown(row.initialReviewLabel)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
     );
   });
 }

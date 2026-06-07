@@ -1,8 +1,8 @@
 (function() {
 const { clamp } = window.MILK_TEA_LAB_HELPERS;
 
-const schemaVersion = "unifiedScoring.v0.0.8.24";
-const baseScore = 88;
+const schemaVersion = "unifiedScoring.v0.0.8.31";
+const baseScore = 84;
 
 const pressureRules = [
   {
@@ -10,12 +10,12 @@ const pressureRules = [
     sourceLayer: "taste",
     triggerMetric: "sweetness",
     summaryKey: "tasteSummary",
-    pressureScale: 3.8,
+    pressureScale: 1,
     bands: [
-      { min: 90, severityLevel: "critical", scoreDelta: -78 },
-      { min: 80, severityLevel: "heavy", scoreDelta: -68 },
-      { min: 55, severityLevel: "medium", scoreDelta: -24 },
-      { min: 28, severityLevel: "light", scoreDelta: -6 }
+      { min: 84, severityLevel: "critical", scoreDelta: -78 },
+      { min: 72, severityLevel: "heavy", scoreDelta: -58 },
+      { min: 50, severityLevel: "medium", scoreDelta: -17 },
+      { min: 32, severityLevel: "light", scoreDelta: -4 }
     ],
     status: "draft_non_final"
   },
@@ -24,12 +24,12 @@ const pressureRules = [
     sourceLayer: "taste",
     triggerMetric: "acidity",
     summaryKey: "tasteSummary",
-    pressureScale: 2.85,
+    pressureScale: 1,
     bands: [
-      { min: 90, severityLevel: "critical", scoreDelta: -74 },
-      { min: 78, severityLevel: "heavy", scoreDelta: -64 },
-      { min: 48, severityLevel: "medium", scoreDelta: -20 },
-      { min: 26, severityLevel: "light", scoreDelta: -5 }
+      { min: 82, severityLevel: "critical", scoreDelta: -74 },
+      { min: 68, severityLevel: "heavy", scoreDelta: -58 },
+      { min: 46, severityLevel: "medium", scoreDelta: -16 },
+      { min: 30, severityLevel: "light", scoreDelta: -4 }
     ],
     status: "draft_non_final"
   },
@@ -38,12 +38,12 @@ const pressureRules = [
     sourceLayer: "taste",
     triggerMetric: "bitterness",
     summaryKey: "tasteSummary",
-    pressureScale: 3.7,
+    pressureScale: 1,
     bands: [
-      { min: 90, severityLevel: "critical", scoreDelta: -72 },
-      { min: 78, severityLevel: "heavy", scoreDelta: -64 },
-      { min: 45, severityLevel: "medium", scoreDelta: -18 },
-      { min: 22, severityLevel: "light", scoreDelta: -5 }
+      { min: 82, severityLevel: "critical", scoreDelta: -70 },
+      { min: 68, severityLevel: "heavy", scoreDelta: -54 },
+      { min: 42, severityLevel: "medium", scoreDelta: -17 },
+      { min: 28, severityLevel: "light", scoreDelta: -4 }
     ],
     status: "draft_non_final"
   },
@@ -52,12 +52,12 @@ const pressureRules = [
     sourceLayer: "texture",
     triggerMetric: "fatLoad",
     summaryKey: "textureSummary",
-    pressureScale: 1.9,
+    pressureScale: 1,
     bands: [
-      { min: 90, severityLevel: "critical", scoreDelta: -72 },
-      { min: 78, severityLevel: "heavy", scoreDelta: -62 },
-      { min: 48, severityLevel: "medium", scoreDelta: -18 },
-      { min: 26, severityLevel: "light", scoreDelta: -5 }
+      { min: 82, severityLevel: "critical", scoreDelta: -74 },
+      { min: 68, severityLevel: "heavy", scoreDelta: -58 },
+      { min: 46, severityLevel: "medium", scoreDelta: -16 },
+      { min: 28, severityLevel: "light", scoreDelta: -4 }
     ],
     status: "draft_non_final"
   },
@@ -68,10 +68,10 @@ const pressureRules = [
     summaryKey: "textureSummary",
     pressureScale: 1,
     bands: [
-      { min: 90, severityLevel: "critical", scoreDelta: -72 },
-      { min: 80, severityLevel: "heavy", scoreDelta: -60 },
+      { min: 85, severityLevel: "critical", scoreDelta: -74 },
+      { min: 74, severityLevel: "heavy", scoreDelta: -58 },
       { min: 56, severityLevel: "medium", scoreDelta: -19 },
-      { min: 30, severityLevel: "light", scoreDelta: -5 }
+      { min: 34, severityLevel: "light", scoreDelta: -4 }
     ],
     status: "draft_non_final"
   },
@@ -80,12 +80,12 @@ const pressureRules = [
     sourceLayer: "texture",
     triggerMetric: "drinkabilityPenalty",
     summaryKey: "textureSummary",
-    pressureScale: 1.25,
+    pressureScale: 1,
     bands: [
-      { min: 90, severityLevel: "critical", scoreDelta: -76 },
-      { min: 78, severityLevel: "heavy", scoreDelta: -66 },
-      { min: 45, severityLevel: "medium", scoreDelta: -21 },
-      { min: 20, severityLevel: "light", scoreDelta: -6 }
+      { min: 82, severityLevel: "critical", scoreDelta: -74 },
+      { min: 66, severityLevel: "heavy", scoreDelta: -58 },
+      { min: 46, severityLevel: "medium", scoreDelta: -18 },
+      { min: 30, severityLevel: "light", scoreDelta: -4 }
     ],
     status: "draft_non_final"
   },
@@ -95,17 +95,17 @@ const pressureRules = [
     triggerMetric: "aromaPressure",
     summaryKey: "flavorSummary",
     alternateMetrics: ["dominantPotential", "identityConflictRisk"],
-    pressureScale: 1.08,
+    pressureScale: 1,
     metricScales: {
-      aromaPressure: 1.08,
-      dominantPotential: 1.08,
-      identityConflictRisk: 2.1
+      aromaPressure: 1,
+      dominantPotential: 1,
+      identityConflictRisk: 1.9
     },
     bands: [
-      { min: 92, severityLevel: "critical", scoreDelta: -58 },
-      { min: 82, severityLevel: "heavy", scoreDelta: -44 },
-      { min: 60, severityLevel: "medium", scoreDelta: -20 },
-      { min: 36, severityLevel: "light", scoreDelta: -6 }
+      { min: 88, severityLevel: "critical", scoreDelta: -54 },
+      { min: 74, severityLevel: "heavy", scoreDelta: -38 },
+      { min: 58, severityLevel: "medium", scoreDelta: -15 },
+      { min: 40, severityLevel: "light", scoreDelta: -4 }
     ],
     status: "draft_non_final"
   }
@@ -121,27 +121,35 @@ const futurePressureDirections = [
 
 const supportTargets = {
   bitterPressure: [
-    { supportKey: "dairySupport", ratio: 0.42 },
-    { supportKey: "sweetnessBalance", ratio: 0.28 }
+    { supportKey: "dairySupport", ratio: 0.75 },
+    { supportKey: "sweetnessBalance", ratio: 0.5 }
   ],
   acidPressure: [
-    { supportKey: "sweetnessBalance", ratio: 0.24 }
+    { supportKey: "sweetnessBalance", ratio: 0.45 }
   ],
   strongIdentityPressure: [
-    { supportKey: "dairySupport", ratio: 0.25 },
-    { supportKey: "sweetnessBalance", ratio: 0.18 },
-    { supportKey: "fitSupport", ratio: 0.32 },
-    { supportKey: "identitySupport", ratio: 0.24 }
+    { supportKey: "dairySupport", ratio: 0.5 },
+    { supportKey: "sweetnessBalance", ratio: 0.35 },
+    { supportKey: "fitSupport", ratio: 0.55 },
+    { supportKey: "identitySupport", ratio: 0.45 }
   ],
   solidLoadPressure: [
-    { supportKey: "liquidSupport", ratio: 0.35 }
+    { supportKey: "liquidSupport", ratio: 0.55 }
   ],
   lowFlowPressure: [
-    { supportKey: "liquidSupport", ratio: 0.32 }
+    { supportKey: "liquidSupport", ratio: 0.55 }
   ]
 };
 
-const secondaryContributionFactors = [1, 0.65, 0.45, 0.35, 0.25];
+const secondaryContributionFactors = [1, 0.35, 0.22, 0.14, 0.08];
+
+const structuralScoreFloors = {
+  milk_tea: 74,
+  coffee_milk_drink: 70,
+  dessert_milk_drink: 72,
+  fruit_tea: 70,
+  fruit_drink: 66
+};
 
 function isNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -261,16 +269,16 @@ function buildSupportState(input) {
     dairySupport: clamp(supportMetric(taste.milkiness) + supportMetric(taste.creaminess) * 0.55),
     sweetnessBalance: clamp(sweetnessPenalty),
     liquidSupport: clamp(drinkability - liquidNeed * 0.35),
-    fitSupport: clamp(fit),
+    fitSupport: clamp(fit - conflict * 0.6),
     identitySupport: clamp(fit - conflict * 0.45)
   };
 }
 
 function severitySupportCap(severityLevel) {
-  if (severityLevel === "critical") return 0.22;
-  if (severityLevel === "heavy") return 0.32;
-  if (severityLevel === "medium") return 0.45;
-  if (severityLevel === "light") return 0.55;
+  if (severityLevel === "critical") return 0.25;
+  if (severityLevel === "heavy") return 0.5;
+  if (severityLevel === "medium") return 0.75;
+  if (severityLevel === "light") return 0.85;
   return 0;
 }
 
@@ -346,21 +354,75 @@ function buildAggregation(pressures) {
     };
   });
 
-  const totalPenalty = contributions.reduce((total, item) => total + item.finalPenaltyContribution, 0);
-  const dominantPressure = contributions[0]?.pressureKey || null;
+  const rawTotalPenalty = contributions.reduce((total, item) => total + item.finalPenaltyContribution, 0);
+  const hasHeavyOrCritical = active.some(pressure =>
+    pressure.severityLevel === "heavy" || pressure.severityLevel === "critical"
+  );
+  const totalPenaltyCap = hasHeavyOrCritical ? 88 : 42;
+  const totalPenalty = Math.min(rawTotalPenalty, totalPenaltyCap);
+  const dominantContribution = contributions.find(item =>
+    item.severityLevel !== "light" || item.finalPenaltyContribution >= 6
+  );
+  const dominantPressure = dominantContribution?.pressureKey || null;
 
   return {
     baseScore,
+    rawTotalPenalty,
     totalPenalty,
+    totalPenaltyCap,
     diminishingReturnsEnabled: true,
     secondaryContributionFactors,
     contributions,
     dominantPressure,
-    explanation: "Primary pressure counts fully; secondary pressures use capped diminishing contribution."
+    explanation: "Primary pressure counts fully; secondary pressures use capped diminishing contribution; non-severe stacks are capped."
   };
 }
 
-function buildScoreReasons(pressures, balances, aggregation) {
+function getDrinkTypeComposerOutput(input, warnings) {
+  const composer = window.MILK_TEA_LAB_DRINK_TYPE_COMPOSER;
+  if (!composer?.composeDrinkType || !Array.isArray(input?.recipeItems) || !input.recipeItems.length) {
+    return null;
+  }
+  const composed = composer.composeDrinkType({
+    recipeItems: input.recipeItems,
+    tasteSummary: input.tasteSummary,
+    textureSummary: input.textureSummary,
+    flavorSummary: input.flavorSummary
+  });
+  (Array.isArray(composed?.warnings) ? composed.warnings : []).forEach(warning => {
+    warnings.push(`structural_coherence:${warning}`);
+  });
+  return composed || null;
+}
+
+function buildStructuralCoherence(input, pressures, aggregation, warnings) {
+  const composedDrinkType = getDrinkTypeComposerOutput(input, warnings);
+  const drinkTypeId = composedDrinkType?.drinkTypeId || null;
+  const baseFloor = structuralScoreFloors[drinkTypeId] || null;
+  const active = pressures.filter(pressure => pressure.matched && pressure.adjustedPenalty > 0);
+  const hasHeavyOrCritical = active.some(pressure =>
+    pressure.severityLevel === "heavy" || pressure.severityLevel === "critical"
+  );
+  const mediumCount = active.filter(pressure => pressure.severityLevel === "medium").length;
+  const scoreFloor = !hasHeavyOrCritical && isNumber(baseFloor)
+    ? Math.max(0, baseFloor - Math.max(0, mediumCount - 1) * 4)
+    : null;
+
+  return {
+    enabled: true,
+    drinkTypeId,
+    broadTypeLabel: composedDrinkType?.broadTypeLabel || null,
+    scoreFloor,
+    applied: isNumber(scoreFloor) && scoreFloor > baseScore - aggregation.totalPenalty,
+    reason: isNumber(scoreFloor)
+      ? `${drinkTypeId} gives a generic structural coherence floor when no heavy/critical pressure is active.`
+      : drinkTypeId
+        ? `${drinkTypeId} has no structural floor or is blocked by heavy/critical pressure.`
+        : "No broad drink type floor was available."
+  };
+}
+
+function buildScoreReasons(pressures, balances, aggregation, structuralCoherence) {
   const pressureReasons = aggregation.contributions.slice(0, 4).map(item => {
     const pressure = pressures.find(entry => entry.pressureKey === item.pressureKey);
     return `${item.pressureKey}: ${pressure?.observedValue ?? "n/a"} / ${item.severityLevel} / -${item.finalPenaltyContribution}`;
@@ -370,7 +432,11 @@ function buildScoreReasons(pressures, balances, aggregation) {
     `${item.supportKey} buffered ${item.pressureKey} by ${item.bufferAmount}`
   );
 
-  return [...pressureReasons, ...balanceReasons];
+  const structuralReasons = structuralCoherence?.applied
+    ? [`structuralCoherence floor ${structuralCoherence.scoreFloor} from ${structuralCoherence.drinkTypeId}`]
+    : [];
+
+  return [...pressureReasons, ...balanceReasons, ...structuralReasons];
 }
 
 function buildConfidence(warnings, pressures) {
@@ -389,7 +455,11 @@ function buildUnifiedScoring(input = {}) {
   const balances = applySupport(pressures, supportState, warnings);
   checkFuturePressureWarnings(input, warnings);
   const aggregation = buildAggregation(pressures);
-  const score = rounded(clamp(baseScore - aggregation.totalPenalty));
+  const structuralCoherence = buildStructuralCoherence(input, pressures, aggregation, warnings);
+  const rawScore = rounded(clamp(baseScore - aggregation.totalPenalty));
+  const score = rounded(clamp(isNumber(structuralCoherence.scoreFloor)
+    ? Math.max(rawScore, structuralCoherence.scoreFloor)
+    : rawScore));
   const legacyScore = isNumber(input.legacyScore) ? rounded(clamp(input.legacyScore)) : null;
 
   return {
@@ -404,15 +474,17 @@ function buildUnifiedScoring(input = {}) {
     affectsAccident: false,
     affectsGoldenExpected: false,
     score,
+    rawScoreBeforeStructuralFloor: rawScore,
     legacyScore,
     scoreDeltaFromLegacy: isNumber(legacyScore) ? score - legacyScore : null,
     confidence: buildConfidence(warnings, pressures),
     pressures,
     balances,
     supportState,
+    structuralCoherence,
     aggregation,
     dominantPressure: aggregation.dominantPressure,
-    scoreReasons: buildScoreReasons(pressures, balances, aggregation),
+    scoreReasons: buildScoreReasons(pressures, balances, aggregation, structuralCoherence),
     warnings
   };
 }

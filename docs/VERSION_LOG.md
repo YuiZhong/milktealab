@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.31 playtest unified scoring calibration v1
+
+本轮在 default unified judgment + v0.0.8.15 anchor profile 生效后，校准 `core/unifiedScoringEngine.js` 的 pressure bands、support / balance、aggregation 和 broad type structural coherence，使正常饮品回到可试玩区间，同时保持极端甜 / 酸 / 苦 / 奶脂 / 低流动性 / 固体负载低分。
+
+本轮扩展 debug sample 输出，方便制作人查看 normal / extreme 样本的 legacy score、unified score、dominant pressure 和 score reasons。
+
+本轮未改 profile 数值、未改 v0.0.8.15 anchor profile source、未改 `data/generated`、未改 content sheets、未改 golden expected、未新增 report、未新增 recipe whitelist / sample-specific if / display text key，未 push，未 tag。
+
 ## v0.0.8.30 default unified judgment + anchor profile takeover
 
 本轮新增 `data/playtestAnchorProfiles.v0.0.8.15.js` 与 `scripts/content/buildPlaytestAnchorProfilesV0015.js`，把 v0.0.8.15 profile draft 提取为 playtest anchor profile 数据源；builder 校验 37/37 覆盖和关键锚点值。
