@@ -1,5 +1,11 @@
 # 版本记录
 
+## v0.0.8 handoff checkpoint after all-ingredient profile draft workspace
+
+本轮只同步 fresh conversation handoff：latest main 已到 `b5b3df7 chore: add ingredient profile value draft workspace`。
+
+下一步应是 v0.0.8.12 all-37 source-referenced profile value first pass，直接基于现有 v0.0.8.11 draft workspace 生成下一版草案；本轮未改 runtime / data / generated / golden，未 push，未 tag。
+
 ## v0.0.8.11 all-ingredient profile value draft workspace
 
 本轮新增 `scripts/content/buildIngredientProfileValueDraft.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.11.csv` 与 `.json`，作为全部 37 个原料的 profile 数值草案工作台。
