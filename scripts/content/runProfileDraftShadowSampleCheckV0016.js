@@ -10,6 +10,8 @@ const draftPath = path.join(
   "content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.15.json"
 );
 
+const profileSource = "v0.0.8.15_proposed_profile_draft";
+
 const prePatchScripts = [
   "utils/helpers.js",
   "data/ingredients.js",
@@ -212,11 +214,44 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }
 
-function normalizeJsonCell(value) {
+function parseProposedProfileCell(row, fieldName) {
+  const warnings = [];
+  const value = row[fieldName];
+
   if (value && typeof value === "object" && !Array.isArray(value)) {
-    return value;
+    return { profile: value, warnings };
   }
-  return {};
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      warnings.push(`${row.ingredientId || row.displayName || "unknown"}:${fieldName}:empty_string`);
+      return { profile: {}, warnings };
+    }
+
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        warnings.push(`${row.ingredientId || row.displayName || "unknown"}:${fieldName}:parsed_non_object`);
+        return { profile: {}, warnings };
+      }
+      if (!Object.keys(parsed).length) {
+        warnings.push(`${row.ingredientId || row.displayName || "unknown"}:${fieldName}:empty_object`);
+      }
+      return { profile: parsed, warnings };
+    } catch (error) {
+      warnings.push(`${row.ingredientId || row.displayName || "unknown"}:${fieldName}:parse_failed:${error.message}`);
+      return { profile: {}, warnings };
+    }
+  }
+
+  if (value === undefined || value === null) {
+    warnings.push(`${row.ingredientId || row.displayName || "unknown"}:${fieldName}:missing`);
+    return { profile: {}, warnings };
+  }
+
+  warnings.push(`${row.ingredientId || row.displayName || "unknown"}:${fieldName}:unsupported_type_${typeof value}`);
+  return { profile: {}, warnings };
 }
 
 function loadProfileDraft() {
@@ -224,17 +259,20 @@ function loadProfileDraft() {
   const rows = Array.isArray(raw.rows) ? raw.rows : [];
   const byId = new Map();
   const byDisplayName = new Map();
+  const warnings = [];
 
   rows.forEach((row) => {
-    const proposedTasteProfile = normalizeJsonCell(row.proposedTasteValuesJson);
-    const proposedTextureProfile = normalizeJsonCell(row.proposedTextureEffectsJson);
-    const proposedFlavorProfile = normalizeJsonCell(row.proposedFlavorValuesJson);
+    const proposedTaste = parseProposedProfileCell(row, "proposedTasteValuesJson");
+    const proposedTexture = parseProposedProfileCell(row, "proposedTextureEffectsJson");
+    const proposedFlavor = parseProposedProfileCell(row, "proposedFlavorValuesJson");
+    warnings.push(...proposedTaste.warnings, ...proposedTexture.warnings, ...proposedFlavor.warnings);
+
     const normalized = {
       ingredientId: row.ingredientId,
       displayName: row.displayName,
-      proposedTasteProfile,
-      proposedTextureProfile,
-      proposedFlavorProfile,
+      proposedTasteProfile: proposedTaste.profile,
+      proposedTextureProfile: proposedTexture.profile,
+      proposedFlavorProfile: proposedFlavor.profile,
     };
     if (normalized.ingredientId) {
       byId.set(normalized.ingredientId, normalized);
@@ -244,7 +282,7 @@ function loadProfileDraft() {
     }
   });
 
-  return { raw, byId, byDisplayName };
+  return { raw, byId, byDisplayName, warnings };
 }
 
 function buildRuntime(profileDraft) {
@@ -376,7 +414,7 @@ function formatScoreDelta(scoreSuggestion) {
   if (!scoreSuggestion) {
     return "n/a";
   }
-  const delta = getNumber(scoreSuggestion.scoreDeltaDraft);
+  const delta = getNumber(scoreSuggestion.scoreDelta ?? scoreSuggestion.scoreDeltaDraft);
   const suggested = getNumber(scoreSuggestion.suggestedScore);
   const parts = [];
   if (suggested !== null) {
@@ -386,6 +424,54 @@ function formatScoreDelta(scoreSuggestion) {
     parts.push(`delta:${Math.round(delta)}`);
   }
   return parts.length ? parts.join(" / ") : "n/a";
+}
+
+function getValue(result, summaryKey, metric) {
+  const value = result && result[summaryKey] && result[summaryKey].values
+    ? result[summaryKey].values[metric]
+    : null;
+  return getNumber(value) ?? 0;
+}
+
+function buildInitialReviewLabel(result) {
+  const score = getNumber(result && (result.legacyScore ?? result.score));
+  const sweetness = getValue(result, "tasteSummary", "sweetness");
+  const bitterness = getValue(result, "tasteSummary", "bitterness");
+  const milkiness = getValue(result, "tasteSummary", "milkiness");
+  const fatLoad = getValue(result, "textureSummary", "fatLoad");
+  const solidLoad = getValue(result, "textureSummary", "solidLoad");
+  const strawResistance = getValue(result, "textureSummary", "strawResistance");
+  const drinkabilityPenalty = getValue(result, "textureSummary", "drinkabilityPenalty");
+  const beverageFit = getValue(result, "flavorSummary", "beverageFit");
+  const dessertFit = getValue(result, "flavorSummary", "dessertFit");
+  const identityConflictRisk = getValue(result, "flavorSummary", "identityConflictRisk");
+
+  if (sweetness >= 80 && score !== null && score >= 30) {
+    return "needs_review: high sweetness pressure may be too lenient";
+  }
+  if ((solidLoad >= 80 || strawResistance >= 65 || drinkabilityPenalty >= 50) && score !== null && score <= 10) {
+    return "intuitive: extreme texture pressure is visible";
+  }
+  if (fatLoad >= 70 && score !== null && score <= 10) {
+    return "intuitive: extreme fat load pressure is visible";
+  }
+  if (identityConflictRisk >= 35 && score !== null && score <= 10) {
+    return "needs_review: strong identity support / conflict balance";
+  }
+  if (milkiness >= 20 && (beverageFit >= 80 || dessertFit >= 75) && score !== null && score <= 70) {
+    return "needs_review: dairy support / drink expectation may be underweighted";
+  }
+  if (bitterness >= 35 && milkiness >= 15 && score !== null && score <= 70) {
+    return "needs_review: bitter pressure balance may be underweighted";
+  }
+  return "observe";
+}
+
+function buildRowNote(draft) {
+  if (!draft.warnings.length) {
+    return "parsed proposed profile draft; no parse warnings";
+  }
+  return `parse warnings: ${draft.warnings.length}`;
 }
 
 function recipeLabel(window, recipe) {
@@ -416,6 +502,8 @@ function main() {
       currentRuntimeSuggestion: formatScoreDelta(currentSuggestion),
       profileDraftShadow: formatScoreDelta(draftSuggestion),
       profileDraftTopSignals: collectSignals(draftResult),
+      initialReviewLabel: buildInitialReviewLabel(draftResult),
+      warningOrNote: buildRowNote(draft),
       shadowObservationBoundary:
         "debug_only; v0.0.8.15 draft profile values are not runtime data",
     };
@@ -424,14 +512,20 @@ function main() {
   console.log("# v0.0.8.15 Profile Draft Shadow Sample Check");
   console.log("");
   console.log(`sourceDraft: ${path.relative(repoRoot, draftPath)}`);
+  console.log(`profileSource: ${profileSource}`);
+  console.log("runtimeData: false");
+  console.log("affectsFinalScore: false");
+  console.log("affectsGoldenExpected: false");
+  console.log("debugOnly: true");
   console.log(`draftRows: ${draft.raw.metadata && draft.raw.metadata.rowCount ? draft.raw.metadata.rowCount : draft.raw.rows.length}`);
+  console.log(`parseWarnings: ${draft.warnings.length ? draft.warnings.join("; ") : "none"}`);
   console.log("runtimeBoundary: read-only shadow observation; no runtime/data/generated/golden writes");
   console.log("");
-  console.log("| sample | recipe | legacy score | current suggestion | v0.0.8.15 draft shadow | top draft signals | boundary |");
-  console.log("|---|---|---:|---|---|---|---|");
+  console.log("| sample | recipe | legacy score | current runtime suggestion | v0.0.8.15 proposed profile shadow | key observed pressures | warning / note | initial review label | boundary |");
+  console.log("|---|---|---:|---|---|---|---|---|---|");
   rows.forEach((row) => {
     console.log(
-      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
+      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.warningOrNote)} | ${escapeMarkdown(row.initialReviewLabel)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
     );
   });
 }
