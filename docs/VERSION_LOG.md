@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.6 page-visible score suggestion calibration review hints
+
+本轮在页面新系统建议区新增 calibration review hints，并在 `generatedSeveritySuggestion` 中新增 `calibrationReview`。
+
+该提示用于提醒制作人判断新系统建议分是否合理；如果不合理，优先检查 threshold、severity、scoreMultiplier、positive synergy、drinkType expectation、score aggregation、customer preference 等评分 / 判定系统层。
+
+profile factual check 只作为最后排查项。原料 profile 描述材料事实，不能为了目标分数或校正测试扭曲原料 profile。
+
+本轮不改 final score / feedback / result.type / accident / golden expected，未写 `data/generated`，未做 final override / active takeover，未 push，未 tag。
+
 ## v0.0.8 docs sync: ingredient factual baseline and scoring calibration boundary
 
 本轮同步未来原料数值生成原则：不能随机生成或拍脑袋，后续批量原料数值阶段应参考食品资料、论文、pH、糖度、质地资料等，先形成资料基线和游戏化相对数值草案。

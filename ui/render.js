@@ -257,6 +257,36 @@ function createRenderer(app) {
     parent.append(item);
   }
 
+  function renderCalibrationReview(calibrationReview) {
+    const calibration = calibrationReview || {};
+    const block = document.createElement("div");
+    block.className = "suggestion-calibration";
+
+    const title = document.createElement("h5");
+    title.textContent = "校准判断";
+
+    const status = document.createElement("p");
+    status.textContent = `状态：${calibration.humanReadableStatus || "待制作人判断"}`;
+
+    const trust = document.createElement("p");
+    trust.textContent = "是否可直接相信：否，仍是 draft";
+
+    const prompt = document.createElement("p");
+    prompt.textContent = `判断提示：${calibration.reviewPrompt || "请结合制作人直觉判断新系统建议是否合理。"}`;
+
+    const targets = Array.isArray(calibration.likelyAdjustmentTargets) && calibration.likelyAdjustmentTargets.length
+      ? calibration.likelyAdjustmentTargets.join(" / ")
+      : "暂无";
+    const targetText = document.createElement("p");
+    targetText.textContent = `优先排查：${targets}`;
+
+    const note = document.createElement("p");
+    note.textContent = `备注：${calibration.note || "不要为了让某杯通过校正测试而扭曲原料 profile。"}`;
+
+    block.append(title, status, trust, prompt, targetText, note);
+    return block;
+  }
+
   function renderGeneratedSeveritySuggestion(suggestion) {
     const panel = el.generatedSeveritySuggestion;
     if (!panel) return;
@@ -287,6 +317,8 @@ function createRenderer(app) {
     const reason = document.createElement("p");
     reason.className = "suggestion-reason";
     reason.textContent = `主要原因：${scoreSuggestion.reason || "尚未启用正式 threshold / scoreMultiplier。"}`;
+
+    const calibrationBlock = renderCalibrationReview(suggestion.calibrationReview);
 
     const metricTitle = document.createElement("p");
     metricTitle.className = "suggestion-subtitle";
@@ -339,7 +371,7 @@ function createRenderer(app) {
     observation.className = "suggestion-footnote";
     observation.textContent = `已观察到 ${observationCount} 条新系统观察项；它们不是正式 generated severity。`;
 
-    panel.append(title, mode, meta, reason, metricTitle, metricList, draftObservationTitle, draftObservationList, observation);
+    panel.append(title, mode, meta, reason, calibrationBlock, metricTitle, metricList, draftObservationTitle, draftObservationList, observation);
   }
 
   function updateSelectedIngredientButtons() {

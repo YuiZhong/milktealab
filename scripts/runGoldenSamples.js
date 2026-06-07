@@ -525,8 +525,8 @@ function checkGeneratedFeedbackShadowExpectation(result, expectation, failures) 
 }
 
 function checkGeneratedSeveritySuggestionStructure(suggestion, result, failures) {
-  if (suggestion?.schemaVersion !== "generatedSeveritySuggestion.v0.0.8.5") {
-    failures.push('generatedSeveritySuggestion.schemaVersion should be "generatedSeveritySuggestion.v0.0.8.5"');
+  if (suggestion?.schemaVersion !== "generatedSeveritySuggestion.v0.0.8.6") {
+    failures.push('generatedSeveritySuggestion.schemaVersion should be "generatedSeveritySuggestion.v0.0.8.6"');
   }
   if (suggestion?.readonly !== true) failures.push("generatedSeveritySuggestion.readonly should be true");
   if (suggestion?.affectsFinalResult !== false) failures.push("generatedSeveritySuggestion.affectsFinalResult should be false");
@@ -571,6 +571,32 @@ function checkGeneratedSeveritySuggestionStructure(suggestion, result, failures)
   }
   if (!Array.isArray(suggestion?.metricAvailability)) {
     failures.push("generatedSeveritySuggestion.metricAvailability should be an array");
+  }
+  if (!isPlainObject(suggestion?.calibrationReview)) {
+    failures.push("generatedSeveritySuggestion.calibrationReview should be an object");
+  } else {
+    const review = suggestion.calibrationReview;
+    if (typeof review.status !== "string") {
+      failures.push("generatedSeveritySuggestion.calibrationReview.status should be a string");
+    }
+    if (typeof review.humanReadableStatus !== "string") {
+      failures.push("generatedSeveritySuggestion.calibrationReview.humanReadableStatus should be a string");
+    }
+    if (review.shouldTrustSuggestion !== false) {
+      failures.push("generatedSeveritySuggestion.calibrationReview.shouldTrustSuggestion should be false");
+    }
+    if (typeof review.reviewPrompt !== "string") {
+      failures.push("generatedSeveritySuggestion.calibrationReview.reviewPrompt should be a string");
+    }
+    if (!Array.isArray(review.likelyAdjustmentTargets)) {
+      failures.push("generatedSeveritySuggestion.calibrationReview.likelyAdjustmentTargets should be an array");
+    }
+    if (review.profileFactualIssueLikely !== false) {
+      failures.push("generatedSeveritySuggestion.calibrationReview.profileFactualIssueLikely should be false");
+    }
+    if (typeof review.note !== "string") {
+      failures.push("generatedSeveritySuggestion.calibrationReview.note should be a string");
+    }
   }
   if (!Array.isArray(suggestion?.warnings)) {
     failures.push("generatedSeveritySuggestion.warnings should be an array");

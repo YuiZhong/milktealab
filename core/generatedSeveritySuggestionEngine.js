@@ -1,5 +1,5 @@
 (function() {
-const schemaVersion = "generatedSeveritySuggestion.v0.0.8.5";
+const schemaVersion = "generatedSeveritySuggestion.v0.0.8.6";
 
 const nonFinalFlags = {
   readonly: true,
@@ -104,12 +104,82 @@ const draftScoreSuggestionRules = [
   }
 ];
 
+const profileBoundaryNote = "原料 profile 描述材料事实；如果建议分不符合直觉，优先校准判定 / scoring 系统，除非确认 profile 本身偏离现实。";
+
+const defaultAdjustmentTargets = [
+  "threshold",
+  "severityLevel",
+  "scoreMultiplier",
+  "positiveSynergy",
+  "drinkTypeExpectation",
+  "scoreAggregation",
+  "customerPreference",
+  "profileFactualCheck"
+];
+
+const adjustmentTargetsByMetric = {
+  solidLoad: [
+    "threshold",
+    "severityLevel",
+    "scoreMultiplier",
+    "drinkTypeExpectation",
+    "positiveSynergy",
+    "scoreAggregation",
+    "customerPreference",
+    "profileFactualCheck"
+  ],
+  fatLoad: [
+    "threshold",
+    "severityLevel",
+    "scoreMultiplier",
+    "drinkTypeExpectation",
+    "positiveSynergy",
+    "scoreAggregation",
+    "customerPreference",
+    "profileFactualCheck"
+  ],
+  drinkabilityPenalty: [
+    "threshold",
+    "severityLevel",
+    "scoreMultiplier",
+    "drinkTypeExpectation",
+    "positiveSynergy",
+    "scoreAggregation",
+    "customerPreference",
+    "profileFactualCheck"
+  ],
+  acidity: [
+    "threshold",
+    "severityLevel",
+    "scoreMultiplier",
+    "positiveSynergy",
+    "drinkTypeExpectation",
+    "scoreAggregation",
+    "customerPreference",
+    "profileFactualCheck"
+  ],
+  bitterness: [
+    "threshold",
+    "severityLevel",
+    "scoreMultiplier",
+    "positiveSynergy",
+    "drinkTypeExpectation",
+    "scoreAggregation",
+    "customerPreference",
+    "profileFactualCheck"
+  ]
+};
+
 function isNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
 }
 
 function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+function uniqueItems(items) {
+  return [...new Set(items.filter(Boolean))];
 }
 
 function metricKey(sourceSummary, metric) {
@@ -283,6 +353,44 @@ function buildScoreSuggestion(result, draftRuleObservations) {
   };
 }
 
+function buildLikelyAdjustmentTargets(draftRuleObservations) {
+  const targets = draftRuleObservations.flatMap(observation =>
+    adjustmentTargetsByMetric[observation.metric] || defaultAdjustmentTargets
+  );
+  const orderedTargets = uniqueItems([...targets, ...defaultAdjustmentTargets]);
+  const profileIndex = orderedTargets.indexOf("profileFactualCheck");
+  if (profileIndex >= 0) {
+    orderedTargets.splice(profileIndex, 1);
+    orderedTargets.push("profileFactualCheck");
+  }
+  return orderedTargets;
+}
+
+function buildCalibrationReview(scoreSuggestion, draftRuleObservations) {
+  if (!scoreSuggestion || scoreSuggestion.scoreDelta === 0) {
+    return {
+      status: "no_delta_observed",
+      humanReadableStatus: "暂无建议分差",
+      shouldTrustSuggestion: false,
+      reviewPrompt: "本轮新系统没有建议调整分数，可先观察其他样本。",
+      likelyAdjustmentTargets: [],
+      profileFactualIssueLikely: false,
+      note: profileBoundaryNote
+    };
+  }
+
+  const targets = buildLikelyAdjustmentTargets(draftRuleObservations);
+  return {
+    status: "needs_review",
+    humanReadableStatus: "待制作人判断",
+    shouldTrustSuggestion: false,
+    reviewPrompt: "新系统建议分数与旧系统不同。请判断这次调整是否符合直觉；如果不符合，优先检查 threshold / severityLevel / scoreMultiplier / positive synergy / drinkType expectation / score aggregation / customer preference，而不是直接改原料 profile。",
+    likelyAdjustmentTargets: targets,
+    profileFactualIssueLikely: false,
+    note: profileBoundaryNote
+  };
+}
+
 function buildWarnings(result) {
   const warnings = [
     "Draft scoreDelta only affects generatedSeveritySuggestion.scoreSuggestion.suggestedScore.",
@@ -300,12 +408,14 @@ function buildWarnings(result) {
 
 function buildGeneratedSeveritySuggestion(result) {
   const draftRuleObservations = buildDraftRuleObservations(result);
+  const scoreSuggestion = buildScoreSuggestion(result, draftRuleObservations);
 
   return {
     schemaVersion,
     ...nonFinalFlags,
     mode: "ui_debug_suggestion",
-    scoreSuggestion: buildScoreSuggestion(result, draftRuleObservations),
+    scoreSuggestion,
+    calibrationReview: buildCalibrationReview(scoreSuggestion, draftRuleObservations),
     severityObservations: buildSeverityObservations(result, draftRuleObservations),
     metricAvailability: buildMetricAvailability(result, draftRuleObservations),
     warnings: buildWarnings(result)
