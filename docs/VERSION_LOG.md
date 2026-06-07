@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.14 profile value scale recalibration draft
+
+本轮新增 `scripts/content/buildIngredientProfileValueDraftV0014.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.14.csv` 与 `.json`。
+
+该草案基于 v0.0.8.12 source-referenced first pass，按制作人确认的 0-100 标尺重校准 `proposedTasteValuesJson`、`proposedTextureEffectsJson` 和 `proposedFlavorValuesJson`；`current*` 字段仍只是 runtime snapshot。
+
+主要锚点包括：柠檬 acidity 80、白糖 sweetness 85、咖啡 / 抹茶 / 可可 bitterness 68 / 60 / 55、淡奶油 / 奶盖 / 厚乳 fatLoad 82 / 76 / 58、珍珠 / 芋泥 / 奥利奥等小料质地重校准，以及海盐 `saltiness` 作为 review-only schema gap。
+
+本轮只生成 draft workspace；所有 runtime / score / golden gates 仍为 false，未改 runtime / data / `data/generated` / scoring logic / final result / golden expected，未生成新 ID / registry / validator，未 push，未 tag。
+
 ## v0.0.8.13 score-only partial takeover flag / rollback scaffold
 
 本轮新增 score-only debug takeover scaffold：默认仍使用 legacy score；只有显式 debug flag 开启且 `generatedSeveritySuggestion.scoreSuggestion.suggestedScore` 合法时，才试验性用新系统建议分覆盖 `result.score`。
