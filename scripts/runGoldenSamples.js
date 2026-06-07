@@ -41,6 +41,7 @@ const scriptFiles = [
   "core/flavorSummaryEngine.js",
   "core/summaryCandidateEngine.js",
   "core/candidatePriorityShellEngine.js",
+  "core/generatedSeveritySuggestionEngine.js",
   "core/tasteJudge.js",
   "data/goldenSamples.js"
 ];
@@ -159,6 +160,10 @@ function getCandidatePriorityShell(result) {
 
 function getGeneratedFeedbackShadow(result) {
   return result?.generatedFeedbackShadow || null;
+}
+
+function getGeneratedSeveritySuggestion(result) {
+  return result?.generatedSeveritySuggestion || null;
 }
 
 function formatIds(ids) {
@@ -519,6 +524,64 @@ function checkGeneratedFeedbackShadowExpectation(result, expectation, failures) 
   }
 }
 
+function checkGeneratedSeveritySuggestionStructure(suggestion, result, failures) {
+  if (suggestion?.schemaVersion !== "generatedSeveritySuggestion.v0.0.8.4") {
+    failures.push('generatedSeveritySuggestion.schemaVersion should be "generatedSeveritySuggestion.v0.0.8.4"');
+  }
+  if (suggestion?.readonly !== true) failures.push("generatedSeveritySuggestion.readonly should be true");
+  if (suggestion?.affectsFinalResult !== false) failures.push("generatedSeveritySuggestion.affectsFinalResult should be false");
+  if (suggestion?.affectsScore !== false) failures.push("generatedSeveritySuggestion.affectsScore should be false");
+  if (suggestion?.affectsFeedback !== false) failures.push("generatedSeveritySuggestion.affectsFeedback should be false");
+  if (suggestion?.affectsResultType !== false) failures.push("generatedSeveritySuggestion.affectsResultType should be false");
+  if (suggestion?.affectsGoldenExpected !== false) failures.push("generatedSeveritySuggestion.affectsGoldenExpected should be false");
+  if (suggestion?.mode !== "ui_debug_suggestion") failures.push('generatedSeveritySuggestion.mode should be "ui_debug_suggestion"');
+  if (!isPlainObject(suggestion?.scoreSuggestion)) {
+    failures.push("generatedSeveritySuggestion.scoreSuggestion should be an object");
+  } else {
+    if (suggestion.scoreSuggestion.legacyScore !== result?.score) {
+      failures.push(`generatedSeveritySuggestion.scoreSuggestion.legacyScore should be ${result?.score}`);
+    }
+    if (suggestion.scoreSuggestion.suggestedScore !== result?.score) {
+      failures.push(`generatedSeveritySuggestion.scoreSuggestion.suggestedScore should be ${result?.score}`);
+    }
+    if (suggestion.scoreSuggestion.scoreDelta !== 0) {
+      failures.push("generatedSeveritySuggestion.scoreSuggestion.scoreDelta should be 0");
+    }
+    if (suggestion.scoreSuggestion.confidence !== "low") {
+      failures.push('generatedSeveritySuggestion.scoreSuggestion.confidence should be "low"');
+    }
+  }
+  if (!Array.isArray(suggestion?.severityObservations)) {
+    failures.push("generatedSeveritySuggestion.severityObservations should be an array");
+  }
+  if (!Array.isArray(suggestion?.metricAvailability)) {
+    failures.push("generatedSeveritySuggestion.metricAvailability should be an array");
+  }
+  if (!Array.isArray(suggestion?.warnings)) {
+    failures.push("generatedSeveritySuggestion.warnings should be an array");
+  }
+}
+
+function checkGeneratedSeveritySuggestionExpectation(result, expectation, failures) {
+  if (!expectation) return;
+
+  const suggestion = getGeneratedSeveritySuggestion(result);
+  if (expectation.exists === true && !suggestion) {
+    failures.push("generatedSeveritySuggestion should exist");
+    return;
+  }
+  if (!suggestion) return;
+
+  if (expectation.exists === true) checkGeneratedSeveritySuggestionStructure(suggestion, result, failures);
+
+  if (typeof expectation.metricAvailabilityCountMin === "number") {
+    const count = Array.isArray(suggestion.metricAvailability) ? suggestion.metricAvailability.length : 0;
+    if (count < expectation.metricAvailabilityCountMin) {
+      failures.push(`generatedSeveritySuggestion.metricAvailability length ${count} is below ${expectation.metricAvailabilityCountMin}`);
+    }
+  }
+}
+
 function normalizeSampleItem(item, ingredientRegistry, sampleId) {
   if (item?.name) return { ...item };
 
@@ -587,6 +650,7 @@ function checkSample(sample, result) {
   checkSummaryCandidatesExpectation(result, expectations.summaryCandidates, failures);
   checkCandidatePriorityShellExpectation(result, expectations.candidatePriorityShell, failures);
   checkGeneratedFeedbackShadowExpectation(result, expectations.generatedFeedbackShadow, failures);
+  checkGeneratedSeveritySuggestionExpectation(result, expectations.generatedSeveritySuggestion, failures);
 
   if (typeof expectations.scoreMin === "number" && score < expectations.scoreMin) {
     failures.push(`score ${score} is below ${expectations.scoreMin}`);

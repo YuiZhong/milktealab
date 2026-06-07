@@ -224,6 +224,101 @@ function createRenderer(app) {
     return Number.isFinite(value) ? clamp(value, 0, 100) : 0;
   }
 
+  function suggestionScore(value) {
+    return Number.isFinite(value) ? String(value) : "待观察";
+  }
+
+  function suggestionDelta(value) {
+    if (!Number.isFinite(value)) return "待观察";
+    if (value > 0) return `+${value}`;
+    return String(value);
+  }
+
+  function availabilityLabel(state) {
+    const labels = {
+      metric_observed_positive: "可观察",
+      metric_observed_zero: "可观察：当前为 0",
+      needs_official_mapping_or_threshold: "仍需正式映射或阈值"
+    };
+    return labels[state] || state || "待确认";
+  }
+
+  function appendSuggestionMeta(parent, label, value) {
+    const item = document.createElement("div");
+    item.className = "suggestion-meta-item";
+
+    const title = document.createElement("span");
+    title.textContent = label;
+
+    const detail = document.createElement("strong");
+    detail.textContent = value;
+
+    item.append(title, detail);
+    parent.append(item);
+  }
+
+  function renderGeneratedSeveritySuggestion(suggestion) {
+    const panel = el.generatedSeveritySuggestion;
+    if (!panel) return;
+    panel.innerHTML = "";
+
+    if (!suggestion) {
+      panel.classList.add("hidden");
+      return;
+    }
+
+    panel.classList.remove("hidden");
+
+    const title = document.createElement("h4");
+    title.textContent = "新系统观察｜Generated severity suggestion";
+
+    const mode = document.createElement("p");
+    mode.className = "suggestion-mode";
+    mode.textContent = "当前模式：只读建议，不影响最终结果";
+
+    const meta = document.createElement("div");
+    meta.className = "suggestion-meta";
+    const scoreSuggestion = suggestion.scoreSuggestion || {};
+    appendSuggestionMeta(meta, "旧系统分数", suggestionScore(scoreSuggestion.legacyScore));
+    appendSuggestionMeta(meta, "建议分数", `${suggestionScore(scoreSuggestion.suggestedScore)}（暂未接管）`);
+    appendSuggestionMeta(meta, "分数差", suggestionDelta(scoreSuggestion.scoreDelta));
+    appendSuggestionMeta(meta, "置信度", scoreSuggestion.confidence || "low");
+
+    const reason = document.createElement("p");
+    reason.className = "suggestion-reason";
+    reason.textContent = `主要原因：${scoreSuggestion.reason || "尚未启用正式 threshold / scoreMultiplier。"}`;
+
+    const metricTitle = document.createElement("p");
+    metricTitle.className = "suggestion-subtitle";
+    metricTitle.textContent = "指标观察";
+
+    const metricList = document.createElement("ul");
+    metricList.className = "suggestion-list";
+    const metrics = Array.isArray(suggestion.metricAvailability)
+      ? suggestion.metricAvailability
+      : [];
+    metrics.slice(0, 8).forEach(item => {
+      const row = document.createElement("li");
+      const valueText = Number.isFinite(item.observedValue) ? `，当前值 ${Math.round(item.observedValue)}` : "";
+      row.textContent = `${item.metric || "unknown"}：${availabilityLabel(item.availability)}${valueText}`;
+      metricList.append(row);
+    });
+    if (!metricList.children.length) {
+      const row = document.createElement("li");
+      row.textContent = "暂无可展示指标。";
+      metricList.append(row);
+    }
+
+    const observationCount = Array.isArray(suggestion.severityObservations)
+      ? suggestion.severityObservations.length
+      : 0;
+    const observation = document.createElement("p");
+    observation.className = "suggestion-footnote";
+    observation.textContent = `已观察到 ${observationCount} 条 summary candidate；它们不是正式 generated severity。`;
+
+    panel.append(title, mode, meta, reason, metricTitle, metricList, observation);
+  }
+
   function updateSelectedIngredientButtons() {
     const selected = selectedIngredients();
     el.groups.querySelectorAll(".ingredient").forEach(button => {
@@ -239,6 +334,7 @@ function createRenderer(app) {
       el.result.classList.add("hidden");
       el.resultEmpty.classList.remove("hidden");
       el.scorePill.textContent = "等待试喝";
+      renderGeneratedSeveritySuggestion(null);
       return;
     }
 
@@ -265,6 +361,7 @@ function createRenderer(app) {
     el.drinkType.textContent = resultText(result.type, "历史配方");
     el.scoreValue.textContent = resultScore(result);
     el.feedback.textContent = resultText(result.feedback, "暂无反馈");
+    renderGeneratedSeveritySuggestion(result.generatedSeveritySuggestion);
     el.audienceTags.innerHTML = "";
     resultAudience(result).forEach(name => {
       const tag = document.createElement("span");

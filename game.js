@@ -30,6 +30,7 @@ const el = {
   drinkType: document.querySelector("#drink-type"),
   scoreValue: document.querySelector("#score-value"),
   feedback: document.querySelector("#feedback"),
+  generatedSeveritySuggestion: document.querySelector("#generated-severity-suggestion"),
   audienceTags: document.querySelector("#audience-tags"),
   attributeBars: document.querySelector("#attribute-bars"),
   savedDialog: document.querySelector("#saved-dialog"),

@@ -89,6 +89,10 @@
               scene: "normal"
             }
           ]
+        },
+        generatedSeveritySuggestion: {
+          exists: true,
+          metricAvailabilityCountMin: 1
         }
       },
       notes: "经典稳定样本，不应被事故规则误伤。"

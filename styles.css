@@ -492,6 +492,70 @@ h1 {
   line-height: 1.65;
 }
 
+.generated-severity-suggestion {
+  margin: 0 0 16px;
+  padding: 14px;
+  border: 1px solid #d9d0c4;
+  border-radius: 8px;
+  background: #f8f5ef;
+}
+
+.generated-severity-suggestion h4 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.suggestion-mode,
+.suggestion-reason,
+.suggestion-subtitle,
+.suggestion-footnote {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.suggestion-mode,
+.suggestion-footnote {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.suggestion-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.suggestion-meta-item {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 8px;
+  border-radius: 8px;
+  background: #fffaf2;
+}
+
+.suggestion-meta-item span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.suggestion-meta-item strong {
+  overflow-wrap: anywhere;
+  font-size: 0.95rem;
+}
+
+.suggestion-list {
+  display: grid;
+  gap: 6px;
+  margin: 7px 0 10px;
+  padding-left: 18px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;

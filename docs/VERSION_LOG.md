@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.4 page-visible generated severity / score suggestion overlay
+
+本轮新增页面可见的 generated severity / score suggestion overlay，让用户在试喝报告里直接看到“新系统观察｜Generated severity suggestion”。
+
+新增 `core/generatedSeveritySuggestionEngine.js`，并在 `tasteJudge` result 上挂载只读 `generatedSeveritySuggestion` 字段。该字段只读取当前 result 的 summary / summaryCandidates / candidatePriorityShell 观察结果，不读取 sample CSV / JSON / markdown report 作为 runtime source。
+
+页面显示旧系统分数、建议分数、分数差、置信度、原因和指标观察；当前 `scoreDelta` 保持 0，因为尚未启用正式 threshold / `scoreMultiplier`。
+
+本轮未覆盖 final score / feedback / result.type / accident / golden expected，未写 `data/generated`，未做 active takeover / final result override，未新增 planning report，未 push，未 tag。
+
 ## v0.0.8 route correction: golden role, no-player risk boundary, and visible-product priority
 
 本轮同步 v0.0.8.x 路线纠偏：当前已进入 read-only generated severity shadow proof / multi-sample shadow output / human-readable review pack，不再把“无限保护旧 golden 一致性”作为最高目标。

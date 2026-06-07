@@ -9,6 +9,7 @@ const textureSummaryEngine = window.MILK_TEA_LAB_TEXTURE_SUMMARY_ENGINE;
 const flavorSummaryEngine = window.MILK_TEA_LAB_FLAVOR_SUMMARY_ENGINE;
 const summaryCandidateEngine = window.MILK_TEA_LAB_SUMMARY_CANDIDATE_ENGINE;
 const candidatePriorityShellEngine = window.MILK_TEA_LAB_CANDIDATE_PRIORITY_SHELL_ENGINE;
+const generatedSeveritySuggestionEngine = window.MILK_TEA_LAB_GENERATED_SEVERITY_SUGGESTION_ENGINE;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -314,6 +315,9 @@ function evaluateCup(cup) {
       drinkTypeId: result.drinkTypeId,
       outcomeTypeId: result.outcomeTypeId
     });
+  }
+  if (generatedSeveritySuggestionEngine?.buildGeneratedSeveritySuggestion) {
+    result.generatedSeveritySuggestion = generatedSeveritySuggestionEngine.buildGeneratedSeveritySuggestion(result);
   }
   return result;
 }

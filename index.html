@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>奶茶实验室</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=0084" />
   </head>
   <body>
     <main class="shell">
       <section class="hero">
         <div>
-          <p class="eyebrow">奶茶实验室 v0.0.7.49｜texture topping migration</p>
+          <p class="eyebrow">奶茶实验室 v0.0.8.4｜severity suggestion overlay</p>
           <h1>奶茶实验室</h1>
           <p class="subtitle">自由研发饮品配方，让试喝员先替未来顾客承受一下。</p>
         </div>
@@ -90,6 +90,8 @@
 
             <div class="feedback" id="feedback"></div>
 
+            <div id="generated-severity-suggestion" class="generated-severity-suggestion hidden"></div>
+
             <div class="audience">
               <p class="label">适合客群</p>
               <div id="audience-tags" class="tags"></div>
@@ -146,9 +148,10 @@
     <script src="./core/flavorSummaryEngine.js?v=0068"></script>
     <script src="./core/summaryCandidateEngine.js?v=00612"></script>
     <script src="./core/candidatePriorityShellEngine.js?v=00615"></script>
-    <script src="./core/tasteJudge.js?v=00615"></script>
+    <script src="./core/generatedSeveritySuggestionEngine.js?v=0084"></script>
+    <script src="./core/tasteJudge.js?v=0084"></script>
     <script src="./storage/saveStorage.js"></script>
-    <script src="./ui/render.js?v=0055"></script>
+    <script src="./ui/render.js?v=0084"></script>
     <script src="./ui/domEvents.js"></script>
     <script src="./game.js"></script>
   </body>
