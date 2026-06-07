@@ -1,5 +1,5 @@
 (function() {
-const schemaVersion = "drinkTypeComposer.v0.0.8.27";
+const schemaVersion = "drinkTypeComposer.v0.0.8.29";
 
 const allowedBroadTypeIds = new Set([
   "milk_tea",
@@ -42,7 +42,7 @@ const typeRules = [
     broadTypeLabel: "奶茶",
     requiredTags: ["tea", "dairy"],
     requiredBaseTags: ["tea_base", "dairy_base"],
-    priority: 88,
+    priority: 94,
     labelMode: "base_only"
   },
   {
@@ -215,14 +215,25 @@ function buildBaseLabel(rule, primaryEntries) {
   return `${getLabelText(firstPrimary)}${rule.labelSuffix || ""}`;
 }
 
+function isEntryCoveredByBaseLabel(entry, baseLabel) {
+  const label = getLabelText(entry);
+  return Boolean(label && baseLabel && baseLabel.includes(label));
+}
+
+function getVisiblePrimaryEntries(primaryEntries, baseLabel) {
+  return primaryEntries.filter(entry => !isEntryCoveredByBaseLabel(entry, baseLabel));
+}
+
 function buildLabel(rule, entries, reasonCodes, warnings) {
   const primaryEntries = getPrimaryIdentityEntries(entries);
   const modifierEntries = getModifierEntries(entries);
   const visibleModifiers = modifierEntries.slice(0, 2);
   const baseLabel = buildBaseLabel(rule, primaryEntries);
+  const visiblePrimaryEntries = getVisiblePrimaryEntries(primaryEntries, baseLabel).slice(0, 2);
+  const visibleIdentityEntries = [...visibleModifiers, ...visiblePrimaryEntries];
   const modifierPrefix = modifierEntries.length > 3
     ? "多料"
-    : visibleModifiers.map(getLabelText).join("");
+    : visibleIdentityEntries.map(getLabelText).join("");
 
   if (modifierEntries.length > 3) {
     warnings.push("drink_type_composer_many_modifiers_used_multi_label");
@@ -230,10 +241,18 @@ function buildLabel(rule, entries, reasonCodes, warnings) {
   } else if (visibleModifiers.length) {
     reasonCodes.push(`modifier_count:${visibleModifiers.length}`);
   }
+  if (visiblePrimaryEntries.length) {
+    reasonCodes.push(`primary_identity_count:${visiblePrimaryEntries.length}`);
+  }
 
   const labelParts = [
     ...visibleModifiers.map(entry => ({
       source: "modifier",
+      ingredientId: entry.ingredientId,
+      text: getLabelText(entry)
+    })),
+    ...visiblePrimaryEntries.map(entry => ({
+      source: "primary_identity",
       ingredientId: entry.ingredientId,
       text: getLabelText(entry)
     })),

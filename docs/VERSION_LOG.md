@@ -1,5 +1,11 @@
 # 版本记录
 
+## v0.0.8.29 drink type visible identity merge fix
+
+本轮修正 `core/drinkTypeComposer.js` 的通用 base + visible identity merge：`tea + dairy` 优先形成奶茶 base，`coffee + dairy` 形成咖啡牛奶 base，未被 base label 覆盖的 primary identity / modifier 再拼入展示名称。
+
+该修复让 fruit + tea + dairy 可显示为水果奶茶方向，fruit + coffee + dairy 可保留水果身份；本轮未新增组合 ID、未写配方特例、未改 scoring / feedback composer / profile / golden expected，未新增 report，未 push，未 tag。
+
 ## v0.0.8.28 playtest unified feedback composer
 
 本轮新增 `core/unifiedFeedbackComposer.js`，让 `judgmentTakeover=1` 试玩路径下的 unified feedback 由新系统 pressure / balance / outcome / drinkType composer 输出组合生成。

@@ -55,6 +55,7 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 - v0.0.8.26：新增 37/37 `ingredientCompositionTags` 与校验器，为未来 composable drink type labeler 提供 stable composition / role / display-role 输入；本轮不是 drinkType composer，不改 runtime / scoring / golden。
 - v0.0.8.27：进入 playtest composable drink type labeler；`judgmentTakeover=1` 下普通饮品类型可读取 stable ingredient composition tags 组合出 broad drink type 和中文展示标签。它不是正式 taxonomy，不改 golden expected，不写 data/generated，不以 displayName / 中文 category / legacy type 作为判断来源。
 - v0.0.8.28：进入 playtest unified feedback composer；`judgmentTakeover=1` 下 unified feedback 由新系统 pressure / balance / outcome / drinkType composer 输出组合，不读取 legacy feedback / legacy type / visible text 作为判断来源。它仍是 playtest-only feedback，不改 default legacy / golden expected。
+- v0.0.8.29：修正 drink type composer 的 base + visible identity merge；`tea + dairy + fruit` 以奶茶为 base 并保留 fruit 可见身份，`coffee + dairy + fruit` 保留 fruit identity，不新增组合 ID / 配方特例 / golden expected。
 
 当前长对话已经出现上下文漂移风险。后续应优先从 `docs/AI_CONTEXT.md`、`docs/VERSION_LOG.md` 和 verified git baseline 恢复，而不是依赖本轮长聊天记忆。
 
