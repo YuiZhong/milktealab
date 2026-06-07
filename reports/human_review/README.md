@@ -51,6 +51,7 @@
 - `sampleResultSnapshotPlanning.round1.md` 规划 future sample result snapshot 结构；它不是 snapshot implementation、generated severity、generated data 或 runtime data。
 - `triggerMetricDirectionReview.round1.md` 审阅第一批 6 个机制的 triggerMetric direction；它不是 metric registry、schema、validator、generated data 或 runtime data。
 - `triggerMetricDirectionReviewRecord.round1.md` 记录用户 + ChatGPT 对 triggerMetric direction review 的审阅结论；它不是 metric registry、schema、validator、allowed values 或 runtime data。
+- `generatedSeverityShadowReview.sample.md` 是 multi-sample generated severity shadow 的人类可读 summary / review pack；它不是 runtime data、generated severity 或 takeover approval。
 - `feedbackShadowReview.sample.md` 用于 feedback shadow review 样例；它审的是“候选反馈文案”。
 
 这些材料都不是 source-of-truth，也不是 runtime data。

@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.3 human-readable generated severity shadow review pack
+
+本轮新增 `scripts/content/buildGeneratedSeverityShadowReviewPack.js` 和 `reports/human_review/generatedSeverityShadowReview.sample.md`，基于 multi-sample debug shadow output 生成中文友好的制作人速读材料。
+
+该 review pack 只用于阅读 `legacySnapshots` / `shadowCandidates` / `matchState` 概况；它不接 runtime / final result / golden expected，不写 `data/generated`，也不代表 proposedDraftId / triggerMetricDirection 已正式批准。
+
+本轮未改 runtime / core / data / generated / golden，未开放 implementation / batch content / generated severity takeover，未 push，未 tag。
+
 ## v0.0.8.2 multi-sample generated severity shadow output
 
 本轮新增 `reports/debug/generatedSeverityShadow.multiSample.sample.json`，基于现有 Node-only / debug-only / read-only generated severity shadow proof，对多个 golden samples 生成 multi-sample debug shadow output。
