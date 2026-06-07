@@ -3,7 +3,7 @@ const { clamp } = window.MILK_TEA_LAB_HELPERS;
 const drinkTypeComposer = window.MILK_TEA_LAB_DRINK_TYPE_COMPOSER;
 const unifiedFeedbackComposer = window.MILK_TEA_LAB_UNIFIED_FEEDBACK_COMPOSER;
 
-const schemaVersion = "unifiedJudgment.v0.0.8.33";
+const schemaVersion = "unifiedJudgment.v0.0.8.34";
 
 const pressureJudgmentRules = {
   sweetnessPressure: {
@@ -41,6 +41,12 @@ const pressureJudgmentRules = {
     accidentTypeId: "texture_low_drinkability",
     feedbackTags: ["straw_disaster"],
     feedback: "低流动性压力偏高，整杯开始变得难以顺畅饮用。"
+  },
+  combinedTextureBurdenPressure: {
+    type: "质地事故（试玩）",
+    accidentTypeId: "texture_solid_overload",
+    feedbackTags: ["straw_disaster"],
+    feedback: "小料、粉碎物和糊状负担叠在一起，已经不像正常饮品，而像一杯需要认真咀嚼的质地事故。"
   },
   strongIdentityPressure: {
     type: "风味冲突（试玩）",
@@ -170,6 +176,8 @@ function buildTextureFloorBlockerPressure(unifiedScoring) {
     : [];
   const pressureKey = pressureKeys.includes("lowFlowPressure")
     ? "lowFlowPressure"
+    : pressureKeys.includes("combinedTextureBurdenPressure")
+      ? "combinedTextureBurdenPressure"
     : pressureKeys.includes("solidLoadPressure") || blockerKeys.includes("highTextureModifierLoad")
       ? "solidLoadPressure"
       : null;

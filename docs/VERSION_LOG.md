@@ -1,5 +1,11 @@
 # 版本记录
 
+## v0.0.8.34 unified texture burden aggregation
+
+本轮修复 unified scoring 对高比例小料 / 粉碎小料 / 糊状质地负担识别不足的问题：`textureSummary` 在 v0.0.8.15 anchor profile 路径下保留结构层 solidLoad / strawResistance 证据，并输出 `combinedTextureBurden`；`unifiedScoringEngine` 以 non-final pressure 读取该合成负担，阻断 structural floor / visible identity fit support，使中重度 texture burden 能进入事故主导展示。
+
+本轮不是配方特例；未写芋圆 / 奥利奥 / 芋泥 / 珍珠样本 if，未改 profile 数值、未改 v0.0.8.15 anchor profile、未改 golden expected、未写 `data/generated`、未新增 report，未 push，未 tag。
+
 ## v0.0.8.33 accident-dominant display priority
 
 本轮修正 playtest unified judgment 的显示优先级：当事故 / 压力已经主导时，页面主显示优先表达问题类型，普通 composed drink label 只保留为 debug 对照。

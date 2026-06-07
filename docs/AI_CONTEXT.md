@@ -58,6 +58,7 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 - v0.0.8.29：修正 drink type composer 的 base + visible identity merge；`tea + dairy + fruit` 以奶茶为 base 并保留 fruit 可见身份，`coffee + dairy + fruit` 保留 fruit identity，不新增组合 ID / 配方特例 / golden expected。
 - v0.0.8.30：进入 default unified judgment + anchor profile takeover；默认页面使用 unified judgment 试玩输出和 v0.0.8.15 anchor profile，`?legacy=1` / `?judgmentTakeover=0` 可回旧系统，`?scoreTakeover=1` 保留 score-only 模式。本轮不改旧 profile / scoring rules / feedback composer / drinkType composer / golden expected。
 - v0.0.8.31：进入 playtest unified scoring calibration v1；在 v0.0.8.15 anchor profile 生效后，校准 unified scoring 的 pressure bands / support / balance / aggregation，让正常饮品回到可试玩区间，同时保留极端甜 / 酸 / 苦 / 奶脂 / 低流动性 / 固体负载低分。本轮不改 profile / data/generated / golden expected，不新增 recipe whitelist / sample-specific if / display text key。
+- v0.0.8.34：修复 unified texture burden aggregation；v0.0.8.15 anchor profile 路径下 texture summary 会保留结构层 solidLoad / strawResistance，并把高比例小料 / 粉碎物 / 糊状负担合成 `combinedTextureBurden`，用于 non-final scoring / accident-dominant display。仍不改 profile / golden / data/generated，不写配方特例。
 
 当前长对话已经出现上下文漂移风险。后续应优先从 `docs/AI_CONTEXT.md`、`docs/VERSION_LOG.md` 和 verified git baseline 恢复，而不是依赖本轮长聊天记忆。
 

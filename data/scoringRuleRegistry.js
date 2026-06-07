@@ -117,6 +117,19 @@ const pressureKeys = [
     ]
   },
   {
+    key: "combinedTextureBurdenPressure",
+    sourceLayer: "texture",
+    status: "draft_non_final",
+    availability: "observed_summary_metric_proxy",
+    triggerMetrics: ["combinedTextureBurden"],
+    canAffectFinalScore: false,
+    canAffectRuntime: false,
+    canAffectGoldenExpected: false,
+    notes: [
+      "Combines structure load, topping / texture ratio, sediment and viscosity as a playtest-only texture burden pressure."
+    ]
+  },
+  {
     key: "strongIdentityPressure",
     sourceLayer: "flavor",
     status: "draft_non_final",
@@ -229,6 +242,15 @@ const triggerMetrics = [
     canAffectGoldenExpected: false
   },
   {
+    key: "combinedTextureBurden",
+    sourceLayer: "texture",
+    availability: "observed",
+    status: "draft_non_final",
+    canAffectFinalScore: false,
+    canAffectRuntime: false,
+    canAffectGoldenExpected: false
+  },
+  {
     key: "sediment",
     sourceLayer: "texture",
     availability: "draft_profile_only",
@@ -316,6 +338,17 @@ const scoreRules = [
     sourceLayer: "texture",
     status: "draft_non_final",
     severityLevels: ["light", "medium", "heavy"],
+    canAffectFinalScore: false,
+    canAffectRuntime: false,
+    canAffectGoldenExpected: false
+  },
+  {
+    ruleId: "draft_texture_combined_burden",
+    pressureKey: "combinedTextureBurdenPressure",
+    triggerMetric: "combinedTextureBurden",
+    sourceLayer: "texture",
+    status: "draft_non_final",
+    severityLevels: ["light", "medium", "heavy", "critical"],
     canAffectFinalScore: false,
     canAffectRuntime: false,
     canAffectGoldenExpected: false

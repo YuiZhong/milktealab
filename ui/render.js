@@ -291,6 +291,7 @@ function createRenderer(app) {
     fatPressure: "奶脂压力",
     solidLoadPressure: "固体小料压力",
     lowFlowPressure: "低流动性压力",
+    combinedTextureBurdenPressure: "合成质地负担压力",
     strongIdentityPressure: "强风味身份压力",
     dairySupport: "奶感支撑",
     sweetnessBalance: "甜度平衡",

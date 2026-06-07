@@ -17,7 +17,6 @@ const textureEffectMetrics = {
 };
 
 const structureMetrics = ["solidLoad", "strawResistance", "drinkability", "textureBalance"];
-
 function roundTextureValue(value) {
   return Math.round(clamp(value));
 }
@@ -35,7 +34,8 @@ function createEmptyTextureValues() {
     liquidSupportNeed: 0,
     fatLoad: 0,
     foamLoad: 0,
-    drinkabilityPenalty: 0
+    drinkabilityPenalty: 0,
+    combinedTextureBurden: 0
   };
 }
 
@@ -99,6 +99,57 @@ function addStructureEvidence(structure, evidence) {
   });
 }
 
+function getCompositionEntry(ingredientId) {
+  const compositionTagsApi = window.MILK_TEA_LAB_INGREDIENT_COMPOSITION_TAGS;
+  return compositionTagsApi?.getIngredientCompositionTags && ingredientId
+    ? compositionTagsApi.getIngredientCompositionTags(ingredientId)
+    : null;
+}
+
+function cloneTags(value) {
+  return Array.isArray(value) ? value.filter(Boolean) : [];
+}
+
+function hasAnyTag(tags, expectedTags) {
+  return expectedTags.some(tag => tags.has(tag));
+}
+
+function buildTextureCompositionBurden(context, values) {
+  let textureModifierRatio = 0;
+  let starchOrPowderRatio = 0;
+
+  context.activeCup.forEach(item => {
+    const entry = getCompositionEntry(item.ingredientId);
+    const tags = new Set([
+      ...cloneTags(entry?.compositionTags),
+      ...cloneTags(entry?.roleTags)
+    ]);
+    const ratio = typeof item.ratio === "number" ? item.ratio : 0;
+    const isTextureModifier = entry?.displayRole === "modifier"
+      && hasAnyTag(tags, ["topping", "texture"]);
+    const isStarchOrPowder = hasAnyTag(tags, ["starch", "powder"]);
+
+    if (isTextureModifier) textureModifierRatio += ratio;
+    if (isStarchOrPowder) starchOrPowderRatio += ratio;
+  });
+
+  const pressure = roundTextureValue(
+    values.solidLoad * 0.35
+    + values.strawResistance * 0.22
+    + values.drinkabilityPenalty * 0.3
+    + values.sedimentRisk * 0.35
+    + values.viscosity * 0.32
+    + textureModifierRatio * 0.58
+    + starchOrPowderRatio * 0.22
+  );
+
+  return {
+    pressure,
+    textureModifierRatio: roundTextureValue(textureModifierRatio),
+    starchOrPowderRatio: roundTextureValue(starchOrPowderRatio)
+  };
+}
+
 function buildTextureSummary(context, options = {}) {
   const values = createEmptyTextureValues();
   const profileSummary = textureProfileAnalyzer?.analyzeTextureProfile(context, options) || {
@@ -116,13 +167,14 @@ function buildTextureSummary(context, options = {}) {
     values[metric] = roundTextureValue(profileSummary.effects?.[effectKey] || 0);
   });
 
-  const shouldUseStructureMetrics = !options.profilesByIngredientId;
   structureMetrics.forEach(metric => {
-    if (!shouldUseStructureMetrics && (metric === "solidLoad" || metric === "strawResistance")) return;
     if (typeof structure[metric] === "number") {
-      values[metric] = roundTextureValue(structure[metric]);
+      values[metric] = roundTextureValue(Math.max(values[metric] || 0, structure[metric]));
     }
   });
+
+  const combinedTextureBurden = buildTextureCompositionBurden(context, values);
+  values.combinedTextureBurden = combinedTextureBurden.pressure;
 
   addUnique(tags, profileSummary.tags);
   addUnique(tags, structure.tags);
@@ -138,9 +190,10 @@ function buildTextureSummary(context, options = {}) {
     risks,
     evidence,
     metadata: {
-      schemaVersion: "textureSummary.v0.0.6.3",
+      schemaVersion: "textureSummary.v0.0.8.34",
       sourceLayer: "texture",
       profileSource: options.profileSource || "runtime_legacy_profile",
+      combinedTextureBurden,
       weightsEnabled: false,
       readonly: true
     }

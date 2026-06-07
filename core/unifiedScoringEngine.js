@@ -1,7 +1,7 @@
 (function() {
 const { clamp } = window.MILK_TEA_LAB_HELPERS;
 
-const schemaVersion = "unifiedScoring.v0.0.8.32";
+const schemaVersion = "unifiedScoring.v0.0.8.34";
 const baseScore = 84;
 
 const pressureRules = [
@@ -90,6 +90,20 @@ const pressureRules = [
     status: "draft_non_final"
   },
   {
+    pressureKey: "combinedTextureBurdenPressure",
+    sourceLayer: "texture",
+    triggerMetric: "combinedTextureBurden",
+    summaryKey: "textureSummary",
+    pressureScale: 1,
+    bands: [
+      { min: 90, severityLevel: "critical", scoreDelta: -76 },
+      { min: 74, severityLevel: "heavy", scoreDelta: -60 },
+      { min: 58, severityLevel: "medium", scoreDelta: -24 },
+      { min: 40, severityLevel: "light", scoreDelta: -4 }
+    ],
+    status: "draft_non_final"
+  },
+  {
     pressureKey: "strongIdentityPressure",
     sourceLayer: "flavor",
     triggerMetric: "aromaPressure",
@@ -158,7 +172,8 @@ const structuralScoreFloors = {
 
 const structuralFloorBlockingTexturePressures = new Set([
   "lowFlowPressure",
-  "solidLoadPressure"
+  "solidLoadPressure",
+  "combinedTextureBurdenPressure"
 ]);
 
 const texturePressureScoreCaps = {
@@ -527,9 +542,16 @@ function getStructuralFloorTextureBlockers(activePressures) {
   ));
 }
 
+function getTextureBlockerScoreCap(blocker) {
+  if (blocker?.pressureKey === "combinedTextureBurdenPressure" && blocker?.severityLevel === "medium") {
+    return 32;
+  }
+  return texturePressureScoreCaps[blocker?.severityLevel];
+}
+
 function getTexturePressureScoreCap(textureBlockers) {
   const caps = textureBlockers
-    .map(pressure => texturePressureScoreCaps[pressure.severityLevel])
+    .map(getTextureBlockerScoreCap)
     .filter(isNumber);
   return caps.length > 0 ? Math.min(...caps) : null;
 }
