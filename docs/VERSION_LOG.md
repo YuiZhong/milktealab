@@ -1,5 +1,15 @@
 # 版本记录
 
+## minimal generated severity shadow proof
+
+本轮新增第一版 Node-only / debug-only / read-only generated severity shadow proof。
+
+新增 `scripts/content/buildGeneratedSeverityShadow.js`，读取 `content_sheets/examples/severity_sample_rows.sample.json`，先调用 `scripts/content/validateSeveritySampleRows.js`，再通过现有 golden sample / `tasteJudge` flow 只读生成 `reports/debug/generatedSeverityShadow.sample.json`。
+
+输出明确包含 `affectsFinalResult=false`、`affectsScore=false`、`affectsFeedback=false`、`affectsGoldenExpected=false`，并保留 `proposedDraftId` / `triggerMetricDirection` 非正式 registry 边界。
+
+本轮未接 runtime / final result / golden expected，未写 `data/generated`，未改 runtime / core / data / generated / golden，未 push，未 tag。
+
 ## sample result snapshot planning round 1
 
 本轮新增 `reports/human_review/sampleResultSnapshotPlanning.round1.md`，规划 future generated severity shadow builder 所需的 current result snapshot / golden sample result snapshot 结构。
