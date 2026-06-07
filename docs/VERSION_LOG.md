@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.12 all-37 source-referenced profile value first pass
+
+本轮新增 `scripts/content/buildIngredientProfileValueDraftV0012.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.12.csv` 与 `.json`。
+
+该草案直接基于 v0.0.8.11 all-37 工作台推进：37/37 原料均补充 `sourceNotes`、`confidence`、`reviewStatus` 和 `aiComment`，并形成第一版 source-referenced proposed profile baseline。
+
+资料方向来自食品成分数据库、食品 pH / 酸度资料、茶 / 咖啡 / 可可食品科学综述，以及淀粉 / 凝胶 / 小料质地资料。资料只作为游戏化相对数值草案的参考基线，不是游戏真理；最终仍需制作人 review。
+
+本轮未改 runtime profile，未写 `data/generated`，未改 scoring logic / UI / final result / golden expected，未 push，未 tag。
+
 ## v0.0.8 handoff checkpoint after all-ingredient profile draft workspace
 
 本轮只同步 fresh conversation handoff：latest main 已到 `b5b3df7 chore: add ingredient profile value draft workspace`。
