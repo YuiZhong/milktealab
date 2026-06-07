@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.9 ingredient profile value readiness audit
+
+本轮新增只读脚本 `scripts/content/auditIngredientProfileValues.js`，并生成 `reports/debug/ingredientProfileValueReadiness.sample.md`。
+
+该 audit 盘点当前 taste / texture / flavor profile 覆盖、metrics 和 draft scoreDelta 依赖，用于确认材料事实层现在有多空。
+
+本轮不改 profile 数值，不做联网资料草案，不调参，不改 scoring logic；当前不应认真判断误伤准确性，后续应先做资料参考的 profile value draft。
+
+本轮未写 `data/generated`，未改 runtime / data / golden，未 push，未 tag。
+
 ## v0.0.8.8 page-visible calibration presets
 
 本轮新增页面 calibration presets 快捷入口，用于快速载入代表性配方，观察 legacy score vs generated severity suggestion。
