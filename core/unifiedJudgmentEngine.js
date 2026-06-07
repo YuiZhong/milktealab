@@ -201,6 +201,7 @@ function buildUnifiedJudgment(input = {}) {
     schemaVersion,
     mode: "playtest_unified_judgment_takeover",
     playtestOnly: true,
+    profileSource: input.profileSource || unifiedScoring.profileSource || "runtime_legacy_profile",
     affectsScore: true,
     affectsFeedback: true,
     affectsResultType: true,

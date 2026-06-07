@@ -25,13 +25,23 @@ function roundTasteValue(value) {
   return Math.round(clamp(value));
 }
 
-function buildTasteSummary(context) {
+function getProfileFromOptions(item, options) {
+  const override = options?.profilesByIngredientId?.[item.ingredientId]?.tasteProfile;
+  if (override && typeof override === "object") return override;
+  if (typeof options?.getTasteProfile === "function") {
+    const profile = options.getTasteProfile(item);
+    if (profile && typeof profile === "object") return profile;
+  }
+  return getTasteProfile({ ingredientId: item.ingredientId, name: item.name });
+}
+
+function buildTasteSummary(context, options = {}) {
   const values = createEmptyTasteValues();
   const tags = [];
   const evidence = [];
 
   context.activeCup.forEach(item => {
-    const profile = getTasteProfile({ ingredientId: item.ingredientId, name: item.name });
+    const profile = getProfileFromOptions(item, options);
     const ratio = item.ratio || 0;
     const ratioWeight = ratio / 100;
 
@@ -73,6 +83,7 @@ function buildTasteSummary(context) {
     metadata: {
       schemaVersion: "tasteSummary.v0.0.6.1",
       sourceLayer: "taste",
+      profileSource: options.profileSource || "runtime_legacy_profile",
       weightsEnabled: false,
       readonly: true
     }

@@ -397,6 +397,7 @@ function buildUnifiedScoring(input = {}) {
     mode: "playtest_score_takeover",
     playtestOnly: true,
     scoreTakeoverOnly: true,
+    profileSource: input.profileSource || "runtime_legacy_profile",
     affectsScore: true,
     affectsFeedback: false,
     affectsResultType: false,

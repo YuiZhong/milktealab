@@ -12,6 +12,7 @@ const candidatePriorityShellEngine = window.MILK_TEA_LAB_CANDIDATE_PRIORITY_SHEL
 const generatedSeveritySuggestionEngine = window.MILK_TEA_LAB_GENERATED_SEVERITY_SUGGESTION_ENGINE;
 const unifiedScoringEngine = window.MILK_TEA_LAB_UNIFIED_SCORING_ENGINE;
 const unifiedJudgmentEngine = window.MILK_TEA_LAB_UNIFIED_JUDGMENT_ENGINE;
+const playtestAnchorProfiles = window.MILK_TEA_LAB_PLAYTEST_ANCHOR_PROFILES_V0015;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -166,6 +167,17 @@ function readJudgmentTakeoverQueryFlag() {
   }
 }
 
+function readLegacyQueryFlag() {
+  try {
+    if (!window.location?.search) return null;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("legacy")) return null;
+    return params.get("legacy");
+  } catch (error) {
+    return null;
+  }
+}
+
 function readScoreTakeoverStorageFlag() {
   try {
     if (!window.localStorage) return null;
@@ -188,16 +200,69 @@ function isTruthyDebugFlag(value) {
   return ["1", "true", "yes", "on", "debug"].includes(String(value || "").toLowerCase());
 }
 
+function isFalsyDebugFlag(value) {
+  return ["0", "false", "no", "off", "legacy"].includes(String(value || "").toLowerCase());
+}
+
+function isLegacyModeRequested() {
+  const legacyValue = readLegacyQueryFlag();
+  if (legacyValue !== null) return isTruthyDebugFlag(legacyValue);
+  const judgmentValue = readJudgmentTakeoverQueryFlag();
+  return judgmentValue !== null && isFalsyDebugFlag(judgmentValue);
+}
+
 function isScoreTakeoverTrialRequested() {
+  if (isLegacyModeRequested()) return false;
   const queryValue = readScoreTakeoverQueryFlag();
   if (queryValue !== null) return isTruthyDebugFlag(queryValue);
   return isTruthyDebugFlag(readScoreTakeoverStorageFlag());
 }
 
 function isJudgmentTakeoverTrialRequested() {
+  if (isLegacyModeRequested()) return false;
+  if (isScoreTakeoverTrialRequested()) return false;
   const queryValue = readJudgmentTakeoverQueryFlag();
   if (queryValue !== null) return isTruthyDebugFlag(queryValue);
-  return isTruthyDebugFlag(readJudgmentTakeoverStorageFlag());
+  const storageValue = readJudgmentTakeoverStorageFlag();
+  if (storageValue !== null) return isTruthyDebugFlag(storageValue);
+  return true;
+}
+
+function getScoreTakeoverMode(takeoverRequested) {
+  if (!takeoverRequested) return "off";
+  return readScoreTakeoverQueryFlag() !== null ? "debug_flag" : "storage_flag";
+}
+
+function getJudgmentTakeoverMode(judgmentTakeoverRequested) {
+  if (!judgmentTakeoverRequested) return "off";
+  if (readJudgmentTakeoverQueryFlag() !== null) return "debug_flag";
+  if (readJudgmentTakeoverStorageFlag() !== null) return "storage_flag";
+  return "default";
+}
+
+function getPlaytestAnchorProfileOptions() {
+  const profilesByIngredientId = playtestAnchorProfiles?.profilesByIngredientId;
+  if (!profilesByIngredientId || typeof profilesByIngredientId !== "object") return null;
+  return {
+    profileSource: "v0.0.8.15_anchor_profile",
+    profilesByIngredientId
+  };
+}
+
+function buildSummaries(context, profileOptions = {}) {
+  const tasteSummary = tasteSummaryEngine?.buildTasteSummary(context, profileOptions) || null;
+  const textureSummary = textureSummaryEngine?.buildTextureSummary(context, profileOptions) || null;
+  const flavorSummary = flavorSummaryEngine?.buildFlavorSummary(context, profileOptions) || null;
+  const summaryCandidates = buildSummaryCandidates(tasteSummary, textureSummary, flavorSummary);
+  const candidatePriorityShell = buildCandidatePriorityShell(summaryCandidates);
+
+  return {
+    tasteSummary,
+    textureSummary,
+    flavorSummary,
+    summaryCandidates,
+    candidatePriorityShell
+  };
 }
 
 function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion, unifiedScoring, unifiedJudgment) {
@@ -215,6 +280,8 @@ function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion, unif
   const judgmentTakeoverEnabled = judgmentTakeoverRequested && Number.isFinite(unifiedJudgmentScore);
   const scoreTakeoverEnabled = !judgmentTakeoverEnabled && takeoverRequested && hasValidUnifiedScore;
   const generatedSuggestedScore = hasValidSuggestedScore ? Math.round(clamp(suggestedScore)) : null;
+  const scoreTakeoverMode = getScoreTakeoverMode(takeoverRequested);
+  const judgmentTakeoverMode = getJudgmentTakeoverMode(judgmentTakeoverRequested);
 
   return {
     score: judgmentTakeoverEnabled ? unifiedJudgmentScore : scoreTakeoverEnabled ? unifiedScore : legacyScore,
@@ -226,17 +293,19 @@ function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion, unif
     dominantPressure: unifiedScoring?.dominantPressure || null,
     scoreReasons: Array.isArray(unifiedScoring?.scoreReasons) ? unifiedScoring.scoreReasons : [],
     scoreSource: judgmentTakeoverEnabled ? "playtest_unified_judgment" : scoreTakeoverEnabled ? "playtest_unified_score" : "legacy",
-    scoreTakeoverMode: takeoverRequested ? "debug_flag" : "off",
-    judgmentTakeoverMode: judgmentTakeoverRequested ? "debug_flag" : "off",
+    scoreTakeoverMode,
+    judgmentTakeoverMode,
     scoreTakeoverEnabled,
     judgmentTakeoverEnabled,
     scoreTakeoverNote: scoreTakeoverEnabled
       ? "已开启 Playtest unified score takeover；只覆盖最终分数，反馈 / 类型 / 事故仍保持旧系统。"
       : judgmentTakeoverEnabled
-        ? "已开启 Playtest unified judgment takeover；分数、类型、事故和反馈使用 unified judgment 试玩输出。"
+        ? judgmentTakeoverMode === "default"
+          ? "新系统默认体验已开启；分数、类型、事故和反馈使用 unified judgment 试玩输出。"
+          : "已开启 Playtest unified judgment takeover；分数、类型、事故和反馈使用 unified judgment 试玩输出。"
         : takeoverRequested
         ? "Debug 分数接管开关已开启，但 unified score 不可用或非法，已自动回退旧系统分数。"
-        : "默认使用旧系统分数。仅在 Debug 试验时使用 ?scoreTakeover=1 或 localStorage MILK_TEA_LAB_SCORE_TAKEOVER_TRIAL=1。"
+        : "当前使用旧系统回退模式。默认页面使用新系统；可用 ?legacy=1 或 ?judgmentTakeover=0 回退旧系统。"
   };
 }
 
@@ -244,11 +313,26 @@ function evaluateCup(cup) {
   const context = createTasteContext(cup);
   if (!context.activeCup.length || context.totalRatio() !== 100) return null;
   context.structure = analyzeDrinkStructure(context);
-  const tasteSummary = tasteSummaryEngine?.buildTasteSummary(context) || null;
-  const textureSummary = textureSummaryEngine?.buildTextureSummary(context) || null;
-  const flavorSummary = flavorSummaryEngine?.buildFlavorSummary(context) || null;
-  const summaryCandidates = buildSummaryCandidates(tasteSummary, textureSummary, flavorSummary);
-  const candidatePriorityShell = buildCandidatePriorityShell(summaryCandidates);
+  const legacySummaries = buildSummaries(context);
+  const anchorProfileOptions = getPlaytestAnchorProfileOptions();
+  const shouldUseAnchorProfile = Boolean(anchorProfileOptions) && !isLegacyModeRequested();
+  const activeSummaries = shouldUseAnchorProfile
+    ? buildSummaries(context, anchorProfileOptions)
+    : legacySummaries;
+  const {
+    tasteSummary,
+    textureSummary,
+    flavorSummary,
+    summaryCandidates,
+    candidatePriorityShell
+  } = activeSummaries;
+  const profileSource = shouldUseAnchorProfile
+    ? "v0.0.8.15_anchor_profile"
+    : "runtime_legacy_profile";
+  const profileSourceWarnings = [];
+  if (!anchorProfileOptions && !isLegacyModeRequested()) {
+    profileSourceWarnings.push("missing_playtest_anchor_profiles_fallback_to_runtime_legacy_profile");
+  }
 
   const attr = ingredientAnalyzer.analyzeBaseAttributes(context);
   const score = scoreEngine.createScoreState(54);
@@ -413,8 +497,15 @@ function evaluateCup(cup) {
     tasteSummary,
     textureSummary,
     flavorSummary,
+    legacyTasteSummary: legacySummaries.tasteSummary,
+    legacyTextureSummary: legacySummaries.textureSummary,
+    legacyFlavorSummary: legacySummaries.flavorSummary,
     summaryCandidates,
-    candidatePriorityShell
+    candidatePriorityShell,
+    profileSource,
+    profileSourceWarnings,
+    legacyProfileSource: "runtime_legacy_profile",
+    playtestAnchorProfileMetadata: shouldUseAnchorProfile ? playtestAnchorProfiles?.metadata || null : null
   };
   if (legacyAccidentTypeId) {
     result.accidentTypeId = legacyAccidentTypeId;
@@ -446,7 +537,8 @@ function evaluateCup(cup) {
       flavorSummary,
       summaryCandidates,
       candidatePriorityShell,
-      legacyScore
+      legacyScore,
+      profileSource
     });
   }
   if (unifiedJudgmentEngine?.buildUnifiedJudgment) {
@@ -461,6 +553,7 @@ function evaluateCup(cup) {
         ratio: item.ratio
       })),
       unifiedScoring: result.unifiedScoring,
+      profileSource,
       legacyComparison: {
         legacyScore,
         legacyType: type,

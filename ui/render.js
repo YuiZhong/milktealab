@@ -515,7 +515,7 @@ function createRenderer(app) {
       ? "试玩 unified score 接管（Debug，可回滚）"
       : judgmentTakeoverEnabled
         ? "试玩 unified judgment 接管（Debug，可回滚）"
-      : "旧系统（默认）";
+      : "旧系统回退模式";
     const scoreSuggestion = suggestion.scoreSuggestion || {};
     const legacyScore = Number.isFinite(result?.legacyScore)
       ? result.legacyScore
@@ -531,9 +531,15 @@ function createRenderer(app) {
       : unifiedScoring?.scoreDeltaFromLegacy;
     const takeoverModeText = result?.scoreTakeoverMode === "debug_flag"
       ? "debug_flag（显式调试开关）"
+      : result?.scoreTakeoverMode === "storage_flag"
+        ? "storage_flag（本地调试开关）"
       : "off（默认关闭）";
     const judgmentModeText = result?.judgmentTakeoverMode === "debug_flag"
       ? "debug_flag（显式调试开关）"
+      : result?.judgmentTakeoverMode === "storage_flag"
+        ? "storage_flag（本地调试开关）"
+        : result?.judgmentTakeoverMode === "default"
+          ? "default（新系统默认）"
       : "off（默认关闭）";
 
     const mode = document.createElement("p");
@@ -542,7 +548,7 @@ function createRenderer(app) {
       ? "当前模式：Playtest unified judgment takeover；分数、类型、事故和反馈使用新系统试玩输出，golden 仍不接管。"
       : scoreTakeoverEnabled
       ? "当前模式：Playtest unified score takeover，只覆盖分数；反馈、类型、事故和 golden 仍不接管。"
-      : "当前模式：旧系统最终分数；新系统只读建议，不影响最终结果。";
+      : "当前模式：旧系统回退；新系统只读建议，不影响最终结果。";
 
     const meta = document.createElement("div");
     meta.className = "suggestion-meta";
@@ -551,6 +557,8 @@ function createRenderer(app) {
     appendSuggestionMeta(meta, "score 接管模式", takeoverModeText);
     appendSuggestionMeta(meta, "judgment 接管开关", judgmentTakeoverEnabled ? "已开启（Debug，可回滚）" : "关闭");
     appendSuggestionMeta(meta, "judgment 接管模式", judgmentModeText);
+    appendSuggestionMeta(meta, "Profile source", result?.profileSource || unifiedScoring?.profileSource || unifiedJudgment?.profileSource || "未标记");
+    appendSuggestionMeta(meta, "Legacy profile source", result?.legacyProfileSource || "runtime_legacy_profile");
     appendSuggestionMeta(meta, "旧系统分数", suggestionScore(legacyScore));
     appendSuggestionMeta(meta, "Unified 试玩分", `${suggestionScore(unifiedScore)}（${scoreTakeoverEnabled || judgmentTakeoverEnabled ? "当前接管试验" : "未接管"}）`);
     appendSuggestionMeta(meta, "Unified 分数差", suggestionDelta(unifiedDelta));

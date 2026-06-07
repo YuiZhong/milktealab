@@ -54,9 +54,18 @@ function addTextureRisks(values, risks) {
   if (values.sedimentRisk >= 30) risks.push("sediment_risk");
 }
 
-function addIngredientEvidence(context, evidence) {
+function getProfileForItem(item, options) {
+  const override = options?.profilesByIngredientId?.[item.ingredientId]?.textureProfile;
+  if (override && typeof override === "object") {
+    return { effects: { ...override } };
+  }
+  if (typeof options?.getTextureProfile === "function") return options.getTextureProfile(item);
+  return getTextureProfile({ ingredientId: item.ingredientId, name: item.name });
+}
+
+function addIngredientEvidence(context, evidence, options) {
   context.activeCup.forEach(item => {
-    const profile = getTextureProfile({ ingredientId: item.ingredientId, name: item.name });
+    const profile = getProfileForItem(item, options);
     const ratio = item.ratio || 0;
     const ratioWeight = ratio / 100;
 
@@ -90,9 +99,9 @@ function addStructureEvidence(structure, evidence) {
   });
 }
 
-function buildTextureSummary(context) {
+function buildTextureSummary(context, options = {}) {
   const values = createEmptyTextureValues();
-  const profileSummary = textureProfileAnalyzer?.analyzeTextureProfile(context) || {
+  const profileSummary = textureProfileAnalyzer?.analyzeTextureProfile(context, options) || {
     effects: {},
     tags: [],
     dominantFamilies: [],
@@ -107,7 +116,9 @@ function buildTextureSummary(context) {
     values[metric] = roundTextureValue(profileSummary.effects?.[effectKey] || 0);
   });
 
+  const shouldUseStructureMetrics = !options.profilesByIngredientId;
   structureMetrics.forEach(metric => {
+    if (!shouldUseStructureMetrics && (metric === "solidLoad" || metric === "strawResistance")) return;
     if (typeof structure[metric] === "number") {
       values[metric] = roundTextureValue(structure[metric]);
     }
@@ -118,7 +129,7 @@ function buildTextureSummary(context) {
   if (profileSummary.missingProfiles?.length) tags.push("texture_profile_missing");
 
   addTextureRisks(values, risks);
-  addIngredientEvidence(context, evidence);
+  addIngredientEvidence(context, evidence, options);
   addStructureEvidence(structure, evidence);
 
   return {
@@ -129,6 +140,7 @@ function buildTextureSummary(context) {
     metadata: {
       schemaVersion: "textureSummary.v0.0.6.3",
       sourceLayer: "texture",
+      profileSource: options.profileSource || "runtime_legacy_profile",
       weightsEnabled: false,
       readonly: true
     }

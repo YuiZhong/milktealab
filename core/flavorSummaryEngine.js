@@ -47,13 +47,16 @@ function addFlavorRisks(values, risks) {
   if (values.beverageFit > 0 && values.beverageFit <= 55) risks.push("low_beverage_fit_risk");
 }
 
-function getItemFlavorProfile(item) {
+function getItemFlavorProfile(item, options = {}) {
+  const override = options?.profilesByIngredientId?.[item.ingredientId]?.flavorProfile;
+  if (override && typeof override === "object") return override;
+  if (typeof options?.getFlavorProfile === "function") return options.getFlavorProfile(item);
   if (!getFlavorProfile) return null;
   if (item.ingredientId) return getFlavorProfile({ ingredientId: item.ingredientId });
   return getFlavorProfile({ name: item.name });
 }
 
-function buildFlavorSummary(context) {
+function buildFlavorSummary(context, options = {}) {
   const values = createEmptyFlavorValues();
   const tags = [];
   const risks = [];
@@ -61,7 +64,7 @@ function buildFlavorSummary(context) {
   let dominantSource = null;
 
   context.activeCup.forEach(item => {
-    const profile = getItemFlavorProfile(item);
+    const profile = getItemFlavorProfile(item, options);
     const ratio = item.ratio || 0;
     const ratioWeight = ratio / 100;
 
@@ -118,6 +121,7 @@ function buildFlavorSummary(context) {
     metadata: {
       schemaVersion: "flavorSummary.v0.0.6.8",
       sourceLayer: "flavor",
+      profileSource: options.profileSource || "runtime_legacy_profile",
       weightsEnabled: false,
       readonly: true
     }

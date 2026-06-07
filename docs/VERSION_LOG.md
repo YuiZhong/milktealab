@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.30 default unified judgment + anchor profile takeover
+
+本轮新增 `data/playtestAnchorProfiles.v0.0.8.15.js` 与 `scripts/content/buildPlaytestAnchorProfilesV0015.js`，把 v0.0.8.15 profile draft 提取为 playtest anchor profile 数据源；builder 校验 37/37 覆盖和关键锚点值。
+
+默认页面现在使用 unified judgment 试玩输出，并默认读取 v0.0.8.15 anchor profile；`?legacy=1` / `?judgmentTakeover=0` 可回旧系统，`?scoreTakeover=1` 保留 score-only 模式。
+
+本轮未改旧 runtime profile、未写 `data/generated`、未改 content sheets、未调 scoring rules、未改 feedback composer / drink type composer 规则、未改 golden expected，未 push，未 tag。
+
 ## v0.0.8.29 drink type visible identity merge fix
 
 本轮修正 `core/drinkTypeComposer.js` 的通用 base + visible identity merge：`tea + dairy` 优先形成奶茶 base，`coffee + dairy` 形成咖啡牛奶 base，未被 base label 覆盖的 primary identity / modifier 再拼入展示名称。

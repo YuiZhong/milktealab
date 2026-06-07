@@ -10,7 +10,23 @@ function emptyEffectTotals() {
   return Object.fromEntries(Object.keys(zeroEffects).map(key => [key, 0]));
 }
 
-function analyzeTextureProfile(context) {
+function getProfileForItem(item, options) {
+  const override = options?.profilesByIngredientId?.[item.ingredientId]?.textureProfile;
+  if (override && typeof override === "object") {
+    return {
+      form: "playtest_anchor",
+      textureFamily: "playtest_anchor",
+      tags: [],
+      effects: { ...zeroEffects, ...override }
+    };
+  }
+  if (typeof options?.getTextureProfile === "function") {
+    return options.getTextureProfile(item);
+  }
+  return getTextureProfile(item);
+}
+
+function analyzeTextureProfile(context, options = {}) {
   const effects = emptyEffectTotals();
   const tags = new Set();
   const missingProfiles = [];
@@ -18,7 +34,7 @@ function analyzeTextureProfile(context) {
 
   context.activeCup.forEach(item => {
     const name = displayName(item.name);
-    const profile = getTextureProfile(item);
+    const profile = getProfileForItem(item, options);
     const ratioWeight = item.ratio / 100;
 
     if (!profile) {
