@@ -284,7 +284,19 @@ function createRenderer(app) {
     solidLoad: "固体小料负载",
     strawResistance: "吸管阻力",
     sweetness: "甜度",
-    sweetnessLoad: "甜度负载方向"
+    sweetnessLoad: "甜度负载方向",
+    sweetnessPressure: "甜度压力",
+    acidPressure: "酸度压力",
+    bitterPressure: "苦味压力",
+    fatPressure: "奶脂压力",
+    solidLoadPressure: "固体小料压力",
+    lowFlowPressure: "低流动性压力",
+    strongIdentityPressure: "强风味身份压力",
+    dairySupport: "奶感支撑",
+    sweetnessBalance: "甜度平衡",
+    liquidSupport: "液体支撑",
+    fitSupport: "饮品 / 甜品适配支撑",
+    identitySupport: "风味身份支撑"
   };
 
   const adjustmentTargetDisplayLabels = {
@@ -368,6 +380,37 @@ function createRenderer(app) {
     parent.append(item);
   }
 
+  function renderUnifiedScoreReasons(unifiedScoring) {
+    const block = document.createElement("div");
+    block.className = "suggestion-calibration";
+
+    const title = document.createElement("h5");
+    title.textContent = "试玩统一评分";
+
+    const reasons = Array.isArray(unifiedScoring?.scoreReasons) ? unifiedScoring.scoreReasons : [];
+    const reasonText = document.createElement("p");
+    reasonText.textContent = reasons.length
+      ? `主要原因：${reasons.slice(0, 4).map(localizeMachineKeysInText).join(" / ")}`
+      : "主要原因：暂无命中的统一评分压力。";
+
+    const warningList = document.createElement("ul");
+    warningList.className = "suggestion-list";
+    const warnings = Array.isArray(unifiedScoring?.warnings) ? unifiedScoring.warnings : [];
+    warnings.slice(0, 4).forEach(warning => {
+      const item = document.createElement("li");
+      item.textContent = localizeMachineKeysInText(warning);
+      warningList.append(item);
+    });
+    if (!warningList.children.length) {
+      const item = document.createElement("li");
+      item.textContent = "暂无 warning。";
+      warningList.append(item);
+    }
+
+    block.append(title, reasonText, warningList);
+    return block;
+  }
+
   function renderCalibrationReview(calibrationReview) {
     const calibration = calibrationReview || {};
     const block = document.createElement("div");
@@ -410,12 +453,13 @@ function createRenderer(app) {
 
     panel.classList.remove("hidden");
 
+    const unifiedScoring = result?.unifiedScoring || null;
     const title = document.createElement("h4");
-    title.textContent = "新系统观察｜Generated severity suggestion";
+    title.textContent = "新系统观察｜Playtest unified scoring";
 
     const scoreTakeoverEnabled = Boolean(result?.scoreTakeoverEnabled);
     const scoreSourceText = scoreTakeoverEnabled
-      ? "新系统建议分接管试验（Debug，可回滚）"
+      ? "试玩 unified score 接管（Debug，可回滚）"
       : "旧系统（默认）";
     const scoreSuggestion = suggestion.scoreSuggestion || {};
     const legacyScore = Number.isFinite(result?.legacyScore)
@@ -424,6 +468,12 @@ function createRenderer(app) {
     const generatedSuggestedScore = Number.isFinite(result?.generatedSuggestedScore)
       ? result.generatedSuggestedScore
       : scoreSuggestion.suggestedScore;
+    const unifiedScore = Number.isFinite(result?.unifiedScore)
+      ? result.unifiedScore
+      : unifiedScoring?.score;
+    const unifiedDelta = Number.isFinite(result?.unifiedScoreDeltaFromLegacy)
+      ? result.unifiedScoreDeltaFromLegacy
+      : unifiedScoring?.scoreDeltaFromLegacy;
     const takeoverModeText = result?.scoreTakeoverMode === "debug_flag"
       ? "debug_flag（显式调试开关）"
       : "off（默认关闭）";
@@ -431,7 +481,7 @@ function createRenderer(app) {
     const mode = document.createElement("p");
     mode.className = "suggestion-mode";
     mode.textContent = scoreTakeoverEnabled
-      ? "当前模式：Debug 分数接管试验，只覆盖分数；反馈、类型、事故和 golden 仍不接管。"
+      ? "当前模式：Playtest unified score takeover，只覆盖分数；反馈、类型、事故和 golden 仍不接管。"
       : "当前模式：旧系统最终分数；新系统只读建议，不影响最终结果。";
 
     const meta = document.createElement("div");
@@ -440,10 +490,12 @@ function createRenderer(app) {
     appendSuggestionMeta(meta, "接管开关", scoreTakeoverEnabled ? "已开启（Debug，可回滚）" : "关闭");
     appendSuggestionMeta(meta, "接管模式", takeoverModeText);
     appendSuggestionMeta(meta, "旧系统分数", suggestionScore(legacyScore));
-    appendSuggestionMeta(meta, "建议分基线", scoreSuggestion.baselineScoreIsLegacy ? "legacyScore（旧系统对照）" : "score fallback（旧字段兜底）");
-    appendSuggestionMeta(meta, "新系统建议分", `${suggestionScore(generatedSuggestedScore)}（${scoreTakeoverEnabled ? "当前接管试验" : "未接管"}）`);
-    appendSuggestionMeta(meta, "分数差", suggestionDelta(scoreSuggestion.scoreDelta));
-    appendSuggestionMeta(meta, "置信度", displayLabel(confidenceDisplayLabels, scoreSuggestion.confidence || "low"));
+    appendSuggestionMeta(meta, "Unified 试玩分", `${suggestionScore(unifiedScore)}（${scoreTakeoverEnabled ? "当前接管试验" : "未接管"}）`);
+    appendSuggestionMeta(meta, "Unified 分数差", suggestionDelta(unifiedDelta));
+    appendSuggestionMeta(meta, "Dominant pressure", displayMetricLabel(unifiedScoring?.dominantPressure));
+    appendSuggestionMeta(meta, "旧 draft 建议分", `${suggestionScore(generatedSuggestedScore)}（观察层）`);
+    appendSuggestionMeta(meta, "旧 draft 分数差", suggestionDelta(scoreSuggestion.scoreDelta));
+    appendSuggestionMeta(meta, "置信度", displayLabel(confidenceDisplayLabels, unifiedScoring?.confidence || scoreSuggestion.confidence || "low"));
     appendSuggestionMeta(meta, "旧系统类型", result?.legacyType || "无");
     appendSuggestionMeta(meta, "旧系统事故 ID", result?.legacyAccidentTypeId || "无");
     appendSuggestionMeta(meta, "旧系统饮品 ID", result?.legacyDrinkTypeId || "无");
@@ -451,7 +503,7 @@ function createRenderer(app) {
 
     const reason = document.createElement("p");
     reason.className = "suggestion-reason";
-    reason.textContent = `主要原因：${localizeMachineKeysInText(scoreSuggestion.reason || "尚未启用正式 threshold / scoreMultiplier。")}`;
+    reason.textContent = `接管路径：${scoreTakeoverEnabled ? "当前分数来自 unified scoring engine。" : "当前最终分数仍来自旧系统，unified 分数只做试玩观察。"}`;
 
     const takeoverNote = document.createElement("p");
     takeoverNote.className = "suggestion-footnote";
@@ -459,6 +511,7 @@ function createRenderer(app) {
       ? `接管说明：${result.scoreTakeoverNote} 旧系统事故 / 类型 / 反馈仍只是 debug 对照，不是新系统 source-of-truth。`
       : "接管说明：默认关闭；仅用于制作人 Debug / rollback 试验。";
 
+    const unifiedBlock = renderUnifiedScoreReasons(unifiedScoring);
     const calibrationBlock = renderCalibrationReview(suggestion.calibrationReview);
 
     const metricTitle = document.createElement("p");
@@ -514,7 +567,7 @@ function createRenderer(app) {
     observation.className = "suggestion-footnote";
     observation.textContent = `已观察到 ${observationCount} 条新系统观察项；它们不是正式 generated severity。`;
 
-    panel.append(title, mode, meta, reason, takeoverNote, calibrationBlock, metricTitle, metricList, draftObservationTitle, draftObservationList, observation);
+    panel.append(title, mode, meta, reason, takeoverNote, unifiedBlock, calibrationBlock, metricTitle, metricList, draftObservationTitle, draftObservationList, observation);
   }
 
   function updateSelectedIngredientButtons() {

@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.24 playtest score takeover scaffold
+
+本轮新增 `core/unifiedScoringEngine.js`，建立第一版可试玩 unified scoring engine：读取 taste / texture / flavor summary 的 numeric values，形成 pressure observations、generic support / balance、aggregation、dominant pressure 和 score reasons。
+
+`scoreTakeover=1` 现在使用 unified score 输出试玩分数，不再以旧 `legacyScore + draft delta` 作为主要新分数；默认模式仍使用 legacy score，旧系统继续作为 debug 对照和回滚路径。
+
+本轮只接管 score，不接管 feedback / `result.type` / accident / drinkType / outcome / golden expected；未改 profile 数值，未写 `data/generated`，未新增 report，未新增 recipe whitelist / sample-specific if，未 push，未 tag。
+
 ## v0.0.8.22 minimum scoring registry / validator gate
 
 本轮新增 `data/scoringRuleRegistry.js` 和 `scripts/content/checkScoringRuleRegistry.js`，为 official score takeover 前建立最小 non-final registry / validator gate。

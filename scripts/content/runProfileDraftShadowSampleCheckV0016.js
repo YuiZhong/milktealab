@@ -53,6 +53,7 @@ const postPatchScripts = [
   "core/summaryCandidateEngine.js",
   "core/candidatePriorityShellEngine.js",
   "core/generatedSeveritySuggestionEngine.js",
+  "core/unifiedScoringEngine.js",
   "core/tasteJudge.js",
 ];
 
@@ -378,6 +379,12 @@ function getScoreSuggestion(result) {
     : null;
 }
 
+function getUnifiedScoring(result) {
+  return result && result.unifiedScoring
+    ? result.unifiedScoring
+    : null;
+}
+
 function collectSignals(result) {
   const tasteValues = (result.tasteSummary && result.tasteSummary.values) || {};
   const textureValues = (result.textureSummary && result.textureSummary.values) || {};
@@ -426,6 +433,24 @@ function formatScoreDelta(scoreSuggestion) {
   return parts.length ? parts.join(" / ") : "n/a";
 }
 
+function formatUnifiedScoring(unifiedScoring) {
+  if (!unifiedScoring) {
+    return "n/a";
+  }
+  const score = getNumber(unifiedScoring.score);
+  const delta = getNumber(unifiedScoring.scoreDeltaFromLegacy);
+  const dominantPressure = unifiedScoring.dominantPressure || "none";
+  const parts = [];
+  if (score !== null) {
+    parts.push(`unified:${Math.round(score)}`);
+  }
+  if (delta !== null) {
+    parts.push(`delta:${Math.round(delta)}`);
+  }
+  parts.push(`dominant:${dominantPressure}`);
+  return parts.join(" / ");
+}
+
 function getValue(result, summaryKey, metric) {
   const value = result && result[summaryKey] && result[summaryKey].values
     ? result[summaryKey].values[metric]
@@ -434,7 +459,7 @@ function getValue(result, summaryKey, metric) {
 }
 
 function buildInitialReviewLabel(result) {
-  const score = getNumber(result && (result.legacyScore ?? result.score));
+  const score = getNumber(result && (result.unifiedScoring?.score ?? result.legacyScore ?? result.score));
   const sweetness = getValue(result, "tasteSummary", "sweetness");
   const bitterness = getValue(result, "tasteSummary", "bitterness");
   const milkiness = getValue(result, "tasteSummary", "milkiness");
@@ -494,13 +519,17 @@ function main() {
     const draftResult = draftWindow.MILK_TEA_LAB_TASTE_JUDGE.evaluateCup(sample.recipe);
     const currentSuggestion = getScoreSuggestion(currentResult);
     const draftSuggestion = getScoreSuggestion(draftResult);
+    const currentUnifiedScoring = getUnifiedScoring(currentResult);
+    const draftUnifiedScoring = getUnifiedScoring(draftResult);
 
     return {
       sampleName: sample.name,
       recipe: recipeLabel(draftWindow, sample.recipe),
       legacyScore: formatScore(currentResult.legacyScore || currentResult.score),
       currentRuntimeSuggestion: formatScoreDelta(currentSuggestion),
+      currentRuntimeUnifiedScore: formatUnifiedScoring(currentUnifiedScoring),
       profileDraftShadow: formatScoreDelta(draftSuggestion),
+      profileDraftUnifiedScore: formatUnifiedScoring(draftUnifiedScoring),
       profileDraftTopSignals: collectSignals(draftResult),
       initialReviewLabel: buildInitialReviewLabel(draftResult),
       warningOrNote: buildRowNote(draft),
@@ -521,11 +550,11 @@ function main() {
   console.log(`parseWarnings: ${draft.warnings.length ? draft.warnings.join("; ") : "none"}`);
   console.log("runtimeBoundary: read-only shadow observation; no runtime/data/generated/golden writes");
   console.log("");
-  console.log("| sample | recipe | legacy score | current runtime suggestion | v0.0.8.15 proposed profile shadow | key observed pressures | warning / note | initial review label | boundary |");
-  console.log("|---|---|---:|---|---|---|---|---|---|");
+  console.log("| sample | recipe | legacy score | current runtime draft suggestion | current runtime unified score | v0.0.8.15 proposed profile draft suggestion | v0.0.8.15 proposed profile unified score | key observed pressures | warning / note | initial review label | boundary |");
+  console.log("|---|---|---:|---|---|---|---|---|---|---|---|");
   rows.forEach((row) => {
     console.log(
-      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.warningOrNote)} | ${escapeMarkdown(row.initialReviewLabel)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
+      `| ${escapeMarkdown(row.sampleName)} | ${escapeMarkdown(row.recipe)} | ${escapeMarkdown(row.legacyScore)} | ${escapeMarkdown(row.currentRuntimeSuggestion)} | ${escapeMarkdown(row.currentRuntimeUnifiedScore)} | ${escapeMarkdown(row.profileDraftShadow)} | ${escapeMarkdown(row.profileDraftUnifiedScore)} | ${escapeMarkdown(row.profileDraftTopSignals)} | ${escapeMarkdown(row.warningOrNote)} | ${escapeMarkdown(row.initialReviewLabel)} | ${escapeMarkdown(row.shadowObservationBoundary)} |`
     );
   });
 }

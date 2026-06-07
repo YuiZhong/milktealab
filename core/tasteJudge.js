@@ -10,6 +10,7 @@ const flavorSummaryEngine = window.MILK_TEA_LAB_FLAVOR_SUMMARY_ENGINE;
 const summaryCandidateEngine = window.MILK_TEA_LAB_SUMMARY_CANDIDATE_ENGINE;
 const candidatePriorityShellEngine = window.MILK_TEA_LAB_CANDIDATE_PRIORITY_SHELL_ENGINE;
 const generatedSeveritySuggestionEngine = window.MILK_TEA_LAB_GENERATED_SEVERITY_SUGGESTION_ENGINE;
+const unifiedScoringEngine = window.MILK_TEA_LAB_UNIFIED_SCORING_ENGINE;
 const ingredientAnalyzer = window.MILK_TEA_LAB_INGREDIENT_ANALYZER;
 const proportionAnalyzer = window.MILK_TEA_LAB_PROPORTION_ANALYZER;
 const accidentAnalyzer = window.MILK_TEA_LAB_ACCIDENT_ANALYZER;
@@ -172,24 +173,32 @@ function isScoreTakeoverTrialRequested() {
   return isTruthyDebugFlag(readScoreTakeoverStorageFlag());
 }
 
-function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion) {
+function createScoreTakeoverState(legacyScore, generatedSeveritySuggestion, unifiedScoring) {
   const suggestedScore = generatedSeveritySuggestion?.scoreSuggestion?.suggestedScore;
   const hasValidSuggestedScore = Number.isFinite(suggestedScore);
+  const unifiedScore = Number.isFinite(unifiedScoring?.score)
+    ? Math.round(clamp(unifiedScoring.score))
+    : null;
+  const hasValidUnifiedScore = Number.isFinite(unifiedScore);
   const takeoverRequested = isScoreTakeoverTrialRequested();
-  const scoreTakeoverEnabled = takeoverRequested && hasValidSuggestedScore;
+  const scoreTakeoverEnabled = takeoverRequested && hasValidUnifiedScore;
   const generatedSuggestedScore = hasValidSuggestedScore ? Math.round(clamp(suggestedScore)) : null;
 
   return {
-    score: scoreTakeoverEnabled ? generatedSuggestedScore : legacyScore,
+    score: scoreTakeoverEnabled ? unifiedScore : legacyScore,
     legacyScore,
     generatedSuggestedScore,
-    scoreSource: scoreTakeoverEnabled ? "generated_suggestion_takeover_trial" : "legacy",
+    unifiedScore,
+    unifiedScoreDeltaFromLegacy: hasValidUnifiedScore ? unifiedScore - legacyScore : null,
+    dominantPressure: unifiedScoring?.dominantPressure || null,
+    scoreReasons: Array.isArray(unifiedScoring?.scoreReasons) ? unifiedScoring.scoreReasons : [],
+    scoreSource: scoreTakeoverEnabled ? "playtest_unified_score" : "legacy",
     scoreTakeoverMode: takeoverRequested ? "debug_flag" : "off",
     scoreTakeoverEnabled,
     scoreTakeoverNote: scoreTakeoverEnabled
-      ? "已开启 Debug 分数接管试验；只覆盖最终分数，反馈 / 类型 / 事故仍保持旧系统。"
+      ? "已开启 Playtest unified score takeover；只覆盖最终分数，反馈 / 类型 / 事故仍保持旧系统。"
       : takeoverRequested
-        ? "Debug 分数接管开关已开启，但新系统建议分不可用或非法，已自动回退旧系统分数。"
+        ? "Debug 分数接管开关已开启，但 unified score 不可用或非法，已自动回退旧系统分数。"
         : "默认使用旧系统分数。仅在 Debug 试验时使用 ?scoreTakeover=1 或 localStorage MILK_TEA_LAB_SCORE_TAKEOVER_TRIAL=1。"
   };
 }
@@ -393,7 +402,17 @@ function evaluateCup(cup) {
   if (generatedSeveritySuggestionEngine?.buildGeneratedSeveritySuggestion) {
     result.generatedSeveritySuggestion = generatedSeveritySuggestionEngine.buildGeneratedSeveritySuggestion(result);
   }
-  Object.assign(result, createScoreTakeoverState(legacyScore, result.generatedSeveritySuggestion));
+  if (unifiedScoringEngine?.buildUnifiedScoring) {
+    result.unifiedScoring = unifiedScoringEngine.buildUnifiedScoring({
+      tasteSummary,
+      textureSummary,
+      flavorSummary,
+      summaryCandidates,
+      candidatePriorityShell,
+      legacyScore
+    });
+  }
+  Object.assign(result, createScoreTakeoverState(legacyScore, result.generatedSeveritySuggestion, result.unifiedScoring));
   return result;
 }
 

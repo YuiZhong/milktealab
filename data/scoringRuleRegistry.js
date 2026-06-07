@@ -277,6 +277,17 @@ const triggerMetrics = [
 
 const scoreRules = [
   {
+    ruleId: "draft_taste_sweetness",
+    pressureKey: "sweetnessPressure",
+    triggerMetric: "sweetness",
+    sourceLayer: "taste",
+    status: "draft_non_final",
+    severityLevels: ["light", "medium", "heavy", "critical"],
+    canAffectFinalScore: false,
+    canAffectRuntime: false,
+    canAffectGoldenExpected: false
+  },
+  {
     ruleId: "draft_texture_solid_load",
     pressureKey: "solidLoadPressure",
     triggerMetric: "solidLoad",
@@ -327,6 +338,17 @@ const scoreRules = [
     sourceLayer: "taste",
     status: "draft_non_final",
     severityLevels: ["light", "medium", "heavy"],
+    canAffectFinalScore: false,
+    canAffectRuntime: false,
+    canAffectGoldenExpected: false
+  },
+  {
+    ruleId: "draft_flavor_strong_identity",
+    pressureKey: "strongIdentityPressure",
+    triggerMetric: "aromaPressure",
+    sourceLayer: "flavor",
+    status: "draft_non_final",
+    severityLevels: ["light", "medium", "heavy", "critical"],
     canAffectFinalScore: false,
     canAffectRuntime: false,
     canAffectGoldenExpected: false
