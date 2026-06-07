@@ -1,10 +1,16 @@
 # 版本记录
 
+## v0.0.8.36 minimal rescue checkpoint
+
+本轮只同步入口文件，修正 `AGENTS.md` / `docs/AI_CONTEXT.md` 与当前真实 runtime 状态不一致的问题。当前 main / origin/main 已到 `a8d44c0 fix: prioritize accident feedback`；默认页面已进入 v0.0.8.35 default playtest unified judgment calibration。
+
+本轮不改 runtime / core / ui / data / generated / golden / scoring / feedback，不新增 report，不整理历史 docs；目标是防止新对话继续被 planning-only 口径误导。未 push，未 tag。
+
 ## v0.0.8.35 accident-dominant unified feedback priority
 
 本轮修复 default unified judgment 下事故 / pressure / low score 已经主导时，`unifiedFeedbackComposer` 仍可能退回 composed drink label 鼓励文案的问题。`combinedTextureBurdenPressure` 现在映射到 playtest texture burden feedback，事故主导路径会优先解释主要问题；普通 composed drink label 只在非事故路径输出“方向成立”类文案。
 
-本轮未调分、未改 profile、未改 drinkType composer、未改 golden expected、未写 `data/generated`、未新增 report、未新增 recipe whitelist / sample-specific if / display text key，未 push，未 tag。
+本轮未调分、未改 profile、未改 drinkType composer、未改 golden expected、未写 `data/generated`、未新增 report、未新增 recipe whitelist / sample-specific if / display text key，本轮完成时未 push，未 tag；后续已推至 origin/main。
 
 ## v0.0.8.34 unified texture burden aggregation
 
