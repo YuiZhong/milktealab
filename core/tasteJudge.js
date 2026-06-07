@@ -456,6 +456,10 @@ function evaluateCup(cup) {
       flavorSummary,
       summaryCandidates,
       candidatePriorityShell,
+      recipeItems: context.activeCup.map(item => ({
+        ingredientId: item.ingredientId,
+        ratio: item.ratio
+      })),
       unifiedScoring: result.unifiedScoring,
       legacyComparison: {
         legacyScore,

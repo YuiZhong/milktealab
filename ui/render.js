@@ -417,12 +417,18 @@ function createRenderer(app) {
 
     const title = document.createElement("h5");
     title.textContent = "试玩统一判定";
+    const composedDrinkType = unifiedJudgment?.composedDrinkType || null;
 
     const reasons = Array.isArray(unifiedJudgment?.judgmentReasons) ? unifiedJudgment.judgmentReasons : [];
     const reasonText = document.createElement("p");
     reasonText.textContent = reasons.length
       ? `判定原因：${reasons.slice(0, 4).map(localizeMachineKeysInText).join(" / ")}`
       : "判定原因：暂无统一判定候选。";
+
+    const composedText = document.createElement("p");
+    composedText.textContent = composedDrinkType
+      ? `组合类型：${composedDrinkType.composedTypeLabel || "待观察"}；broad ID：${composedDrinkType.drinkTypeId || "无"}；modifier：${Array.isArray(composedDrinkType.modifierIdentityTags) && composedDrinkType.modifierIdentityTags.length ? composedDrinkType.modifierIdentityTags.join(" / ") : "无"}；fallback：${composedDrinkType.fallbackReason || "无"}。`
+      : "组合类型：本轮没有普通饮品类型 composer 输出，可能是事故优先或 composer fallback。";
 
     const warningList = document.createElement("ul");
     warningList.className = "suggestion-list";
@@ -438,7 +444,7 @@ function createRenderer(app) {
       warningList.append(item);
     }
 
-    block.append(title, reasonText, warningList);
+    block.append(title, reasonText, composedText, warningList);
     return block;
   }
 
@@ -547,6 +553,12 @@ function createRenderer(app) {
     appendSuggestionMeta(meta, "Unified 饮品 ID", unifiedJudgment?.drinkTypeId || "无");
     appendSuggestionMeta(meta, "Unified outcome ID", unifiedJudgment?.outcomeTypeId || "无");
     appendSuggestionMeta(meta, "Unified feedback", unifiedJudgment?.feedback || "待观察");
+    const composedDrinkType = unifiedJudgment?.composedDrinkType || null;
+    appendSuggestionMeta(meta, "Composer 组合类型", composedDrinkType?.composedTypeLabel || "无");
+    appendSuggestionMeta(meta, "Composer broad ID", composedDrinkType?.drinkTypeId || "无");
+    appendSuggestionMeta(meta, "Composer identity tags", Array.isArray(composedDrinkType?.identityTags) && composedDrinkType.identityTags.length ? composedDrinkType.identityTags.join(" / ") : "无");
+    appendSuggestionMeta(meta, "Composer modifier tags", Array.isArray(composedDrinkType?.modifierIdentityTags) && composedDrinkType.modifierIdentityTags.length ? composedDrinkType.modifierIdentityTags.join(" / ") : "无");
+    appendSuggestionMeta(meta, "Composer fallback", composedDrinkType?.fallbackReason || "无");
 
     const reason = document.createElement("p");
     reason.className = "suggestion-reason";

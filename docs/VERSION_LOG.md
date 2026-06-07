@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.0.8.27 playtest composable drink type labeler
+
+本轮新增 `core/drinkTypeComposer.js`，在 `judgmentTakeover=1` 试玩路径中读取 stable ingredient composition tags，按通用 rule table 组合 broad drink type、modifier 和中文展示标签。
+
+本轮让普通饮品类型显示可以参考 flavor / composition 层堆叠，例如茶 / 乳 / 水果 / 咖啡 / 小料等稳定标签；展示标签可使用 `labelPart.zh`，但只作为 display，不作为判断 key。
+
+本轮不是正式 taxonomy / final production takeover；未改 golden expected，未写 `data/generated`，未改 profile 数值，未新增 report，未新增 recipe whitelist / sample-specific if / displayName key，未 push，未 tag。
+
 ## v0.0.8.26 ingredient composition / display-role tag gate
 
 本轮新增 `data/ingredientCompositionTags.js`，为 37/37 原料补齐 stable composition / role / base / identity / display-role tags，作为未来 composable drink type labeler 的干净输入。

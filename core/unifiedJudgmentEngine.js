@@ -1,7 +1,8 @@
 (function() {
 const { clamp } = window.MILK_TEA_LAB_HELPERS;
+const drinkTypeComposer = window.MILK_TEA_LAB_DRINK_TYPE_COMPOSER;
 
-const schemaVersion = "unifiedJudgment.v0.0.8.25";
+const schemaVersion = "unifiedJudgment.v0.0.8.27";
 
 const pressureJudgmentRules = {
   sweetnessPressure: {
@@ -56,18 +57,6 @@ function rounded(value) {
   return Math.round(value);
 }
 
-function getValues(summary) {
-  return summary?.values || {};
-}
-
-function collectTags(...summaries) {
-  return new Set(summaries.flatMap(summary => Array.isArray(summary?.tags) ? summary.tags : []));
-}
-
-function hasTag(tags, tag) {
-  return tags.has(tag);
-}
-
 function getActivePressures(unifiedScoring) {
   return (Array.isArray(unifiedScoring?.pressures) ? unifiedScoring.pressures : [])
     .filter(pressure => pressure?.matched && pressure.adjustedPenalty > 0)
@@ -88,70 +77,31 @@ function shouldTreatAsAccident(pressure, score) {
 }
 
 function buildDrinkTypeCandidate(input, warnings) {
-  const taste = getValues(input.tasteSummary);
-  const texture = getValues(input.textureSummary);
-  const flavor = getValues(input.flavorSummary);
-  const tags = collectTags(input.tasteSummary, input.textureSummary, input.flavorSummary);
-  const score = input.unifiedScoring?.score;
+  const composedDrinkType = drinkTypeComposer?.composeDrinkType
+    ? drinkTypeComposer.composeDrinkType({
+      recipeItems: input.recipeItems,
+      tasteSummary: input.tasteSummary,
+      textureSummary: input.textureSummary,
+      flavorSummary: input.flavorSummary,
+      unifiedScoring: input.unifiedScoring
+    })
+    : null;
 
-  if (isNumber(score) && score < 45) {
+  if (composedDrinkType) {
+    (Array.isArray(composedDrinkType.warnings) ? composedDrinkType.warnings : []).forEach(warning => {
+      warnings.push(`drink_type_composer:${warning}`);
+    });
     return {
-      type: "实验事故（试玩）",
-      drinkTypeId: null,
-      outcomeTypeId: "experimental_special",
-      reason: "unified score 较低，先保留为试玩实验结果。"
-    };
-  }
-
-  const hasCoffeeIdentity = hasTag(tags, "coffee");
-  const hasDairySupport = hasTag(tags, "dairy") && (taste.milkiness || 0) >= 8;
-
-  if (hasCoffeeIdentity && hasDairySupport) {
-    return {
-      type: "咖啡乳饮（试玩）",
-      drinkTypeId: "coffee_special",
+      type: `${composedDrinkType.composedTypeLabel || composedDrinkType.broadTypeLabel || "实验特调"}（试玩）`,
+      drinkTypeId: composedDrinkType.drinkTypeId || null,
       outcomeTypeId: null,
-      reason: "咖啡身份和乳基支撑都在 summary tags / numeric summary 中可见。"
+      feedbackTags: composedDrinkType.drinkTypeId === "flavor_conflict" ? ["weird"] : [],
+      reason: `drinkType composer matched ${composedDrinkType.drinkTypeId || "none"} from ingredient composition tags.`,
+      composedDrinkType
     };
   }
 
-  if (hasTag(tags, "premium") && hasTag(tags, "tea") && hasTag(tags, "dairy") && (taste.milkiness || 0) >= 8) {
-    return {
-      type: "高级厚乳款（试玩）",
-      drinkTypeId: "premium_thick_milk_tea",
-      outcomeTypeId: null,
-      reason: "茶感、乳基和 premium / thick support 标签同时成立。"
-    };
-  }
-
-  if (hasTag(tags, "tea") && hasTag(tags, "dairy") && (taste.teaStrength || 0) >= 8 && (taste.milkiness || 0) >= 8) {
-    return {
-      type: "经典奶茶（试玩）",
-      drinkTypeId: "classic_milk_tea",
-      outcomeTypeId: null,
-      reason: "茶感和乳基支撑形成稳定奶茶结构。"
-    };
-  }
-
-  if ((hasTag(tags, "fruit") || hasTag(tags, "fresh")) && (flavor.beverageFit || 0) >= 55 && (texture.drinkability || 0) >= 50) {
-    return {
-      type: "清爽饮品（试玩）",
-      drinkTypeId: "fresh_fruit_tea",
-      outcomeTypeId: null,
-      reason: "果味 / 清爽标签、beverageFit 和 drinkability 支撑清爽饮品方向。"
-    };
-  }
-
-  if ((texture.fatLoad || 0) >= 18 || (taste.creaminess || 0) >= 14 || ((flavor.dessertFit || 0) >= 55 && hasTag(tags, "dessert"))) {
-    warnings.push("playtest_drink_type_candidate:creamy_dessert_drink_missing_stable_id");
-    return {
-      type: "奶感甜品饮（试玩）",
-      drinkTypeId: null,
-      outcomeTypeId: null,
-      reason: "奶脂、奶油感或甜品适配信号支持奶感甜品饮方向。"
-    };
-  }
-
+  warnings.push("drink_type_composer_unavailable_fallback_used");
   return {
     type: "实验特调（试玩）",
     drinkTypeId: "experimental_special",
@@ -247,6 +197,7 @@ function buildUnifiedJudgment(input = {}) {
     accidentTypeId: finalCandidate.accidentTypeId || null,
     drinkTypeId: finalCandidate.drinkTypeId || null,
     outcomeTypeId: finalCandidate.outcomeTypeId || null,
+    composedDrinkType: finalCandidate.composedDrinkType || null,
     feedback: buildFeedback(pressureJudgment, drinkTypeCandidate, unifiedScoring),
     feedbackTags,
     dominantPressure: unifiedScoring.dominantPressure || null,

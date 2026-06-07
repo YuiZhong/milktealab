@@ -19,6 +19,7 @@ const prePatchScripts = [
   "data/ingredientTasteProfiles.js",
   "data/ingredientTextureProfiles.js",
   "data/ingredientFlavorProfiles.js",
+  "data/ingredientCompositionTags.js",
   "data/combinationRules.js",
   "data/drinkTypeRules.js",
   "data/accidentRules.js",
@@ -54,6 +55,7 @@ const postPatchScripts = [
   "core/candidatePriorityShellEngine.js",
   "core/generatedSeveritySuggestionEngine.js",
   "core/unifiedScoringEngine.js",
+  "core/drinkTypeComposer.js",
   "core/unifiedJudgmentEngine.js",
   "core/tasteJudge.js",
 ];
@@ -462,11 +464,14 @@ function formatUnifiedJudgment(unifiedJudgment) {
   if (!unifiedJudgment) {
     return "n/a";
   }
+  const composed = unifiedJudgment.composedDrinkType || null;
   return [
     `type:${unifiedJudgment.type || "n/a"}`,
     `accident:${unifiedJudgment.accidentTypeId || "none"}`,
     `drink:${unifiedJudgment.drinkTypeId || "none"}`,
     `outcome:${unifiedJudgment.outcomeTypeId || "none"}`,
+    `composed:${composed?.composedTypeLabel || "none"}`,
+    `broad:${composed?.drinkTypeId || "none"}`,
     `tags:${Array.isArray(unifiedJudgment.feedbackTags) ? unifiedJudgment.feedbackTags.join("+") || "none" : "none"}`
   ].join(" / ");
 }
