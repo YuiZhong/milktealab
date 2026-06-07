@@ -1,11 +1,12 @@
 (function() {
-const schemaVersion = "unifiedFeedbackComposer.v0.0.8.28";
+const schemaVersion = "unifiedFeedbackComposer.v0.0.8.35";
 
 const pressureFeedbackTagByKey = {
   sweetnessPressure: "taste_sweet_overload",
   acidPressure: "taste_acid_overload",
   bitterPressure: "taste_bitter_pressure",
   fatPressure: "texture_fat_pressure",
+  combinedTextureBurdenPressure: "texture_combined_burden",
   solidLoadPressure: "texture_solid_overload",
   lowFlowPressure: "texture_low_flow",
   strongIdentityPressure: "flavor_strong_identity"
@@ -45,6 +46,10 @@ const pressureCopyByTag = {
     tone: "accident_warning",
     text: "固体负载过高，饮用重点会从喝变成嚼。"
   },
+  texture_combined_burden: {
+    tone: "accident_warning",
+    text: "固体、粉碎物和糊状压力叠在一起，质地负担已经主导体验。"
+  },
   texture_low_flow: {
     tone: "accident_warning",
     text: "低流动性压力明显，整杯不够顺畅。"
@@ -81,6 +86,17 @@ function getDominantPressure(unifiedScoring, pressureJudgment) {
   return activePressures.find(pressure => pressure.pressureKey === dominantKey) || activePressures[0];
 }
 
+function isProblemSeverity(pressure) {
+  return pressure?.severityLevel === "critical" || pressure?.severityLevel === "heavy";
+}
+
+function isProblemDominant({ pressureJudgment, finalCandidate, dominantPressure, unifiedScoring }) {
+  if (pressureJudgment) return true;
+  if (finalCandidate?.accidentTypeId || finalCandidate?.outcomeTypeId) return true;
+  if (isProblemSeverity(dominantPressure)) return true;
+  return isNumber(unifiedScoring?.score) && unifiedScoring.score <= 42 && Boolean(dominantPressure);
+}
+
 function compactPressure(pressure) {
   if (!pressure) return null;
   const observedValue = isNumber(pressure.observedValue)
@@ -115,50 +131,68 @@ function buildSupportSentence(balances) {
   return `不过${labels.join("、")}仍提供了一点缓冲。`;
 }
 
-function buildFeedbackTags({ pressureTag, balances, drinkTypeCandidate, finalCandidate }) {
+function buildFeedbackTags({ pressureTag, balances, drinkTypeCandidate, finalCandidate, feedbackPath }) {
+  const problemFeedbackPath = feedbackPath === "accident_dominant_pressure"
+    || feedbackPath === "problem_dominant_generic";
   const balanceTags = balances
     .map(balance => balanceFeedbackTagByKey[balance.supportKey])
     .filter(Boolean);
   const outcomeTag = finalCandidate?.outcomeTypeId ? "flavor_conflict" : null;
   const composedTag = drinkTypeCandidate?.composedDrinkType?.composedTypeLabel ? "drinktype_composed_label" : null;
+  const pathTag = feedbackPath === "accident_dominant_pressure"
+    ? "accident_dominant_feedback"
+    : feedbackPath === "problem_dominant_generic"
+      ? "problem_dominant_feedback"
+      : null;
   return uniqueItems([
     "playtest_feedback",
-    pressureTag,
+    pathTag,
+    problemFeedbackPath ? pressureTag : null,
     ...balanceTags,
     outcomeTag,
     composedTag
   ]);
 }
 
-function buildFeedbackText({ pressureTag, dominantPressure, balances, drinkTypeCandidate, finalCandidate }) {
+function buildFeedbackText({ pressureTag, dominantPressure, balances, drinkTypeCandidate, finalCandidate, problemDominant }) {
   const pressureCopy = pressureTag ? pressureCopyByTag[pressureTag] : null;
   const supportSentence = buildSupportSentence(balances);
   const composedLabel = drinkTypeCandidate?.composedDrinkType?.composedTypeLabel || null;
 
-  if (pressureCopy && dominantPressure) {
+  if (problemDominant && pressureCopy && dominantPressure) {
     return {
       tone: pressureCopy.tone,
-      text: `${pressureCopy.text}${supportSentence ? ` ${supportSentence}` : ""}`
+      text: `${pressureCopy.text}${supportSentence ? ` ${supportSentence}` : ""}`,
+      feedbackPath: "accident_dominant_pressure",
+      fallbackReason: null
     };
   }
 
-  if (finalCandidate?.outcomeTypeId) {
+  if (problemDominant || finalCandidate?.outcomeTypeId) {
     return {
-      tone: "experimental_warning",
-      text: `这杯方向有实验感，但当前风味压力还需要制作人判断是否成立。${supportSentence ? ` ${supportSentence}` : ""}`
+      tone: finalCandidate?.outcomeTypeId ? "experimental_warning" : "accident_warning",
+      text: `这杯已经由问题压力主导，需要先解释主要风险，再判断普通饮品方向是否成立。${supportSentence ? ` ${supportSentence}` : ""}`,
+      feedbackPath: "problem_dominant_generic",
+      fallbackReason: dominantPressure?.pressureKey
+        ? `missing_pressure_copy:${dominantPressure.pressureKey}`
+        : "problem_dominant_without_source_pressure"
     };
   }
 
   if (composedLabel) {
     return {
       tone: "encouraging",
-      text: `这杯${composedLabel}的方向是成立的，主体身份清楚，适合继续微调。${supportSentence ? ` ${supportSentence}` : ""}`
+      text: `这杯${composedLabel}的方向是成立的，主体身份清楚，适合继续微调。${supportSentence ? ` ${supportSentence}` : ""}`,
+      feedbackPath: "normal_composed_drink",
+      fallbackReason: null
     };
   }
 
   return {
     tone: "neutral",
-    text: `这杯当前没有明显事故，结构大体成立，可以进入试玩反馈。${supportSentence ? ` ${supportSentence}` : ""}`
+    text: `这杯当前没有明显事故，结构大体成立，可以进入试玩反馈。${supportSentence ? ` ${supportSentence}` : ""}`,
+    feedbackPath: "normal_generic",
+    fallbackReason: null
   };
 }
 
@@ -188,20 +222,28 @@ function buildUnifiedFeedback(input = {}) {
   const drinkTypeCandidate = input.drinkTypeCandidate || null;
   const finalCandidate = input.finalCandidate || {};
   const dominantPressure = getDominantPressure(unifiedScoring, pressureJudgment);
+  const problemDominant = isProblemDominant({
+    pressureJudgment,
+    finalCandidate,
+    dominantPressure,
+    unifiedScoring
+  });
   const pressureTag = dominantPressure ? pressureFeedbackTagByKey[dominantPressure.pressureKey] : null;
   const balances = getSupportBalances(unifiedScoring, dominantPressure);
-  const feedbackTags = buildFeedbackTags({
-    pressureTag,
-    balances,
-    drinkTypeCandidate,
-    finalCandidate
-  });
   const feedbackCopy = buildFeedbackText({
     pressureTag,
     dominantPressure,
     balances,
     drinkTypeCandidate,
-    finalCandidate
+    finalCandidate,
+    problemDominant
+  });
+  const feedbackTags = buildFeedbackTags({
+    pressureTag,
+    balances,
+    drinkTypeCandidate,
+    finalCandidate,
+    feedbackPath: feedbackCopy.feedbackPath
   });
   const warnings = [
     "playtest_unified_feedback_only:not_final_copy_system",
@@ -212,6 +254,12 @@ function buildUnifiedFeedback(input = {}) {
   if (dominantPressure && !pressureTag) {
     warnings.push(`missing_feedback_tag_for_pressure:${dominantPressure.pressureKey}`);
   }
+  if (problemDominant) {
+    warnings.push(`problem_dominant_feedback_path:${feedbackCopy.feedbackPath}`);
+  }
+  if (feedbackCopy.fallbackReason) {
+    warnings.push(`feedback_fallback_reason:${feedbackCopy.fallbackReason}`);
+  }
 
   return {
     schemaVersion,
@@ -219,6 +267,9 @@ function buildUnifiedFeedback(input = {}) {
     feedback: feedbackCopy.text,
     feedbackTags,
     tone: feedbackCopy.tone,
+    feedbackPath: feedbackCopy.feedbackPath,
+    problemDominant,
+    fallbackReason: feedbackCopy.fallbackReason,
     sourcePressure: compactPressure(dominantPressure),
     sourceOutcome: finalCandidate?.outcomeTypeId || null,
     sourceDrinkTypeId: drinkTypeCandidate?.drinkTypeId || finalCandidate?.drinkTypeId || null,

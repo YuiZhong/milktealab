@@ -504,8 +504,10 @@ function formatUnifiedJudgment(unifiedJudgment) {
     `outcome:${unifiedJudgment.outcomeTypeId || "none"}`,
     `composed:${composed?.composedTypeLabel || "none"}`,
     `broad:${composed?.drinkTypeId || "none"}`,
+    `feedbackPath:${unifiedFeedback?.feedbackPath || "none"}`,
     `feedbackTone:${unifiedFeedback?.tone || "none"}`,
     `feedbackSource:${unifiedFeedback?.sourcePressure?.pressureKey || unifiedJudgment.dominantPressure || "none"}`,
+    `feedbackFallback:${unifiedFeedback?.fallbackReason || "none"}`,
     `tags:${Array.isArray(unifiedJudgment.feedbackTags) ? unifiedJudgment.feedbackTags.join("+") || "none" : "none"}`
   ].join(" / ");
 }

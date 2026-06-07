@@ -445,7 +445,7 @@ function createRenderer(app) {
         : "无";
     const feedbackText = document.createElement("p");
     feedbackText.textContent = unifiedFeedback
-      ? `Unified feedback 来源：${displayMetricLabel(feedbackSource)}；tone：${unifiedFeedback.tone || "无"}；tags：${feedbackTags}。`
+      ? `Unified feedback 来源：${displayMetricLabel(feedbackSource)}；路径：${unifiedFeedback.feedbackPath || "无"}；tone：${unifiedFeedback.tone || "无"}；tags：${feedbackTags}。`
       : "Unified feedback 来源：暂无 composer 输出，可能使用 fallback。";
 
     const warningList = document.createElement("ul");
@@ -588,6 +588,8 @@ function createRenderer(app) {
     const unifiedFeedback = unifiedJudgment?.unifiedFeedback || null;
     appendSuggestionMeta(meta, "Unified feedback tags", Array.isArray(unifiedFeedback?.feedbackTags) && unifiedFeedback.feedbackTags.length ? unifiedFeedback.feedbackTags.join(" / ") : "无");
     appendSuggestionMeta(meta, "Unified feedback tone", unifiedFeedback?.tone || "无");
+    appendSuggestionMeta(meta, "Unified feedback path", unifiedFeedback?.feedbackPath || "无");
+    appendSuggestionMeta(meta, "Unified feedback fallback", unifiedFeedback?.fallbackReason || "无");
     appendSuggestionMeta(meta, "Unified feedback source", displayMetricLabel(unifiedFeedback?.sourcePressure?.pressureKey || unifiedJudgment?.dominantPressure || "none"));
     appendSuggestionMeta(meta, "Unified feedback drinkType", unifiedFeedback?.sourceDrinkTypeId || "无");
     const composedDrinkType = unifiedJudgment?.composedDrinkType || null;

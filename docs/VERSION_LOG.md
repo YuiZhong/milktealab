@@ -1,5 +1,11 @@
 # 版本记录
 
+## v0.0.8.35 accident-dominant unified feedback priority
+
+本轮修复 default unified judgment 下事故 / pressure / low score 已经主导时，`unifiedFeedbackComposer` 仍可能退回 composed drink label 鼓励文案的问题。`combinedTextureBurdenPressure` 现在映射到 playtest texture burden feedback，事故主导路径会优先解释主要问题；普通 composed drink label 只在非事故路径输出“方向成立”类文案。
+
+本轮未调分、未改 profile、未改 drinkType composer、未改 golden expected、未写 `data/generated`、未新增 report、未新增 recipe whitelist / sample-specific if / display text key，未 push，未 tag。
+
 ## v0.0.8.34 unified texture burden aggregation
 
 本轮修复 unified scoring 对高比例小料 / 粉碎小料 / 糊状质地负担识别不足的问题：`textureSummary` 在 v0.0.8.15 anchor profile 路径下保留结构层 solidLoad / strawResistance 证据，并输出 `combinedTextureBurden`；`unifiedScoringEngine` 以 non-final pressure 读取该合成负担，阻断 structural floor / visible identity fit support，使中重度 texture burden 能进入事故主导展示。

@@ -30,7 +30,7 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 - 定位：v0.0.8.x 内容管线 / review pack / registry-validator planning。
 - 边界：已从 pure planning 进入 visible shadow proof / debug output / human-readable review pack；implementation / final takeover 仍需明确批准。
 
-当前 verified baseline：latest main 为 `13d97f1 fix: merge visible drink type identities`，该 commit 已推 main；新对话继续前应先确认 branch 为 `main`、working tree clean、HEAD 与 `origin/main` 一致。
+当前 verified baseline：latest main 为 `3e97b29 feat: aggregate texture burden scoring`，该 commit 已推 main；新对话继续前应先确认 branch 为 `main`、working tree clean、HEAD 与 `origin/main` 一致。
 
 当前路线压缩：
 
@@ -59,6 +59,7 @@ P0-C: resolved。docs source-of-truth hierarchy failure 已通过 `docs/DOCS_SOU
 - v0.0.8.30：进入 default unified judgment + anchor profile takeover；默认页面使用 unified judgment 试玩输出和 v0.0.8.15 anchor profile，`?legacy=1` / `?judgmentTakeover=0` 可回旧系统，`?scoreTakeover=1` 保留 score-only 模式。本轮不改旧 profile / scoring rules / feedback composer / drinkType composer / golden expected。
 - v0.0.8.31：进入 playtest unified scoring calibration v1；在 v0.0.8.15 anchor profile 生效后，校准 unified scoring 的 pressure bands / support / balance / aggregation，让正常饮品回到可试玩区间，同时保留极端甜 / 酸 / 苦 / 奶脂 / 低流动性 / 固体负载低分。本轮不改 profile / data/generated / golden expected，不新增 recipe whitelist / sample-specific if / display text key。
 - v0.0.8.34：修复 unified texture burden aggregation；v0.0.8.15 anchor profile 路径下 texture summary 会保留结构层 solidLoad / strawResistance，并把高比例小料 / 粉碎物 / 糊状负担合成 `combinedTextureBurden`，用于 non-final scoring / accident-dominant display。仍不改 profile / golden / data/generated，不写配方特例。
+- v0.0.8.35：修复 accident-dominant unified feedback priority；事故 / pressure / low score 主导时 unified feedback 优先解释主要问题，不再退回 composed drink label 的鼓励文案。仍不调分、不改 profile / golden / data/generated，不写配方特例。
 
 当前长对话已经出现上下文漂移风险。后续应优先从 `docs/AI_CONTEXT.md`、`docs/VERSION_LOG.md` 和 verified git baseline 恢复，而不是依赖本轮长聊天记忆。
 
