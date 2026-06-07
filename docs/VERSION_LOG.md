@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.11 all-ingredient profile value draft workspace
+
+本轮新增 `scripts/content/buildIngredientProfileValueDraft.js`，并生成 `content_sheets/drafts/ingredient_profile_value_draft.v0.0.8.11.csv` 与 `.json`，作为全部 37 个原料的 profile 数值草案工作台。
+
+该工作台导出现有 taste / texture / flavor profile 快照，并预留 source research、confidence、reviewStatus、producerComment、aiComment 和安全 gate 字段。
+
+本轮不联网，不查资料，不生成正式新数值；`proposed*` 字段保持空对象，后续 proposed values 仍需资料参考 / 人类 review。
+
+本轮未改 runtime profile 数值，未改 scoring logic / UI / generatedSeveritySuggestion，未写 `data/generated`，未改 runtime / data / golden，未 push，未 tag。
+
 ## v0.0.8.10 current technical debt review / next-route triage
 
 本轮新增 `reports/debug/currentTechnicalDebtReview.v0.0.8.10.md`，复盘当前显示文案主键 / 中文主键残留、旧 P1 / P2 / P7 / P8 机制债、source-of-truth / registry / validator 债、generated severity / scoring 接管前阻塞，以及 ingredient profile value readiness。
