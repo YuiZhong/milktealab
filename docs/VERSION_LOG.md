@@ -1,5 +1,15 @@
 # 版本记录
 
+## v0.0.8.10 current technical debt review / next-route triage
+
+本轮新增 `reports/debug/currentTechnicalDebtReview.v0.0.8.10.md`，复盘当前显示文案主键 / 中文主键残留、旧 P1 / P2 / P7 / P8 机制债、source-of-truth / registry / validator 债、generated severity / scoring 接管前阻塞，以及 ingredient profile value readiness。
+
+结论：当前可继续推进 debug-only / review-only / feature-flag 路线和小批 source-referenced profile value draft；不应直接进入 active generated severity / final score override / final feedback takeover / golden expected rewrite。
+
+本轮给出 next 3 recommended tasks：core ingredient source-referenced profile value draft、displayName / Chinese-key runtime risk grep + staged cleanup plan、draft scoreDelta rule config extraction / scoring table preparation。
+
+本轮未改 runtime / core / data / generated / golden，未开放 implementation / active takeover，未 push，未 tag。
+
 ## v0.0.8.9 ingredient profile value readiness audit
 
 本轮新增只读脚本 `scripts/content/auditIngredientProfileValues.js`，并生成 `reports/debug/ingredientProfileValueReadiness.sample.md`。
